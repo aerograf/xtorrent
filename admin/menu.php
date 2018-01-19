@@ -1,15 +1,17 @@
 <?php
 
-if (!isset($moduleDirName)) {
-    $moduleDirName = basename(dirname(__DIR__));
-}
-if (false !== ($moduleHelper = Xmf\Module\Helper::getHelper($moduleDirName))) {
-} else {
-    $moduleHelper = Xmf\Module\Helper::getHelper('system');
-}
-$adminObject   = \Xmf\Module\Admin::getInstance();
+use XoopsModules\Xtorrent;
+
+
+$moduleDirName = basename(dirname(__DIR__));
+
+$helper = Xtorrent\Helper::getInstance();
+//$adminObject   = \Xmf\Module\Admin::getInstance();
 $pathIcon32    = \Xmf\Module\Admin::menuIconPath('');
-$pathModIcon32 = $moduleHelper->getModule()->getInfo('modicons32');
+$pathModIcon32 = $helper->getModule()->getInfo('modicons32');
+
+$helper->loadLanguage('admin');
+$helper->loadLanguage('modinfo');
 
 $adminmenu = [
     [

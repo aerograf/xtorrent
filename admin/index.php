@@ -1,11 +1,11 @@
 <?php
 
-require_once __DIR__ . '/../../../include/cp_header.php';
+//require_once __DIR__ . '/../../../include/cp_header.php';
 require_once __DIR__ . '/admin_header.php';
 
 include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
 include_once XOOPS_ROOT_PATH . '/class/xoopsform/grouppermform.php';
-include_once "../class/xtorrent_lists.php";
+include_once __DIR__ . "../class/xtorrent_lists.php";
 
 $mytree = new XoopsTree($xoopsDB -> prefix('xtorrent_cat'), "cid", "pid");
 

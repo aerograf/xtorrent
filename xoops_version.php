@@ -1,13 +1,19 @@
-<?php 
+<?php
 
-$moduleDirName  = basename(__DIR__);
+use XoopsModules\Xtorrent;
+
+$moduleDirName = basename(dirname(__DIR__));
+
+$helper = Xtorrent\Helper::getInstance();
+$helper->loadLanguage('admin');
+$helper->loadLanguage('modinfo');
 
 $modversion     = [
     'version'             => 4.00,
     'module_status'       => 'Alpha 1',
     'release_date'        => '2018/01/17',
-    'name'                => _MI_TORRENT_NAME,
-    'description'         => _MI_TORRENT_DESC,
+    'name'                => '_MI_TORRENT_NAME',
+    'description'         => '_MI_TORRENT_DESC',
     'dirname'             => $moduleDirName,
     'help'                => 'xtorrent.tpl',
     'author'              => 'Wishcraft, LordPeter, Eparcyl, Aerograf',
@@ -88,7 +94,7 @@ $modversion['author_credits'] = _MI_TORRENT_AUTHOR_CREDITSTEXT;
 $modversion['blocks'] = [];
 $modversion['blocks'][] = [
          'file'         => 'xtorrent_top.php',
-         'name'         => _MI_TORRENT_BNAME1,
+         'name'         => '_MI_TORRENT_BNAME1',
          'description'  => 'Shows recently added donwload files',
          'show_func'    => 'b_XTORRENT_top_show',
          'edit_func'    => 'b_XTORRENT_top_edit',
@@ -544,8 +550,8 @@ GNU Free Documentation License (FDL) (v. 1.1)|
 GNU Free Documentation License (FDL) (v. 1.2)| 
 Guy Hoffmans license| 
 Linux Documentation Project Copying License| 
-Lizenz für Freie Inhalte|
-Lizenz für die freie Nutzung unveränderter Inhalte| 
+Lizenz fï¿½r Freie Inhalte|
+Lizenz fï¿½r die freie Nutzung unverï¿½nderter Inhalte| 
 October Open Game License (OOGL)| 
 The Open Book Project| 
 Open Content License (OPL)| 

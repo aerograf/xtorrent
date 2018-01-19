@@ -1,5 +1,7 @@
 <?php
 
+use XoopsModules\Xtorrent;
+
 $path = dirname(dirname(dirname(__DIR__)));
 include_once $path . '/mainfile.php';
 include_once $path . '/include/cp_functions.php';
@@ -20,16 +22,16 @@ if (is_object($xoopsUser)) {
     redirect_header(XOOPS_URL . "/", 1, _NOPERM);
     exit();
 }
-if (!isset($moduleDirName)) {
-    $moduleDirName = basename(dirname(__DIR__));
-}
-if (false !== ($moduleHelper = Xmf\Module\Helper::getHelper($moduleDirName))) {
-} else {
-    $moduleHelper = Xmf\Module\Helper::getHelper('system');
-}
+
+$moduleDirName = basename(dirname(__DIR__));
+
+$helper = Xtorrent\Helper::getInstance();
 $adminObject   = \Xmf\Module\Admin::getInstance();
 $pathIcon32    = \Xmf\Module\Admin::menuIconPath('');
-$pathModIcon32 = $moduleHelper->getModule()->getInfo('modicons32');
+$pathModIcon32 = $helper->getModule()->getInfo('modicons32');
+
+$helper->loadLanguage('admin');
+$helper->loadLanguage('modinfo');
 
 $myts = MyTextSanitizer::getInstance();
 
