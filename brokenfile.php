@@ -22,7 +22,7 @@ if (!empty($_POST['submit'])) {
         $result = $xoopsDB->query($sql);
 
         $newid = $xoopsDB->getInsertId();
-        $tags = array();
+        $tags = [];
         $tags['BROKENREPORTS_URL'] = XOOPS_URL . '/modules/xtorrent/admin/index.php?op=listBrokenDownloads';
         $notification_handler = &xoops_gethandler('notification');
         $notification_handler->triggerEvent('global', 0, 'file_broken', $tags);

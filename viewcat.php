@@ -64,7 +64,7 @@ $mytree      = new XoopsTree($xoopsDB->prefix('xtorrent_cat'), "cid", "pid");
 $pathstring  = "<a href='index.php'>" . _MD_XTORRENT_MAIN . "</a>&nbsp;:&nbsp;";
 $pathstring .= $mytree->getNicePathFromId($cid, "title", "viewcat.php?op=");
 $child_array = $mytree->getFirstChild($myrow['cid'], "title");
-$xoopsTpl->assign('xoops_pagetitle', str_replace(array('HOME | '), "", str_replace(array("&nbsp;:&nbsp;",":"), " | ", strip_tags($pathstring)))." | Torrents ");
+$xoopsTpl->assign('xoops_pagetitle', str_replace(['HOME | '], "", str_replace(["&nbsp;:&nbsp;", ":"], " | ", strip_tags($pathstring))) . " | Torrents ");
 $xoopsTpl->assign('category_path', $pathstring);
 $xoopsTpl->assign('category_id', $cid);
 $xoopsTpl->assign('navitem', 1);
@@ -111,9 +111,11 @@ if (is_array($arr) > 0 && !empty($list) && !empty($selectdate)) {
             }
         }
         $totallinks = xtorrent_REQUESTTotalItems($ele['cid']);
-        $xoopsTpl->append('subcategories', array('title' => $myts->htmlSpecialChars($ele['title']),
-                'id' => $ele['cid'], 'infercategories' => $infercategories, 'totallinks' => $totallinks['count'],
-                'count' => $scount));
+        $xoopsTpl->append('subcategories', [
+            'title' => $myts->htmlSpecialChars($ele['title']),
+            'id'    => $ele['cid'], 'infercategories' => $infercategories, 'totallinks' => $totallinks['count'],
+            'count' => $scount
+        ]);
         $scount++;
     }
 }

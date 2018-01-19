@@ -27,7 +27,7 @@ switch ($op) {
             if (file_exists(XOOPS_ROOT_PATH . "/" . $_POST['uploadpath'] . "/" . $_FILES['uploadfile']['name'])) {
                 redirect_header('upload.php', 2, _AM_XTORRENT_DOWN_IMAGEEXIST);
             }
-            $allowed_mimetypes = array('image/gif', 'image/jpeg', 'image/pjpeg', 'image/x-png');
+            $allowed_mimetypes = ['image/gif', 'image/jpeg', 'image/pjpeg', 'image/x-png'];
             uploading($_FILES['uploadfile']['name'], $_POST['uploadpath'], $allowed_mimetypes, "upload.php", 1, 0);
             redirect_header("upload.php", 2, _AM_XTORRENT_DOWN_IMAGEUPLOAD);
             exit();

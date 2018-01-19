@@ -58,7 +58,7 @@ while (list($cid, $ctitle) = $xoopsDB -> fetchRow($result)) {
                     //    $dtitle = $myts -> htmlSpecialChars($ctitle); //. $ctitle;
                     //}
 
-                    $rankings[$e]['file'][] = array('id' => $did, 'cid' => $dcid, 'rank' => $rank, 'title' => $dtitle, 'category' => $catpath, 'hits' => $hits, 'rating' => number_format($rating, 2), 'votes' => $votes);
+                    $rankings[$e]['file'][] = ['id' => $did, 'cid' => $dcid, 'rank' => $rank, 'title' => $dtitle, 'category' => $catpath, 'hits' => $hits, 'rating' => number_format($rating, 2), 'votes' => $votes];
                     $rank++;
                 }
             }

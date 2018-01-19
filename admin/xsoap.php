@@ -71,11 +71,13 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 	$client = new soapclient($servers[$server]['uri']);
   // Call the SOAP method
 	$rnd    = rand(-100000, 100000000);
-	$result = $client->call('xtorrent_key', 
-							array('username' => $servers[$server]['username'], 
-							"password" => $servers[$server]['password'],
-							"passhash" => sha1((time()-$rnd).$servers[$server]['username'].$servers[$server]['password']), "rand"=>$rnd,
-							"time" => time()));
+	$result = $client->call('xtorrent_key',
+                            [
+                                'username' => $servers[$server]['username'],
+                                "password" => $servers[$server]['password'],
+                                "passhash" => sha1((time()-$rnd).$servers[$server]['username'].$servers[$server]['password']), "rand" =>$rnd,
+                                "time"     => time()
+                            ]);
 
 	$srv_key = new XoopsFormLabel("Server Key", $result['RESULT']['response_key']);
 	$sform -> addElement($srv_key);
@@ -127,7 +129,7 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 
 				$sql = "SELECT * FROM ".$xoopsDB->prefix('xtorrent_soap_catmatch')." WHERE skey = '$server_key'";
 				$ret = $xoopsDB->queryF($sql);
-				$cordta = array();
+				$cordta = [];
 				while($row = $xoopsDB->fetchArray($ret))
 				{
 					$cordta[] = $row;

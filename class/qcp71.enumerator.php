@@ -18,7 +18,7 @@ if (!class_exists('qcp71_enumerator')) {
         private function setElements($base)
         {
             @$this->base = $base;
-            @$this->elekey = array();
+            @$this->elekey = [];
 
             foreach ($base->base as $key => $data) {
                 if (strlen((string)$data)==1) {
@@ -255,8 +255,10 @@ if (!class_exists('qcp71_enumerator')) {
             }
 
             if ($debug==true) {
-                $data[sizeof($data)+1] = array("pos" => $this->getBytePos($char),
-                                              "elements" => $this->elekey);
+                $data[sizeof($data)+1] = [
+                    "pos"      => $this->getBytePos($char),
+                    "elements" => $this->elekey
+                ];
 
                 $result = ["result" => $result,
                          "prince" => $prince,

@@ -495,10 +495,12 @@ if (!class_exists('pcm3108_base')) {
                                     "bin"  => decbin(ord($data))];
             }
             
-            return array("mode" => $this->mode, "roll" => $this->roll,
-                         "seed" => $this->seed, "mode" => $this->mode,
-                         "num_evr" => $this->num_evr, "base" => $this->base,
-                         "debug" => $base);
+            return [
+                "mode"    => $this->mode, "roll" => $this->roll,
+                "seed"    => $this->seed, "mode" => $this->mode,
+                "num_evr" => $this->num_evr, "base" => $this->base,
+                "debug"   => $base
+            ];
         }
     }
 }

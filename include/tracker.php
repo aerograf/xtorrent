@@ -39,7 +39,7 @@ function tracker_scrape_summarise($scrape_results)
 function tracker_scrape_all($torrent, $timeout = 5)
 {
     if (!count($torrent->announceList)) {
-        return array(tracker_scrape($torrent));
+        return [tracker_scrape($torrent)];
     }
     
     $scrape_results = [];

@@ -158,7 +158,7 @@ class XtorrentReviewHandler extends XoopsObjectHandler
 
     public function getObjects($criteria = null, $fields='*', $reviewid_as_key = false)
     {
-        $ret = array();
+        $ret = [];
         $limit = $start = 0;
         $sql = 'SELECT '.$fields.' FROM '.$this->db_table;
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {

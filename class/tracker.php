@@ -109,7 +109,7 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
     public function xtorrent_scrape_all($torrent, $timeout = 5)
     {
         if (!count($torrent->getvar('announceList'))) {
-            return array($this->xtorrent_scrape($torrent));
+            return [$this->xtorrent_scrape($torrent)];
         }
 
         $scrape_results = [];

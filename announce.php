@@ -30,7 +30,7 @@ function debugtxt($str, $filename)
 
 function err($msg)
 {
-    benc_resp(["failure reason" => array(type => "string", value => $msg)]);
+    benc_resp(["failure reason" => [type => "string", value => $msg]]);
     hit_end();
     exit();
 }
@@ -75,7 +75,7 @@ foreach ($_GET as $x => $k) {
 //echo ."'<br>";
 }
 $info_hash = md5($info_hash);
-foreach (array("port","downloaded","uploaded","left") as $x) {
+foreach (["port", "downloaded", "uploaded", "left"] as $x) {
     ${$x} = 0 + $_GET[$x];
 }
 

@@ -372,8 +372,8 @@ function mkprettytime($s)
     if ($s < 0) {
         $s = 0;
     }
-    $t = array();
-    foreach (array("60:sec","60:min","24:hour","0:day") as $x) {
+    $t = [];
+    foreach (["60:sec", "60:min", "24:hour", "0:day"] as $x) {
         $y = explode(":", $x);
         if ($y[0] > 1) {
             $v = $s % $y[0];

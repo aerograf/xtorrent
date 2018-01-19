@@ -76,11 +76,11 @@ switch ($op) {
 
         $sform->addElement(new XoopsFormDhtmlTextArea(_AM_XTORRENT_IPAGE_CHEADING, 'indexheader', $indexheader, 15, 60));
         $headeralign_select = new XoopsFormSelect(_AM_XTORRENT_IPAGE_CHEADINGA, "indexheaderalign", $indexheaderalign);
-        $headeralign_select->addOptionArray(array("left" => _AM_XTORRENT_IPAGE_CLEFT, "right" => _AM_XTORRENT_IPAGE_CRIGHT, "center" => _AM_XTORRENT_IPAGE_CCENTER));
+        $headeralign_select->addOptionArray(["left" => _AM_XTORRENT_IPAGE_CLEFT, "right" => _AM_XTORRENT_IPAGE_CRIGHT, "center" => _AM_XTORRENT_IPAGE_CCENTER]);
         $sform->addElement($headeralign_select);
         $sform->addElement(new XoopsFormTextArea(_AM_XTORRENT_IPAGE_CFOOTER, 'indexfooter', $indexfooter, 10, 60));
         $footeralign_select = new XoopsFormSelect(_AM_XTORRENT_IPAGE_CFOOTERA, "indexfooteralign", $indexfooteralign);
-        $footeralign_select->addOptionArray(array("left" => _AM_XTORRENT_IPAGE_CLEFT, "right" => _AM_XTORRENT_IPAGE_CRIGHT, "center" => _AM_XTORRENT_IPAGE_CCENTER));
+        $footeralign_select->addOptionArray(["left" => _AM_XTORRENT_IPAGE_CLEFT, "right" => _AM_XTORRENT_IPAGE_CRIGHT, "center" => _AM_XTORRENT_IPAGE_CCENTER]);
         $sform->addElement($footeralign_select);
 
         $options_tray = new XoopsFormElementTray(_AM_XTORRENT_TEXTOPTIONS, '<br>');
