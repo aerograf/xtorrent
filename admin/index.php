@@ -124,7 +124,7 @@ function Download()
         $gperm_handler = xoops_gethandler('groupperm');
         $groups = $gperm_handler -> getGroupIds('xtorrentownFilePerm', $lid, $xoopsModule -> getVar('mid'));
 
-        $groups = $groups ? $groups : true;
+        $groups = $groups ?: true;
         $sform -> addElement(new XoopsFormSelectGroup(_AM_XTORRENT_FCATEGORY_GROUPPROMPT, 'groups', true, $groups, 5, true));
 
         $titles_tray = new XoopsFormElementTray(_AM_XTORRENT_FILE_TITLE, '<br />');

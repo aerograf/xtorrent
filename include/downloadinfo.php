@@ -107,7 +107,7 @@ $sql2    = 'SELECT rated FROM ' . $xoopsDB->prefix('xtorrent_reviews') . ' WHERE
 $results = $xoopsDB->query($sql2);
 $numrows = $xoopsDB->getRowsNum($results);
 
-$down['reviews_num'] = $numrows ? $numrows : 0;
+$down['reviews_num'] = $numrows ?: 0;
 
 $finalrating = 0;
 $totalrating = 0;
