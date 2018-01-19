@@ -838,7 +838,7 @@ switch ($op) {
                 $lid         = (int)$review_array['lid'];
                 $submitter   = xoops_getLinkedUnameFromId($review_array['uid']);
                 $datetime    = formatTimestamp($review_array['date'], $xoopsModuleConfig['dateformat']);
-                $status      = intval($review_array['submit']) ? $approved : "<a href='index.php?op=approve_review&review_id=" . $review_id . "'>" . $imagearray['approve'] . '</a>';
+                $status      = (int)$review_array['submit'] ? $approved : "<a href='index.php?op=approve_review&review_id=" . $review_id . "'>" . $imagearray['approve'] . '</a>';
                 $modify      = "<a href='index.php?op=edit_review&review_id=" . $review_id . "'>" . $imagearray['editimg'] . '</a>';
                 $delete      = "<a href='index.php?op=del_review&review_id=" . $review_id . "'>" . $imagearray['deleteimg'] . '</a>';
                 echo "
