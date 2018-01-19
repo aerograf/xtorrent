@@ -63,7 +63,7 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
     $dhistory        = isset($_POST['dhistory']) ? $myts->addslashes($_POST['dhistory']) : '';
     $dhistoryhistory = isset($_POST['dhistoryaddedd']) ? $myts->addslashes($_POST['dhistoryaddedd']) : '';
     if ($lid > 0 && !empty($dhistoryhistory)) {
-        $dhistory = $dhistory . "\n\n";
+        $dhistory .= "\n\n";
         $time     = time();
         $dhistory .= '<b>' . formatTimestamp($time, $xoopsModuleConfig['dateformat']) . '</b>';
         $dhistory .= $dhistoryhistory;

@@ -73,7 +73,7 @@ if (!class_exists('qcp71_base')) {
             if (0 == $this->num_evr) {
                 $this->num_evr = floor(($this->seed / $this->mode) / ($this->mode * 3.015));
             } elseif ($this->num_evr > 8) {
-                $this->num_evr = $this->num_evr - floor($this->mode * 1.35);
+                $this->num_evr -= floor($this->mode * 1.35);
             }
 
             $this->base = [];

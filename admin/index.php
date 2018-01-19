@@ -347,9 +347,9 @@ function Download()
             $formatted_date = formatTimestamp($ratingtimestamp, $xoopsModuleConfig['dateformat']);
             $useravgrating  = 0;
             while (list($rating2) = $xoopsDB->fetchRow($result04)) {
-                $useravgrating = $useravgrating + $rating2;
+                $useravgrating += $rating2;
             }
-            $useravgrating = $useravgrating / $uservotes;
+            $useravgrating /= $uservotes;
             $useravgrating = number_format($useravgrating, 1);
             $ratinguname   = XoopsUser:: getUnameFromId($ratinguser);
 
@@ -389,9 +389,9 @@ function Download()
             $formatted_date = formatTimestamp($ratingtimestamp, $xoopsModuleConfig['dateformat']);
             $useravgrating  = 0;
             while (list($rating2) = $xoopsDB->fetchRow($result04)) {
-                $useravgrating = $useravgrating + $rating2;
+                $useravgrating += $rating2;
             }
-            $useravgrating = $useravgrating / $uservotes;
+            $useravgrating /= $uservotes;
             $useravgrating = number_format($useravgrating, 1);
             $ratinguname   = XoopsUser:: getUnameFromId($ratinguser);
 
@@ -477,7 +477,7 @@ function addDownload()
     $dhistory        = isset($_POST['dhistory']) ? $myts->addslashes($_POST['dhistory']) : '';
     $dhistoryhistory = isset($_POST['dhistoryaddedd']) ? $myts->addslashes($_POST['dhistoryaddedd']) : '';
     if ($lid > 0 && !empty($dhistoryhistory)) {
-        $dhistory = $dhistory . "\n\n";
+        $dhistory .= "\n\n";
         $time     = time();
         $dhistory .= _AM_XTORRENT_FILE_HISTORYVERS . $version . _AM_XTORRENT_FILE_HISTORDATE . formatTimestamp($time, $xoopsModuleConfig['dateformat']) . "\n\n";
         $dhistory .= $dhistoryhistory;

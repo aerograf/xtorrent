@@ -162,8 +162,8 @@ while ($row = $xoopsDB->fetchArray($ret[1])) {
         'leeches' => $row['leechers'],
         'tracker' => $row['tracker']
     ];
-    $down['total_seeds']   = $down['total_seeds'] + $row['seeds'];
-    $down['total_leeches'] = $down['total_leeches'] + $row['leechers'];
+    $down['total_seeds']   += $row['seeds'];
+    $down['total_leeches'] += $row['leechers'];
 }
 
 $files = [];

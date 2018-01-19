@@ -52,10 +52,10 @@ switch ($op) {
         $useravgrating = 0;
 
         while (list($rating2) = $xoopsDB->fetchRow($result2)) {
-            $useravgrating = $useravgrating + $rating2;
+            $useravgrating += $rating2;
         }
         if ($useravgrating > 0) {
-            $useravgrating = $useravgrating / $uservotes;
+            $useravgrating /= $uservotes;
             $useravgrating = number_format($useravgrating, 2);
         }
 

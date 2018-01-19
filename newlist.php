@@ -36,7 +36,7 @@ while ($counter <= 7 - 1) {
         }
     }
     $counter++;
-    $allweekdownloads = $allweekdownloads + $totaldownloads;
+    $allweekdownloads += $totaldownloads;
 }
 
 $counter = 0;
@@ -58,7 +58,7 @@ while ($counter <= 30 - 1) {
     if (!isset($allmonthdownloads)) {
         $allmonthdownloads = 0;
     };
-    $allmonthdownloads = $allmonthdownloads + $totaldownloads;
+    $allmonthdownloads += $totaldownloads;
     $counter++;
 }
 $xoopsTpl->assign('allweekdownloads', $allweekdownloads);
@@ -95,7 +95,7 @@ while ($counter <= $newdownloadshowdays - 1) {
         }
     }
     $counter++;
-    $allweekdownloads                    = $allweekdownloads + $totaldownloads;
+    $allweekdownloads                    += $totaldownloads;
     $dailydownloads['newdownloadday']    = $dailydownloads['newdownloadView'] = $newdownloadView;
     $dailydownloads['newdownloaddayRaw'] = $newdownloaddayRaw;
     $dailydownloads['totaldownloads']    = $totaldownloads;

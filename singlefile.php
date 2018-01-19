@@ -128,8 +128,8 @@ while ($row = $xoopsDB->fetchArray($ret[1])) {
         'leeches' => $row['leechers'],
         'tracker' => $row['tracker']
     ];
-    $down['total_seeds']   = $down['total_seeds'] + $row['seeds'];
-    $down['total_leeches'] = $down['total_leeches'] + $row['leechers'];
+    $down['total_seeds']   += $row['seeds'];
+    $down['total_leeches'] += $row['leechers'];
 }
 
 $files = [];
@@ -140,8 +140,8 @@ while ($row = $xoopsDB->fetchArray($ret[3])) {
 $down['torrent_last_polled'] = date('H:i:s', $poll['torrent']);
 $down['tracker_last_polled'] = date('H:i:s', $poll['tracker']);
 $down['torrent']             = $torrent;
-$down['total_seeds']         = $down['total_seeds'] + $torrent['seeds'];
-$down['total_leeches']       = $down['total_leeches'] + $torrent['leechers'];
+$down['total_seeds']         += $torrent['seeds'];
+$down['total_leeches']       += $torrent['leechers'];
 $down['tracker']             = $trkcr;
 $down['files']               = $files;
 //print_r($down);

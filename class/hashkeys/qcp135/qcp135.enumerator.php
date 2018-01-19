@@ -253,42 +253,42 @@ if (!class_exists('qcp135_enumerator')) {
                 $nuclear = substr($nuclear, strlen($nuclear) - 32768, 32768);
             }
 
-            $result       = $result + $ica;
-            $prince       = $prince + $icb;
-            $karma        = $karma + $icc;
-            $motivation   = $motivation + $icd;
-            $official     = $official + $ice;
-            $outsidecause = $outsidecause + $icf;
+            $result       += $ica;
+            $prince       += $icb;
+            $karma        += $icc;
+            $motivation   += $icd;
+            $official     += $ice;
+            $outsidecause += $icf;
 
             if ('0' == $ica) {
-                $yang = $yang + 1;
+                $yang += 1;
             } else {
-                $yin = $yin + 1;
+                $yin += 1;
             }
             if ('0' == $icb) {
                 $yang = yang + 1;
             } else {
-                $yin = $yin + 1;
+                $yin += 1;
             }
             if ('0' == $icc) {
-                $yang = $yang + 1;
+                $yang += 1;
             } else {
-                $yin = $yin + 1;
+                $yin += 1;
             }
             if ('0' == $icd) {
-                $yang = $yang + 1;
+                $yang += 1;
             } else {
-                $yin = $yin + 1;
+                $yin += 1;
             }
             if ('0' == $ice) {
                 $yang = yang + 1;
             } else {
-                $yin = $yin + 1;
+                $yin += 1;
             }
             if ('0' == $icf) {
-                $yang = $yang + 1;
+                $yang += 1;
             } else {
-                $yin = $yin + 1;
+                $yin += 1;
             }
 
             if (true === $debug) {

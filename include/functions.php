@@ -622,13 +622,13 @@ function xtorrent_GetDownloadTime($size = 0, $gmodem = 1, $gisdn = 1, $gdsl = 1,
                 }
                 $asout[$i] = '<b>' . $amname[$i] . '</b>' . $asout[$i];
                 if ($i < 4) {
-                    $asout[$i] = $asout[$i] . ' | ';
+                    $asout[$i] .= ' | ';
                 }
             }
         }
         $dltime = '';
         for ($i = 0; $i < 5; $i++) {
-            $dltime = $dltime . $asout[$i];
+            $dltime .= $asout[$i];
         }
     }
     return $dltime;
