@@ -58,7 +58,7 @@ function tracker_scrape_all($torrent, $timeout = 5)
 // announce address will be used from the tracker object.
 function tracker_scrape($torrent, $tracker = null, $timeout = 5)
 {
-    if (is_null($tracker)) {
+    if (null === $tracker) {
         $tracker        = $torrent->announce;
     }
     

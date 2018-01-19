@@ -20,7 +20,7 @@ class BEncodeReader
     {
         ini_set('allow_url_fopen', true);
         
-        if (is_null($filename)) {
+        if (null === $filename) {
             return;
         }
     
