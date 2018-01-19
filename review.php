@@ -41,7 +41,7 @@ switch (isset($op) && !empty($op)) {
         $catarray['toolbar']     = xtorrent_toolbar();
         $xoopsTpl->assign('catarray', $catarray);
 
-        $sql_review    = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_reviews') . ' WHERE lid = ' . (int)$lid . ' AND submit = 1 ORDER by date';
+        $sql_review    = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_reviews') . ' WHERE lid = ' . $lid . ' AND submit = 1 ORDER by date';
         $result_review = $xoopsDB->query($sql_review, 5, $start);
         $result_count  = $xoopsDB->query($sql_review);
         $review_amount = $xoopsDB->getRowsNum($result_count);
