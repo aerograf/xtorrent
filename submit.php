@@ -22,8 +22,8 @@ if (!$xoopsModuleConfig['submissions']) {
 if (isset($_POST['submit']) && !empty($_POST['submit'])) {
     $notify = !empty($_POST['notify']) ? 1 : 0;
 
-    $lid = !empty($_POST['lid']) ? intval($_POST['lid']) : 0 ;
-    $cid = !empty($_POST['cid']) ? intval($_POST['cid']) : 0 ;
+    $lid = !empty($_POST['lid']) ? (int)$_POST['lid'] : 0 ;
+    $cid = !empty($_POST['cid']) ? (int)$_POST['cid'] : 0 ;
 
     if (empty($_FILES['userfile']['name']) && $_POST['url'] && '' != $_POST['url'] && 'https://' != $_POST['url']) {
         $url   = ('https://' != $_POST['url']) ? $myts->addslashes($_POST['url']) : '';
@@ -58,7 +58,7 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
     $currency        = $myts->addslashes(trim($_POST['currency']));
     $features        = $myts->addslashes(trim($_POST['features']));
     $requirements    = $myts->addslashes(trim($_POST['requirements']));
-    $forumid         = (isset($_POST['forumid']) && $_POST['forumid'] > 0) ? intval($_POST['forumid']) : 0;
+    $forumid         = (isset($_POST['forumid']) && $_POST['forumid'] > 0) ? (int)$_POST['forumid'] : 0;
     $limitations     = isset($_POST['limitations']) ? $myts->addslashes($_POST['limitations']) : '';
     $dhistory        = isset($_POST['dhistory']) ? $myts->addslashes($_POST['dhistory']) : '';
     $dhistoryhistory = isset($_POST['dhistoryaddedd']) ? $myts->addslashes($_POST['dhistoryaddedd']) : '';
@@ -265,9 +265,9 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
     $publisher     = '';
 
     if (isset($_POST['lid'])) {
-        $lid = intval($_POST['lid']);
+        $lid = (int)$_POST['lid'];
     } elseif (isset($_GET['lid'])) {
-        $lid = intval($_GET['lid']);
+        $lid = (int)$_GET['lid'];
     } else {
         $lid = 0;
     }

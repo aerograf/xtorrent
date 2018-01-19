@@ -13,9 +13,9 @@ if (!empty($_POST['submit'])) {
     // Make sure only 1 anonymous from an IP in a single day.
     $anonwaitdays = 1;
     $ip           = getenv('REMOTE_ADDR');
-    $lid          = intval($_POST['lid']);
-    $cid          = intval($_POST['cid']);
-    $rating       = intval($_POST['rating']);
+    $lid          = (int)$_POST['lid'];
+    $cid          = (int)$_POST['cid'];
+    $rating       = (int)$_POST['rating'];
     // Check if Rating is Null
     if ('--' == $rating) {
         redirect_header('ratefile.php?cid=' . $cid . '&amp;lid=' . $lid . '', 4, _MD_XTORRENT_NORATING);
@@ -61,8 +61,8 @@ if (!empty($_POST['submit'])) {
 } else {
     $xoopsOption['template_main'] = 'xtorrent_ratefile.tpl';
     include XOOPS_ROOT_PATH . '/header.php';
-    $lid         = intval($_GET['lid']);
-    $cid         = intval($_GET['cid']);
+    $lid         = (int)$_GET['lid'];
+    $cid         = (int)$_GET['cid'];
     $imageheader = xtorrent_imageheader();
 
     $result      = $xoopsDB -> query('SELECT title FROM ' . $xoopsDB-> prefix('xtorrent_downloads') . " WHERE lid=$lid");

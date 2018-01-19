@@ -50,7 +50,7 @@ class XtorrentReviewHandler extends XoopsObjectHandler
 
     public function get($reviewid, $fields='*')
     {
-        $reviewid = intval($reviewid);
+        $reviewid = (int)$reviewid;
         if ($reviewid > 0) {
             $sql = 'SELECT '.$fields.' FROM '.$this->db_table.' WHERE reviewid ='.$reviewid;
         } else {

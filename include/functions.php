@@ -126,12 +126,12 @@ function xtorrent_displayicons($time, $status = 0, $counter = 0)
     $new = '';
     $pop = '';
 
-    $newdate = (time() - (86400 * intval($xoopsModuleConfig['daysnew'])));
-    $popdate = (time() - (86400 * intval($xoopsModuleConfig['daysupdated']))) ;
+    $newdate = (time() - (86400 * (int)$xoopsModuleConfig['daysnew']));
+    $popdate = (time() - (86400 * (int)$xoopsModuleConfig['daysupdated'])) ;
 
     if (3 != $xoopsModuleConfig['displayicons']) {
         if ($newdate < $time) {
-            if (intval($status) > 1) {
+            if ((int)$status > 1) {
                 if (1 == $xoopsModuleConfig['displayicons']) {
                     $new = '&nbsp;<img src=' . XOOPS_URL . "/modules/xtorrent/images/icon/update.gif alt='' align ='absmiddle'>";
                 }
@@ -909,7 +909,7 @@ function xtorrent_downlistbody($published)
     $cid       = $published['cid'];
     $title     = "<a href='../singlefile.php?cid=" . $published['cid'] . '&amp;lid=' . $published['lid'] . "'>" . $myts-> htmlSpecialChars(trim($published['title'])) . '</a>';
     ;
-    $submitter = xoops_getLinkedUnameFromId(intval($published['submitter']));
+    $submitter = xoops_getLinkedUnameFromId((int)$published['submitter']);
     $publish   = formatTimestamp($published['published'], 's');
     $status    = ($published['published'] > 0) ? $imagearray['online'] : "<a href='newdownloads.php'>" . $imagearray['offline'] . '</a>';
     $offline   = (0 == $published['offline']) ? $imagearray['online'] : $imagearray['offline'];
@@ -945,7 +945,7 @@ function xtorrent_setcookie($name, $string = '', $expire = 0)
         }
         $string = implode(',', $value);
     }
-    setcookie($xtorrentCookie['prefix'].$name, $string, intval($expire), $xtorrentCookie['path'], $xtorrentCookie['domain'], $xtorrentCookie['secure']);
+    setcookie($xtorrentCookie['prefix'].$name, $string, (int)$expire, $xtorrentCookie['path'], $xtorrentCookie['domain'], $xtorrentCookie['secure']);
 }
 
 function xtorrent_getcookie($name, $isArray = false)

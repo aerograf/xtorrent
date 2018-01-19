@@ -22,14 +22,14 @@ if (isset($_GET)) {
     }
 }
 
-$cid = intval($cid);
-$lid = intval($lid);
+$cid = (int)$cid;
+$lid = (int)$lid;
 
 switch (isset($op) && !empty($op)) {
     case 'list':
 
         global $xoopsDB, $xoopsModuleConfig, $myts;
-        $start = isset($_GET['start']) ? intval($_GET['start']) : 0;
+        $start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
         
         $xoopsOption['template_main'] = 'xtorrent_reviews.tpl';
         include XOOPS_ROOT_PATH . '/header.php';
@@ -41,7 +41,7 @@ switch (isset($op) && !empty($op)) {
         $catarray['toolbar']     = xtorrent_toolbar();
         $xoopsTpl->assign('catarray', $catarray);
 
-        $sql_review    = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_reviews') . ' WHERE lid = ' . intval($lid) . ' AND submit = 1 ORDER by date';
+        $sql_review    = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_reviews') . ' WHERE lid = ' . (int)$lid . ' AND submit = 1 ORDER by date';
         $result_review = $xoopsDB->query($sql_review, 5, $start);
         $result_count  = $xoopsDB->query($sql_review);
         $review_amount = $xoopsDB->getRowsNum($result_count);
@@ -49,20 +49,20 @@ switch (isset($op) && !empty($op)) {
         $sql                     = 'SELECT title, lid, cid FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE lid = ' . $lid . '';
         $down_arr_text           = $xoopsDB->fetcharray($xoopsDB->query($sql));
         $down_arr['title']       = $myts->htmlSpecialChars($myts->stripSlashesGPC($down_arr_text['title']));
-        $down_arr['cid']         = intval($down_arr_text['cid']);
-        $down_arr['lid']         = intval($down_arr_text['lid']);
+        $down_arr['cid']         = (int)$down_arr_text['cid'];
+        $down_arr['lid']         = (int)$down_arr_text['lid'];
         $down_arr['description'] = $myts->displayTarea($down_arr_text['description'], 1, 1, 1, 1, 0);
         $xoopsTpl->assign('down_arr', $down_arr);
 
         while ($arr_review = $xoopsDB->fetchArray($result_review)) {
-            $down_review['review_id'] = intval($arr_review['review_id']);
-            $down_review['lid']       = intval($arr_review['lid']);
+            $down_review['review_id'] = (int)$arr_review['review_id'];
+            $down_review['lid']       = (int)$arr_review['lid'];
             $down_review['title']     = $myts->censorstring($arr_review['title']);
             $down_review['title']     = $myts->htmlSpecialChars($myts->stripSlashesGPC($down_review['title']));
             $down_review['review']    = $myts->censorstring($arr_review['review']);
             $down_review['review']    = $myts->displayTarea($down_review['review'], 0, 0, 0, 0, 0);
             $down_review['date']      = formatTimestamp($arr_review['date'], $xoopsModuleConfig['dateformat']);
-            $down_review['submitter'] = xoops_getLinkedUnameFromId(intval($arr_review['uid']));
+            $down_review['submitter'] = xoops_getLinkedUnameFromId((int)$arr_review['uid']);
             $review_rating            = round(number_format($arr_review['rated'], 0) / 2);
             $rateimg                  = "rate$review_rating.gif";
             $down_review['rated_img'] = $rateimg;
@@ -84,8 +84,8 @@ switch (isset($op) && !empty($op)) {
             $uid    = !empty($xoopsUser) ? $xoopsUser->getVar('uid') : 0;
             $title  = $myts->addslashes(trim($_POST['title']));
             $review = $myts->addslashes(trim($_POST['review']));
-            $lid    = intval(trim($_POST['lid']));
-            $rated  = intval(trim($_POST['rated']));
+            $lid    = (int)trim($_POST['lid']);
+            $rated  = (int)trim($_POST['rated']);
             $date   = time();
             $submit = $xoopsModuleConfig['autoapprove'] ? 1 : 0 ;
             $sql    = 'INSERT INTO ' . $xoopsDB->prefix('xtorrent_reviews') . " (review_id, lid, title, review, submit, date, uid, rated) VALUES ('', $lid, '$title', '$review', '$submit', $date, $uid, $rated)";

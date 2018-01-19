@@ -19,7 +19,7 @@ switch ($op) {
         $adminObject = \Xmf\Module\Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));
 
-        $requestid = intval($_GET['requestid']);
+        $requestid = (int)$_GET['requestid'];
 
         $sql = 'SELECT lid, title, url, mirror, homepage, homepagetitle, cid, version, submitter, size, platform,  
   			license, limitations, price, description, features, requirements, dhistory, screenshot, modifysubmitter, requestid
@@ -209,7 +209,7 @@ switch ($op) {
         include_once XOOPS_ROOT_PATH . '/class/xoopstree.php';
 
         global $xoopsModuleConfig;
-        $start  = isset($_GET['start']) ? intval($_GET['start']) : 0;
+        $start  = isset($_GET['start']) ? (int)$_GET['start'] : 0;
         $mytree = new XoopsTree($xoopsDB->prefix('xtorrent_mod'), 'requestid', 0);
 
         global $xoopsDB, $myts, $mytree, $xoopsModuleConfig;

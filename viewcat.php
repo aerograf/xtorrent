@@ -5,9 +5,9 @@ include_once XOOPS_ROOT_PATH . '/class/xoopstree.php';
 
 global $xoopsModuleConfig, $myts, $xoopsModules;
 
-$start      = isset($_REQUEST['start']) ? intval($_REQUEST['start']) : 0;
+$start      = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
 $orderby    = isset($_REQUEST['orderby']) ? $_REQUEST['orderby'] : 'dateD';
-$cid        = isset($_REQUEST['cid']) && $_REQUEST['cid'] > 0 ? intval($_REQUEST['cid']) : 0;
+$cid        = isset($_REQUEST['cid']) && $_REQUEST['cid'] > 0 ? (int)$_REQUEST['cid'] : 0;
 $selectdate = isset($_REQUEST['selectdate'])?$_REQUEST['selectdate']: 0 ;
 $list       = isset($_REQUEST['list'])?$_REQUEST['list']: 0 ;
 $cat        = empty($_REQUEST['cat']) ? '' : xoops_sef($_REQUEST['cat'], '_');

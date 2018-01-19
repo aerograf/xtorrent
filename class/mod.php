@@ -78,7 +78,7 @@ class XtorrentModHandler extends XoopsObjectHandler
 
     public function get($requestid, $fields='*')
     {
-        $requestid = intval($requestid);
+        $requestid = (int)$requestid;
         if ($requestid > 0) {
             $sql = 'SELECT '.$fields.' FROM '.$this->db_table.' WHERE requestid ='.$requestid;
         } else {

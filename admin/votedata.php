@@ -25,8 +25,8 @@ if (isset($_POST['op'])) {
 switch ($op) {
     case 'delVote':
         global $xoopsDB, $_GET;
-        $rid = intval($_GET['rid']);
-        $lid = intval($_GET['lid']);
+        $rid = (int)$_GET['rid'];
+        $lid = (int)$_GET['lid'];
         $sql = $xoopsDB->queryF('DELETE FROM ' . $xoopsDB->prefix('xtorrent_votedata') . " WHERE ratingid = $rid");
         $xoopsDB->query($sql);
         xtorrent_updaterating($lid);
@@ -38,7 +38,7 @@ switch ($op) {
 
         global $xoopsDB, $imagearray;
 
-            $start         = isset($_GET['start']) ? intval($_GET['start']) : 0;
+            $start         = isset($_GET['start']) ? (int)$_GET['start'] : 0;
         $useravgrating = '0';
         $uservotes     = '0';
 

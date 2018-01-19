@@ -48,7 +48,7 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
 
     public function get($ratingid, $fields='*')
     {
-        $ratingid = intval($ratingid);
+        $ratingid = (int)$ratingid;
         if ($ratingid > 0) {
             $sql = 'SELECT '.$fields.' FROM '.$this->db_table.' WHERE ratingid ='.$ratingid;
         } else {

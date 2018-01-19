@@ -78,7 +78,7 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
 
     public function get($id, $fields='*')
     {
-        $id = intval($id);
+        $id = (int)$id;
         if ($id > 0) {
             $sql = 'SELECT '.$fields.' FROM '.$this->db_table.' WHERE id='.$id;
         } else {

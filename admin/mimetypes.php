@@ -135,8 +135,8 @@ switch ($op) {
         $mime_ext   = $myts -> addslashes($_POST['mime_ext']);
         $mime_name  = $myts -> addslashes($_POST['mime_name']);
         $mime_types = $myts -> addslashes($_POST['mime_type']);
-        $mime_admin = intval($_POST['mime_admin']);
-        $mime_user  = intval($_POST['mime_user']);
+        $mime_admin = (int)$_POST['mime_admin'];
+        $mime_user  = (int)$_POST['mime_user'];
 
         if (0 == $mime_id) {
             $query = 'INSERT INTO ' . $xoopsDB-> prefix('xtorrent_mimetypes') . " 
@@ -161,7 +161,7 @@ switch ($op) {
 
             $mime_admin = (isset($_GET['admin']) && 1 == $_GET['admin']) ? $_GET['admin'] : 0;
         $mime_user  = (isset($_GET['user']) && 1 == $_GET['user']) ? $_GET['user'] : 0;
-            $type_all   = intval($_GET['type_all']);
+            $type_all   = (int)$_GET['type_all'];
             $query      = 'UPDATE ' . $xoopsDB-> prefix('xtorrent_mimetypes') . ' SET ';
         if (1 == $mime_admin) {
             $query .= " mime_admin = $type_all";
@@ -218,7 +218,7 @@ switch ($op) {
     default:
 
         global $xoopsUser, $xoopsDB, $xoopsModuleConfig;
-        $start      = isset($_GET['start']) ? intval($_GET['start']) : 0;
+        $start      = isset($_GET['start']) ? (int)$_GET['start'] : 0;
         $query      = 'select * from ' . $xoopsDB-> prefix('xtorrent_mimetypes') . ' ORDER BY mime_name';
         $mime_array = $xoopsDB -> query($query, 20, $start);
         $mime_num   = $xoopsDB -> getRowsNum($xoopsDB -> query($query));

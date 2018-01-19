@@ -7,7 +7,7 @@ if (!empty($_POST['submit'])) {
 
     $sender = is_object($xoopsUser) ? $xoopsUser->getVar('uid') : 0;
     $ip = getenv('REMOTE_ADDR');
-    $lid = intval($_POST['lid']);
+    $lid = (int)$_POST['lid'];
     $time = time();
     /*
     *  Check if REG user is trying to report twice.
@@ -34,7 +34,7 @@ if (!empty($_POST['submit'])) {
         $down_arr = $xoopsDB->fetchArray($xoopsDB->query($sql));
         unset($sql);
 
-        $user = new XoopsUser(intval($down_arr['submitter']));
+        $user = new XoopsUser((int)$down_arr['submitter']);
         $subdate = formatTimestamp($down_arr['date'], $xoopsModuleConfig['dateformat']);
         $cid = $down_arr['cid'];
         $title = $down_arr['title'];
@@ -70,7 +70,7 @@ if (!empty($_POST['submit'])) {
     $catarray['imageheader'] = xtorrent_imageheader();
     $xoopsTpl->assign('catarray', $catarray);
 
-    $lid = (isset($_GET['lid']) && $_GET['lid'] > 0) ? intval($_GET['lid']) : 0;
+    $lid = (isset($_GET['lid']) && $_GET['lid'] > 0) ? (int)$_GET['lid'] : 0;
     $sql = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_downloads') . " WHERE lid = $lid AND published > 0 AND published <= " . time() . ' AND (expired = 0 OR expired > ' . time() . ')';
     $down_arr = $xoopsDB->fetchArray($xoopsDB->query($sql));
     unset($sql);
@@ -84,7 +84,7 @@ if (!empty($_POST['submit'])) {
 
         $broken['title'] = trim($down_arr['title']);
         $broken['id'] = $broke_arr['reportid'];
-        $broken['reporter'] = xoops_getLinkedUnameFromId(intval($broke_arr['sender']));
+        $broken['reporter'] = xoops_getLinkedUnameFromId((int)$broke_arr['sender']);
         $broken['date'] = formatTimestamp($broke_arr['date'], $xoopsModuleConfig['dateformat']);
         $broken['acknowledged'] = (1 == $broke_arr['acknowledged']) ? _YES : _NO ;
         $broken['confirmed'] = (1 == $broke_arr['confirmed']) ? _YES : _NO ;
@@ -106,7 +106,7 @@ if (!empty($_POST['submit'])) {
         $time = (0 != $down_arr['updated']) ? $down_arr['updated'] : $down_arr['published'];
         $down['updated'] = formatTimestamp($time, $xoopsModuleConfig['dateformat']);
         $is_updated = (0 != $down_arr['updated']) ? _MD_XTORRENT_UPDATEDON : _MD_XTORRENT_SUBMITDATE;
-        $down['publisher'] = xoops_getLinkedUnameFromId(intval($down_arr['submitter']));
+        $down['publisher'] = xoops_getLinkedUnameFromId((int)$down_arr['submitter']);
 
         $xoopsTpl->assign('file_id', $lid);
         $xoopsTpl->assign('lang_subdate', $is_updated);

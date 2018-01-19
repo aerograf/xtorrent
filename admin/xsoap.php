@@ -417,8 +417,8 @@ function importtorrents($req, $client, $servers, $server, $server_key, $site_nam
 		  //print_r($result);
 			$myts   = MyTextSanitizer::getInstance();
 			$notify = 0 != $req['notify'] ? 1 : 0;
-			$slid   = !empty($result['RESULT']['data'][0]['content']['lid']) ? intval($result['RESULT']['data'][0]['content']['lid']) : 0 ;
-			$scid   = !empty($result['RESULT']['data'][0]['content']['cid']) ? intval($result['RESULT']['data'][0]['content']['cid']) : 0 ;
+			$slid   = !empty($result['RESULT']['data'][0]['content']['lid']) ? (int)$result['RESULT']['data'][0]['content']['lid'] : 0 ;
+			$scid   = !empty($result['RESULT']['data'][0]['content']['cid']) ? (int)$result['RESULT']['data'][0]['content']['cid'] : 0 ;
 			$sql    = 'SELECT cid, auto_approval FROM ' . $xoopsDB->prefix('xtorrent_soap_catmatch') . ' WHERE scid = ' . $scid . ' and skey = ' . $server_key;
 
 			list($cid, $x_autoapprove) = $xoopsDB->fetchRow($xoopsDB->queryF($sql));

@@ -16,7 +16,7 @@ if (isset($_GET)) {
     }
 }
 
-$rootpath = isset($_GET['rootpath']) ? intval($_GET['rootpath']) : 0;
+$rootpath = isset($_GET['rootpath']) ? (int)$_GET['rootpath'] : 0;
 
 switch ($op) {
     case 'upload':

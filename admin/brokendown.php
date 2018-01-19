@@ -10,7 +10,7 @@ if (!isset($_POST['op'])) {
     $op = $_POST['op'];
 }
 
-$lid = isset($_GET['lid']) ? intval($_GET['lid']) : 0;
+$lid = isset($_GET['lid']) ? (int)$_GET['lid'] : 0;
 
 switch ($op) {
     case 'updateNotice':

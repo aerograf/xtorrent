@@ -57,7 +57,7 @@ class XtorrentCatHandler extends XoopsObjectHandler
 
     public function get($cid, $fields='*')
     {
-        $cid = intval($cid);
+        $cid = (int)$cid;
         if ($cid > 0) {
             $sql = 'SELECT '.$fields.' FROM '.$this->db_table.' WHERE cid ='.$cid;
         } else {

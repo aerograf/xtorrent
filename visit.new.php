@@ -7,8 +7,8 @@ global $xoopsUser, $xoopsModuleConfig, $myts;
 
 $agreed = isset($_GET['agree']) ? $_GET['agree'] : 0;
 
-$lid = intval($_GET['lid']);
-$cid = intval($_GET['cid']);
+$lid = (int)$_GET['lid'];
+$cid = (int)$_GET['cid'];
 
 function passkey_paypal($lid, $made)
 {

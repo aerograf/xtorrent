@@ -3,8 +3,8 @@
 include 'header.php';
 include_once XOOPS_ROOT_PATH . '/class/xoopstree.php';
 
-$lid   = intval($_GET['lid']);
-$cid   = intval($_GET['cid']);
+$lid   = (int)$_GET['lid'];
+$cid   = (int)$_GET['cid'];
 $title = xoops_sef($HTTP_GET_VARS['title'], '_');
 $cat   = xoops_sef($HTTP_GET_VARS['cat'], '_');
 global $xoopsModuleConfig;
@@ -42,8 +42,8 @@ include XOOPS_ROOT_PATH . '/header.php';
  * Begin Main page Heading etc
  */
 $down['imageheader'] = xtorrent_imageheader();
-$down['id']          = intval($down_arr['lid']);
-$down['cid']         = intval($down_arr['cid']);
+$down['id']          = (int)$down_arr['lid'];
+$down['cid']         = (int)$down_arr['cid'];
 /**
  * Breadcrumb
  */

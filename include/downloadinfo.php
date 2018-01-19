@@ -1,7 +1,7 @@
 <?php
 
-$down['id']  = intval($down_arr['lid']);
-$down['cid'] = intval($down_arr['cid']);
+$down['id']  = (int)$down_arr['lid'];
+$down['cid'] = (int)$down_arr['cid'];
 
 include_once XOOPS_ROOT_PATH . '/modules/tag/include/tagbar.php';
 $down['tagbar'] = tagBar($down['id'], $down['cid']);
@@ -16,7 +16,7 @@ $rating          = round(number_format($down_arr['rating'], 0) / 2);
 $rateimg         = "rate$rating.gif";
 $down['rateimg'] = $rateimg;
 $down['votes']   = (1 == $down_arr['votes']) ? _MD_XTORRENT_ONEVOTE : sprintf(_MD_XTORRENT_NUMVOTES, $down_arr['votes']);
-$down['hits']    = intval($down_arr['hits']);
+$down['hits']    = (int)$down_arr['hits'];
 
 $xoopsTpl->assign('lang_dltimes', sprintf(_MD_XTORRENT_DLTIMES, $down['hits']));
 
@@ -54,9 +54,9 @@ $down['mirror']   = ('https://' == $down_arr['mirror']) ? '' : $myts->htmlSpecia
 $down['mirror']   = $down['mirror'] ? "<a style=\"color:#A033BB;\" href='" . $down['mirror'] . "' target='_blank'>" . _MD_XTORRENT_MIRRORSITE . '</a>' : _MD_XTORRENT_NOTSPECIFIED;
 $down['comments'] = $down_arr['comments'];
 $down['version']  = $down_arr['version'];
-$down['downtime'] = xtorrent_GetDownloadTime(intval($down_arr['size']), 1, 1, 1, 1, 0);
+$down['downtime'] = xtorrent_GetDownloadTime((int)$down_arr['size'], 1, 1, 1, 1, 0);
 $down['downtime'] = str_replace('|', '<br />', $down['downtime']);
-$down['size']     = xtorrent_PrettySize(intval($down_arr['size']));
+$down['size']     = xtorrent_PrettySize((int)$down_arr['size']);
 
 $time            = (0 != $down_arr['updated']) ? $down_arr['updated'] : $down_arr['published'];
 $down['updated'] = formatTimestamp($time, $xoopsModuleConfig['dateformat']);
@@ -64,10 +64,10 @@ $is_updated      = (0 != $down_arr['updated']) ? _MD_XTORRENT_UPDATEDON : _MD_XT
 $xoopsTpl->assign('lang_subdate', $is_updated);
 
 $down['description'] = $myts->displayTarea($down_arr['description'], 0); //no html
-$down['price']       = (0 != $down_arr['price']) ? intval($down_arr['price']) : _MD_XTORRENT_PRICEFREE;
+$down['price']       = (0 != $down_arr['price']) ? (int)$down_arr['price'] : _MD_XTORRENT_PRICEFREE;
 $down['limitations'] = empty($down_arr['limitations']) ? _MD_XTORRENT_NOTSPECIFIED : $myts->htmlSpecialChars(trim($xoopsModuleConfig['limitations'][$down_arr['limitations']]));
 $down['license']     = empty($down_arr['license']) ? _MD_XTORRENT_NOTSPECIFIED : $myts->htmlSpecialChars(trim($xoopsModuleConfig['license'][$down_arr['license']]));
-$down['submitter']   = str_replace('<a', '<a style="color:#A033BB;"', xoops_getLinkedUnameFromId(intval($down_arr['submitter'])));
+$down['submitter']   = str_replace('<a', '<a style="color:#A033BB;"', xoops_getLinkedUnameFromId((int)$down_arr['submitter']));
 $down['publisher']   = (isset($down_arr['publisher']) && !empty($down_arr['publisher'])) ? $myts->htmlSpecialChars($down_arr['publisher']) : _MD_XTORRENT_NOTSPECIFIED;
 $down['platform']    = $myts->htmlSpecialChars($xoopsModuleConfig['platform'][$down_arr['platform']]);
 $down['history']     = $myts->displayTarea($down_arr['dhistory'], 1);

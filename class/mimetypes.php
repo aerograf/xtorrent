@@ -48,7 +48,7 @@ class XtorrentMimetypesHandler extends XoopsObjectHandler
 
     public function get($mime_id, $fields='*')
     {
-        $mime_id = intval($mime_id);
+        $mime_id = (int)$mime_id;
         if ($mime_id > 0) {
             $sql = 'SELECT '.$fields.' FROM '.$this->db_table.' WHERE `mime_id` ='.$mime_id;
         } else {

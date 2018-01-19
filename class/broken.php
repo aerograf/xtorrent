@@ -49,7 +49,7 @@ class XtorrentBrokenHandler extends XoopsObjectHandler
 
     public function get($reportid, $fields='*')
     {
-        $reportid = intval($reportid);
+        $reportid = (int)$reportid;
         if ($reportid > 0) {
             $sql = 'SELECT ' . $fields . ' FROM ' . $this->db_table . ' WHERE reportid =' . $reportid;
         } else {

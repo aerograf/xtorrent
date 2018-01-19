@@ -92,12 +92,12 @@ class XoopsMediaUploader
             $this->allowedMimeTypes = &$allowedMimeTypes;
         }
         $this->uploadDir = $uploadDir;
-        $this->maxFileSize = intval($maxFileSize);
+        $this->maxFileSize = (int)$maxFileSize;
         if (isset($maxWidth)) {
-            $this->maxWidth = intval($maxWidth);
+            $this->maxWidth = (int)$maxWidth;
         }
         if (isset($maxHeight)) {
-            $this->maxHeight = intval($maxHeight);
+            $this->maxHeight = (int)$maxHeight;
         }
     }
 
@@ -122,7 +122,7 @@ class XoopsMediaUploader
             $this->setErrors('You either did not choose a file to upload or the server has insufficient read/writes to upload this file.!');
             return false;
         } elseif (is_array($_FILES[$media_name]['name']) && isset($index)) {
-            $index              = intval($index);
+            $index              = (int)$index;
             $this->mediaName    = get_magic_quotes_gpc() ? stripslashes($_FILES[$media_name]['name'][$index]) : $_FILES[$media_name]['name'][$index];
             $this->mediaType    = $_FILES[$media_name]['type'][$index];
             $this->mediaSize    = $_FILES[$media_name]['size'][$index];
@@ -141,7 +141,7 @@ class XoopsMediaUploader
 
         $this->errors = [];
 
-        if (intval($this->mediaSize) < 0) {
+        if ((int)$this->mediaSize < 0) {
             $this->setErrors('Invalid File Size');
             return false;
         }
@@ -192,7 +192,7 @@ class XoopsMediaUploader
      */
     public function setTargetFileName($value)
     {
-        $this->targetFileName = strval(trim($value));
+        $this->targetFileName = (string)trim($value);
     }
 
     /**
@@ -202,7 +202,7 @@ class XoopsMediaUploader
      */
     public function setPrefix($value)
     {
-        $this->prefix = strval(trim($value));
+        $this->prefix = (string)trim($value);
     }
 
     /**

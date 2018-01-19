@@ -47,9 +47,9 @@ function Download()
     $notifypub     = '';
 
     if (isset($_POST['lid'])) {
-        $lid = intval($_POST['lid']);
+        $lid = (int)$_POST['lid'];
     } elseif (isset($_GET['lid'])) {
-        $lid = intval($_GET['lid']);
+        $lid = (int)$_GET['lid'];
     } else {
         $lid = 0;
     }
@@ -85,7 +85,7 @@ function Download()
             $homepage      = $myts -> htmlSpecialChars($down_array['homepage']);
             $homepagetitle = $myts -> htmlSpecialChars($down_array['homepagetitle']);
             $version       = $down_array['version'];
-            $size          = intval($down_array['size']);
+            $size          = (int)$down_array['size'];
             $platform      = $myts -> htmlSpecialChars($down_array['platform']);
             $publisher     = $myts -> htmlSpecialChars($down_array['publisher']);
             $screenshot    = $myts -> htmlSpecialChars($down_array['screenshot']);
@@ -417,7 +417,7 @@ function delVote()
 {
     global $xoopsDB, $_GET;
     $xoopsDB -> queryF('DELETE FROM ' . $xoopsDB-> prefix('xtorrent_votedata') . ' WHERE ratingid = ' . $_GET['rid'] . '');
-    xtorrent_updaterating(intval($_GET['lid']));
+    xtorrent_updaterating((int)$_GET['lid']);
     redirect_header('index.php', 1, _AM_XTORRENT_VOTE_VOTEDELETED);
 }
 
@@ -472,7 +472,7 @@ function addDownload()
     ;
     $features        = $myts -> addslashes(trim($_POST['features']));
     $requirements    = $myts -> addslashes(trim($_POST['requirements']));
-    $forumid         = (isset($_POST['forumid']) && $_POST['forumid'] > 0) ? intval($_POST['forumid']) : 0;
+    $forumid         = (isset($_POST['forumid']) && $_POST['forumid'] > 0) ? (int)$_POST['forumid'] : 0;
     $limitations     = isset($_POST['limitations']) ? $myts-> addslashes($_POST['limitations']) : '';
     $dhistory        = isset($_POST['dhistory']) ? $myts-> addslashes($_POST['dhistory']) : '';
     $dhistoryhistory = isset($_POST['dhistoryaddedd']) ? $myts-> addslashes($_POST['dhistoryaddedd']) : '';
@@ -693,7 +693,7 @@ switch ($op) {
     case 'approve_review':
 
         global $xoopsDB;
-        $review_id = isset($_GET['review_id']) ? intval($_GET['review_id']) : 0;
+        $review_id = isset($_GET['review_id']) ? (int)$_GET['review_id'] : 0;
         $sql       = 'UPDATE ' . $xoopsDB-> prefix('xtorrent_reviews') . " SET submit = 1 WHERE review_id = '$review_id'";
         $result    = $xoopsDB -> queryF($sql);
         $error     = "<a href='javascript:history.go(-1)'>" . _AM_XTORRENT_BRETURN . '</a><br><br>';
@@ -709,11 +709,11 @@ switch ($op) {
 
         $confirm = isset($confirm) ? 1 : 0;
         if ($confirm) {
-            $review_id = intval($_POST['review_id']);
+            $review_id = (int)$_POST['review_id'];
             $title     = $myts -> addSlashes(trim($_POST['title']));
             $review    = $myts -> addSlashes(trim($_POST['review']));
-            $rated     = intval($_POST['rated']);
-            $submit    = intval($_POST['approve']);
+            $rated     = (int)$_POST['rated'];
+            $submit    = (int)$_POST['approve'];
             $xoopsDB -> queryF('UPDATE ' . $xoopsDB-> prefix('xtorrent_reviews') . " 
       			SET title = '$title', review = '$review', rated = '$rated', submit = '$submit'
       			WHERE review_id = '$review_id'");
@@ -796,7 +796,7 @@ switch ($op) {
     case 'reviews':
         include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
         global $xoopsDB, $myts, $xoopsModuleConfig, $imagearray;
-        $start  = isset($_GET['start']) ? intval($_GET['start']) : 0;
+        $start  = isset($_GET['start']) ? (int)$_GET['start'] : 0;
         $sql    = 'SELECT * FROM ' . $xoopsDB-> prefix('xtorrent_reviews') . ' WHERE submit = 0 ORDER BY review_id';
         $result = $xoopsDB -> query($sql, $xoopsModuleConfig['admin_perpage'], $start);
         $num    = $xoopsDB -> getRowsNum($result);
@@ -831,11 +831,11 @@ switch ($op) {
   		  ';
         if ($num) {
             while ($review_array = $xoopsDB -> fetchArray($result)) {
-                $review_id   = intval($review_array['review_id']);
+                $review_id   = (int)$review_array['review_id'];
                 $sql2        = 'SELECT title FROM ' . $xoopsDB-> prefix('xtorrent_downloads') . ' WHERE lid = ' . $review_array['lid'] . '';
                 list($title) = $xoopsDB -> fetchrow($result2 = $xoopsDB -> query($sql2));
                 $title       = $myts -> htmlSpecialChars($title);
-                $lid         = intval($review_array['lid']);
+                $lid         = (int)$review_array['lid'];
                 $submitter   = xoops_getLinkedUnameFromId($review_array['uid']);
                 $datetime    = formatTimestamp($review_array['date'], $xoopsModuleConfig['dateformat']);
                 $status      = intval($review_array['submit']) ? $approved : "<a href='index.php?op=approve_review&review_id=" . $review_id . "'>" . $imagearray['approve'] . '</a>';
@@ -866,11 +866,11 @@ switch ($op) {
 
         global $xoopsUser, $xoopsDB, $xoopsConfig;
         include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-        $start  = isset($_GET['start']) ? intval($_GET['start']) : 0;
-        $start1 = isset($_GET['start1']) ? intval($_GET['start1']) : 0;
-        $start2 = isset($_GET['start2']) ? intval($_GET['start2']) : 0;
-        $start3 = isset($_GET['start3']) ? intval($_GET['start3']) : 0;
-        $start4 = isset($_GET['start4']) ? intval($_GET['start4']) : 0;
+        $start  = isset($_GET['start']) ? (int)$_GET['start'] : 0;
+        $start1 = isset($_GET['start1']) ? (int)$_GET['start1'] : 0;
+        $start2 = isset($_GET['start2']) ? (int)$_GET['start2'] : 0;
+        $start3 = isset($_GET['start3']) ? (int)$_GET['start3'] : 0;
+        $start4 = isset($_GET['start4']) ? (int)$_GET['start4'] : 0;
         $totalcats = xtorrent_totalcategory();
         $result = $xoopsDB -> query('SELECT COUNT(*) FROM ' . $xoopsDB-> prefix('xtorrent_broken') . '');
         list($totalbrokendownloads) = $xoopsDB -> fetchRow($result);

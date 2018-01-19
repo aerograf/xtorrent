@@ -48,13 +48,13 @@ function createcat($cid = 0)
         $imgurl         = $myts -> htmlSpecialChars($cat_arr['imgurl']);
         $description    = $myts -> htmlSpecialChars($cat_arr['description']);
         $summary        = $myts -> htmlSpecialChars($cat_arr['summary']);
-        $nohtml         = intval($cat_arr['nohtml']);
-        $nosmiley       = intval($cat_arr['nosmiley']);
-        $noxcodes       = intval($cat_arr['noxcodes']);
-        $noimages       = intval($cat_arr['noimages']);
-        $nobreak        = intval($cat_arr['nobreak']);
-        $spotlighthis   = intval($cat_arr['spotlighthis']);
-        $spotlighttop   = intval($cat_arr['spotlighttop']);
+        $nohtml         = (int)$cat_arr['nohtml'];
+        $nosmiley       = (int)$cat_arr['nosmiley'];
+        $noxcodes       = (int)$cat_arr['noxcodes'];
+        $noimages       = (int)$cat_arr['noimages'];
+        $nobreak        = (int)$cat_arr['nobreak'];
+        $spotlighthis   = (int)$cat_arr['spotlighthis'];
+        $spotlighttop   = (int)$cat_arr['spotlighttop'];
         $weight         = $cat_arr['weight'];
         $heading        = _AM_XTORRENT_CCATEGORY_MODIFY;
 
@@ -168,7 +168,7 @@ if (!isset($_POST['op'])) {
 switch ($op) {
     case 'move':
         if (!isset($_POST['ok'])) {
-            $cid = isset($_POST['cid']) ? intval($_POST['cid']) : intval($_GET['cid']);
+            $cid = isset($_POST['cid']) ? (int)$_POST['cid'] : (int)$_GET['cid'];
 
             xoops_cp_header();
             $adminObject = \Xmf\Module\Admin::getInstance();
@@ -281,8 +281,8 @@ switch ($op) {
 
         global $xoopsDB, $xoopsModule;
 
-        $cid    = (isset($_POST['cid']) && is_numeric($_POST['cid'])) ? intval($_POST['cid']) : intval($_GET['cid']);
-        $ok     = (isset($_POST['ok']) && 1 == $_POST['ok']) ? intval($_POST['ok']) : 0;
+        $cid    = (isset($_POST['cid']) && is_numeric($_POST['cid'])) ? (int)$_POST['cid'] : (int)$_GET['cid'];
+        $ok     = (isset($_POST['ok']) && 1 == $_POST['ok']) ? (int)$_POST['ok'] : 0;
         $mytree = new XoopsTree($xoopsDB -> prefix('xtorrent_cat'), 'cid', 'pid');
 
         if (1 == $ok) {

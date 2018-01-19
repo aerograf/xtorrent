@@ -83,7 +83,7 @@ class XtorrentDownloadsHandler extends XoopsObjectHandler
 
     public function get($lid, $fields='*')
     {
-        $lid = intval($lid);
+        $lid = (int)$lid;
         if ($lid > 0) {
             $sql = 'SELECT '.$fields.' FROM '.$this->db_table.' WHERE lid ='.$lid;
         } else {

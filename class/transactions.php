@@ -95,7 +95,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 	}
 
 	public function get($xtid, $fields='*'){
-		$xtid = intval($xtid);
+		$xtid = (int)$xtid;
 		if( $xtid > 0 ){
 			$sql = 'SELECT '.$fields.' FROM '.$this->db_table.' WHERE id='.$xtid;
 		} else {

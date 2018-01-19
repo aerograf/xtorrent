@@ -29,7 +29,7 @@ class XtsLists
         $this->value = $value;
         $this->selection = $selected;
         $this->path = $path;
-        $this->size = intval($size);
+        $this->size = (int)$size;
         $this->emptyselect = $emptyselect ? 0 : 1;
         $this->type = $type;
     }

@@ -25,7 +25,7 @@ switch ($op) {
 
         global $xoopsModule;
 
-        $lid                   = intval($_GET['lid']);
+        $lid                   = (int)$_GET['lid'];
         $result                = $xoopsDB->query('SELECT cid, title, notifypub FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE lid=' . $lid . '');
         list($cid, $title, $notifypub) = $xoopsDB->fetchRow($result);
         /**
@@ -61,7 +61,7 @@ switch ($op) {
         include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
         global $xoopsDB, $myts, $xoopsModuleConfig, $imagearray;
 
-        $start           = isset($_GET['start']) ? intval($_GET['start']) : 0;
+        $start           = isset($_GET['start']) ? (int)$_GET['start'] : 0;
         $sql             = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE published = 0 ORDER BY lid DESC';
         $new_array       = $xoopsDB->query($sql, $xoopsModuleConfig['admin_perpage'], $start);
         $new_array_count = $xoopsDB->getRowsNum($xoopsDB->query($sql));
