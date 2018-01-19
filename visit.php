@@ -121,32 +121,32 @@ function passkey_paypal($lid, $made)
 <table width="100%" border="0" cellspacing="0" cellpadding="4" style="border-collapse: collapse">
     <tr>
         <td>
-            <h2><? echo $title; ?> - <? echo $price.' '.$xoopsModuleConfig['currencies'][$currency]; ?></h2>
-            <h3><? echo $myts -> displayTarea($xoopsModuleConfig['payment_subtitle'], 0, 1, 1, 1, 1); ?></h3>
+            <h2><?php echo $title; ?> - <?php echo $price . ' ' . $xoopsModuleConfig['currencies'][$currency]; ?></h2>
+            <h3><?php echo $myts-> displayTarea($xoopsModuleConfig['payment_subtitle'], 0, 1, 1, 1, 1); ?></h3>
             <div style="clear:both;">&nbsp;</div>
-            <div><? echo $myts -> displayTarea($description, 0, 1, 1, 1, 1); ?></div>
+            <div><?php echo $myts-> displayTarea($description, 0, 1, 1, 1, 1); ?></div>
             <div style="clear:both;">&nbsp;</div>
-            <div><? echo $myts -> displayTarea($xoopsModuleConfig['payment_clause'], 0, 1, 1, 1, 1);  ?></div>
+            <div><?php echo $myts-> displayTarea($xoopsModuleConfig['payment_clause'], 0, 1, 1, 1, 1);  ?></div>
 			      <div align="center">
               <form action="https://www.paypal.com/cgi-bin/webscr" target="paypal" method="post">
-                <input type="hidden" name="amount" id="paypal" value="<? echo $price;?>">
+                <input type="hidden" name="amount" id="paypal" value="<?php echo $price;?>">
                 <input type="hidden" name="cmd" value="_xclick">
-                <input type="hidden" name="business" value="<? echo $paypalemail;?>">
-                <input type="hidden" name="item_name" value="<? echo $uid." : ".$title;?>">
-                <input type="hidden" name="item_number" value="<? echo $lid;?>">
-                <input type="hidden" name="notify_url" value="<? echo XOOPS_URL;?>/modules/xtorrent/ipnppd.php">
-                <input type="hidden" name="currency_code" value="<? echo $xoopsModuleConfig['currencies'][$currency]; ?>">
-                <input type="hidden" name="custom" value="<? echo $passkey; ?>">
-                <input type="hidden" name="cancel_return" value="<? echo XOOPS_URL;?>/modules/xtorrent/cancel.php">
-                <input type="hidden" name="return" value="<? echo XOOPS_URL;?>/modules/xtorrent/visit.php?lid=<? echo $lid;?>&cid=<? echo $cid;?>&agree=1&made=yes">
-                <input type="hidden" name="image_url" value="<? echo $xoopsModuleConfig['image_url']; ?>"><br><br>
+                <input type="hidden" name="business" value="<?php echo $paypalemail;?>">
+                <input type="hidden" name="item_name" value="<?php echo $uid . " : " . $title;?>">
+                <input type="hidden" name="item_number" value="<?php echo $lid;?>">
+                <input type="hidden" name="notify_url" value="<?php echo XOOPS_URL;?>/modules/xtorrent/ipnppd.php">
+                <input type="hidden" name="currency_code" value="<?php echo $xoopsModuleConfig['currencies'][$currency]; ?>">
+                <input type="hidden" name="custom" value="<?php echo $passkey; ?>">
+                <input type="hidden" name="cancel_return" value="<?php echo XOOPS_URL;?>/modules/xtorrent/cancel.php">
+                <input type="hidden" name="return" value="<?php echo XOOPS_URL;?>/modules/xtorrent/visit.php?lid=<?php echo $lid;?>&cid=<?php echo $cid;?>&agree=1&made=yes">
+                <input type="hidden" name="image_url" value="<?php echo $xoopsModuleConfig['image_url']; ?>"><br><br>
                 <input type="submit" value="Make Payment" border="0" name="I1">
             </form>
            </div>
       </td>
   </tr>
 </table>
-<?	
+        <?php
 		$passkey = 'stop';
 	}
 	

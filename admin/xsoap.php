@@ -215,7 +215,7 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 				break;
 			case "search":
 				$toggles = xtorrent_getcookie('G', true);
-    			?><script src="/modules/xtorrent/assets/js/xtorrent_toggle.js" language="javascript"></script><?
+    			?><script src="/modules/xtorrent/assets/js/xtorrent_toggle.js" language="javascript"></script><?php
 				if (is_array($_REQUEST['category']))
 				{
 					$request["cid"] = $_REQUEST['category'];
