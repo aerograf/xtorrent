@@ -2,11 +2,10 @@
 
 use XoopsModules\Xtorrent;
 
-$path = dirname(dirname(dirname(__DIR__)));
-include_once $path . '/mainfile.php';
-include_once $path . '/include/cp_functions.php';
-require_once $path . '/include/cp_header.php';
-require_once '../include/functions.php';
+include __DIR__ . '/../preloads/autoloader.php';
+
+require_once __DIR__ . '/../../../include/cp_header.php';
+require_once __DIR__ . '../include/functions.php';
 
 include_once XOOPS_ROOT_PATH . '/class/xoopstree.php';
 include_once XOOPS_ROOT_PATH . '/class/xoopslists.php';

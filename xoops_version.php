@@ -1,26 +1,29 @@
 <?php
 
-use XoopsModules\Xtorrent;
+//use XoopsModules\Xtorrent;
+
+//include __DIR__ . '/preloads/autoloader.php';
 
 $moduleDirName = basename(dirname(__DIR__));
 
-$helper = Xtorrent\Helper::getInstance();
-$helper->loadLanguage('admin');
-$helper->loadLanguage('modinfo');
+//$helper = Xtorrent\Helper::getInstance();
+//$helper->loadLanguage('admin');
+//$helper->loadLanguage('modinfo');
 
 $modversion     = [
     'version'             => 4.00,
     'module_status'       => 'Alpha 1',
     'release_date'        => '2018/01/17',
-    'name'                => '_MI_TORRENT_NAME',
-    'description'         => '_MI_TORRENT_DESC',
+    'name'                => _MI_TORRENT_NAME,
+    'description'         => _MI_TORRENT_DESC,
     'dirname'             => $moduleDirName,
     'help'                => 'xtorrent.tpl',
     'author'              => 'Wishcraft, LordPeter, Eparcyl, Aerograf',
     'credits'             => 'X-Torrent extrapolated from WF-Downloads',
     'license'             => 'GNU GPL 2.0',
     'license_url'         => 'www.gnu.org/licenses/gpl-2.0.html/',
-    'image'               => 'assets/images/logoModule_b.png',
+//    'image'               => 'assets/images/logoModule_b.png',
+    'image'               => 'assets/images/logoModule.png',
     'module_website_url'  => 'www.xoops.org/',
     'module_website_name' => 'XOOPS',
     'demo_site_url'       => 'https://xoops.org/newbb/',
@@ -63,9 +66,9 @@ $modversion     = [
     'hasSearch'           => 1,
     'search'              => [
         'file' => 'include/search.inc.php',
-        'func' => 'newbb_search',
+        'func' => 'xtorrent_search',
     ],
-    'use_smarty'          => 1
+//    'use_smarty'          => 1
 ];
 /*
 * added by Liquid. Based on code by Marcan
@@ -94,7 +97,7 @@ $modversion['author_credits'] = _MI_TORRENT_AUTHOR_CREDITSTEXT;
 $modversion['blocks'] = [];
 $modversion['blocks'][] = [
          'file'         => 'xtorrent_top.php',
-         'name'         => '_MI_TORRENT_BNAME1',
+         'name'         => _MI_TORRENT_BNAME1,
          'description'  => 'Shows recently added donwload files',
          'show_func'    => 'b_XTORRENT_top_show',
          'edit_func'    => 'b_XTORRENT_top_edit',
