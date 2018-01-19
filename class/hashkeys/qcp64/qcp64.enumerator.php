@@ -284,7 +284,7 @@ if (!class_exists('qcp64_enumerator')) {
             }
             
             if (true == $debug) {
-                $data[sizeof($data)+1] = [
+                $data[count($data) + 1] = [
                     'pos'      => $this->getBytePos($char),
                     'elements' => $this->elekey];
                                 

@@ -206,7 +206,7 @@ if ($total_numrows['count'] > 0) {
     }
     $page_nav = $pagenav->renderNav();
     $istrue   = (isset($page_nav) && !empty($page_nav)) ? true : false;
-    $xoopsTpl->assign('rss_source', xoops_sef($child_array[sizeof($child_array)]));
+    $xoopsTpl->assign('rss_source', xoops_sef($child_array[count($child_array)]));
     $xoopsTpl->assign('page_nav', $istrue);
     $xoopsTpl->assign('pagenav', $page_nav);
     $xoopsTpl->assign('htaccess', $xoopsModuleConfig['htaccess']);

@@ -72,7 +72,7 @@ $sql              = 'SELECT b.paypalemail FROM ' . $xoopsDB->prefix('xtorrent_us
 $rset             = $xoopsDB->query($sql);
 list($paypalemail) = $xoopsDB->fetchRow($rset);
 
-fputs($fp, $header . $req);
+fwrite($fp, $header . $req);
 
 
 /*
@@ -138,7 +138,7 @@ while (!$dbg && !$ERR && !feof($fp)) {
                 ((0 == strcmp($payment_status, 'Completed')) && ((0 == strcmp($txn_type, 'web_accept')) || (0 == strcmp($txn_type, 'send_money')))) {
             dprt('Normal transaction', _INF);
             if ($lp) {
-                fputs($lp, $payer_email . ' ' . $payment_status . ' ' . $_REQUEST['payment_date'] . "\n");
+                fwrite($lp, $payer_email . ' ' . $payment_status . ' ' . $_REQUEST['payment_date'] . "\n");
             }
 
             // Check for a duplicate txn_id
@@ -209,7 +209,7 @@ if ($log) {
 
 fclose($fp);
 if ($lp) {
-    fputs($lp, "Exiting\n");
+    fwrite($lp, "Exiting\n");
 }
 if ($lp) {
     fclose($lp);
@@ -225,7 +225,7 @@ function dprt($str, $clvl)
     global $dbg, $xoopsDB, $lp, $log, $loglvl;
 
     if ($lp) {
-        fputs($lp, $str . "\n");
+        fwrite($lp, $str . "\n");
     }
     if ($dbg) {
         echo $str . '<br>';

@@ -54,7 +54,7 @@ function docleanup()
             unset($ar[$k]);
         }
         if (count($delids)) {
-            mysqli_query('DELETE FROM torrents WHERE id IN (' . join(',', $delids) . ')');
+            mysqli_query('DELETE FROM torrents WHERE id IN (' . implode(',', $delids) . ')');
         }
 
         $res    = mysqli_query('SELECT torrent FROM peers GROUP BY torrent');
@@ -67,7 +67,7 @@ function docleanup()
             $delids[] = $id;
         }
         if (count($delids)) {
-            mysqli_query('DELETE FROM peers WHERE torrent IN (' . join(',', $delids) . ')');
+            mysqli_query('DELETE FROM peers WHERE torrent IN (' . implode(',', $delids) . ')');
         }
 
         $res    = mysqli_query('SELECT torrent FROM files GROUP BY torrent');
@@ -80,7 +80,7 @@ function docleanup()
             $delids[] = $id;
         }
         if (count($delids)) {
-            mysqli_query('DELETE FROM files WHERE torrent IN (' . join(',', $delids) . ')');
+            mysqli_query('DELETE FROM files WHERE torrent IN (' . implode(',', $delids) . ')');
         }
     } while (0);
 

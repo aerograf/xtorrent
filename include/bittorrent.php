@@ -733,7 +733,7 @@ function pager($rpp, $count, $href, $opts = [])
                 $pagerarr[] = "<b>$text</b>";
             }
         }
-        $pagerstr = join(' | ', $pagerarr);
+        $pagerstr = implode(' | ', $pagerarr);
         $pagertop = "<p align=\"center\">$pager<br />$pagerstr</p>\n";
         $pagerbottom = "<p align=\"center\">$pagerstr<br />$pager</p>\n";
     } else {

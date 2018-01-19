@@ -450,7 +450,7 @@ if ('yes' == $seeder) {
 }
 
 if (count($updateset)) {
-    $xoopsDB->queryF('UPDATE ' . $xoopsDB->prefix('xtorrent_torrent') . ' SET ' . join(',', $updateset) . " WHERE lid = $torrentid");
+    $xoopsDB->queryF('UPDATE ' . $xoopsDB->prefix('xtorrent_torrent') . ' SET ' . implode(',', $updateset) . " WHERE lid = $torrentid");
 }
 
     //$rt=debugtxt("start resp:".$resp."", $filename);

@@ -75,7 +75,7 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 	{
 		global $dbg, $lp, $log, $loglvl;
 		if( $lp ) 
-				fputs($lp, $str . "\n");
+				fwrite($lp, $str . "\n");
 		if( $dbg ) 
 				echo $str . '<br>';
 		if( $clvl <= $loglvl )
