@@ -1,7 +1,7 @@
 <?php
 
 class ioResource extends XoopsObject {
-	function __construct(){
+	public function __construct(){
 		$this->XoopsObject();
 		$this->initVar("session", XOBJ_DTYPE_INT);
 		$this->initVar("xoopsUser");
@@ -9,12 +9,12 @@ class ioResource extends XoopsObject {
 }
 
 class XtorrentIoHandler extends XoopsObjectHandler {
-	var $db;
-	var $db_table;
-	var $perm_name = 'xtorrent_io_';
-	var $obj_class = 'ioResource';
+	public $db;
+	public $db_table;
+	public $perm_name = 'xtorrent_io_';
+	public $obj_class = 'ioResource';
 
-	function __construct($db){
+	public function __construct($db){
 		if (!isset($db)&&!empty($db))
 		{
 			$this->db = $db;
@@ -26,7 +26,7 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 		//$this->perm_handler =& xoops_gethandler('groupperm');
 	}
 	
-	function getInstance($db){
+	public function getInstance($db){
 		static $instance;
 		if( !isset($instance) ){
 			$instance = new xtorrentioHandler($db);
@@ -34,14 +34,14 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 		return $instance;
 	}
 	
-	function err($msg)
+	public function err($msg)
 	{
 		benc_resp(["failure reason" => [type => "string", value => $msg]]);
 		hit_end();
 		exit();
 	}
 	
-	function benc_resp($d)
+	public function benc_resp($d)
 	{
 		$xthdlr_benc  = xoops_load('benc', 'xtorrent');
 		$benc_torrent = $xthdlr_benc->create();				
@@ -50,7 +50,7 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 		benc_resp_raw($benc_torrent->getVar('benc'));
 	}
 	
-	function benc_resp_raw($x)
+	public function benc_resp_raw($x)
 	{
 		header("Content-Type: text/plain");
 		header("Pragma: no-cache");
@@ -58,7 +58,7 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 	}
 
 	
-	function strip_magic_quotes($arr)
+	public function strip_magic_quotes($arr)
 	{
 		foreach ($arr as $k => $v)
 		{
@@ -71,7 +71,7 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 		return $arr;
 	}
 
-	function ipn_out($str, $clvl)
+	public function ipn_out($str, $clvl)
 	{
 		global $dbg, $lp, $log, $loglvl;
 		if( $lp ) 
@@ -82,28 +82,28 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 				$log .= $str . "\n";
 	}
 	
-	function validfilename($name) {
+	public function validfilename($name) {
 		return preg_match('/^[^\0-\x1f:\\\\\/?*\xff#<>|]+$/si', $name);
 	}
 	
-	function validemail($email) {
+	public function validemail($email) {
 		return preg_match('/^[\w.-]+@([\w.-]+\.)+[a-z]{2,6}$/is', $email);
 	}
 	
-	function gmtime()
+	public function gmtime()
 	{
 		return strtotime(get_date_time());
 	}
 
-	function hash_pad($hash) {
+	public function hash_pad($hash) {
 		return str_pad($hash, 20);
 	}
 	
-	function shhash($hash) {
+	public function shhash($hash) {
 		return preg_replace('/ *$/s', "", $hash);
 	}
 	
-	function getip() {
+	public function getip() {
 		if (isset($_SERVER)) {
 			if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 			  	$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -124,13 +124,13 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 		return $ip;
 	}
 
-	function unesc($x) {
+	public function unesc($x) {
 		if (get_magic_quotes_gpc())
 			return stripslashes($x);
 		return $x;
 	}
 	
-	function portblacklisted($port)
+	public function portblacklisted($port)
 	{
 		global $xoopsModuleConfig;
 		$ports = explode(',', str_replace(" ", "", $xoopsModuleConfig['ports_checked']));
@@ -150,15 +150,15 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 		return false;
 	}
 
-	function benc_str($s) {
+	public function benc_str($s) {
 		return strlen($s) . ":$s";
 	}
 	
-	function benc_int($i) {
+	public function benc_int($i) {
 		return "i" . $i . "e";
 	}
 	
-	function mksize($bytes)
+	public function mksize($bytes)
 	{
 		if ($bytes < 1000 * 1024)
 			return number_format($bytes / 1024, 2) . " kB";
@@ -170,7 +170,7 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 			return number_format($bytes / 1099511627776, 2) . " TB";
 	}
 	
-	function mksizeint($bytes)
+	public function mksizeint($bytes)
 	{
 		$bytes = max(0, $bytes);
 		if ($bytes < 1000)
@@ -185,11 +185,11 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 			return floor($bytes / 1099511627776) . " TB";
 	}
 	
-	function deadtime() {
+	public function deadtime() {
 		return time() - floor($this->->tracker_wait * 1.3);
 	}
 	
-	function mkprettytime($s) {
+	public function mkprettytime($s) {
 		if ($s < 0)
 		$s = 0;
 		$t = [];
@@ -214,7 +214,7 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 	}
 
 	
-	function validip($ip)
+	public function validip($ip)
 	{
 		if (!empty($ip) && ip2long($ip)!=-1)
 		{
@@ -240,120 +240,120 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 		else return false;
 	}
 
-	function agents_disallowed()
+	public function agents_disallowed()
 	{
 		global $xoopsModuleConfig;
 		return (!isset($xoopsModuleConfig['agents_disallowed']))?'':(string)$xoopsModuleConfig['agents_disallowed'];
 	}
 
-	function numleechers()
+	public function numleechers()
 	{
 		global $xoopsModuleConfig;
 		return (!isset($xoopsModuleConfig['numleechers']))?300:(int)$xoopsModuleConfig['numleechers'];
 	}
 
-	function numseeds()
+	public function numseeds()
 	{
 		global $xoopsModuleConfig;
 		return (!isset($xoopsModuleConfig['numseeds']))?1000:(int)$xoopsModuleConfig['numseeds'];
 	}
 
-	function max_torrent_size()
+	public function max_torrent_size()
 	{
 		global $xoopsModuleConfig;
 		return (!isset($xoopsModuleConfig['max_torrent_size']))?1000000:(int)$xoopsModuleConfig['max_torrent_size'];
 	}
 
-	function max_torrent_size()
+	public function max_torrent_size()
 	{
 		global $xoopsModuleConfig;
 		return (!isset($xoopsModuleConfig['max_torrent_size']))?1000000:(int)$xoopsModuleConfig['max_torrent_size'];
 	}
 
-	function completed_notice()
+	public function completed_notice()
 	{
 		global $xoopsConfig;
 		return (!isset($xoopsConfig['completed_notice']))?TRUE:(int)$xoopsConfig['completed_notice'];
 	}
 
-	function stopped_notice()
+	public function stopped_notice()
 	{
 		global $xoopsConfig;
 		return (!isset($xoopsConfig['stopped_notice']))?FALSE:(int)$xoopsConfig['stopped_notice'];
 	}
 
-	function sitename()
+	public function sitename()
 	{
 		global $xoopsConfig;
 		return (!isset($xoopsConfig['sitename']))?'X-Torrent Module Site':(string)$xoopsConfig['sitename'];
 	}
 
-	function siteemail()
+	public function siteemail()
 	{
 		global $xoopsConfig;
 		return (!isset($xoopsConfig['adminemail']))?'example555@hotmail.com':(string)$xoopsConfig['adminemail'];
 	}
 
-	function peerlimit()
+	public function peerlimit()
 	{
 		global $xoopsModuleConfig;
 		return (!isset($xoopsModuleConfig['peerlimit']))?1:(int)$xoopsModuleConfig['peerlimit'];
 	}
 	
-	function baseurl()
+	public function baseurl()
 	{
 		return XOOPS_URL;
 	}
 
-	function autoclean_interval()
+	public function autoclean_interval()
 	{
 		global $xoopsModuleConfig;
 		return (!isset($xoopsModuleConfig['autoclean_interval']))?(900):(int)$xoopsModuleConfig['autoclean_interval'];
 	}
 
-	function max_torrent_size()
+	public function max_torrent_size()
 	{
 		global $xoopsModuleConfig;
 		return (!isset($xoopsModuleConfig['max_torrent_size']))?1000000:(int)$xoopsModuleConfig['max_torrent_size'];
 	}
 
-	function tracker_wait()
+	public function tracker_wait()
 	{
 		global $xoopsModuleConfig;
 		return (!isset($xoopsModuleConfig['tracker_wait']))?(60 * 30):(int)$xoopsModuleConfig['tracker_wait'];
 	}
 	
-	function mit_timeout()
+	public function mit_timeout()
 	{
 		global $xoopsModuleConfig;
 		return (!isset($xoopsModuleConfig['mit_timeout']))?(86400 * 3):(int)$xoopsModuleConfig['mit_timeout'];
 	}	
 
-	function minvotes()
+	public function minvotes()
 	{
 		global $xoopsModuleConfig;
 		return (!isset($xoopsModuleConfig['minvotes']))?(1):(int)$xoopsModuleConfig['minvotes'];
 	}	
 	
-	function dead_torrent_time()
+	public function dead_torrent_time()
 	{
 		global $xoopsModuleConfig;
 		return (!isset($xoopsModuleConfig['dead_torrent_time']))?(6 * 3600):(int)$xoopsModuleConfig['dead_torrent_time'];
 	}	
 
-	function online()
+	public function online()
 	{
 		global $xoopsModuleConfig;
 		return (!isset($xoopsModuleConfig['online']))?(TRUE):(int)$xoopsModuleConfig['online'];
 	}	
 	
-	function maxusers()
+	public function maxusers()
 	{
 		global $xoopsModuleConfig;
 		return (!isset($xoopsModuleConfig['maxusers']))?(450009):(int)$xoopsModuleConfig['maxusers'];
 	}	
 	
-	function announce_urls()
+	public function announce_urls()
 	{
 		global $xoopsModuleConfig;
 		$announce_urls   = [];
@@ -361,13 +361,13 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 		return $announce_urls;
 	}
 
-	function local_user()
+	public function local_user()
 	{
 		global $HTTP_SERVER_VARS;
 		return $HTTP_SERVER_VARS["SERVER_ADDR"] == $HTTP_SERVER_VARS["REMOTE_ADDR"];
 	}
 	
-	function create(){
+	public function create(){
 		global $xoopsUser;
 		
 		$io_obj = new $this->obj_class();
