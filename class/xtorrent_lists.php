@@ -44,14 +44,14 @@ class XtsLists
 
     public static function getarray($this_array)
     {
-        $ret = "<select size='" . $this->size() . "' name='$this->value()'>";
+        $ret = "<select size='" . static::size() . "' name='$this->value()'>";
         if ($this->emptyselect) {
-            $ret .= "<option value='" . $this->value() . "'>----------------------</option>";
+            $ret .= "<option value='" . static::value() . "'>----------------------</option>";
         }
         foreach ($this_array as $content) {
             $opt_selected = '';
 
-            if ($content[0] == $this->selected()) {
+            if ($content[0] == static::selected()) {
                 $opt_selected = "selected='selected'";
             }
             $ret .= "<option value='" . $content . "' $opt_selected>" . $content . '</option>';
