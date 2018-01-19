@@ -41,8 +41,8 @@ class downloadsResource extends XoopsObject
         $this->initVar('notifypub', XOBJ_DTYPE_INT);
         $this->initVar('currency', XOBJ_DTYPE_TXTBOX);
     }
-    
-    public function increaseHit($amount=1)
+
+    public function increaseHit($amount = 1)
     {
         $hits = $this->getVar('hits');
         $this->setVar('hits', $hits + $amount);
@@ -58,16 +58,16 @@ class XtorrentDownloadsHandler extends XoopsObjectHandler
 
     public function __construct($db)
     {
-        if (!isset($db)&&!empty($db)) {
+        if (!isset($db) && !empty($db)) {
             $this->db = $db;
         } else {
             global $xoopsDB;
             $this->db = $xoopsDB;
         }
-        $this->db_table = $this->db->prefix('xtorrent_downloads');
+        $this->db_table     = $this->db->prefix('xtorrent_downloads');
         $this->perm_handler = xoops_gethandler('groupperm');
     }
-    
+
     public function getInstance($db)
     {
         static $instance;
@@ -76,16 +76,17 @@ class XtorrentDownloadsHandler extends XoopsObjectHandler
         }
         return $instance;
     }
+
     public function create()
     {
         return new $this->obj_class();
     }
 
-    public function get($lid, $fields='*')
+    public function get($lid, $fields = '*')
     {
         $lid = (int)$lid;
         if ($lid > 0) {
-            $sql = 'SELECT '.$fields.' FROM '.$this->db_table.' WHERE lid ='.$lid;
+            $sql = 'SELECT ' . $fields . ' FROM ' . $this->db_table . ' WHERE lid =' . $lid;
         } else {
             return false;
         }
@@ -112,7 +113,7 @@ class XtorrentDownloadsHandler extends XoopsObjectHandler
         if (!$mod->cleanVars()) {
             return false;
         }
-        foreach ($mod->cleanVars as $k=>$v) {
+        foreach ($mod->cleanVars as $k => $v) {
             ${$k} = $v;
         }
         $myts = MyTextSanitizer::getInstance();
@@ -132,32 +133,32 @@ class XtorrentDownloadsHandler extends XoopsObjectHandler
                 $this->db->quoteString($myts->addslashes($url)),
                 $this->db->quoteString($myts->addslashes($homepage)),
                 $this->db->quoteString($version),
-                $this->db->quoteString($size),
+                           $this->db->quoteString($size),
                 $this->db->quoteString($platform),
                 $this->db->quoteString($myts->addslashes($screenshot)),
                 $this->db->quoteString($submitter),
                 $this->db->quoteString($publisher),
                 $this->db->quoteString($status),
                 $this->db->quoteString($date),
-                $this->db->quoteString($hits),
+                           $this->db->quoteString($hits),
                 $this->db->quoteString($rating),
                 $this->db->quoteString($votes),
                 $this->db->quoteString($comments),
                 $this->db->quoteString($$myts->addslashes(license)),
                 $this->db->quoteString($myts->addslashes($mirror)),
                 $this->db->quoteString($price),
-                $this->db->quoteString($myts->addslashes($paypalemail)),
+                           $this->db->quoteString($myts->addslashes($paypalemail)),
                 $this->db->quoteString($myts->addslashes($features)),
                 $this->db->quoteString($myts->addslashes($requirements)),
                 $this->db->quoteString($myts->addslashes($homepagetitle)),
                 $this->db->quoteString($forumid),
-                $this->db->quoteString($myts->addslashes($limitations)),
+                           $this->db->quoteString($myts->addslashes($limitations)),
                 $this->db->quoteString($myts->addslashes($dhistory)),
                 $this->db->quoteString($published),
                 $this->db->quoteString($expired),
                 $this->db->quoteString($updated),
                 $this->db->quoteString($offline),
-                $this->db->quoteString($myts->addslashes($description)),
+                           $this->db->quoteString($myts->addslashes($description)),
                 $this->db->quoteString($ipaddress),
                 $this->db->quoteString($notifypub),
                 $this->db->quoteString($currency)
@@ -166,45 +167,45 @@ class XtorrentDownloadsHandler extends XoopsObjectHandler
             $sql = sprintf(
                 'UPDATE %s SET
 				`cid` = %s, `title` = %s, `url` = %s, `homepage` = %s, `version` = %s, `size` = %s, `platform` = %s, `screenshot` = %s, `submitter` = %s, `publisher` = %s, `status` = %s, `date` = %s, `hits` = %s, `rating` = %s, `votes` = %s, `comments` = %s, `license` = %s, `mirror` = %s, `price` = %s, `paypalemail` = %s, `features` = %s, `requirements` = %s, `homepagetitle` = %s, `forumid` = %s, `limitations` = %s, `dhistory` = %s, `published` = %s, `expired` = %s, `updated` = %s, `offline` = %s, `description` = %s, `ipaddress` = %s, `notifypub` = %s, `currency` = %s WHERE `lid` = %s',
-                $this->db_table,
+                           $this->db_table,
                 $this->db->quoteString($cid),
                 $this->db->quoteString($myts->addslashes($title)),
                 $this->db->quoteString($myts->addslashes($url)),
                 $this->db->quoteString($myts->addslashes($homepage)),
                 $this->db->quoteString($version),
                 $this->db->quoteString($size),
-                $this->db->quoteString($platform),
+                           $this->db->quoteString($platform),
                 $this->db->quoteString($myts->addslashes($screenshot)),
                 $this->db->quoteString($submitter),
                 $this->db->quoteString($publisher),
                 $this->db->quoteString($status),
                 $this->db->quoteString($date),
                 $this->db->quoteString($hits),
-                $this->db->quoteString($rating),
+                           $this->db->quoteString($rating),
                 $this->db->quoteString($votes),
                 $this->db->quoteString($comments),
                 $this->db->quoteString($$myts->addslashes(license)),
                 $this->db->quoteString($myts->addslashes($mirror)),
                 $this->db->quoteString($price),
-                $this->db->quoteString($myts->addslashes($paypalemail)),
+                           $this->db->quoteString($myts->addslashes($paypalemail)),
                 $this->db->quoteString($myts->addslashes($features)),
                 $this->db->quoteString($myts->addslashes($requirements)),
                 $this->db->quoteString($myts->addslashes($homepagetitle)),
                 $this->db->quoteString($forumid),
-                $this->db->quoteString($limitations),
+                           $this->db->quoteString($limitations),
                 $this->db->quoteString($myts->addslashes($dhistory)),
                 $this->db->quoteString($published),
                 $this->db->quoteString($expired),
                 $this->db->quoteString($updated),
                 $this->db->quoteString($offline),
-                $this->db->quoteString($myts->addslashes($description)),
+                           $this->db->quoteString($myts->addslashes($description)),
                 $this->db->quoteString($ipaddress),
                 $this->db->quoteString($notifypub),
                 $this->db->quoteString($currency),
                 $this->db->quoteString($lid)
             );
         }
-        
+
         if (false != $force) {
             $result = $this->db->queryF($sql);
         } else {
@@ -220,7 +221,7 @@ class XtorrentDownloadsHandler extends XoopsObjectHandler
         $downloads->assignVar('lid', $lid);
         return $lid;
     }
-    
+
     public function delete($criteria = null, $force = false)
     {
         if (strtolower(get_class($downloads)) != strtolower($this->obj_class)) {
@@ -237,15 +238,15 @@ class XtorrentDownloadsHandler extends XoopsObjectHandler
         return true;
     }
 
-    public function getObjects($criteria = null, $fields='*', $lid_as_key = false)
+    public function getObjects($criteria = null, $fields = '*', $lid_as_key = false)
     {
         $ret   = [];
         $limit = $start = 0;
-        $sql   = 'SELECT '.$fields.' FROM '.$this->db_table;
+        $sql   = 'SELECT ' . $fields . ' FROM ' . $this->db_table;
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql .= ' '.$criteria->renderWhere();
+            $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->getSort()) {
-                $sql .= ' ORDER BY '.$criteria->getSort().' '.$criteria->getOrder();
+                $sql .= ' ORDER BY ' . $criteria->getSort() . ' ' . $criteria->getOrder();
             }
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
@@ -266,12 +267,12 @@ class XtorrentDownloadsHandler extends XoopsObjectHandler
         }
         return count($ret) > 0 ? $ret : false;
     }
-    
+
     public function getCount($criteria = null)
     {
-        $sql = 'SELECT COUNT(*) FROM '.$this->db_table;
+        $sql = 'SELECT COUNT(*) FROM ' . $this->db_table;
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql .= ' '.$criteria->renderWhere();
+            $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);
         if (!$result) {
@@ -280,26 +281,26 @@ class XtorrentDownloadsHandler extends XoopsObjectHandler
         list($count) = $this->db->fetchRow($result);
         return $count;
     }
-    
+
     public function deleteAll($criteria = null)
     {
-        $sql = 'DELETE FROM '.$this->db_table;
+        $sql = 'DELETE FROM ' . $this->db_table;
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql .= ' '.$criteria->renderWhere();
+            $sql .= ' ' . $criteria->renderWhere();
         }
         if (!$result = $this->db->query($sql)) {
             return false;
         }
         return true;
     }
-    
+
     public function deleteTorrentPermissions($lid, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
         $criteria->add(new Criteria('gperm_itemid', $lid));
         $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid')));
-        $criteria->add(new Criteria('gperm_name', $this->perm_name.$mode));
+        $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode));
         if ($old_perms = $this->perm_handler->getObjects($criteria)) {
             foreach ($old_perms as $p) {
                 $this->perm_handler->delete($p);
@@ -307,13 +308,13 @@ class XtorrentDownloadsHandler extends XoopsObjectHandler
         }
         return true;
     }
-    
+
     public function insertTorrentPermissions($lid, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $lid) {
             $perm = $this->perm_handler->create();
-            $perm->setVar('gperm_name', $this->perm_name.$mode);
+            $perm->setVar('gperm_name', $this->perm_name . $mode);
             $perm->setVar('gperm_itemid', $lid);
             $perm->setVar('gperm_groupid', $lid);
             $perm->setVar('gperm_modid', $xoopsModule->getVar('mid'));
@@ -322,28 +323,28 @@ class XtorrentDownloadsHandler extends XoopsObjectHandler
         }
         return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $lid;
     }
-    
+
     public function getPermittedTorrents($downloads, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
-        $ret=false;
+        $ret = false;
         if (isset($downloads)) {
             $ret      = [];
             $criteria = new CriteriaCompo();
             $criteria->add(new Criteria('gperm_itemid', $downloads->getVar('lid'), '='), 'AND');
             $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid'), '='), 'AND');
-            $criteria->add(new Criteria('gperm_name', $this->perm_name.$mode, '='), 'AND');
+            $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode, '='), 'AND');
 
             $gtObjperm = $this->perm_handler->getObjects($criteria);
             $groups    = [];
-            
+
             foreach ($gtObjperm as $v) {
                 $ret[] = $v->getVar('gperm_groupid');
             }
             return $ret;
         } else {
-            $ret    = [];
-            $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;
+            $ret      = [];
+            $groups   = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;
             $criteria = new CriteriaCompo();
             $criteria->add(new Criteria('Torrent_order', 1, '>='), 'OR');
             $criteria->setSort('Torrent_order');
@@ -351,7 +352,7 @@ class XtorrentDownloadsHandler extends XoopsObjectHandler
             if ($downloads = $this->getObjects($criteria, 'home_list')) {
                 $ret = [];
                 foreach ($downloads as $f) {
-                    if (false != $this->perm_handler->checkRight($this->perm_name.$mode, $f->getVar('lid'), $groups, $xoopsModule->getVar('mid'))) {
+                    if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $f->getVar('lid'), $groups, $xoopsModule->getVar('mid'))) {
                         $ret[] = $f;
                         unset($f);
                     }
@@ -360,12 +361,12 @@ class XtorrentDownloadsHandler extends XoopsObjectHandler
         }
         return ret;
     }
-    
+
     public function getSingleTorrentPermission($lid, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;
-        if (false != $this->perm_handler->checkRight($this->perm_name.$mode, $lid, $groups, $xoopsModule->getVar('mid'))) {
+        if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $lid, $groups, $xoopsModule->getVar('mid'))) {
             return true;
         }
         return false;

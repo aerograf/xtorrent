@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 ob_start('ob_gzhandler');
 require_once '../../mainfile.php';
@@ -7,13 +7,13 @@ require_once 'include/bittorrent.php';
 require_once 'include/benc.php';
 
 global $xoopsDB, $xoopsConfig, $xoopsModuleConfig;
-$filename = XOOPS_ROOT_PATH.'/uploads/test.txt';
+$filename = XOOPS_ROOT_PATH . '/uploads/test.txt';
 
 // Let's make sure the file exists and is writable first.
 function debugtxt($str, $filename)
 {
     if (is_writable($filename)) {
-    
+
         // In our example we're opening $filename in append mode.
         // The file pointer is at the bottom of the file hence
         // that's where $somecontent will go when we fwrite() it.
@@ -24,6 +24,7 @@ function debugtxt($str, $filename)
         fclose($handle);
     }
 }
+
 //hit_start();
 
 //$rt=debugtxt("Start", $filename);
@@ -46,6 +47,7 @@ function benc_resp_raw($x)
     header('Pragma: no-cache');
     print($x);
 }
+
 /*
 function hex2bin($h)
   {
@@ -59,8 +61,8 @@ if (!function_exists('bin2hex')) {
     function bin2hex($str)
     {
         $strl = strlen($str);
-        $fin = '';
-        for ($i =0; $i < $strl; $i++) {
+        $fin  = '';
+        for ($i = 0; $i < $strl; $i++) {
             $fin .= dechex(ord($str[$i]));
         }
         return $fin;
@@ -72,7 +74,7 @@ foreach ($_GET as $x => $k) {
         ${$x} = '' . $k;
     }
     //$rt=debugtxt("$x = '".$k, $filename);
-//echo ."'<br>";
+    //echo ."'<br>";
 }
 $info_hash = md5($info_hash);
 foreach (['port', 'downloaded', 'uploaded', 'left'] as $x) {
@@ -94,7 +96,6 @@ if (20 == strlen($peer_id)) {
 /* if (strlen($info_hash) == 20) {
     $info_hash = bin2hex($info_hash);
 } */
-
 
 foreach (['passkey', 'info_hash', 'peer_id', 'port', 'downloaded', 'uploaded', 'left'] as $x) {
     if (!isset($x)) {
@@ -130,8 +131,6 @@ if (!isset($event)) {
 
 $seeder = (0 == $left) ? 'yes' : 'no';
 
-
-
 if (isset($_SERVER['PATH_INFO'])) {
     if ('/scrape' == substr($_SERVER['PATH_INFO'], -7)) {
         /*
@@ -157,7 +156,8 @@ if (isset($_SERVER['PATH_INFO'])) {
          * Get requested info
          */
         if ($usehash) {
-            $query = $xoopsDB->query('SELECT a.info_hash, a.seeds, a.finished, a.leechers, b.filename FROM ' . $xoopsDB->prefix('xtorrent_torrent') . ' a LEFT JOIN ' . $xoopsDB->prefix('xtorrent_downloads') . " b ON a.lid = b.lid WHERE a.info_hash=\"$info_hash\"") or err('Database error. Cannot complete request.');
+            $query = $xoopsDB->query('SELECT a.info_hash, a.seeds, a.finished, a.leechers, b.filename FROM ' . $xoopsDB->prefix('xtorrent_torrent') . ' a LEFT JOIN ' . $xoopsDB->prefix('xtorrent_downloads') . " b ON a.lid = b.lid WHERE a.info_hash=\"$info_hash\"")
+            or err('Database error. Cannot complete request.');
         } else {
             $query = $xoopsDB->query('SELECT a.info_hash, a.seeds, a.finished, a.leechers, b.filename FROM ' . $xoopsDB->prefix('xtorrent_torrent') . ' a LEFT JOIN ' . $xoopsDB->prefix('xtorrent_downloads') . ' b ON a.lid = b.lid WHERE 1=1') or err('Database error. Cannot complete request.');
         }
@@ -181,16 +181,15 @@ if (isset($_SERVER['PATH_INFO'])) {
     }
 }
 
-
 $res = $xoopsDB->queryF('DELETE FROM ' . $xoopsDB->prefix('xtorrent_users') . " WHERE `last_action` < '" . date('Y-m-d H:i:s', time() - 57254) . "'");
 $res = $xoopsDB->queryF('DELETE FROM ' . $xoopsDB->prefix('xtorrent_peers') . " WHERE `last_access` < '" . date('Y-m-d H:i:s', time() - 57254) . "'");
 $res = $xoopsDB->queryF('DELETE FROM ' . $xoopsDB->prefix('xtorrent_users') . " WHERE `last_action` = '' OR `last_action` = NULL");
 $res = $xoopsDB->queryF('DELETE FROM ' . $xoopsDB->prefix('xtorrent_peers') . " WHERE `last_access` = '' OR `last_access` = NULL");
 
 if (0 == strpos($_SERVER['REQUEST_URI'], '?=')) {
-    $sql = 'SELECT lid, id FROM ' . $xoopsDB->prefix('xtorrent_users') . ' WHERE passkey=' . sqlesc($passkey) . ' and secret = ' . sqlesc(sha1(xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR']))));
+    $sql = 'SELECT lid, id FROM ' . $xoopsDB->prefix('xtorrent_users') . ' WHERE passkey=' . sqlesc($passkey) . ' AND secret = ' . sqlesc(sha1(xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR']))));
 } else {
-    $sql = 'SELECT a.lid, a.id FROM ' . $xoopsDB->prefix('xtorrent_users') . ' a INNER JOIN ' . $xoopsDB->prefix('xtorrent_torrent') . ' b on a.lid = b.lid WHERE b.hashInfo=' . sqlesc($info_hash) . ' and a.secret = ' . sqlesc(sha1(xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR']))));
+    $sql = 'SELECT a.lid, a.id FROM ' . $xoopsDB->prefix('xtorrent_users') . ' a INNER JOIN ' . $xoopsDB->prefix('xtorrent_torrent') . ' b ON a.lid = b.lid WHERE b.hashInfo=' . sqlesc($info_hash) . ' AND a.secret = ' . sqlesc(sha1(xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR']))));
 }
 
 $valid = @mysqli_fetch_row(@$xoopsDB->queryF($sql));
@@ -217,90 +216,83 @@ $limit    = '';
 if ($numpeers > $rsize) {
     $limit = "ORDER BY RAND() LIMIT $rsize";
 }
-$res = $xoopsDB->queryF("SELECT DISTINCT $fields FROM ".$xoopsDB->prefix('xtorrent_peers')." WHERE torrent = $torrentid $limit");
+$res = $xoopsDB->queryF("SELECT DISTINCT $fields FROM " . $xoopsDB->prefix('xtorrent_peers') . " WHERE torrent = $torrentid $limit");
 unset($self);
 
+$resp .= 'd' . '8:intervali' . ($xoopsModuleConfig['announce_interval'] * 60) . 'e' . '12:min intervali' . ($xoopsModuleConfig['announce_interval'] * 30) . 'e' . '5:peers';
 
-    $resp .= 'd' . '8:intervali' . ($xoopsModuleConfig['announce_interval'] * 60) . 'e'
-             . '12:min intervali' . ($xoopsModuleConfig['announce_interval'] * 30) . 'e'
-             . '5:peers';
+$seeds = 'd' . '8:intervali' . ($xoopsModuleConfig['announce_interval'] * 60) . 'e' . '12:min intervali' . ($xoopsModuleConfig['announce_interval'] * 30) . 'e' . '5:seeds';
 
-    $seeds = 'd' . '8:intervali' . ($xoopsModuleConfig['announce_interval'] * 60) . 'e'
-             . '12:min intervali' . ($xoopsModuleConfig['announce_interval'] * 30) . 'e'
-             . '5:seeds';
-        
-    if (isset($_GET['compact']) && '1' == $_GET['compact']) {
-        $p = '';
-        $s = '';
-        while ($row = $xoopsDB->fetchArray($res)) {
-            if ($row['peer_id'] === $peer_id) {
-                $userid = $row['userid'];
-                $self = $row;
-                continue;
-            }
-            
-            $p .= pack('Nn', hex2bin($row['ip']), $row['port']);
-            if ($row['seeder']='yes') {
-                $s .= pack('Nn', hex2bin($row['ip']), $row['port']);
-            }
+if (isset($_GET['compact']) && '1' == $_GET['compact']) {
+    $p = '';
+    $s = '';
+    while ($row = $xoopsDB->fetchArray($res)) {
+        if ($row['peer_id'] === $peer_id) {
+            $userid = $row['userid'];
+            $self   = $row;
+            continue;
         }
-        $resp .= strlen($p).':'.$p;
-        if (strlen($s)) {
-            $seeds .= strlen($s).':'.$s;
-        }
-    } else {
-        // no_peer_id or no feature supported
-        $resp .='l';
-        $seeds .='l';
-        while ($row = $xoopsDB->fetchArray($res)) {
-            if ($row['peer_id'] === $peer_id) {
-                $userid = $row['userid'];
-                $self = $row;
-                continue;
-            }
-            
-            $ips = $row['ip'];
-            
-            if ($row['seeder']='yes') {
-                $seeds .= 'd2:ip' . strlen($ips) . ':' . $ips;
-                if (isset($row['peer_id'])) {
-                    $seeds .= '7:peer id' . strlen(hex2bin($row['peer_id'])) . ':' . hex2bin($row['peer_id']);
-                }
-                $seeds .= '4:porti' . $row['port'] . 'ee';
-            }
-            
 
-            $resp .= 'd2:ip' . strlen($ips) . ':' . $ips;
+        $p .= pack('Nn', hex2bin($row['ip']), $row['port']);
+        if ($row['seeder'] = 'yes') {
+            $s .= pack('Nn', hex2bin($row['ip']), $row['port']);
+        }
+    }
+    $resp .= strlen($p) . ':' . $p;
+    if (strlen($s)) {
+        $seeds .= strlen($s) . ':' . $s;
+    }
+} else {
+    // no_peer_id or no feature supported
+    $resp  .= 'l';
+    $seeds .= 'l';
+    while ($row = $xoopsDB->fetchArray($res)) {
+        if ($row['peer_id'] === $peer_id) {
+            $userid = $row['userid'];
+            $self   = $row;
+            continue;
+        }
+
+        $ips = $row['ip'];
+
+        if ($row['seeder'] = 'yes') {
+            $seeds .= 'd2:ip' . strlen($ips) . ':' . $ips;
             if (isset($row['peer_id'])) {
-                $resp .= '7:peer id' . strlen(hex2bin($row['peer_id'])) . ':' . hex2bin($row['peer_id']);
+                $seeds .= '7:peer id' . strlen(hex2bin($row['peer_id'])) . ':' . hex2bin($row['peer_id']);
             }
-            $resp .= '4:porti' . $row['port'] . 'ee';
+            $seeds .= '4:porti' . $row['port'] . 'ee';
         }
-        $seeds .= 'e';
-        $resp .= 'e';
+
+        $resp .= 'd2:ip' . strlen($ips) . ':' . $ips;
+        if (isset($row['peer_id'])) {
+            $resp .= '7:peer id' . strlen(hex2bin($row['peer_id'])) . ':' . hex2bin($row['peer_id']);
+        }
+        $resp .= '4:porti' . $row['port'] . 'ee';
     }
-    
-    if (isset($xoopsModuleConfig['response_key'])) {
-        $resp .= '10:tracker id' . strlen($xoopsModuleConfig['response_key']) . ':' . $xoopsModuleConfig['response_key'];
-    }
-    
-    $resp .= 'e';
-    $resp .= $seeds . 'e';
-        
+    $seeds .= 'e';
+    $resp  .= 'e';
+}
+
+if (isset($xoopsModuleConfig['response_key'])) {
+    $resp .= '10:tracker id' . strlen($xoopsModuleConfig['response_key']) . ':' . $xoopsModuleConfig['response_key'];
+}
+
+$resp .= 'e';
+$resp .= $seeds . 'e';
+
 $selfwhere = "torrent = $torrentid AND " . hash_where('peer_id', $peer_id);
 
 if (!isset($self)) {
     //$rt=debugtxt("start self", $filename);
-    $sql = "SELECT $fields FROM ".$xoopsDB->prefix('xtorrent_peers')." WHERE $selfwhere";
+    $sql = "SELECT $fields FROM " . $xoopsDB->prefix('xtorrent_peers') . " WHERE $selfwhere";
     //$rt=debugtxt($sql, $filename);
     $res = $xoopsDB->queryF($sql);// or err('Self Location Failed');
     $row = $xoopsDB->fetchArray($res);
     if ($row) {
         $userid = $row['userid'];
-        $self = $row;
+        $self   = $row;
     }
 }
-
 
 //// Up/down stats ////////////////////////////////////////////////////////////
 if (!isset($self)) {
@@ -311,10 +303,14 @@ if (!isset($self)) {
     //if ($xoopsModuleConfig['numseeds'] != 0 && $valid[0] >= $xoopsModuleConfig['numseeds'] && $seeder == 'yes') err("Connection limit exceeded!");
 
     $rz = $xoopsDB->queryF('SELECT id, uploaded, downloaded FROM '
-                           . $xoopsDB->prefix('xtorrent_users') . ' WHERE passkey='
-                           . sqlesc($passkey) . " AND enabled = 'yes' and secret = " . sqlesc(sha1(xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR'])))) . ' ORDER BY last_access DESC LIMIT 1') or err('Tracker error 2');
+                           . $xoopsDB->prefix('xtorrent_users')
+                           . ' WHERE passkey='
+                           . sqlesc($passkey)
+                           . " AND enabled = 'yes' AND secret = "
+                           . sqlesc(sha1(xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR']))))
+                           . ' ORDER BY last_access DESC LIMIT 1') or err('Tracker error 2');
 
-    $az = $xoopsDB->fetchArray($rz);
+    $az     = $xoopsDB->fetchArray($rz);
     $userid = $az['id'];
 
     if (0 == $xoopsDB->getRowsNum($rz)) {
@@ -323,14 +319,14 @@ if (!isset($self)) {
 } else {
     $rz = $xoopsDB->queryF('SELECT id, uploaded, downloaded FROM ' . $xoopsDB->prefix('xtorrent_users') . ' WHERE passkey=' . sqlesc($passkey) . " AND enabled = 'yes' ORDER BY last_access DESC LIMIT 1") or err('Tracker error 2');
 
-    $az = $xoopsDB->fetchArray($rz);
+    $az     = $xoopsDB->fetchArray($rz);
     $userid = $az['id'];
 
     $upthis   = max(0, $uploaded - $self['uploaded']);
     $downthis = max(0, $downloaded - $self['downloaded']);
 
     if (($upthis > 0 || $downthis > 0) && 0 <> $userid) {
-        $rt=$xoopsDB->queryF('UPDATE ' . $xoopsDB->prefix('xtorrent_users') . " SET uploaded = uploaded + $upthis, downloaded = downloaded + $downthis WHERE id=$userid") or err('Tracker error 3');
+        $rt = $xoopsDB->queryF('UPDATE ' . $xoopsDB->prefix('xtorrent_users') . " SET uploaded = uploaded + $upthis, downloaded = downloaded + $downthis WHERE id=$userid") or err('Tracker error 3');
     }
 }
 
@@ -392,10 +388,12 @@ if ('stopped' == $event) {
     }
 
     if (isset($self)) {
-        $xoopsDB->queryF('UPDATE ' . $xoopsDB->prefix('xtorrent_peers') . " SET uploaded = $uploaded, ip='$ip', downloaded = $downloaded, to_go = $left, last_action = NOW(), seeder = '$seeder'"
-                         . ('yes' == $seeder && $self['seeder'] != $seeder ? ', finishedat = ' . time() : '') . " WHERE $selfwhere");
+        $xoopsDB->queryF('UPDATE '
+                         . $xoopsDB->prefix('xtorrent_peers')
+                         . " SET uploaded = $uploaded, ip='$ip', downloaded = $downloaded, to_go = $left, last_action = NOW(), seeder = '$seeder'"
+                         . ('yes' == $seeder && $self['seeder'] != $seeder ? ', finishedat = ' . time() : '')
+                         . " WHERE $selfwhere");
 
-            
         if ($xoopsDB->getAffectedRows() && $self['seeder'] != $seeder) {
             if ('yes' == $seeder) {
                 $updateset[] = 'seeds = seeds + 1';
@@ -420,19 +418,35 @@ if ('stopped' == $event) {
         }
 
         $sql = 'SELECT id FROM ' . $xoopsDB->prefix('xtorrent_peers') . " WHERE torrent = '$torrentid', peer_id = " . sqlesc($peer_id) . ',  agent = ' . sqlesc(addslashes($agent)) . '';
-        $rt = $xoopsDB->queryF($sql);
+        $rt  = $xoopsDB->queryF($sql);
         if ($xoopsDB->getRowsNum($rt)) {
             list($pid) = $xoopsDB->fetchRow($rt) or err('Could not fetch peer record');
             $sql = 'UPDATE '
-                   . $xoopsDB->prefix('xtorrent_peers') . " SET connectable = '$connectable', torrent = '$torrentid', peer_id = " . sqlesc($peer_id) . ', ip = '
-                   . sqlesc($ip) . ", port = '$port', uploaded = '$uploaded', downloaded = '$downloaded', to_go = '$left', started = NOW(), last_action = NOW(), seeder = '$seeder', userid = '$userid', agent = " . sqlesc(addslashes($agent)) . ", uploadoffset = '$uploaded', downloadoffset = '$downloaded', passkey = " . sqlesc($passkey) . ") WHERE id = $pid";
+                   . $xoopsDB->prefix('xtorrent_peers')
+                   . " SET connectable = '$connectable', torrent = '$torrentid', peer_id = "
+                   . sqlesc($peer_id)
+                   . ', ip = '
+                   . sqlesc($ip)
+                   . ", port = '$port', uploaded = '$uploaded', downloaded = '$downloaded', to_go = '$left', started = NOW(), last_action = NOW(), seeder = '$seeder', userid = '$userid', agent = "
+                   . sqlesc(addslashes($agent))
+                   . ", uploadoffset = '$uploaded', downloadoffset = '$downloaded', passkey = "
+                   . sqlesc($passkey)
+                   . ") WHERE id = $pid";
         } else {
             $sql = 'INSERT INTO '
-                   . $xoopsDB->prefix('xtorrent_peers') . " (connectable, torrent, peer_id, ip, port, uploaded, downloaded, to_go, started, last_action, seeder, userid, agent, uploadoffset, downloadoffset, passkey) VALUES ('$connectable', '$torrentid', " . sqlesc(addslashes($peer_id)) . ', '
-                   . sqlesc($ip) . ", '$port', '$uploaded', '$downloaded', '$left', NOW(), NOW(), '$seeder', '$userid', " . sqlesc(addslashes($agent)) . ", '$uploaded', '$downloaded', " . sqlesc($passkey) . ')';
+                   . $xoopsDB->prefix('xtorrent_peers')
+                   . " (connectable, torrent, peer_id, ip, port, uploaded, downloaded, to_go, started, last_action, seeder, userid, agent, uploadoffset, downloadoffset, passkey) VALUES ('$connectable', '$torrentid', "
+                   . sqlesc(addslashes($peer_id))
+                   . ', '
+                   . sqlesc($ip)
+                   . ", '$port', '$uploaded', '$downloaded', '$left', NOW(), NOW(), '$seeder', '$userid', "
+                   . sqlesc(addslashes($agent))
+                   . ", '$uploaded', '$downloaded', "
+                   . sqlesc($passkey)
+                   . ')';
         }
         $ret = $xoopsDB->queryF($sql) or err('Tracker error - Update Peer Failed');
-         
+
         if ($ret) {
             if ('yes' == $seeder) {
                 $updateset[] = 'seeds = seeds + 1';
@@ -453,7 +467,7 @@ if (count($updateset)) {
     $xoopsDB->queryF('UPDATE ' . $xoopsDB->prefix('xtorrent_torrent') . ' SET ' . implode(',', $updateset) . " WHERE lid = $torrentid");
 }
 
-    //$rt=debugtxt("start resp:".$resp."", $filename);
+//$rt=debugtxt("start resp:".$resp."", $filename);
 
 benc_resp_raw($resp);
 

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH . '/class/xoopstree.php';
@@ -22,8 +22,8 @@ if (!$xoopsModuleConfig['submissions']) {
 if (isset($_POST['submit']) && !empty($_POST['submit'])) {
     $notify = !empty($_POST['notify']) ? 1 : 0;
 
-    $lid = !empty($_POST['lid']) ? (int)$_POST['lid'] : 0 ;
-    $cid = !empty($_POST['cid']) ? (int)$_POST['cid'] : 0 ;
+    $lid = !empty($_POST['lid']) ? (int)$_POST['lid'] : 0;
+    $cid = !empty($_POST['cid']) ? (int)$_POST['cid'] : 0;
 
     if (empty($_FILES['userfile']['name']) && $_POST['url'] && '' != $_POST['url'] && 'https://' != $_POST['url']) {
         $url   = ('https://' != $_POST['url']) ? $myts->addslashes($_POST['url']) : '';
@@ -68,11 +68,11 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
         $dhistory .= '<b>' . formatTimestamp($time, $xoopsModuleConfig['dateformat']) . '</b>';
         $dhistory .= $dhistoryhistory;
     }
-    $offline = (isset($_POST['offline']) && 1 == $_POST['offline']) ? 1 : 0;
-    $date = time();
+    $offline     = (isset($_POST['offline']) && 1 == $_POST['offline']) ? 1 : 0;
+    $date        = time();
     $publishdate = 0;
-    $notifypub = (isset($_POST['notifypub']) && 1 == $_POST['notifypub']) ? 1 : 0;
-    
+    $notifypub   = (isset($_POST['notifypub']) && 1 == $_POST['notifypub']) ? 1 : 0;
+
     $screenshot = '';
     if (isset($_FILES['screenshot']['name']) && !empty($_FILES['screenshot']['name'])) {
         $allowed_mimetypes = $allowed_mimetypes = ['image/gif', 'image/jpeg', 'image/pjpeg', 'image/x-png'];
@@ -101,35 +101,35 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
     if (0 == $lid) {
         if (1 == $xoopsModuleConfig['autoapprove']) {
             $publishdate = time();
-            $status = 1;
+            $status      = 1;
         }
-        $status = (1 == $xoopsModuleConfig['autoapprove']) ? 1 : 0 ;
-        $query = 'INSERT INTO ' . $xoopsDB->prefix('xtorrent_downloads') . ' 
+        $status = (1 == $xoopsModuleConfig['autoapprove']) ? 1 : 0;
+        $query  = 'INSERT INTO ' . $xoopsDB->prefix('xtorrent_downloads') . ' 
             			(lid, cid, title, url, homepage, version, size, platform, screenshot, submitter, publisher, status, 
             			date, hits, rating, votes, comments, price, mirror, license, paypalemail, features, requirements, 
             			homepagetitle, forumid, limitations, dhistory, published, expired,offline, description, ipaddress, notifypub, currency)';
-        $query .= " VALUES 	('', $cid, '$title', '$url', '$homepage', '$version', $size, '$platform', '$screenshot', 
+        $query  .= " VALUES 	('', $cid, '$title', '$url', '$homepage', '$version', $size, '$platform', '$screenshot', 
             			'$submitter', '$publisher','$status', '$date', 0, 0, 0, 0, '$price', '$mirror', '$license', '$paypalemail', 
             			'$features', '$requirements', '$homepagetitle', '$forumid', '$limitations', '$dhistory', '$publishdate', 
             			0, '$offline', '$description', '$ipaddress', '$notifypub', '$currency')";
         $result = $xoopsDB->queryF($query);
         $error  = _MD_XTORRENT_INFONOSAVEDB;
-        $error .= $query;
+        $error  .= $query;
         if (!$result) {
             trigger_error($error, E_USER_ERROR);
         }
-        $newid = $xoopsDB->getInsertId();
+        $newid  = $xoopsDB->getInsertId();
         $groups = [1, 2];
         xtorrent_save_Permissions($groups, $newid, 'xtorrentownFilePerm');
         // START TO CHECK FOR POLLING OF TORRENT
         //echo "Please wait a moment while we poll the torrent...";
         error_reporting(E_ALL);
         include 'include/pollall.php';
-        
+
         if (1 == $xoopsModuleConfig['poll_torrent']) {
             $rt = poll_torrent($newid);
         }
-        
+
         if (1 == $xoopsModuleConfig['poll_tracker']) {
             $rt = poll_tracker($rt, $newid, $xoopsModuleConfig['poll_tracker_timeout']);
         }
@@ -163,11 +163,12 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
         exit();
     } else {
         $updated = (isset($_POST['up_dated']) && 0 == $_POST['up_dated']) ? 0 : time();
-        
+
         if (1 == $xoopsModuleConfig['autoapprove']) {
-            $updated               = time();
+            $updated = time();
             $xoopsDB->query('UPDATE '
-                            . $xoopsDB->prefix('xtorrent_downloads') . " SET cid = $cid, title = '$title', url = '$url', mirror = '$mirror', license = '$license', features = '$features', homepage = '$homepage', version = '$version', size = $size, platform = '$platform', screenshot = '$screenshot', publisher = '$publisher', price = '$price', requirements = '$requirements', homepagetitle = '$homepagetitle', limitations = '$limitations', dhistory = '$dhistory', updated = '$updated', offline = '$offline', description = '$description', ipaddress = '$ipaddress', notifypub = '$notifypub', paypalemail = '$paypalemail', currency = '$currency' WHERE lid = $lid");
+                            . $xoopsDB->prefix('xtorrent_downloads')
+                            . " SET cid = $cid, title = '$title', url = '$url', mirror = '$mirror', license = '$license', features = '$features', homepage = '$homepage', version = '$version', size = $size, platform = '$platform', screenshot = '$screenshot', publisher = '$publisher', price = '$price', requirements = '$requirements', homepagetitle = '$homepagetitle', limitations = '$limitations', dhistory = '$dhistory', updated = '$updated', offline = '$offline', description = '$description', ipaddress = '$ipaddress', notifypub = '$notifypub', paypalemail = '$paypalemail', currency = '$currency' WHERE lid = $lid");
             $notification_handler  = xoops_gethandler('notification');
             $tags                  = [];
             $tags['FILE_NAME']     = $title;
@@ -179,15 +180,15 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
             $tags['CATEGORY_URL']  = XOOPS_URL . '/modules/xtorrent/viewcat.php?cid=' . $cid;
         } else {
             $modifysubmitter = $xoopsUser->uid();
-            $requestdate = time();
-            $sql = 'INSERT INTO ' . $xoopsDB->prefix('xtorrent_mod') . ' 
+            $requestdate     = time();
+            $sql             = 'INSERT INTO ' . $xoopsDB->prefix('xtorrent_mod') . ' 
           				(requestid, lid, cid, title, url, homepage, version, size, platform, screenshot, publisher, price, mirror, license, paypalemail, features, requirements, homepagetitle, forumid, limitations, dhistory, description, modifysubmitter, requestdate, currency)';
-            $sql .= " VALUES 	('', $lid, $cid, '$title', '$url', '$homepage', '$version', $size, '$platform', 
+            $sql             .= " VALUES 	('', $lid, $cid, '$title', '$url', '$homepage', '$version', $size, '$platform', 
           				'$screenshot', '$publisher', '$price', '$mirror', '$license', '$paypalemail', '$features', 
           				'$requirements', '$homepagetitle', '$forumid', '$limitations', '$dhistory', '$description', 
           				'$modifysubmitter', '$requestdate', '$currency')";
-            $result = $xoopsDB->query($sql);
-            $error  = '' . _MD_XTORRENT_ERROR . ': <br><br>' . $sql;
+            $result          = $xoopsDB->query($sql);
+            $error           = '' . _MD_XTORRENT_ERROR . ': <br><br>' . $sql;
             if (!$result) {
                 trigger_error($error, E_USER_ERROR);
             }
@@ -276,7 +277,7 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
 		<p><div align = 'center'>" . xtorrent_imageheader() . '</div></p>
 		<div>' . _MD_XTORRENT_SUB_SNEWMNAMEDESC . '</div>';
     if ($lid) {
-        $sql = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE lid=' . $lid . '';
+        $sql        = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE lid=' . $lid . '';
         $down_array = $xoopsDB->fetchArray($xoopsDB->query($sql));
 
         $lid           = $myts->htmlSpecialChars($down_array['lid']);
@@ -357,7 +358,7 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
     $price_tray->addElement(new XoopsFormText('', 'price', 10, 20, $price), false);
     $price_tray->addElement($price_select);
     $sform->addElement($price_tray);
-    
+
     $sform->addElement(new XoopsFormText(_MD_XTORRENT_PAYPAL, 'paypalemail', 50, 250, $paypalemail), false);
     $sform->addElement(new XoopsFormDhtmlTextArea(_MD_XTORRENT_DESCRIPTION, 'description', $description, 15, 60), true);
     $sform->addElement(new XoopsFormTextArea(_MD_XTORRENT_KEYFEATURESC, 'features', $features, 7, 60), false);

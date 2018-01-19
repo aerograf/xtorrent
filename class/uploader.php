@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * !
  * Example
@@ -46,12 +46,12 @@
  * }
  * </code>
  *
- * @package kernel
- * @subpackage core
- * @author Kazumi Ono <onokazu@xoops.org>
+ * @package       kernel
+ * @subpackage    core
+ * @author        Kazumi Ono <onokazu@xoops.org>
  * @copyright (c) 2000-2003 The Xoops Project - www.xoops.org
  */
-mt_srand((double) microtime() * 1000000);
+mt_srand((double)microtime() * 1000000);
 
 class XoopsMediaUploader
 {
@@ -91,7 +91,7 @@ class XoopsMediaUploader
         if (is_array($allowedMimeTypes)) {
             $this->allowedMimeTypes = &$allowedMimeTypes;
         }
-        $this->uploadDir = $uploadDir;
+        $this->uploadDir   = $uploadDir;
         $this->maxFileSize = (int)$maxFileSize;
         if (isset($maxWidth)) {
             $this->maxWidth = (int)$maxWidth;
@@ -110,14 +110,14 @@ class XoopsMediaUploader
      * Fetch the uploaded file
      *
      * @param string $media_name Name of the file field
-     * @param int $index Index of the file (if more than one uploaded under that name)
-     * @global $HTTP_POST_FILES
+     * @param int    $index      Index of the file (if more than one uploaded under that name)
+     * @global       $HTTP_POST_FILES
      * @return bool
      */
     public function fetchMedia($media_name, $index = null)
     {
         global $_FILES;
-        
+
         if (!isset($_FILES[$media_name])) {
             $this->setErrors('You either did not choose a file to upload or the server has insufficient read/writes to upload this file.!');
             return false;
@@ -304,7 +304,7 @@ class XoopsMediaUploader
                 $this->setErrors('MIME type not allowed: ' . $this->mediaType);
             }
         }
-        
+
         if (!$this->_copyFile($chmod)) {
             $this->setErrors('Failed uploading file: ' . $this->mediaName);
         }

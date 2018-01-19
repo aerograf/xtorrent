@@ -61,8 +61,6 @@ define('_MI_PAYPAL_PAYCLAUSEDESC', 'This is the clause or disclaimer for making 
 //define('_MI_ACCESS_CLEAR','User Table clearance');
 //define('_MI_ACCESS_CLEARDESC','Set this to the number of weeks you want the Torrent to remain active');
 
-
-
 define('_MI_PAYPAL_IMAGE', 'PayPal Image');
 define('_MI_PAYPAL_IMAGEDESC', 'Set the url for the image you want displayed in the paypal checkout.');
 
@@ -190,7 +188,7 @@ define('_MI_TORRENT_POLL_TRACKERTIMEOUTDSC', 'Number of seconds to wait before t
 
 // Description of each config items
 define('_MI_TORRENT_PLATFORMDSC', 'List of platforms to enter <br>Separate withIMPORTANT: Do not change this once the site is Live, Add new to the end of the list!');
-define('_MI_TORRENT_SUBCATSDSC', 'Select Yes to display sub-categories. Selecting No will hide sub-categories from the listings');
+define('_MI_TORRENT_SUBCATSDSC', 'SELECT Yes TO display sub-categories. Selecting NO will hide sub-categories FROM the listings');
 define('_MI_TORRENT_LICENSEDSC', 'List of platforms to enter <br>Separate with');
 
 // Text for notifications

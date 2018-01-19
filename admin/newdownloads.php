@@ -25,21 +25,21 @@ switch ($op) {
 
         global $xoopsModule;
 
-        $lid                   = (int)$_GET['lid'];
-        $result                = $xoopsDB->query('SELECT cid, title, notifypub FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE lid=' . $lid . '');
+        $lid    = (int)$_GET['lid'];
+        $result = $xoopsDB->query('SELECT cid, title, notifypub FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE lid=' . $lid . '');
         list($cid, $title, $notifypub) = $xoopsDB->fetchRow($result);
         /**
          * Update the database
          */
-        $time                  = time();
+        $time = time();
         $xoopsDB->queryF('UPDATE ' . $xoopsDB->prefix('xtorrent_downloads') . " SET published = '$time.', status = '1' WHERE lid = " . $lid . '');
 
-        $tags                  = [];
-        $tags['FILE_NAME']     = $title;
-        $tags['FILE_URL']      = XOOPS_URL . '/modules/xtorrent/singlefile.php?cid=' . $cid . '&amp;lid=' . $lid;
+        $tags              = [];
+        $tags['FILE_NAME'] = $title;
+        $tags['FILE_URL']  = XOOPS_URL . '/modules/xtorrent/singlefile.php?cid=' . $cid . '&amp;lid=' . $lid;
 
-        $sql                   = 'SELECT title FROM ' . $xoopsDB->prefix('xtorrent_cat') . ' WHERE cid=' . $cid;
-        $result                = $xoopsDB->query($sql);
+        $sql    = 'SELECT title FROM ' . $xoopsDB->prefix('xtorrent_cat') . ' WHERE cid=' . $cid;
+        $result = $xoopsDB->query($sql);
 
         $row                   = $xoopsDB->fetchArray($result);
         $tags['CATEGORY_NAME'] = $row['title'];
@@ -70,7 +70,7 @@ switch ($op) {
         $adminObject = \Xmf\Module\Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));
 
-          echo "<fieldset><legend style='font-weight: bold; color: #900;'>" . _AM_XTORRENT_SUB_FILESWAITINGINFO . "</legend>
+        echo "<fieldset><legend style='font-weight: bold; color: #900;'>" . _AM_XTORRENT_SUB_FILESWAITINGINFO . "</legend>
           		<div  style='padding:4px;'><b>" . _AM_XTORRENT_SUB_FILESWAITINGVALIDATION . '</b> ' . $new_array_count . "</div>
           		<div  style='padding:4px;'>
           		<li>" . $imagearray['approve'] . ' ' . _AM_XTORRENT_SUB_APPROVEWAITINGFILE . '
@@ -118,7 +118,7 @@ switch ($op) {
         include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
         $page    = ($new_array_count > $xoopsModuleConfig['admin_perpage']) ? _AM_XTORRENT_MINDEX_PAGE : '';
         $pagenav = new XoopsPageNav($new_array_count, $xoopsModuleConfig['admin_perpage'], $start, 'start');
-        echo "<div style='padding:8px;float:right;'>" . $page . '' . $pagenav -> renderNav() . '</div>';
+        echo "<div style='padding:8px;float:right;'>" . $page . '' . $pagenav->renderNav() . '</div>';
         require_once __DIR__ . '/admin_footer.php';
         break;
 }

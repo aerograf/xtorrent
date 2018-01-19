@@ -6,10 +6,10 @@ $down['cid'] = (int)$down_arr['cid'];
 include_once XOOPS_ROOT_PATH . '/modules/tag/include/tagbar.php';
 $down['tagbar'] = tagBar($down['id'], $down['cid']);
 
-$path = $mytree->getPathFromId($down_arr['cid'], 'title');
-$path = substr($path, 1);
-$path = basename($path);
-$path = str_replace('/', '', $path);
+$path             = $mytree->getPathFromId($down_arr['cid'], 'title');
+$path             = substr($path, 1);
+$path             = basename($path);
+$path             = str_replace('/', '', $path);
 $down['category'] = $path;
 
 $rating          = round(number_format($down_arr['rating'], 0) / 2);
@@ -29,12 +29,13 @@ if (isset($down_arr['screenshot'])) {
         if (isset($xoopsModuleConfig['usethumbs']) && 1 == $xoopsModuleConfig['usethumbs']) {
             $down['screenshot_thumb'] = down_createthumb(
                 $down['screenshot_full'],
-                $xoopsModuleConfig['screenshots'], 'thumbs',
+                $xoopsModuleConfig['screenshots'],
+                'thumbs',
                 $xoopsModuleConfig['shotwidth'],
                 $xoopsModuleConfig['shotheight'],
                 $xoopsModuleConfig['imagequality'],
                 $xoopsModuleConfig['updatethumbs'],
-                $xoopsModuleConfig['keepaspect']
+                                                         $xoopsModuleConfig['keepaspect']
             );
         } else {
             $down['screenshot_thumb'] = XOOPS_URL . '/' . $xoopsModuleConfig['screenshots'] . '/' . xoops_trim($down_arr['screenshot']);
@@ -45,7 +46,7 @@ if (isset($down_arr['screenshot'])) {
 $down['homepage'] = (!$down_arr['homepage'] || 'http://' == $down_arr['homepage']) ? '' : $myts->htmlSpecialChars(trim($down_arr['homepage']));
 if ($down['homepage'] && !empty($down['homepage'])) {
     $down['homepagetitle'] = empty($down_arr['homepagetitle']) ? trim($down['homepage']) : $myts->htmlSpecialChars(trim($down_arr['homepagetitle']));
-    $down['homepage'] = "<a style=\"color:#A033BB;\" href='" . $down['homepage'] . "' target='_blank'>" . $down['homepagetitle'] . '</a>';
+    $down['homepage']      = "<a style=\"color:#A033BB;\" href='" . $down['homepage'] . "' target='_blank'>" . $down['homepagetitle'] . '</a>';
 } else {
     $down['homepage'] = _MD_XTORRENT_NOTSPECIFIED;
 }
@@ -89,9 +90,9 @@ if ($down_arr['requirements']) {
 $down['mail_subject'] = rawurlencode(sprintf(_MD_XTORRENT_INTFILEFOUND, $xoopsConfig['sitename']));
 $down['mail_body']    = rawurlencode(sprintf(_MD_XTORRENT_INTFILEFOUND, $xoopsConfig['sitename']) . ':  ' . XOOPS_URL . '/modules/xtorrent/singlefile.php?cid=' . $down_arr['cid'] . '&amp;lid=' . $down_arr['lid']);
 
-$down['isadmin']      = (!empty($xoopsUser) && $xoopsUser->isAdmin($xoopsModule->mid())) ? true : false;
+$down['isadmin'] = (!empty($xoopsUser) && $xoopsUser->isAdmin($xoopsModule->mid())) ? true : false;
 
-$down['adminlink']    = '';
+$down['adminlink'] = '';
 if (true == $down['isadmin']) {
     $down['adminlink'] = '[ <a href="' . XOOPS_URL . '/modules/xtorrent/admin/index.php?op=Download&amp;lid=' . $down_arr['lid'] . '">' . _MD_XTORRENT_EDIT . '</a> | ';
     $down['adminlink'] .= '<a href="' . XOOPS_URL . '/modules/xtorrent/admin/index.php?op=delDownload&amp;lid=' . $down_arr['lid'] . '">' . _MD_XTORRENT_DELETE . '</a> ]';
@@ -136,8 +137,8 @@ $sql[0] = 'SELECT torrent, tracker FROM ' . $xoopsDB->prefix('xtorrent_poll') . 
 $sql[1] = 'SELECT seeds, leechers, tracker FROM ' . $xoopsDB->prefix('xtorrent_tracker') . ' WHERE lid = ' . $down['id'];
 $sql[2] = 'SELECT seeds, leechers, totalsize, modifiedby, tname FROM ' . $xoopsDB->prefix('xtorrent_torrent') . ' WHERE lid = ' . $down['id'];
 $sql[3] = 'SELECT file FROM ' . $xoopsDB->prefix('xtorrent_files') . ' WHERE lid = ' . $down['id'];
-$sql[4] = 'SELECT COUNT(*) as seeders  FROM ' . $xoopsDB->prefix('xtorrent_peers') . ' WHERE torrent = ' . $down['id'] . " AND connectable = 'yes' AND seeder = 'yes'";
-$sql[5] = 'SELECT COUNT(*) as peers FROM ' . $xoopsDB->prefix('xtorrent_peers') . ' WHERE torrent = ' . $down['id'] . " AND connectable = 'yes' AND seeder = 'no'";
+$sql[4] = 'SELECT COUNT(*) AS seeders  FROM ' . $xoopsDB->prefix('xtorrent_peers') . ' WHERE torrent = ' . $down['id'] . " AND connectable = 'yes' AND seeder = 'yes'";
+$sql[5] = 'SELECT COUNT(*) AS peers FROM ' . $xoopsDB->prefix('xtorrent_peers') . ' WHERE torrent = ' . $down['id'] . " AND connectable = 'yes' AND seeder = 'no'";
 
 //print_r($sql);
 $ret    = [];
@@ -148,7 +149,7 @@ $ret[3] = $xoopsDB->query($sql[3]);
 $ret[4] = $xoopsDB->query($sql[4]);
 $ret[5] = $xoopsDB->query($sql[5]);
 
-$down['total_seeds'] = 0;
+$down['total_seeds']   = 0;
 $down['total_leeches'] = 0;
 
 $poll    = $xoopsDB->fetchArray($ret[0]);
@@ -156,12 +157,13 @@ $torrent = $xoopsDB->fetchArray($ret[2]);
 
 $trkcr = [];
 while ($row = $xoopsDB->fetchArray($ret[1])) {
-    $trkcr[] = [
+    $trkcr[]               = [
         'seeds'   => $row['seeds'],
         'leeches' => $row['leechers'],
-        'tracker' => $row['tracker']];
-    $down['total_seeds']   = $down['total_seeds']+$row['seeds'];
-    $down['total_leeches'] = $down['total_leeches']+$row['leechers'];
+        'tracker' => $row['tracker']
+    ];
+    $down['total_seeds']   = $down['total_seeds'] + $row['seeds'];
+    $down['total_leeches'] = $down['total_leeches'] + $row['leechers'];
 }
 
 $files = [];
@@ -174,8 +176,8 @@ $down['tracker_last_polled'] = date('H:i:s', $poll['tracker']);
 $down['torrent']             = $torrent;
 $seeds                       = $xoopsDB->fetchArray($ret[4]);
 $peers                       = $xoopsDB->fetchArray($ret[5]);
-$down['total_seeds']         = $down['total_seeds']+$torrent['seeds']+$seeds['seeders'] ;
-$down['total_leeches']       = $down['total_leeches']+$torrent['leechers']+$peers['peers'];
+$down['total_seeds']         = $down['total_seeds'] + $torrent['seeds'] + $seeds['seeders'];
+$down['total_leeches']       = $down['total_leeches'] + $torrent['leechers'] + $peers['peers'];
 $down['tracker']             = $trkcr;
 $down['files']               = $files;
 

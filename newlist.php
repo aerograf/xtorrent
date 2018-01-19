@@ -18,13 +18,13 @@ $xoopsTpl->assign('imageheader', $imageheader);
 $counter          = 0;
 $allweekdownloads = 0;
 
-while ($counter <= 7-1) {
+while ($counter <= 7 - 1) {
     $newdownloaddayRaw = (time() - (86400 * $counter));
     $newdownloadday    = date('d-M-Y', $newdownloaddayRaw);
     $newdownloadView   = date('F d, Y', $newdownloaddayRaw);
     $newdownloadDB     = formatTimestamp($newdownloaddayRaw, 's');
     $totaldownloads    = 0;
-    $result = $xoopsDB->query('SELECT lid, cid, published, updated FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE published > 0 AND published <= ' . time() . ' AND (expired = 0 OR expired > ' . time() . ') AND offline = 0');
+    $result            = $xoopsDB->query('SELECT lid, cid, published, updated FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE published > 0 AND published <= ' . time() . ' AND (expired = 0 OR expired > ' . time() . ') AND offline = 0');
     while ($myrow = $xoopsDB->fetcharray($result)) {
         $published = ($myrow['updated'] > 0) ? $myrow['updated'] : $myrow['published'];
         if ($gperm_handler->checkRight('xtorrentownCatPerm', $myrow['cid'], $groups, $module_id)) {
@@ -40,11 +40,11 @@ while ($counter <= 7-1) {
 }
 
 $counter = 0;
-while ($counter <= 30-1) {
+while ($counter <= 30 - 1) {
     $newdownloaddayRaw = (time() - (86400 * $counter));
     $newdownloadDB     = formatTimestamp($newdownloaddayRaw, 's');
     $totaldownloads    = 0;
-    $result = $xoopsDB->query('SELECT lid, cid, published, updated FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE published > 0 AND published <= ' . time() . ' AND (expired = 0 OR expired > ' . time() . ') AND offline = 0');
+    $result            = $xoopsDB->query('SELECT lid, cid, published, updated FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE published > 0 AND published <= ' . time() . ' AND (expired = 0 OR expired > ' . time() . ') AND offline = 0');
     while ($myrow = $xoopsDB->fetcharray($result)) {
         $published = ($myrow['updated'] > 0) ? $myrow['updated'] : $myrow['published'];
         if ($gperm_handler->checkRight('xtorrentownCatPerm', $myrow['cid'], $groups, $module_id)) {
@@ -70,9 +70,9 @@ $xoopsTpl->assign('navitem', 1);
 $newdownloadshowdays = !isset($_GET['newdownloadshowdays']) ? 7 : $_GET['newdownloadshowdays'];
 $xoopsTpl->assign('newdownloadshowdays', $newdownloadshowdays);
 
-$counter = 0;
+$counter          = 0;
 $allweekdownloads = 0;
-while ($counter <= $newdownloadshowdays-1) {
+while ($counter <= $newdownloadshowdays - 1) {
     $newdownloaddayRaw = (time() - (86400 * $counter));
     $newdownloadday    = formatTimestamp($newdownloaddayRaw, 'd-M-Y');
     $newdownloadView   = formatTimestamp($newdownloaddayRaw, 'F d, Y');
@@ -117,14 +117,14 @@ while ($down_arr = $xoopsDB->fetchArray($result)) {
     }
 }
 
-    /**
-     * Screenshots display
-     */
-    $xoopsTpl->assign('show_screenshot', false);
-    if (isset($xoopsModuleConfig['screenshot']) && 1 == $xoopsModuleConfig['screenshot']) {
-        $xoopsTpl->assign('shots_dir', $xoopsModuleConfig['screenshots']);
-        $xoopsTpl->assign('shotwidth', $xoopsModuleConfig['shotwidth']);
-        $xoopsTpl->assign('shotheight', $xoopsModuleConfig['shotheight']);
-        $xoopsTpl->assign('show_screenshot', true);
-    }
+/**
+ * Screenshots display
+ */
+$xoopsTpl->assign('show_screenshot', false);
+if (isset($xoopsModuleConfig['screenshot']) && 1 == $xoopsModuleConfig['screenshot']) {
+    $xoopsTpl->assign('shots_dir', $xoopsModuleConfig['screenshots']);
+    $xoopsTpl->assign('shotwidth', $xoopsModuleConfig['shotwidth']);
+    $xoopsTpl->assign('shotheight', $xoopsModuleConfig['shotheight']);
+    $xoopsTpl->assign('show_screenshot', true);
+}
 include 'footer.php';

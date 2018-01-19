@@ -1,7 +1,7 @@
 <?php
 
-if (! defined('XOOPS_ROOT_PATH')) {
-    exit ;
+if (!defined('XOOPS_ROOT_PATH')) {
+    exit;
 }
 
 function myDeleteByModule($DB, $gperm_modid, $gperm_name = null, $gperm_itemid = null)
@@ -23,13 +23,13 @@ function myDeleteByModule($DB, $gperm_modid, $gperm_name = null, $gperm_itemid =
 $modid = isset($_POST['modid']) ? (int)$_POST['modid'] : 1;
 // we dont want system module permissions to be changed here ( 1 -> 0 GIJ)
 if ($modid <= 0 || !is_object($xoopsUser) || !$xoopsUser->isAdmin($modid)) {
-    redirect_header(XOOPS_URL.'/index.php', 1, _NOPERM);
+    redirect_header(XOOPS_URL . '/index.php', 1, _NOPERM);
     exit();
 }
 $module_handler = xoops_gethandler('module');
 $module         = $module_handler->get($modid);
 if (!is_object($module) || !$module->getVar('isactive')) {
-    redirect_header(XOOPS_URL.'/admin.php', 1, _MODULENOEXIST);
+    redirect_header(XOOPS_URL . '/admin.php', 1, _MODULENOEXIST);
     exit();
 }
 $member_handler = xoops_gethandler('member');
@@ -37,13 +37,13 @@ $group_list     = $member_handler->getGroupList();
 if (is_array($_POST['perms']) && !empty($_POST['perms'])) {
     $gperm_handler = xoops_gethandler('groupperm');
     foreach ($_POST['perms'] as $perm_name => $perm_data) {
-        foreach ($perm_data['itemname' ] as $item_id => $item_name) {
+        foreach ($perm_data['itemname'] as $item_id => $item_name) {
             if (false != myDeleteByModule($gperm_handler->db, $modid, $perm_name, $item_id)) {
                 if (empty($perm_data['groups'])) {
-                    continue ;
+                    continue;
                 }
                 foreach ($perm_data['groups'] as $group_id => $item_ids) {
-                    $selected = isset($item_ids[ $item_id ]) ? $item_ids[ $item_id ] : 0 ;
+                    $selected = isset($item_ids[$item_id]) ? $item_ids[$item_id] : 0;
                     if (1 == $selected) {
                         // make sure that all parent ids are selected as well
                         if ('' != $perm_data['parents'][$item_id]) {

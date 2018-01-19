@@ -32,16 +32,16 @@ if (!class_exists('qcp64')) {
         public $enum;
         public $seed;
         public $crc;
-            
-        public function __construct($data, $seed, $len=29)
+
+        public function __construct($data, $seed, $len = 29)
         {
-            $this->seed = $seed;
+            $this->seed   = $seed;
             $this->length = $len;
-            $this->base = new qcp64_base((int)$seed);
-            $this->enum = new qcp64_enumerator($this->base);
-            
+            $this->base   = new qcp64_base((int)$seed);
+            $this->enum   = new qcp64_enumerator($this->base);
+
             if (!empty($data)) {
-                for ($i=1, $iMax = strlen($data); $i < $iMax; $i++) {
+                for ($i = 1, $iMax = strlen($data); $i < $iMax; $i++) {
                     $enum_calc = $this->enum->enum_calc(substr($data, $i, 1), $enum_calc);
                 }
                 $qcp64_crc = new qcp64_leaver($enum_calc, $this->base, $this->length);
@@ -49,10 +49,10 @@ if (!class_exists('qcp64')) {
                 $this->crc = $qcp64_crc->crc;
             }
         }
-            
+
         public function calc($data)
         {
-            for ($i=1, $iMax = strlen($data); $i < $iMax; $i++) {
+            for ($i = 1, $iMax = strlen($data); $i < $iMax; $i++) {
                 $enum_calc = $this->enum->enum_calc(substr($data, $i, 1), $enum_calc);
             }
             $qcp64_crc = new qcp64_leaver($enum_calc, $this->base, $this->length);

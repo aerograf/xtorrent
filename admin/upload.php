@@ -58,12 +58,7 @@ switch ($op) {
             xoops_cp_header();
             $adminObject = \Xmf\Module\Admin::getInstance();
             $adminObject->displayNavigation(basename(__FILE__));
-            xoops_confirm(
-                ['op' => 'delfile', 'uploadpath' => $_POST['uploadpath'], 'downfile' => $_POST['downfile'], 'confirm' => 1],
-                           'upload.php',
-                _AM_XTORRENT_DOWN_DELETEFILE . '<br><br>' . $_POST['downfile'],
-                _AM_XTORRENT_BDELETE
-            );
+            xoops_confirm(['op' => 'delfile', 'uploadpath' => $_POST['uploadpath'], 'downfile' => $_POST['downfile'], 'confirm' => 1], 'upload.php', _AM_XTORRENT_DOWN_DELETEFILE . '<br><br>' . $_POST['downfile'], _AM_XTORRENT_BDELETE);
         }
         break;
 
@@ -79,8 +74,8 @@ switch ($op) {
         global $xoopsUser, $xoopsDB, $xoopsModuleConfig;
 
         $dirarray  = [1 => $xoopsModuleConfig['catimage'], 2 => $xoopsModuleConfig['screenshots'], 3 => $xoopsModuleConfig['mainimagedir']];
-        $namearray = [1 => _AM_XTORRENT_DOWN_CATIMAGE , 2 => _AM_XTORRENT_DOWN_SCREENSHOTS, 3 => _AM_XTORRENT_DOWN_MAINIMAGEDIR];
-        $listarray = [1 => _AM_XTORRENT_DOWN_FCATIMAGE , 2 => _AM_XTORRENT_DOWN_FSCREENSHOTS, 3 => _AM_XTORRENT_DOWN_FMAINIMAGEDIR];
+        $namearray = [1 => _AM_XTORRENT_DOWN_CATIMAGE, 2 => _AM_XTORRENT_DOWN_SCREENSHOTS, 3 => _AM_XTORRENT_DOWN_MAINIMAGEDIR];
+        $listarray = [1 => _AM_XTORRENT_DOWN_FCATIMAGE, 2 => _AM_XTORRENT_DOWN_FSCREENSHOTS, 3 => _AM_XTORRENT_DOWN_FMAINIMAGEDIR];
 
         if ($rootpath > 0) {
             echo '
@@ -100,7 +95,7 @@ switch ($op) {
         ob_end_clean();
 
         if ($rootpath > 0) {
-            $graph_array = XtsLists::getListTypeAsArray(XOOPS_ROOT_PATH . '/' . $dirarray[$rootpath], $type = 'images');
+            $graph_array       = XtsLists::getListTypeAsArray(XOOPS_ROOT_PATH . '/' . $dirarray[$rootpath], $type = 'images');
             $indeximage_select = new XoopsFormSelect('', 'downfile', '');
             $indeximage_select->addOptionArray($graph_array);
             $indeximage_select->setExtra("onchange='showImgSelected(\"image\", \"downfile\", \"" . $dirarray[$rootpath] . '", "", "' . XOOPS_URL . "\")'");

@@ -34,12 +34,12 @@ class XtsLists
 
     public function __construct($path = 'uploads', $value = null, $selected = '', $size = 1, $emptyselect = 0, $type = 0, $prefix = '', $suffix = '')
     {
-        $this->value = $value;
-        $this->selection = $selected;
-        $this->path = $path;
-        $this->size = (int)$size;
+        $this->value       = $value;
+        $this->selection   = $selected;
+        $this->path        = $path;
+        $this->size        = (int)$size;
         $this->emptyselect = $emptyselect ? 0 : 1;
-        $this->type = $type;
+        $this->type        = $type;
     }
 
     public static function getarray($this_array)
@@ -117,7 +117,7 @@ class XtsLists
                     if ('blank.png' == strtolower($file)) {
                         continue;
                     }
-                    $file = $prefix . $file;
+                    $file            = $prefix . $file;
                     $filelist[$file] = $file;
                 }
             }

@@ -24,7 +24,7 @@
 //  along with this program; if not, write to the Chronolab Australia        //
 //  Chronolabs International PO BOX 699, DULWICH HILL, NSW, 2203, Australia  //
 //  ---------------------------------------------------------(.)-(.)-------- //
-   //  ----+--------[  Dedication Peter & Carola Muynck   ]-----=:->----- //
+//  ----+--------[  Dedication Peter & Carola Muynck   ]-----=:->----- //
 //  ----------------------------------------------------------------+------- //
 //  -------+-----(.)-(.)- Happy Wedding - 03/10-2009  ---------------------- //
 //  ---+------+------------------------------------------------------------- //
@@ -33,24 +33,24 @@
 
 if (!class_exists('sha1')) {
     error_reporting(0);
-    
+
     class sha1
     {
         public $base;
         public $enum;
         public $seed;
         public $crc;
-            
-        public function __construct($data, $seed, $len=42)
+
+        public function __construct($data, $seed, $len = 42)
         {
-            $this->seed = $seed;
+            $this->seed   = $seed;
             $this->length = $len;
-            
+
             if (!empty($data)) {
                 $this->crc = sha1($data);
             }
         }
-            
+
         public function calc($data)
         {
             return sha1($data);

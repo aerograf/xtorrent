@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 require_once __DIR__ . '/admin_header.php';
 
@@ -21,13 +21,13 @@ switch ($op) {
 
         $requestid = (int)$_GET['requestid'];
 
-        $sql = 'SELECT lid, title, url, mirror, homepage, homepagetitle, cid, version, submitter, size, platform,  
+        $sql       = 'SELECT lid, title, url, mirror, homepage, homepagetitle, cid, version, submitter, size, platform,  
   			license, limitations, price, description, features, requirements, dhistory, screenshot, modifysubmitter, requestid
   			FROM ' . $xoopsDB->prefix('xtorrent_mod') . ' WHERE requestid=' . $_GET['requestid'];
         $mod_array = $xoopsDB->fetchArray($xoopsDB->query($sql));
         unset($sql);
-        
-        $sql = 'SELECT lid, title, url, mirror, homepage, homepagetitle, cid, version, publisher, size, platform,  
+
+        $sql        = 'SELECT lid, title, url, mirror, homepage, homepagetitle, cid, version, publisher, size, platform,  
   			license, limitations, price, description, features, requirements, dhistory, screenshot, submitter 
   			FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE lid=' . $mod_array['lid'];
         $orig_array = $xoopsDB->fetchArray($xoopsDB->query($sql));
@@ -161,9 +161,9 @@ switch ($op) {
     case 'changeModReq':
         global $xoopsDB, $_POST, $eh, $myts;
 
-        $sql           = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_mod') . ' WHERE requestid=' . $_POST['requestid'] . '';
-        $down_array    = $xoopsDB->fetchArray($xoopsDB->query($sql));
- 
+        $sql        = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_mod') . ' WHERE requestid=' . $_POST['requestid'] . '';
+        $down_array = $xoopsDB->fetchArray($xoopsDB->query($sql));
+
         $lid           = $down_array['lid'];
         $cid           = $down_array['cid'];
         $title         = $down_array['title'];
@@ -184,7 +184,7 @@ switch ($op) {
         $limitations   = $down_array['limitations'];
         $dhistory      = $down_array['dhistory'];
         $submitter     = $down_array['submitter'];
-            $updated       = time();
+        $updated       = time();
 
         $xoopsDB->query('UPDATE ' . $xoopsDB->prefix('xtorrent_downloads') . " SET cid = $cid, title = '$title', 
   			url = '$url', mirror = '$mirror', license = '$license', features = '$features', homepage = '$homepage', version = '$version', size = $size, platform = '$platform',
@@ -221,7 +221,7 @@ switch ($op) {
         $adminObject = \Xmf\Module\Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));
 
-          echo "<fieldset><legend style='font-weight:bold;color:#900;'>" . _AM_XTORRENT_MOD_MODREQUESTSINFO . "</legend>
+        echo "<fieldset><legend style='font-weight:bold;color:#900;'>" . _AM_XTORRENT_MOD_MODREQUESTSINFO . "</legend>
           		<div style='padding:4px;'><b>" . _AM_XTORRENT_MOD_TOTMODREQUESTS . '</b> ' . $totalmodrequests . "</div><br>
           		<table class='outer' style='width:100%;'>
           		<tr>
@@ -233,11 +233,11 @@ switch ($op) {
           		</tr>';
         if ($totalmodrequests > 0) {
             while ($down_arr = $xoopsDB->fetchArray($result)) {
-                $path        = $mytree->getNicePathFromId($down_arr['requestid'], 'title', 'modifications.php?op=listModReqshow&requestid');
-                $path        = str_replace('/', '', $path);
-                $path        = str_replace(':', '', trim($path));
-                $title       = trim($path);
-                $submitter   = xoops_getLinkedUnameFromId($down_arr['modifysubmitter']);
+                $path      = $mytree->getNicePathFromId($down_arr['requestid'], 'title', 'modifications.php?op=listModReqshow&requestid');
+                $path      = str_replace('/', '', $path);
+                $path      = str_replace(':', '', trim($path));
+                $title     = trim($path);
+                $submitter = xoops_getLinkedUnameFromId($down_arr['modifysubmitter']);
                 ;
                 $requestdate = formatTimestamp($down_arr['requestdate'], $xoopsModuleConfig['dateformat']);
                 echo "<tr>
@@ -256,6 +256,6 @@ switch ($op) {
         include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
         $page    = ($totalmodrequests > $xoopsModuleConfig['admin_perpage']) ? _AM_XTORRENT_MINDEX_PAGE : '';
         $pagenav = new XoopsPageNav($totalmodrequests, $xoopsModuleConfig['admin_perpage'], $start, 'start');
-        echo "<div style='padding:8px;float:right;'>" . $page . '' . $pagenav -> renderNav() . '</div>';
+        echo "<div style='padding:8px;float:right;'>" . $page . '' . $pagenav->renderNav() . '</div>';
         require_once __DIR__ . '/admin_footer.php';
 }

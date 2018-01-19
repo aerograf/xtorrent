@@ -13,7 +13,7 @@ function docleanup()
         $res = mysqli_query('SELECT id FROM torrents');
         $ar  = [];
         while ($row = mysqli_fetch_array($res)) {
-            $id = $row[0];
+            $id      = $row[0];
             $ar[$id] = 1;
         }
 
@@ -31,7 +31,7 @@ function docleanup()
             if (!preg_match('/^(\d+)\.torrent$/', $file, $m)) {
                 continue;
             }
-            $id = $m[1];
+            $id       = $m[1];
             $ar2[$id] = 1;
             if (isset($ar[$id]) && $ar[$id]) {
                 continue;
@@ -131,14 +131,14 @@ function docleanup()
     }
 
     //delete inactive user accounts
-    $secs     = 42*86400;
+    $secs     = 42 * 86400;
     $dt       = sqlesc(get_date_time(gmtime() - $secs));
     $maxclass = UC_POWER_USER;
     mysqli_query("DELETE FROM users WHERE status='confirmed' AND class <= $maxclass AND last_access < $dt");
 
     // lock topics where last post was made more than x days ago
-    $secs = 7*86400;
-    $res  = mysqli_query("SELECT topics.id FROM topics JOIN posts ON topics.lastpost = posts.id AND topics.sticky = 'no' WHERE " . gmtime() . " - UNIX_TIMESTAMP(posts.added) > $secs") or sqlerr(__FILE__, __LINE__);
+    $secs = 7 * 86400;
+    $res = mysqli_query("SELECT topics.id FROM topics JOIN posts ON topics.lastpost = posts.id AND topics.sticky = 'no' WHERE " . gmtime() . " - UNIX_TIMESTAMP(posts.added) > $secs") or sqlerr(__FILE__, __LINE__);
     while ($arr = mysqli_fetch_assoc($res)) {
         mysqli_query("UPDATE topics SET locked='yes' WHERE id=$arr[id]") or sqlerr(__FILE__, __LINE__);
     }
@@ -155,10 +155,10 @@ function docleanup()
     }
 
     // promote power users
-    $limit    = 25*1024*1024*1024;
+    $limit    = 25 * 1024 * 1024 * 1024;
     $minratio = 1.05;
-    $maxdt    = sqlesc(get_date_time(gmtime() - 86400*28));
-    $res      = mysqli_query("SELECT id FROM users WHERE class = 0 AND uploaded >= $limit AND uploaded / downloaded >= $minratio AND added < $maxdt") or sqlerr(__FILE__, __LINE__);
+    $maxdt    = sqlesc(get_date_time(gmtime() - 86400 * 28));
+    $res = mysqli_query("SELECT id FROM users WHERE class = 0 AND uploaded >= $limit AND uploaded / downloaded >= $minratio AND added < $maxdt") or sqlerr(__FILE__, __LINE__);
     if (mysqli_num_rows($res) > 0) {
         $dt  = sqlesc(get_date_time());
         $msg = sqlesc("Congratulations, you have been auto-promoted to [b]Power User[/b]. :)\nYou can now download dox over 1 meg and view torrent NFOs.\n");
@@ -170,7 +170,7 @@ function docleanup()
 
     // demote power users
     $minratio = 0.95;
-    $res      = mysqli_query("SELECT id FROM users WHERE class = 1 AND uploaded / downloaded < $minratio") or sqlerr(__FILE__, __LINE__);
+    $res = mysqli_query("SELECT id FROM users WHERE class = 1 AND uploaded / downloaded < $minratio") or sqlerr(__FILE__, __LINE__);
     if (mysqli_num_rows($res) > 0) {
         $dt  = sqlesc(get_date_time());
         $msg = sqlesc("You have been auto-demoted from [b]Power User[/b] to [b]User[/b] because your share ratio has dropped below $minratio.\n");
@@ -187,14 +187,14 @@ function docleanup()
     mysqli_query("UPDATE avps SET value_u=$leechers WHERE arg='leechers'") or sqlerr(__FILE__, __LINE__);
 
     // update forum post/topic count
-    $forums = mysqli_query('select id from forums');
+    $forums = mysqli_query('SELECT id FROM forums');
     while ($forum = mysqli_fetch_assoc($forums)) {
         $postcount  = 0;
         $topiccount = 0;
         $topics     = mysqli_query("select id from topics where forumid=$forum[id]");
         while ($topic = mysqli_fetch_assoc($topics)) {
-            $res = mysqli_query("select count(*) from posts where topicid=$topic[id]");
-            $arr = mysqli_fetch_row($res);
+            $res       = mysqli_query("select count(*) from posts where topicid=$topic[id]");
+            $arr       = mysqli_fetch_row($res);
             $postcount += $arr[0];
             ++$topiccount;
         }

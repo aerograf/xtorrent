@@ -23,16 +23,16 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
 
     public function __construct($db)
     {
-        if (!isset($db)&&!empty($db)) {
+        if (!isset($db) && !empty($db)) {
             $this->db = $db;
         } else {
             global $xoopsDB;
             $this->db = $xoopsDB;
         }
-        $this->db_table = $this->db->prefix('xtorrent_votedata');
+        $this->db_table     = $this->db->prefix('xtorrent_votedata');
         $this->perm_handler = xoops_gethandler('groupperm');
     }
-    
+
     public function getInstance($db)
     {
         static $instance;
@@ -41,16 +41,17 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
         }
         return $instance;
     }
+
     public function &create()
     {
         return new $this->obj_class();
     }
 
-    public function get($ratingid, $fields='*')
+    public function get($ratingid, $fields = '*')
     {
         $ratingid = (int)$ratingid;
         if ($ratingid > 0) {
-            $sql = 'SELECT '.$fields.' FROM '.$this->db_table.' WHERE ratingid ='.$ratingid;
+            $sql = 'SELECT ' . $fields . ' FROM ' . $this->db_table . ' WHERE ratingid =' . $ratingid;
         } else {
             return false;
         }
@@ -77,44 +78,26 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
         if (!$votedata->cleanVars()) {
             return false;
         }
-        foreach ($votedata->cleanVars as $k=>$v) {
+        foreach ($votedata->cleanVars as $k => $v) {
             ${$k} = $v;
         }
         $myts = MyTextSanitizer::getInstance();
         if ($votedata->isNew() || empty($ratingid)) {
             $ratingid = $this->db->genId($this->db_table . '_xt_votedata_id_seq');
-            $sql = sprintf(
-                'INSERT INTO %s (
+            $sql      = sprintf('INSERT INTO %s (
 				`ratingid`, `lid`, `ratinguser`, `rating`, `ratinghostname`, `ratingtimestamp`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s
-				)',
-                $this->db_table,
-                $this->db->quoteString($ratingid),
-                $this->db->quoteString($lid),
-                $this->db->quoteString($ratinguser),
-                $this->db->quoteString($rating),
-                $this->db->quoteString($ratinghostname),
-                $this->db->quoteString($ratingtimestamp)
-            );
+				)', $this->db_table, $this->db->quoteString($ratingid), $this->db->quoteString($lid), $this->db->quoteString($ratinguser), $this->db->quoteString($rating), $this->db->quoteString($ratinghostname), $this->db->quoteString($ratingtimestamp));
         } else {
-            $sql = sprintf(
-                'UPDATE %s SET
+            $sql = sprintf('UPDATE %s SET
 				`lid` = %s,
 				`ratinguser` = %s,
 				`rating` = %s,
 				`ratinghostname` = %s,
-				`ratingtimestamp` = %s WHERE `ratingid` = %s',
-                $this->db_table,
-                $this->db->quoteString($lid),
-                $this->db->quoteString($ratinguser),
-                $this->db->quoteString($rating),
-                $this->db->quoteString($ratinghostname),
-                $this->db->quoteString($ratingtimestamp),
-                $this->db->quoteString($ratingid)
-            );
+				`ratingtimestamp` = %s WHERE `ratingid` = %s', $this->db_table, $this->db->quoteString($lid), $this->db->quoteString($ratinguser), $this->db->quoteString($rating), $this->db->quoteString($ratinghostname), $this->db->quoteString($ratingtimestamp), $this->db->quoteString($ratingid));
         }
-        
+
         if (false != $force) {
             $result = $this->db->queryF($sql);
         } else {
@@ -130,7 +113,7 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
         $votedata->assignVar('id', $ratingid);
         return $ratingid;
     }
-    
+
     public function delete($criteria = null, $force = false)
     {
         if (strtolower(get_class($votedata)) != strtolower($this->obj_class)) {
@@ -147,15 +130,15 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
         return true;
     }
 
-    public function &getObjects($criteria = null, $fields='*', $ratingid_as_key = false)
+    public function &getObjects($criteria = null, $fields = '*', $ratingid_as_key = false)
     {
         $ret   = [];
         $limit = $start = 0;
-        $sql   = 'SELECT '.$fields.' FROM '.$this->db_table;
+        $sql   = 'SELECT ' . $fields . ' FROM ' . $this->db_table;
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql .= ' '.$criteria->renderWhere();
+            $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->getSort()) {
-                $sql .= ' ORDER BY '.$criteria->getSort().' '.$criteria->getOrder();
+                $sql .= ' ORDER BY ' . $criteria->getSort() . ' ' . $criteria->getOrder();
             }
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
@@ -176,12 +159,12 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
         }
         return count($ret) > 0 ? $ret : false;
     }
-    
+
     public function getCount($criteria = null)
     {
-        $sql = 'SELECT COUNT(*) FROM '.$this->db_table;
+        $sql = 'SELECT COUNT(*) FROM ' . $this->db_table;
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql .= ' '.$criteria->renderWhere();
+            $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);
         if (!$result) {
@@ -190,26 +173,26 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
         list($count) = $this->db->fetchRow($result);
         return $count;
     }
-    
+
     public function deleteAll($criteria = null)
     {
-        $sql = 'DELETE FROM '.$this->db_table;
+        $sql = 'DELETE FROM ' . $this->db_table;
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql .= ' '.$criteria->renderWhere();
+            $sql .= ' ' . $criteria->renderWhere();
         }
         if (!$result = $this->db->query($sql)) {
             return false;
         }
         return true;
     }
-    
+
     public function deleteTorrentPermissions($ratingid, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
         $criteria->add(new Criteria('gperm_itemid', $ratingid));
         $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid')));
-        $criteria->add(new Criteria('gperm_name', $this->perm_name.$mode));
+        $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode));
         if ($old_perms = $this->perm_handler->getObjects($criteria)) {
             foreach ($old_perms as $p) {
                 $this->perm_handler->delete($p);
@@ -217,13 +200,13 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
         }
         return true;
     }
-    
+
     public function insertTorrentPermissions($ratingid, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $ratingid) {
             $perm = $this->perm_handler->create();
-            $perm->setVar('gperm_name', $this->perm_name.$mode);
+            $perm->setVar('gperm_name', $this->perm_name . $mode);
             $perm->setVar('gperm_itemid', $ratingid);
             $perm->setVar('gperm_groupid', $ratingid);
             $perm->setVar('gperm_modid', $xoopsModule->getVar('mid'));
@@ -232,7 +215,7 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
         }
         return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $ratingid;
     }
-    
+
     public function &getPermittedTorrents($votedata, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
@@ -242,11 +225,11 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
             $criteria = new CriteriaCompo();
             $criteria->add(new Criteria('gperm_itemid', $votedata->getVar('ratingid'), '='), 'AND');
             $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid'), '='), 'AND');
-            $criteria->add(new Criteria('gperm_name', $this->perm_name.$mode, '='), 'AND');
+            $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode, '='), 'AND');
 
             $gtObjperm = $this->perm_handler->getObjects($criteria);
             $groups    = [];
-            
+
             foreach ($gtObjperm as $v) {
                 $ret[] = $v->getVar('gperm_groupid');
             }
@@ -261,7 +244,7 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
             if ($votedata = $this->getObjects($criteria, 'home_list')) {
                 $ret = [];
                 foreach ($votedata as $f) {
-                    if (false != $this->perm_handler->checkRight($this->perm_name.$mode, $f->getVar('ratingid'), $groups, $xoopsModule->getVar('mid'))) {
+                    if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $f->getVar('ratingid'), $groups, $xoopsModule->getVar('mid'))) {
                         $ret[] = $f;
                         unset($f);
                     }
@@ -270,12 +253,12 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
         }
         return ret;
     }
-    
+
     public function getSingleTorrentPermission($ratingid, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;
-        if (false != $this->perm_handler->checkRight($this->perm_name.$mode, $ratingid, $groups, $xoopsModule->getVar('mid'))) {
+        if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $ratingid, $groups, $xoopsModule->getVar('mid'))) {
             return true;
         }
         return false;

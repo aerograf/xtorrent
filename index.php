@@ -4,7 +4,7 @@ include 'header.php';
 global $xoopsModuleConfig, $xoopsModule, $xoopsUser;
 
 if (0 != $xoopsModuleConfig['htaccess']) {
-    if (strpos($_SERVER['REQUEST_URI'], 'odules/')>0||strpos($_SERVER['REQUEST_URI'], 'ndex.php')>0) {
+    if (strpos($_SERVER['REQUEST_URI'], 'odules/') > 0 || strpos($_SERVER['REQUEST_URI'], 'ndex.php') > 0) {
         header('HTTP/1.1 301 Moved Permanently');
         header('Location: ' . XOOPS_URL . '/torrents/');
         exit;
@@ -67,7 +67,7 @@ while ($myrow = $xoopsDB->fetchArray($result)) {
     $subtotaldownload = 0;
     $totaldownload    = xtorrent_getTotalItems($myrow['cid'], 1);
     //$subtotaldownload = xtorrent_getTotalItems($myrow['cid'], 1);
-    $indicator        = xtorrent_isnewimage($totaldownload['published']);
+    $indicator = xtorrent_isnewimage($totaldownload['published']);
 
     if ($gperm_handler->checkRight('xtorrentownCatPerm', $myrow['cid'], $groups, $module_id)) {
         $title   = $myts->htmlSpecialChars($myrow['title']);
@@ -104,12 +104,13 @@ while ($myrow = $xoopsDB->fetchArray($result)) {
             if ($xoopsModuleConfig['usethumbs'] && function_exists('gd_info')) {
                 $imgurl = down_createthumb(
                     $myts->htmlSpecialChars($myrow['imgurl']),
-                    $xoopsModuleConfig['catimage'], 'thumbs',
+                    $xoopsModuleConfig['catimage'],
+                    'thumbs',
                     $xoopsModuleConfig['shotwidth'],
                     $xoopsModuleConfig['shotheight'],
-                                    $xoopsModuleConfig['imagequality'],
+                    $xoopsModuleConfig['imagequality'],
                     $xoopsModuleConfig['updatethumbs'],
-                    $xoopsModuleConfig['keepaspect']
+                                           $xoopsModuleConfig['keepaspect']
                 );
             } else {
                 $imgurl = XOOPS_URL . '/' . $xoopsModuleConfig['catimage'] . '/' . $myts->htmlSpecialChars($myrow['imgurl']);
@@ -117,9 +118,16 @@ while ($myrow = $xoopsDB->fetchArray($result)) {
         } else {
             $imgurl = $indicator['image'];
         }
-        $xoopsTpl->append('categories', ['image' => $imgurl, 'id' => $myrow['cid'], 'title' => $title,
-                  'summary' => $summary, 'subcategories' => $subcategories, 'totaldownloads' => $totaldownload['count'],
-                  'count' => $count, 'alttext' => $indicator['alttext']]);
+        $xoopsTpl->append('categories', [
+            'image'          => $imgurl,
+            'id'             => $myrow['cid'],
+            'title'          => $title,
+            'summary'        => $summary,
+            'subcategories'  => $subcategories,
+            'totaldownloads' => $totaldownload['count'],
+            'count'          => $count,
+            'alttext'        => $indicator['alttext']
+        ]);
         $count++;
     }
 }

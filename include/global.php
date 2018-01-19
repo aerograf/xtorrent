@@ -263,7 +263,7 @@ function get_row_count($table, $suffix = '')
     if ($suffix) {
         $suffix = " $suffix";
     }
-  ($r = mysql_query("SELECT COUNT(*) FROM $table$suffix")) or die(mysql_error());
+    ($r = mysql_query("SELECT COUNT(*) FROM $table$suffix")) or die(mysql_error());
     ($a = mysql_fetch_row($r)) or die(mysql_error());
     return $a[0];
 }
@@ -277,7 +277,6 @@ function stdmsg($heading, $text)
     print("<table style='width:width=100%;border:1;'><tr><td class=text>");
     print($text . '</td></tr></table></td></tr></table>');
 }
-
 
 function stderr($heading, $text)
 {
@@ -320,11 +319,7 @@ function get_dt_num()
 
 function format_urls($s)
 {
-    return preg_replace(
-        "/(\A|[^=\]'\"a-zA-Z0-9])((http|ftp|https|ftps|irc):\/\/[^()<>\s]+)/i",
-        "\\1<a href=\"\\2\">\\2</a>",
-        $s
-    );
+    return preg_replace("/(\A|[^=\]'\"a-zA-Z0-9])((http|ftp|https|ftps|irc):\/\/[^()<>\s]+)/i", "\\1<a href=\"\\2\">\\2</a>", $s);
 }
 
 /*
@@ -377,18 +372,10 @@ function format_quotes($s)
         $quote = substr($s, $open, $close - $open + 8);
 
         //[quote]Text[/quote]
-        $quote = preg_replace(
-        "/\[quote\]\s*((\s|.)+?)\s*\[\/quote\]\s*/i",
-        "<p class=sub><b>Quote:</b></p><table class=main border=1 cellspacing=0 cellpadding=10><tr><td style='border: 1px black dotted'>\\1</td></tr></table><br>",
-          $quote
-      );
+        $quote = preg_replace("/\[quote\]\s*((\s|.)+?)\s*\[\/quote\]\s*/i", "<p class=sub><b>Quote:</b></p><table class=main border=1 cellspacing=0 cellpadding=10><tr><td style='border: 1px black dotted'>\\1</td></tr></table><br>", $quote);
 
         //[quote=Author]Text[/quote]
-        $quote = preg_replace(
-        "/\[quote=(.+?)\]\s*((\s|.)+?)\s*\[\/quote\]\s*/i",
-        "<p class=sub><b>\\1 wrote:</b></p><table class=main border=1 cellspacing=0 cellpadding=10><tr><td style='border: 1px black dotted'>\\2</td></tr></table><br>",
-          $quote
-      );
+        $quote = preg_replace("/\[quote=(.+?)\]\s*((\s|.)+?)\s*\[\/quote\]\s*/i", "<p class=sub><b>\\1 wrote:</b></p><table class=main border=1 cellspacing=0 cellpadding=10><tr><td style='border: 1px black dotted'>\\2</td></tr></table><br>", $quote);
 
         $s = substr($s, 0, $open) . $quote . substr($s, $close + 8);
     }
@@ -436,56 +423,32 @@ function format_comment($text, $strip_html = true)
     $s = preg_replace("/\[img=([^\s'\"<>]+?)\]/i", "<img border=0 src=\"\\1\">", $s);
 
     // [color=blue]Text[/color]
-    $s = preg_replace(
-        "/\[color=([a-zA-Z]+)\]((\s|.)+?)\[\/color\]/i",
-        "<font color=\\1>\\2</font>",
-        $s
-    );
+    $s = preg_replace("/\[color=([a-zA-Z]+)\]((\s|.)+?)\[\/color\]/i", "<font color=\\1>\\2</font>", $s);
 
     // [color=#ffcc99]Text[/color]
-    $s = preg_replace(
-        "/\[color=(#[a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9])\]((\s|.)+?)\[\/color\]/i",
-        "<font color=\\1>\\2</font>",
-        $s
-    );
+    $s = preg_replace("/\[color=(#[a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9])\]((\s|.)+?)\[\/color\]/i", "<font color=\\1>\\2</font>", $s);
 
     // [url=http://www.example.com]Text[/url]
-    $s = preg_replace(
-        "/\[url=([^()<>\s]+?)\]((\s|.)+?)\[\/url\]/i",
-        "<a href=\"\\1\">\\2</a>",
-        $s
-    );
+    $s = preg_replace("/\[url=([^()<>\s]+?)\]((\s|.)+?)\[\/url\]/i", "<a href=\"\\1\">\\2</a>", $s);
 
     // [url]http://www.example.com[/url]
-    $s = preg_replace(
-        "/\[url\]([^()<>\s]+?)\[\/url\]/i",
-        "<a href=\"\\1\">\\1</a>",
-        $s
-    );
+    $s = preg_replace("/\[url\]([^()<>\s]+?)\[\/url\]/i", "<a href=\"\\1\">\\1</a>", $s);
 
     // [size=4]Text[/size]
-    $s = preg_replace(
-        "/\[size=([1-7])\]((\s|.)+?)\[\/size\]/i",
-        "<font size=\\1>\\2</font>",
-        $s
-    );
+    $s = preg_replace("/\[size=([1-7])\]((\s|.)+?)\[\/size\]/i", "<font size=\\1>\\2</font>", $s);
 
     // [font=Arial]Text[/font]
-    $s = preg_replace(
-        "/\[font=([a-zA-Z ,]+)\]((\s|.)+?)\[\/font\]/i",
-        "<font face=\"\\1\">\\2</font>",
-        $s
-    );
+    $s = preg_replace("/\[font=([a-zA-Z ,]+)\]((\s|.)+?)\[\/font\]/i", "<font face=\"\\1\">\\2</font>", $s);
 
     //  //[quote]Text[/quote]
     //  $s = preg_replace(
-//    "/\[quote\]\s*((\s|.)+?)\s*\[\/quote\]\s*/i",
-//    "<p class=sub><b>Quote:</b></p><table class=main border=1 cellspacing=0 cellpadding=10><tr><td style='border: 1px black dotted'>\\1</td></tr></table><br>", $s);
+    //    "/\[quote\]\s*((\s|.)+?)\s*\[\/quote\]\s*/i",
+    //    "<p class=sub><b>Quote:</b></p><table class=main border=1 cellspacing=0 cellpadding=10><tr><td style='border: 1px black dotted'>\\1</td></tr></table><br>", $s);
 
     //  //[quote=Author]Text[/quote]
     //  $s = preg_replace(
-//    "/\[quote=(.+?)\]\s*((\s|.)+?)\s*\[\/quote\]\s*/i",
-//    "<p class=sub><b>\\1 wrote:</b></p><table class=main border=1 cellspacing=0 cellpadding=10><tr><td style='border: 1px black dotted'>\\2</td></tr></table><br>", $s);
+    //    "/\[quote=(.+?)\]\s*((\s|.)+?)\s*\[\/quote\]\s*/i",
+    //    "<p class=sub><b>\\1 wrote:</b></p><table class=main border=1 cellspacing=0 cellpadding=10><tr><td style='border: 1px black dotted'>\\2</td></tr></table><br>", $s);
 
     // Quotes
     $s = format_quotes($s);
@@ -501,8 +464,7 @@ function format_comment($text, $strip_html = true)
     $s = preg_replace("/\[pre\]((\s|.)+?)\[\/pre\]/i", "<tt><nobr>\\1</nobr></tt>", $s);
 
     // [nfo]NFO-preformatted[/nfo]
-    $s = preg_replace("/\[nfo\]((\s|.)+?)\[\/nfo\]/i", "<tt><nobr><font face='MS Linedraw' size=2 style='font-size: 10pt; line-height: " .
-        "10pt'>\\1</font></nobr></tt>", $s);
+    $s = preg_replace("/\[nfo\]((\s|.)+?)\[\/nfo\]/i", "<tt><nobr><font face='MS Linedraw' size=2 style='font-size: 10pt; line-height: " . "10pt'>\\1</font></nobr></tt>", $s);
 
     // Maintain spacing
     $s = str_replace('  ', ' &nbsp;', $s);
@@ -537,20 +499,27 @@ function get_user_class()
 function get_user_class_name($class)
 {
     switch ($class) {
-    case UC_USER: return 'User';
+        case UC_USER:
+            return 'User';
 
-    case UC_POWER_USER: return 'Power User';
+        case UC_POWER_USER:
+            return 'Power User';
 
-    case UC_VIP: return 'VIP';
+        case UC_VIP:
+            return 'VIP';
 
-    case UC_UPLOADER: return 'Uploader';
+        case UC_UPLOADER:
+            return 'Uploader';
 
-    case UC_MODERATOR: return 'Moderator';
+        case UC_MODERATOR:
+            return 'Moderator';
 
-    case UC_ADMINISTRATOR: return 'Administrator';
+        case UC_ADMINISTRATOR:
+            return 'Administrator';
 
-    case UC_SYSOP: return 'SysOp';
-  }
+        case UC_SYSOP:
+            return 'SysOp';
+    }
     return '';
 }
 
@@ -564,170 +533,167 @@ function is_valid_id($id)
     return is_numeric($id) && ($id > 0) && (floor($id) == $id);
 }
 
+//-------- Begins a main frame
 
-  //-------- Begins a main frame
+function begin_main_frame()
+{
+    print("<table class=main style='width:750px;'>" . "<tr><td class='embedded'>");
+}
 
-  function begin_main_frame()
-  {
-      print("<table class=main style='width:750px;'>" .
-          "<tr><td class='embedded'>");
-  }
+//-------- Ends a main frame
 
-  //-------- Ends a main frame
+function end_main_frame()
+{
+    print('</td></tr></table>');
+}
 
-  function end_main_frame()
-  {
-      print('</td></tr></table>');
-  }
+function begin_frame($caption = '', $center = false, $padding = 10)
+{
+    if ($caption) {
+        print('<h2>' . $caption . '</h2>');
+    }
 
-  function begin_frame($caption = '', $center = false, $padding = 10)
-  {
-      if ($caption) {
-          print('<h2>' . $caption . '</h2>');
-      }
+    if ($center) {
+        $tdextra .= ' align=center';
+    }
 
-      if ($center) {
-          $tdextra .= ' align=center';
-      }
+    print("<table style='width:100%;border:1;' cellpadding=" . $padding . '><tr><td ' . $tdextra . '>');
+}
 
-      print("<table style='width:100%;border:1;' cellpadding=" . $padding . '><tr><td ' . $tdextra . '>');
-  }
+function attach_frame($padding = 10)
+{
+    print("</td></tr><tr><td style='border-top:0px'>");
+}
 
-  function attach_frame($padding = 10)
-  {
-      print("</td></tr><tr><td style='border-top:0px'>");
-  }
+function end_frame()
+{
+    print('</td></tr></table>');
+}
 
-  function end_frame()
-  {
-      print('</td></tr></table>');
-  }
+function begin_table($fullwidth = false, $padding = 5)
+{
+    if ($fullwidth) {
+        $width = ' width=100%';
+    }
+    print('<table class=main ' . $width . ' border=1 cellspacing=0 cellpadding=' . $padding . '>');
+}
 
-  function begin_table($fullwidth = false, $padding = 5)
-  {
-      if ($fullwidth) {
-          $width = ' width=100%';
-      }
-      print('<table class=main ' . $width . ' border=1 cellspacing=0 cellpadding=' . $padding . '>');
-  }
+function end_table()
+{
+    print('</td></tr></table>');
+}
 
-  function end_table()
-  {
-      print('</td></tr></table>');
-  }
+//-------- Inserts a smilies frame
+//         (move to globals)
 
-  //-------- Inserts a smilies frame
-  //         (move to globals)
+function insert_smilies_frame()
+{
+    global $smilies, $BASEURL;
 
-  function insert_smilies_frame()
-  {
-      global $smilies, $BASEURL;
+    begin_frame('Smilies', true);
 
-      begin_frame('Smilies', true);
+    begin_table(false, 5);
 
-      begin_table(false, 5);
+    print('<tr><td class=colhead>Type...</td><td class=colhead>To make a...</td></tr>');
 
-      print('<tr><td class=colhead>Type...</td><td class=colhead>To make a...</td></tr>');
+    while (list($code, $url) = each($smilies)) {
+        print('<tr><td>' . $code . '</td><td><img src=' . $BASEURL . '/pic/smilies/' . $url . '></td>');
+    }
 
-      while (list($code, $url) = each($smilies)) {
-          print('<tr><td>' . $code . '</td><td><img src=' . $BASEURL . '/pic/smilies/' . $url . '></td>');
-      }
+    end_table();
 
-      end_table();
-
-      end_frame();
-  }
-
+    end_frame();
+}
 
 function sql_timestamp_to_unix_timestamp($s)
 {
     return mktime(substr($s, 11, 2), substr($s, 14, 2), substr($s, 17, 2), substr($s, 5, 2), substr($s, 8, 2), substr($s, 0, 4));
 }
 
-  function get_ratio_color($ratio)
-  {
-      if ($ratio < 0.1) {
-          return '#ff0000';
-      }
-      if ($ratio < 0.2) {
-          return '#ee0000';
-      }
-      if ($ratio < 0.3) {
-          return '#dd0000';
-      }
-      if ($ratio < 0.4) {
-          return '#cc0000';
-      }
-      if ($ratio < 0.5) {
-          return '#bb0000';
-      }
-      if ($ratio < 0.6) {
-          return '#aa0000';
-      }
-      if ($ratio < 0.7) {
-          return '#990000';
-      }
-      if ($ratio < 0.8) {
-          return '#880000';
-      }
-      if ($ratio < 0.9) {
-          return '#770000';
-      }
-      if ($ratio < 1) {
-          return '#660000';
-      }
-      return '#000000';
-  }
+function get_ratio_color($ratio)
+{
+    if ($ratio < 0.1) {
+        return '#ff0000';
+    }
+    if ($ratio < 0.2) {
+        return '#ee0000';
+    }
+    if ($ratio < 0.3) {
+        return '#dd0000';
+    }
+    if ($ratio < 0.4) {
+        return '#cc0000';
+    }
+    if ($ratio < 0.5) {
+        return '#bb0000';
+    }
+    if ($ratio < 0.6) {
+        return '#aa0000';
+    }
+    if ($ratio < 0.7) {
+        return '#990000';
+    }
+    if ($ratio < 0.8) {
+        return '#880000';
+    }
+    if ($ratio < 0.9) {
+        return '#770000';
+    }
+    if ($ratio < 1) {
+        return '#660000';
+    }
+    return '#000000';
+}
 
-  function get_slr_color($ratio)
-  {
-      if ($ratio < 0.025) {
-          return '#ff0000';
-      }
-      if ($ratio < 0.05) {
-          return '#ee0000';
-      }
-      if ($ratio < 0.075) {
-          return '#dd0000';
-      }
-      if ($ratio < 0.1) {
-          return '#cc0000';
-      }
-      if ($ratio < 0.125) {
-          return '#bb0000';
-      }
-      if ($ratio < 0.15) {
-          return '#aa0000';
-      }
-      if ($ratio < 0.175) {
-          return '#990000';
-      }
-      if ($ratio < 0.2) {
-          return '#880000';
-      }
-      if ($ratio < 0.225) {
-          return '#770000';
-      }
-      if ($ratio < 0.25) {
-          return '#660000';
-      }
-      if ($ratio < 0.275) {
-          return '#550000';
-      }
-      if ($ratio < 0.3) {
-          return '#440000';
-      }
-      if ($ratio < 0.325) {
-          return '#330000';
-      }
-      if ($ratio < 0.35) {
-          return '#220000';
-      }
-      if ($ratio < 0.375) {
-          return '#110000';
-      }
-      return '#000000';
-  }
+function get_slr_color($ratio)
+{
+    if ($ratio < 0.025) {
+        return '#ff0000';
+    }
+    if ($ratio < 0.05) {
+        return '#ee0000';
+    }
+    if ($ratio < 0.075) {
+        return '#dd0000';
+    }
+    if ($ratio < 0.1) {
+        return '#cc0000';
+    }
+    if ($ratio < 0.125) {
+        return '#bb0000';
+    }
+    if ($ratio < 0.15) {
+        return '#aa0000';
+    }
+    if ($ratio < 0.175) {
+        return '#990000';
+    }
+    if ($ratio < 0.2) {
+        return '#880000';
+    }
+    if ($ratio < 0.225) {
+        return '#770000';
+    }
+    if ($ratio < 0.25) {
+        return '#660000';
+    }
+    if ($ratio < 0.275) {
+        return '#550000';
+    }
+    if ($ratio < 0.3) {
+        return '#440000';
+    }
+    if ($ratio < 0.325) {
+        return '#330000';
+    }
+    if ($ratio < 0.35) {
+        return '#220000';
+    }
+    if ($ratio < 0.375) {
+        return '#110000';
+    }
+    return '#000000';
+}
 
 function write_log($text)
 {
@@ -738,14 +704,14 @@ function write_log($text)
 
 function get_elapsed_time($ts)
 {
-    $mins   = floor((gmtime() - $ts) / 60);
-    $hours  = floor($mins / 60);
+    $mins  = floor((gmtime() - $ts) / 60);
+    $hours = floor($mins / 60);
     $mins  -= $hours * 60;
-    $days   = floor($hours / 24);
+    $days  = floor($hours / 24);
     $hours -= $days * 24;
-    $weeks  = floor($days / 7);
+    $weeks = floor($days / 7);
     $days  -= $weeks * 7;
-    $t      = '';
+    $t     = '';
     if ($weeks > 0) {
         return "$weeks week" . ($weeks > 1 ? 's' : '');
     }

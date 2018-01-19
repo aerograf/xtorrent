@@ -8,5 +8,5 @@ if ($com_itemid > 0) {
     $result         = $xoopsDB->query($sql);
     $row            = $xoopsDB->fetchArray($result);
     $com_replytitle = $row['title'];
-    include XOOPS_ROOT_PATH.'/include/comment_new.php';
+    include XOOPS_ROOT_PATH . '/include/comment_new.php';
 }

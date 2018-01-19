@@ -14,79 +14,79 @@ $helper->loadLanguage('modinfo');
 
 $adminmenu = [
     [
-     'title'   =>  _MI_TORRENT_BINDEX,
-     'link'    =>  'admin/index.php',
-     'desc'    =>  '',
-     'icon'    =>  $pathIcon32 . 'home.png'
+        'title' => _MI_TORRENT_BINDEX,
+        'link'  => 'admin/index.php',
+        'desc'  => '',
+        'icon'  => $pathIcon32 . 'home.png'
     ],
     [
-     'title'   =>  _MI_TORRENT_MDOWNLOADS,
-     'link'    =>  'admin/index.php?op=Download',
-     'desc'    =>  '',
-     'icon'    =>  $pathIcon32 . '/add.png'
+        'title' => _MI_TORRENT_MDOWNLOADS,
+        'link'  => 'admin/index.php?op=Download',
+        'desc'  => '',
+        'icon'  => $pathIcon32 . '/add.png'
     ],
     [
-     'title'   =>  _MI_TORRENT_INDEXPAGE,
-     'link'    =>  'admin/indexpage.php',
-     'desc'    =>  '',
-     'icon'    =>  $pathIcon32 . '/manage.png'
+        'title' => _MI_TORRENT_INDEXPAGE,
+        'link'  => 'admin/indexpage.php',
+        'desc'  => '',
+        'icon'  => $pathIcon32 . '/manage.png'
     ],
     [
-     'title'   =>  _MI_TORRENT_MCATEGORY,
-     'link'    =>  'admin/category.php',
-     'desc'    =>  '',
-     'icon'    =>  $pathIcon32 . '/category.png'
+        'title' => _MI_TORRENT_MCATEGORY,
+        'link'  => 'admin/category.php',
+        'desc'  => '',
+        'icon'  => $pathIcon32 . '/category.png'
     ],
     [
-     'title'   =>  _MI_TORRENT_MUPLOADS,
-     'link'    =>  'admin/upload.php',
-     'desc'    =>  '',
-     'icon'    =>  $pathIcon32 . '/compfile.png'
+        'title' => _MI_TORRENT_MUPLOADS,
+        'link'  => 'admin/upload.php',
+        'desc'  => '',
+        'icon'  => $pathIcon32 . '/compfile.png'
     ],
     [
-     'title'   =>  _MI_TORRENT_MMIMETYPES,
-     'link'    =>  'admin/mimetypes.php',
-     'desc'    =>  '',
-     'icon'    =>  $pathIcon32 . '/type.png'
+        'title' => _MI_TORRENT_MMIMETYPES,
+        'link'  => 'admin/mimetypes.php',
+        'desc'  => '',
+        'icon'  => $pathIcon32 . '/type.png'
     ],
     [
-     'title'   =>  _MI_TORRENT_MVOTEDATA,
-     'link'    =>  'admin/votedata.php',
-     'desc'    =>  '',
-     'icon'    =>  $pathIcon32 . '/event.png'
+        'title' => _MI_TORRENT_MVOTEDATA,
+        'link'  => 'admin/votedata.php',
+        'desc'  => '',
+        'icon'  => $pathIcon32 . '/event.png'
     ],
     [
-     'title'   =>  _MI_TORRENT_PERMISSIONS,
-     'link'    =>  'admin/permissions.php',
-     'desc'    =>  '',
-     'icon'    =>  $pathIcon32 . '/permissions.png'
+        'title' => _MI_TORRENT_PERMISSIONS,
+        'link'  => 'admin/permissions.php',
+        'desc'  => '',
+        'icon'  => $pathIcon32 . '/permissions.png'
     ],
     [
-     'title'   =>  _MI_TORRENT_BLOCKADMIN,
-     'link'    =>  'admin/myblocksadmin.php',
-     'desc'    =>  '',
-     'icon'    =>  $pathIcon32 . '/block.png'
+        'title' => _MI_TORRENT_BLOCKADMIN,
+        'link'  => 'admin/myblocksadmin.php',
+        'desc'  => '',
+        'icon'  => $pathIcon32 . '/block.png'
     ],
     [
-     'title'   =>  _MI_XTORRENT_PAYMENTS,
-     'link'    =>  'admin/index.php?op=payment',
-     'desc'    =>  '',
-     'icon'    =>  $pathIcon32 . '/cash_stack.png'
+        'title' => _MI_XTORRENT_PAYMENTS,
+        'link'  => 'admin/index.php?op=payment',
+        'desc'  => '',
+        'icon'  => $pathIcon32 . '/cash_stack.png'
     ],
     [
-     'title'   =>  _MI_XTORRENT_PCONSOLID,
-     'link'    =>  'admin/index.php?op=ipnrec',
-     'desc'    =>  '',
-     'icon'    =>  $pathIcon32 . '/cash_stack.png'
+        'title' => _MI_XTORRENT_PCONSOLID,
+        'link'  => 'admin/index.php?op=ipnrec',
+        'desc'  => '',
+        'icon'  => $pathIcon32 . '/cash_stack.png'
     ],
     [
-     'title'   =>  _MI_TORRENT_ADMENU3,
-     'link'    =>  'admin/about.php',
-     'desc'    =>  '',
-     'icon'    => $pathIcon32 . '/about.png'
+        'title' => _MI_TORRENT_ADMENU3,
+        'link'  => 'admin/about.php',
+        'desc'  => '',
+        'icon'  => $pathIcon32 . '/about.png'
     ]
 ];
- 
+
 /*
 global $xoopsModule, $xoopsUser;
 $xoopsModule = XoopsModule::getByDirname("xsoap");

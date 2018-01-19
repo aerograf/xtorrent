@@ -53,7 +53,7 @@ switch ($op) {
         $adminObject = \Xmf\Module\Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));
 
-          echo "<fieldset><legend style='font-weight:bold;color:#900;'>" . _AM_XTORRENT_BROKEN_REPORTINFO . "</legend>
+        echo "<fieldset><legend style='font-weight:bold;color:#900;'>" . _AM_XTORRENT_BROKEN_REPORTINFO . "</legend>
           		<div style='padding:4px;'>" . _AM_XTORRENT_BROKEN_REPORTSNO . "&nbsp;<b>$totalbrokendownloads</b><div>
           		<div style='padding:4px;'>
           		<ul>

@@ -35,21 +35,21 @@ function xtorrent_save_Permissions($groups, $id, $perm_name)
 {
     $result         = true;
     $hModule        = xoops_gethandler('module');
-    $xtorrentModule = $hModule -> getByDirname('xtorrent');
+    $xtorrentModule = $hModule->getByDirname('xtorrent');
 
-    $module_id      = $xtorrentModule -> getVar('mid');
-    $gperm_handler  = xoops_gethandler('groupperm');
+    $module_id     = $xtorrentModule->getVar('mid');
+    $gperm_handler = xoops_gethandler('groupperm');
 
     /*
     * First, if the permissions are already there, delete them
     */
-    $gperm_handler -> deleteByModule($module_id, $perm_name, $id);
+    $gperm_handler->deleteByModule($module_id, $perm_name, $id);
     /*
     *  Save the new permissions
     */
     if (is_array($groups)) {
         foreach ($groups as $group_id) {
-            $gperm_handler -> addRight($perm_name, $id, $group_id, $module_id);
+            $gperm_handler->addRight($perm_name, $id, $group_id, $module_id);
         }
     }
     return $result;
@@ -127,7 +127,7 @@ function xtorrent_displayicons($time, $status = 0, $counter = 0)
     $pop = '';
 
     $newdate = (time() - (86400 * (int)$xoopsModuleConfig['daysnew']));
-    $popdate = (time() - (86400 * (int)$xoopsModuleConfig['daysupdated'])) ;
+    $popdate = (time() - (86400 * (int)$xoopsModuleConfig['daysupdated']));
 
     if (3 != $xoopsModuleConfig['displayicons']) {
         if ($newdate < $time) {
@@ -291,17 +291,17 @@ function xtorrent_PrettySize($size)
 function xtorrent_updaterating($sel_id)
 {
     global $xoopsDB;
-    $query       = 'select rating FROM ' . $xoopsDB-> prefix('xtorrent_votedata') . ' WHERE lid = ' . $sel_id . '';
-    $voteresult  = $xoopsDB -> query($query);
-    $votesDB     = $xoopsDB -> getRowsNum($voteresult);
+    $query       = 'SELECT rating FROM ' . $xoopsDB->prefix('xtorrent_votedata') . ' WHERE lid = ' . $sel_id . '';
+    $voteresult  = $xoopsDB->query($query);
+    $votesDB     = $xoopsDB->getRowsNum($voteresult);
     $totalrating = 0;
-    while (list($rating) = $xoopsDB -> fetchRow($voteresult)) {
+    while (list($rating) = $xoopsDB->fetchRow($voteresult)) {
         $totalrating += $rating;
     }
     $finalrating = $totalrating / $votesDB;
     $finalrating = number_format($finalrating, 4);
-    $sql = sprintf('UPDATE %s SET rating = %u, votes = %u WHERE lid = %u', $xoopsDB-> prefix('xtorrent_downloads'), $finalrating, $votesDB, $sel_id);
-    $xoopsDB -> query($sql);
+    $sql         = sprintf('UPDATE %s SET rating = %u, votes = %u WHERE lid = %u', $xoopsDB->prefix('xtorrent_downloads'), $finalrating, $votesDB, $sel_id);
+    $xoopsDB->query($sql);
 }
 
 /**
@@ -314,17 +314,17 @@ function xtorrent_totalcategory($pid = 0)
 {
     global $xoopsDB, $xoopsModule, $xoopsUser;
 
-    $groups        = is_object($xoopsUser) ? $xoopsUser-> getGroups() : XOOPS_GROUP_ANONYMOUS;
+    $groups        = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
     $gperm_handler = xoops_gethandler('groupperm');
 
-    $sql = 'SELECT cid FROM ' . $xoopsDB-> prefix('xtorrent_cat') . ' ';
+    $sql = 'SELECT cid FROM ' . $xoopsDB->prefix('xtorrent_cat') . ' ';
     if ($pid > 0) {
         $sql .= 'WHERE pid = 0';
     }
-    $result           = $xoopsDB -> query($sql);
-    $catlisting       = 0;
-    while (list($cid) = $xoopsDB -> fetchRow($result)) {
-        if ($gperm_handler -> checkRight('xtorrentownCatPerm', $cid, $groups, $xoopsModule -> getVar('mid'))) {
+    $result     = $xoopsDB->query($sql);
+    $catlisting = 0;
+    while (list($cid) = $xoopsDB->fetchRow($result)) {
+        if ($gperm_handler->checkRight('xtorrentownCatPerm', $cid, $groups, $xoopsModule->getVar('mid'))) {
             $catlisting++;
         }
     }
@@ -342,34 +342,34 @@ function xtorrent_getTotalItems($sel_id = 0, $get_child = 0)
 {
     global $xoopsDB, $mytree, $xoopsModule, $xoopsUser;
 
-    $groups         = is_object($xoopsUser) ? $xoopsUser-> getGroups() : XOOPS_GROUP_ANONYMOUS;
-    $gperm_handler  = xoops_gethandler('groupperm');
+    $groups        = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
+    $gperm_handler = xoops_gethandler('groupperm');
 
     $count          = 0;
     $published_date = 0;
 
-    $arr = [];
-    $query = 'select lid, published from ' . $xoopsDB-> prefix('xtorrent_downloads') . ' 
+    $arr   = [];
+    $query = 'SELECT lid, published FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' 
 		WHERE offline = 0 AND published > 0 AND published <= ' . time() . ' AND (expired = 0 OR expired > ' . time() . ')';
     if ($sel_id) {
         $query .= ' AND cid=' . $sel_id . '';
     }
-    $result = $xoopsDB -> query($query);
-    while (list($lid, $published) = $xoopsDB -> fetchRow($result)) {
-        if ($gperm_handler -> checkRight('xtorrentownFilePerm', $lid, $groups, $xoopsModule -> getVar('mid'))) {
+    $result = $xoopsDB->query($query);
+    while (list($lid, $published) = $xoopsDB->fetchRow($result)) {
+        if ($gperm_handler->checkRight('xtorrentownFilePerm', $lid, $groups, $xoopsModule->getVar('mid'))) {
             $count++;
             $published_date = ($published > $published_date) ? $published : $published_date;
         }
     }
     $thing = 0;
     if (1 == $get_child) {
-        $arr  = $mytree -> getAllChildId($sel_id);
+        $arr  = $mytree->getAllChildId($sel_id);
         $size = count($arr);
         for ($i = 0, $iMax = count($arr); $i < $iMax; $i++) {
-            $query2  = 'select lid, published from ' . $xoopsDB-> prefix('xtorrent_downloads') . ' WHERE status > 0 AND offline = 0 AND published > 0 AND published <= ' . time() . ' AND (expired = 0 OR expired > ' . time() . ') AND cid=' . $arr[$i] . '';
-            $result2 = $xoopsDB -> query($query2);
-            while (list($lid, $published) = $xoopsDB -> fetchRow($result2)) {
-                if ($gperm_handler -> checkRight('xtorrentownFilePerm', $lid, $groups, $xoopsModule -> getVar('mid'))) {
+            $query2  = 'SELECT lid, published FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE status > 0 AND offline = 0 AND published > 0 AND published <= ' . time() . ' AND (expired = 0 OR expired > ' . time() . ') AND cid=' . $arr[$i] . '';
+            $result2 = $xoopsDB->query($query2);
+            while (list($lid, $published) = $xoopsDB->fetchRow($result2)) {
+                if ($gperm_handler->checkRight('xtorrentownFilePerm', $lid, $groups, $xoopsModule->getVar('mid'))) {
                     $published_date = ($published > $published_date) ? $published : $published_date;
                     $thing++;
                 }
@@ -386,8 +386,8 @@ function xtorrent_imageheader()
     global $xoopsDB, $xoopsModule, $xoopsModuleConfig;
 
     $image  = '';
-    $result = $xoopsDB -> query('SELECT indeximage, indexheading FROM ' . $xoopsDB-> prefix('xtorrent_indexpage ') . ' ');
-    list($indeximage, $indexheading) = $xoopsDB -> fetchrow($result);
+    $result = $xoopsDB->query('SELECT indeximage, indexheading FROM ' . $xoopsDB->prefix('xtorrent_indexpage ') . ' ');
+    list($indeximage, $indexheading) = $xoopsDB->fetchrow($result);
     if (!empty($indeximage)) {
         $image = xtorrent_displayimage($indeximage, "'index.php'", $xoopsModuleConfig['mainimagedir'], $indexheading);
     }
@@ -414,7 +414,7 @@ function xtorrent_displayimage($image = '', $path = '', $imgsource = '', $alttex
     if (!is_dir(XOOPS_ROOT_PATH . '/' . $imgsource . '/' . $image) && file_exists(XOOPS_ROOT_PATH . '/' . $imgsource . '/' . $image)) {
         $showimage .= "<img src='" . XOOPS_URL . '/' . $imgsource . '/' . $image . "' border='0' alt='" . $alttext . "' ></a>";
     } else {
-        if ($xoopsUser && $xoopsUser -> isAdmin($xoopsModule -> mid())) {
+        if ($xoopsUser && $xoopsUser->isAdmin($xoopsModule->mid())) {
             $showimage .= "<img src='" . XOOPS_URL . "/modules/xtorrent/images/brokenimg.png' alt='" . _MD_XTORRENT_ISADMINNOTICE . "' ></a>";
         } else {
             $showimage .= "<img src='" . XOOPS_URL . "/modules/xtorrent/images/blank.png' alt=" . $alttext . ' ></a>';
@@ -535,11 +535,11 @@ function xtorrent_letters()
 {
     global $xoopsModule;
 
-    $letterchoice  = '<div>' . _MD_XTORRENT_BROWSETOTOPIC . '</div>';
+    $letterchoice = '<div>' . _MD_XTORRENT_BROWSETOTOPIC . '</div>';
     $letterchoice .= '[  ';
-    $alphabet      = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-    $num           = count($alphabet) - 1;
-    $counter       = 0;
+    $alphabet     = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    $num          = count($alphabet) - 1;
+    $counter      = 0;
     while (list(, $ltr) = each($alphabet)) {
         $letterchoice .= "<a href='" . XOOPS_URL . "/modules/xtorrent/viewcat.php?list=$ltr'>$ltr</a>";
         if ($counter == round($num / 2)) {
@@ -579,6 +579,7 @@ function xtorrent_isnewimage($published)
     }
     return $indicator;
 }
+
 // GetDownloadTime()
 // This function is used to show some different download times
 // BCMATH-Support in PHP needed!
@@ -593,16 +594,16 @@ function xtorrent_GetDownloadTime($size = 0, $gmodem = 1, $gisdn = 1, $gdsl = 1,
     $aflag  = [$gmodem, $gisdn, $gdsl, $gslan, $gflan];
     $amtime = [$size / 6300 / 60, $size / 7200 / 60, $size / 86400 / 60, $size / 1125000 / 60, $size / 11250000 / 60];
     $amname = ['Modem(56k)', 'ISDN(64k)', 'DSL(768k)', 'LAN(10M)', 'LAN(100M'];
-    for ($i = 0;$i < 5;$i++) {
+    for ($i = 0; $i < 5; $i++) {
         $artime[$i] = ($amtime[$i] % 60);
     }
-    for ($i = 0;$i < 5;$i++) {
+    for ($i = 0; $i < 5; $i++) {
         $ahtime[$i] = sprintf(' %2.0f', $amtime[$i] / 60);
     }
     if ($size <= 0) {
         $dltime = 'N/A';
     } else {
-        for ($i = 0;$i < 5;$i++) {
+        for ($i = 0; $i < 5; $i++) {
             if (!$aflag[$i]) {
                 $asout[$i] = '';
             } else {
@@ -626,7 +627,7 @@ function xtorrent_GetDownloadTime($size = 0, $gmodem = 1, $gisdn = 1, $gdsl = 1,
             }
         }
         $dltime = '';
-        for ($i = 0;$i < 5;$i++) {
+        for ($i = 0; $i < 5; $i++) {
             $dltime = $dltime . $asout[$i];
         }
     }
@@ -643,14 +644,14 @@ function xtorrent_retmime($filename, $usertype = 1)
     global $xoopsDB;
 
     $ext = ltrim(strrchr($filename, '.'), '.');
-    $sql = 'SELECT mime_types, mime_ext FROM ' . $xoopsDB-> prefix('xtorrent_mimetypes') . " WHERE mime_ext = '" . strtolower($ext) . "'";
+    $sql = 'SELECT mime_types, mime_ext FROM ' . $xoopsDB->prefix('xtorrent_mimetypes') . " WHERE mime_ext = '" . strtolower($ext) . "'";
     if (1 == $usertype) {
         $sql .= ' AND mime_admin = 1';
     } else {
         $sql .= ' AND mime_user = 1';
     }
-    $result = $xoopsDB -> query($sql);
-    list($mime_types, $mime_ext) = $xoopsDB -> fetchrow($result);
+    $result = $xoopsDB->query($sql);
+    list($mime_types, $mime_ext) = $xoopsDB->fetchrow($result);
     $mimtypes = explode(' ', trim($mime_types));
     return $mimtypes;
 }
@@ -658,10 +659,10 @@ function xtorrent_retmime($filename, $usertype = 1)
 function xtorrent_adminmenu($header = '', $menu = '', $extra = '', $scount = 4)
 {
     global $xoopsConfig, $xoopsModule;
-    
+
     if (!is_object($xoopsModule)) {
         $module_handler = xoops_gethandler('module');
-        $xoopsModule = $module_handler->getByDirname('xtorrent');
+        $xoopsModule    = $module_handler->getByDirname('xtorrent');
     }
 
     if (isset($_SERVER['PHP_SELF'])) {
@@ -673,7 +674,7 @@ function xtorrent_adminmenu($header = '', $menu = '', $extra = '', $scount = 4)
 		<table class='outer' style='width:100%;'>
 		<tr>
 		<td style='font-size:10px;text-align:left;color:#2F5376;padding:2px 6px;line-height:18px;'>
-		<a href='../../system/admin.php?fct=preferences&amp;op=showmod&amp;mod=" . $xoopsModule -> getVar('mid') . "'>" . _AM_XTORRENT_PREFS . "</a> |
+		<a href='../../system/admin.php?fct=preferences&amp;op=showmod&amp;mod=" . $xoopsModule->getVar('mid') . "'>" . _AM_XTORRENT_PREFS . "</a> |
 		<a href='../admin/index.php'>" . _AM_XTORRENT_BINDEX . "</a> |
 		<a href='../admin/permissions.php'>" . _AM_XTORRENT_PERMISSIONS . "</a> |
 		<a href='../admin/myblocksadmin.php'>" . _AM_XTORRENT_BLOCKADMIN . "</a> |
@@ -697,8 +698,8 @@ function xtorrent_adminmenu($header = '', $menu = '', $extra = '', $scount = 4)
             _AM_XTORRENT_MUPLOADS   => 'upload.php',
             _AM_XTORRENT_MMIMETYPES => 'mimetypes.php',
             _AM_XTS_MVOTEDATA       => 'votedata.php',
-            _AM_XTORRENT_MCOMMENTS  => '../../system/admin.php?module=' . $xoopsModule-> mid() . '&amp;status=0&amp;limit=100&amp;fct=comments&amp;selsubmit=Go',
-            ];
+            _AM_XTORRENT_MCOMMENTS  => '../../system/admin.php?module=' . $xoopsModule->mid() . '&amp;status=0&amp;limit=100&amp;fct=comments&amp;selsubmit=Go',
+        ];
     }
 
     if (!is_array($menu)) {
@@ -708,11 +709,11 @@ function xtorrent_adminmenu($header = '', $menu = '', $extra = '', $scount = 4)
         return false;
     }
 
-    $oddnum   = [1 => '1', 3 => '3', 5 => '5', 7 => '7', 9 => '9', 11 => '11', 13 => '13'];
+    $oddnum = [1 => '1', 3 => '3', 5 => '5', 7 => '7', 9 => '9', 11 => '11', 13 => '13'];
     // number of rows per menu
     $menurows = count($menu) / $scount;
     // total amount of rows to complete menu
-    $menurow  = ceil($menurows) * $scount;
+    $menurow = ceil($menurows) * $scount;
     // actual number of menuitems per row
     $rowcount = $menurow / ceil($menurows);
     $count    = 0;
@@ -800,6 +801,7 @@ function xtorrent_getDirSelectOption($selected, $dirarray, $namearray)
     }
     echo '</select>';
 }
+
 /*
 function filesarray($filearray)
 {
@@ -827,7 +829,7 @@ function xtorrent_uploading($_GLOBALS, $uploaddir = 'uploads', $allowed_mimetype
     global $_GLOBALS, $xoopsConfig, $xoopsModuleConfig, $_POST, $xoopsModule;
 
     $down = [];
-    
+
     include_once XOOPS_ROOT_PATH . '/modules/xtorrent/class/uploader.php';
 
     if (empty($allowed_mimetypes)) {
@@ -840,25 +842,25 @@ function xtorrent_uploading($_GLOBALS, $uploaddir = 'uploads', $allowed_mimetype
     $maxfileheight = $xoopsModuleConfig['maximgheight'];
 
     $uploader = new XoopsMediaUploader($upload_dir, $allowed_mimetypes, $maxfilesize, $maxfilewidth, $maxfileheight);
-    $uploader -> noAdminSizeCheck(1);
+    $uploader->noAdminSizeCheck(1);
 
-    if ($uploader -> fetchMedia($_POST['xoops_upload_file'][0])) {
-        if (!$uploader -> upload()) {
-            $errors = $uploader -> getErrors();
+    if ($uploader->fetchMedia($_POST['xoops_upload_file'][0])) {
+        if (!$uploader->upload()) {
+            $errors = $uploader->getErrors();
             redirect_header($redirecturl, 2, $errors);
         } else {
             if ($redirect) {
                 redirect_header($redirecturl, 1, _AM_XTORRENT_UPLOADFILE);
             } else {
                 if (is_file($uploader->savedDestination)) {
-                    $down['url'] = XOOPS_URL . '/' . $uploaddir . '/' . strtolower($uploader->savedFileName);
+                    $down['url']  = XOOPS_URL . '/' . $uploaddir . '/' . strtolower($uploader->savedFileName);
                     $down['size'] = filesize(XOOPS_ROOT_PATH . '/' . $uploaddir . '/' . strtolower($uploader->savedFileName));
                 }
                 return $down;
             }
         }
     } else {
-        $errors = $uploader -> getErrors();
+        $errors = $uploader->getErrors();
         redirect_header($redirecturl, 1, $errors);
     }
 }
@@ -869,11 +871,11 @@ function xtorrent_getforum($forumid)
 
     echo "<select name='forumid'>";
     echo "<option value='0'>----------------------</option>";
-    $result = $xoopsDB -> query('SELECT forum_name, forum_id FROM ' . $xoopsDB-> prefix('bb_forums') . ' ORDER BY forum_id');
+    $result = $xoopsDB->query('SELECT forum_name, forum_id FROM ' . $xoopsDB->prefix('bb_forums') . ' ORDER BY forum_id');
     if (!$result) {
-        $result = $xoopsDB -> query('SELECT forum_name, forum_id FROM ' . $xoopsDB-> prefix('xf_forums') . ' ORDER BY forum_id');
+        $result = $xoopsDB->query('SELECT forum_name, forum_id FROM ' . $xoopsDB->prefix('xf_forums') . ' ORDER BY forum_id');
     }
-    while (list($forum_name, $forum_id) = $xoopsDB -> fetchRow($result)) {
+    while (list($forum_name, $forum_id) = $xoopsDB->fetchRow($result)) {
         if ($forum_id == $forumid) {
             $opt_selected = "selected='selected'";
         } else {
@@ -904,9 +906,9 @@ function xtorrent_downlistbody($published)
 {
     global $myts, $imagearray;
 
-    $lid       = $published['lid'];
-    $cid       = $published['cid'];
-    $title     = "<a href='../singlefile.php?cid=" . $published['cid'] . '&amp;lid=' . $published['lid'] . "'>" . $myts-> htmlSpecialChars(trim($published['title'])) . '</a>';
+    $lid   = $published['lid'];
+    $cid   = $published['cid'];
+    $title = "<a href='../singlefile.php?cid=" . $published['cid'] . '&amp;lid=' . $published['lid'] . "'>" . $myts->htmlSpecialChars(trim($published['title'])) . '</a>';
     ;
     $submitter = xoops_getLinkedUnameFromId((int)$published['submitter']);
     $publish   = formatTimestamp($published['published'], 's');
@@ -940,28 +942,28 @@ function xtorrent_setcookie($name, $string = '', $expire = 0)
     if (is_array($string)) {
         $value = [];
         foreach ($string as $key => $val) {
-            $value[]= $key . '|' . $val;
+            $value[] = $key . '|' . $val;
         }
         $string = implode(',', $value);
     }
-    setcookie($xtorrentCookie['prefix'].$name, $string, (int)$expire, $xtorrentCookie['path'], $xtorrentCookie['domain'], $xtorrentCookie['secure']);
+    setcookie($xtorrentCookie['prefix'] . $name, $string, (int)$expire, $xtorrentCookie['path'], $xtorrentCookie['domain'], $xtorrentCookie['secure']);
 }
 
 function xtorrent_getcookie($name, $isArray = false)
 {
     global $xtorrentCookie;
-    $value = !empty($_COOKIE[$xtorrentCookie['prefix'].$name]) ? $_COOKIE[$xtorrentCookie['prefix'].$name] : null;
+    $value = !empty($_COOKIE[$xtorrentCookie['prefix'] . $name]) ? $_COOKIE[$xtorrentCookie['prefix'] . $name] : null;
     if ($isArray) {
-        $_value = $value ?explode(',', $value):[];
-        $value = [];
-        if (count($_value)>0) {
+        $_value = $value ? explode(',', $value) : [];
+        $value  = [];
+        if (count($_value) > 0) {
             foreach ($_value as $string) {
                 $sep = strpos($string, '|');
                 if (false === $sep) {
-                    $value[]=$string;
+                    $value[] = $string;
                 } else {
-                    $key = substr($string, 0, $sep);
-                    $val = substr($string, $sep + 1);
+                    $key         = substr($string, 0, $sep);
+                    $val         = substr($string, $sep + 1);
                     $value[$key] = $val;
                 }
             }
@@ -979,72 +981,361 @@ function xtorrent_downlistpagenav($pubrowamount, $start, $art = 'art')
     // Display Page Nav if published is > total display pages amount.
     $page    = ($pubrowamount > $xoopsModuleConfig['admin_perpage']) ? _AM_XTORRENT_MINDEX_PAGE : '';
     $pagenav = new XoopsPageNav($pubrowamount, $xoopsModuleConfig['admin_perpage'], $start, 'st' . $art);
-    echo '<div style="padding:8px;float:right;">' . $page . '' . $pagenav -> renderNav() . '</div>';
+    echo '<div style="padding:8px;float:right;">' . $page . '' . $pagenav->renderNav() . '</div>';
     echo '</fieldset><br>';
 }
 
 function xtorrent_get_base_domain($url)
 {
     static $sdomain;
-    
+
     if (!strpos($url, '://')) {
         $url = 'tcp://' . $url;
     }
-    
+
     $parsed_url = parse_url($url);
-    
+
     if (strpos(' ' . $parsed_url['host'], $sdomain)) {
         return $sdomain;
     }
-            
+
     // break up domain, reverse
     $domain = explode('.', $parsed_url['host']);
     $domain = array_reverse($domain);
-    
+
     // first check for ip address
     if (4 == count($domain) && is_numeric($domain[0]) && is_numeric($domain[3])) {
         return implode('.', $domain);
     }
-    
+
     // if only 2 domain parts, that must be our domain
     if (count($domain) <= 2) {
         $sdomain = strtolower($parsed_url['host']);
         return $sdomain;
     }
-    
+
     $OEG_TLD = [
-                    'biz','com','edu','gov','info','int','mil','name','net','org',
-                    'aero','asia','cat','coop','jobs','mobi','museum','pro','tel','travel',
-                    'arpa','root','berlin','bzh','cym','gal','geo','kid','kids','lat','mail',
-                    'nyc','post','sco','web','xxx','nato', 'example','invalid','localhost','test',
-                    'bitnet','csnet','ip','localhost','onion','uucp','geek','co','go','spy','travel','int','asia'
-                  ];
-  
+        'biz',
+        'com',
+        'edu',
+        'gov',
+        'info',
+        'int',
+        'mil',
+        'name',
+        'net',
+        'org',
+        'aero',
+        'asia',
+        'cat',
+        'coop',
+        'jobs',
+        'mobi',
+        'museum',
+        'pro',
+        'tel',
+        'travel',
+        'arpa',
+        'root',
+        'berlin',
+        'bzh',
+        'cym',
+        'gal',
+        'geo',
+        'kid',
+        'kids',
+        'lat',
+        'mail',
+        'nyc',
+        'post',
+        'sco',
+        'web',
+        'xxx',
+        'nato',
+        'example',
+        'invalid',
+        'localhost',
+        'test',
+        'bitnet',
+        'csnet',
+        'ip',
+        'localhost',
+        'onion',
+        'uucp',
+        'geek',
+        'co',
+        'go',
+        'spy',
+        'travel',
+        'int',
+        'asia'
+    ];
+
     // country tlds (source: http://en.wikipedia.org/wiki/Country_code_top-level_domain)
     $OE_TLD = [
-      // active
-                  'ac','ad','ae','af','ag','ai','al','am','an','ao','aq','ar','as','at','au','aw','ax','az',
-                  'ba','bb','bd','be','bf','bg','bh','bi','bj','bm','bn','bo','br','bs','bt','bw','by','bz',
-                  'ca','cc','cd','cf','cg','ch','ci','ck','cl','cm','cn','co','cr','cu','cv','cx','cy','cz',
-                  'de','dj','dk','dm','do','dz','ec','ee','eg','er','es','et','eu','fi','fj','fk','fm','fo',
-                  'fr','ga','gd','ge','gf','gg','gh','gi','gl','gm','gn','gp','gq','gr','gs','gt','gu','gw',
-                  'gy','hk','hm','hn','hr','ht','hu','id','ie','il','im','in','io','iq','ir','is','it','je',
-                  'jm','jo','jp','ke','kg','kh','ki','km','kn','kr','kw','ky','kz','la','lb','lc','li','lk',
-                  'lr','ls','lt','lu','lv','ly','ma','mc','md','mg','mh','mk','ml','mm','mn','mo','mp','mq',
-                  'mr','ms','mt','mu','mv','mw','mx','my','mz','na','nc','ne','nf','ng','ni','nl','no','np',
-                  'nr','nu','nz','om','pa','pe','pf','pg','ph','pk','pl','pn','pr','ps','pt','pw','py','qa',
-                  're','ro','ru','rw','sa','sb','sc','sd','se','sg','sh','si','sk','sl','sm','sn','sr','st',
-                  'sv','sy','sz','tc','td','tf','tg','th','tj','tk','tl','tm','tn','to','tr','tt','tv','tw',
-                  'tz','ua','ug','uk','us','uy','uz','va','vc','ve','vg','vi','vn','vu','wf','ws','ye','yu',
-                  'za','zm','zw','io','eh','kp','me','rs','um','bv','gb','pm','sj','so','yt','su','tp',
-                  'bu','cs','dd','zr'
-              ];
-    
+        // active
+        'ac',
+        'ad',
+        'ae',
+        'af',
+        'ag',
+        'ai',
+        'al',
+        'am',
+        'an',
+        'ao',
+        'aq',
+        'ar',
+        'as',
+        'at',
+        'au',
+        'aw',
+        'ax',
+        'az',
+        'ba',
+        'bb',
+        'bd',
+        'be',
+        'bf',
+        'bg',
+        'bh',
+        'bi',
+        'bj',
+        'bm',
+        'bn',
+        'bo',
+        'br',
+        'bs',
+        'bt',
+        'bw',
+        'by',
+        'bz',
+        'ca',
+        'cc',
+        'cd',
+        'cf',
+        'cg',
+        'ch',
+        'ci',
+        'ck',
+        'cl',
+        'cm',
+        'cn',
+        'co',
+        'cr',
+        'cu',
+        'cv',
+        'cx',
+        'cy',
+        'cz',
+        'de',
+        'dj',
+        'dk',
+        'dm',
+        'do',
+        'dz',
+        'ec',
+        'ee',
+        'eg',
+        'er',
+        'es',
+        'et',
+        'eu',
+        'fi',
+        'fj',
+        'fk',
+        'fm',
+        'fo',
+        'fr',
+        'ga',
+        'gd',
+        'ge',
+        'gf',
+        'gg',
+        'gh',
+        'gi',
+        'gl',
+        'gm',
+        'gn',
+        'gp',
+        'gq',
+        'gr',
+        'gs',
+        'gt',
+        'gu',
+        'gw',
+        'gy',
+        'hk',
+        'hm',
+        'hn',
+        'hr',
+        'ht',
+        'hu',
+        'id',
+        'ie',
+        'il',
+        'im',
+        'in',
+        'io',
+        'iq',
+        'ir',
+        'is',
+        'it',
+        'je',
+        'jm',
+        'jo',
+        'jp',
+        'ke',
+        'kg',
+        'kh',
+        'ki',
+        'km',
+        'kn',
+        'kr',
+        'kw',
+        'ky',
+        'kz',
+        'la',
+        'lb',
+        'lc',
+        'li',
+        'lk',
+        'lr',
+        'ls',
+        'lt',
+        'lu',
+        'lv',
+        'ly',
+        'ma',
+        'mc',
+        'md',
+        'mg',
+        'mh',
+        'mk',
+        'ml',
+        'mm',
+        'mn',
+        'mo',
+        'mp',
+        'mq',
+        'mr',
+        'ms',
+        'mt',
+        'mu',
+        'mv',
+        'mw',
+        'mx',
+        'my',
+        'mz',
+        'na',
+        'nc',
+        'ne',
+        'nf',
+        'ng',
+        'ni',
+        'nl',
+        'no',
+        'np',
+        'nr',
+        'nu',
+        'nz',
+        'om',
+        'pa',
+        'pe',
+        'pf',
+        'pg',
+        'ph',
+        'pk',
+        'pl',
+        'pn',
+        'pr',
+        'ps',
+        'pt',
+        'pw',
+        'py',
+        'qa',
+        're',
+        'ro',
+        'ru',
+        'rw',
+        'sa',
+        'sb',
+        'sc',
+        'sd',
+        'se',
+        'sg',
+        'sh',
+        'si',
+        'sk',
+        'sl',
+        'sm',
+        'sn',
+        'sr',
+        'st',
+        'sv',
+        'sy',
+        'sz',
+        'tc',
+        'td',
+        'tf',
+        'tg',
+        'th',
+        'tj',
+        'tk',
+        'tl',
+        'tm',
+        'tn',
+        'to',
+        'tr',
+        'tt',
+        'tv',
+        'tw',
+        'tz',
+        'ua',
+        'ug',
+        'uk',
+        'us',
+        'uy',
+        'uz',
+        'va',
+        'vc',
+        've',
+        'vg',
+        'vi',
+        'vn',
+        'vu',
+        'wf',
+        'ws',
+        'ye',
+        'yu',
+        'za',
+        'zm',
+        'zw',
+        'io',
+        'eh',
+        'kp',
+        'me',
+        'rs',
+        'um',
+        'bv',
+        'gb',
+        'pm',
+        'sj',
+        'so',
+        'yt',
+        'su',
+        'tp',
+        'bu',
+        'cs',
+        'dd',
+        'zr'
+    ];
+
     if (in_array($domain[0], $OE_TLD) && in_array($domain[1], $OEG_TLD) && 'www' != $domain[2]) {
         $sdomain = strtolower($domain[2] . '.' . $domain[1] . '.' . $domain[0]);
         return $sdomain;
     } elseif (in_array($domain[0], $OE_TLD) && in_array($domain[1], $OEG_TLD)) {
-        $sdomain = strtolower($domain[2] . '.' .$domain[1] . '.' . $domain[0]);
+        $sdomain = strtolower($domain[2] . '.' . $domain[1] . '.' . $domain[0]);
         return $sdomain;
     } elseif (in_array($domain[0], $OEG_TLD)) {
         $sdomain = strtolower($domain[1] . '.' . $domain[0]);
@@ -1054,21 +1345,20 @@ function xtorrent_get_base_domain($url)
         return $sdomain;
     }
 
-    
     $A_TLD = [];
     $first = 'a';
-    for ($i=0;$i<26;$i++) {
+    for ($i = 0; $i < 26; $i++) {
         $second = 'a';
-        for ($j=0;$j<26;$j++) {
-            $A_TLD[] = $first.$second;
-            if (strlen('us')>2) {
+        for ($j = 0; $j < 26; $j++) {
+            $A_TLD[] = $first . $second;
+            if (strlen('us') > 2) {
                 $third = 'a';
-                for ($c=0;$c<26;$c++) {
-                    $A_TLD[] = $first.$second.$third;
-                    if (strlen('mil')>3) {
+                for ($c = 0; $c < 26; $c++) {
+                    $A_TLD[] = $first . $second . $third;
+                    if (strlen('mil') > 3) {
                         $forth = 'a';
-                        for ($l=0;$l<26;$l++) {
-                            $A_TLD[] = $first.$second.$third.forth;
+                        for ($l = 0; $l < 26; $l++) {
+                            $A_TLD[] = $first . $second . $third . forth;
                             $forth++;
                         }
                     }
@@ -1079,45 +1369,45 @@ function xtorrent_get_base_domain($url)
         }
         $first++;
     }
-    
+
     $first = 'a';
-    for ($i=0;$i<26;$i++) {
-        if (strlen('localhost')>1) {
+    for ($i = 0; $i < 26; $i++) {
+        if (strlen('localhost') > 1) {
             $second = 'a';
-            for ($j=0;$j<26;$j++) {
-                $C_TLD[] = $first.$second;
-                if (strlen('localhost')>2) {
+            for ($j = 0; $j < 26; $j++) {
+                $C_TLD[] = $first . $second;
+                if (strlen('localhost') > 2) {
                     $third = 'a';
-                    for ($c=0;$c<26;$c++) {
-                        $C_TLD[] = $first.$second.$third;
-                        if (strlen('localhost')>3) {
+                    for ($c = 0; $c < 26; $c++) {
+                        $C_TLD[] = $first . $second . $third;
+                        if (strlen('localhost') > 3) {
                             $forth = 'a';
-                            for ($v=0;$v<26;$v++) {
-                                $C_TLD[] = $first.$second.$third.$forth;
-                                if (strlen('localhost')>4) {
+                            for ($v = 0; $v < 26; $v++) {
+                                $C_TLD[] = $first . $second . $third . $forth;
+                                if (strlen('localhost') > 4) {
                                     $fifth = 'a';
-                                    for ($x=0;$x<26;$x++) {
-                                        $C_TLD[] = $first.$second.$third.$forth.$fifth;
-                                        if (strlen('localhost')>5) {
+                                    for ($x = 0; $x < 26; $x++) {
+                                        $C_TLD[] = $first . $second . $third . $forth . $fifth;
+                                        if (strlen('localhost') > 5) {
                                             $sixth = 'a';
-                                            for ($x=0;$x<26;$x++) {
-                                                $C_TLD[] = $first.$second.$third.$forth.$fifth.$sixth;
-                                                if (strlen('localhost')>6) {
+                                            for ($x = 0; $x < 26; $x++) {
+                                                $C_TLD[] = $first . $second . $third . $forth . $fifth . $sixth;
+                                                if (strlen('localhost') > 6) {
                                                     $seventh = 'a';
-                                                    for ($x=0;$x<26;$x++) {
-                                                        $C_TLD[] = $first.$second.$third.$forth.$fifth.$sixth.$seventh;
-                                                        if (strlen('localhost')>7) {
+                                                    for ($x = 0; $x < 26; $x++) {
+                                                        $C_TLD[] = $first . $second . $third . $forth . $fifth . $sixth . $seventh;
+                                                        if (strlen('localhost') > 7) {
                                                             $eigth = 'a';
-                                                            for ($x=0;$x<26;$x++) {
-                                                                $C_TLD[] = $first.$second.$third.$forth.$fifth.$sixth.$seventh.$eigth;
-                                                                if (strlen('localhost')>8) {
+                                                            for ($x = 0; $x < 26; $x++) {
+                                                                $C_TLD[] = $first . $second . $third . $forth . $fifth . $sixth . $seventh . $eigth;
+                                                                if (strlen('localhost') > 8) {
                                                                     $ninth = 'a';
-                                                                    for ($x=0;$x<26;$x++) {
-                                                                        $C_TLD[] = $first.$second.$third.$forth.$fifth.$sixth.$seventh.$eigth.$ninth;
-                                                                        if (strlen('localhost')>9) {
+                                                                    for ($x = 0; $x < 26; $x++) {
+                                                                        $C_TLD[] = $first . $second . $third . $forth . $fifth . $sixth . $seventh . $eigth . $ninth;
+                                                                        if (strlen('localhost') > 9) {
                                                                             $tenth = 'a';
-                                                                            for ($x=0;$x<26;$x++) {
-                                                                                $C_TLD[] = $first.$second.$third.$forth.$fifth.$sixth.$seventh.$eigth.$ninth.$tenth;
+                                                                            for ($x = 0; $x < 26; $x++) {
+                                                                                $C_TLD[] = $first . $second . $third . $forth . $fifth . $sixth . $seventh . $eigth . $ninth . $tenth;
                                                                                 $tenth++;
                                                                             }
                                                                         }
@@ -1144,7 +1434,7 @@ function xtorrent_get_base_domain($url)
                 }
                 $second++;
             }
-                
+
             if (in_array($domain[0], $A_TLD) && in_array($domain[1], $C_TLD) && 'www' != $domain[2]) {
                 $sdomain = strtolower($domain[2] . '.' . $domain[1] . '.' . $domain[0]);
                 return $sdomain;

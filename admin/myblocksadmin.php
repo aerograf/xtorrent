@@ -9,7 +9,7 @@ $xoops_system_url  = XOOPS_URL . '/modules/system';
 $xoops_system_path = XOOPS_ROOT_PATH . '/modules/system';
 // language files
 $language = $xoopsConfig['language'];
-if (! file_exists("$xoops_system_path/language/$language/admin/blocksadmin.php")) {
+if (!file_exists("$xoops_system_path/language/$language/admin/blocksadmin.php")) {
     $language = 'english';
 }
 
@@ -22,7 +22,7 @@ foreach ($group_defs as $def) {
     }
 }
 // check $xoopsModule
-if (! is_object($xoopsModule)) {
+if (!is_object($xoopsModule)) {
     redirect_header(XOOPS_URL . '/user.php', 1, _NOPERM);
 }
 // get blocks owned by the module
@@ -30,16 +30,16 @@ $block_arr = XoopsBlock::getByModule($xoopsModule->mid());
 
 function list_blocks()
 {
-    global $xoopsUser , $xoopsConfig , $xoopsDB;
-    global $block_arr , $xoops_system_url;
+    global $xoopsUser, $xoopsConfig, $xoopsDB;
+    global $block_arr, $xoops_system_url;
     require_once __DIR__ . '/admin_header.php';
-    
+
     $side_descs = [0 => _AM_XTORRENT_SBLEFT, 1 => _AM_XTORRENT_SBRIGHT, 3 => _AM_XTORRENT_CBLEFT, 4 => _AM_XTORRENT_CBRIGHT, 5 => _AM_XTORRENT_CBCENTER];
     // displaying TH
     echo "<table width='100%' class='outer' cellpadding='4' cellspacing='1'>
 	        <tr valign='middle'>";
     $headingarray = [_AM_XTORRENT_BLKDESC, _AM_XTORRENT_TITLE, _AM_XTORRENT_SIDE, _AM_XTORRENT_WEIGHT, _AM_XTORRENT_VISIBLE, _AM_XTORRENT_ACTION];
-    for ($i = 0; $i <= count($headingarray)-1; $i++) {
+    for ($i = 0; $i <= count($headingarray) - 1; $i++) {
         $align = 'center';
         echo "<th style='text-align:" . $align . ";'><b>" . $headingarray[$i] . '</th>';
     }
@@ -54,8 +54,8 @@ function list_blocks()
         if ('' == $title) {
             $title = '&nbsp;';
         }
-        $name      = $block_arr[$i]->getVar('name');
-        $bid       = $block_arr[$i]->getVar('bid');
+        $name = $block_arr[$i]->getVar('name');
+        $bid  = $block_arr[$i]->getVar('bid');
 
         echo "<tr>
               <td class='" . $class . "'>" . $name . "</td>
@@ -73,11 +73,11 @@ function list_blocks()
 
 function list_groups()
 {
-    global $xoopsUser , $xoopsConfig , $xoopsDB;
-    global $xoopsModule , $block_arr , $xoops_system_url;
+    global $xoopsUser, $xoopsConfig, $xoopsDB;
+    global $xoopsModule, $block_arr, $xoops_system_url;
 
     foreach (array_keys($block_arr) as $i) {
-        $item_list[ $block_arr[$i]->getVar('bid') ] = $block_arr[$i]->getVar('title');
+        $item_list[$block_arr[$i]->getVar('bid')] = $block_arr[$i]->getVar('title');
     }
     $form = new MyXoopsGroupPermForm('', 1, 'block_read', _AM_SYSTEM_ADGS);
     $form->addAppendix('module_admin', $xoopsModule->mid(), $xoopsModule->name() . ' ' . _AM_XTORRENT_ACTIVERIGHTS);
@@ -88,15 +88,15 @@ function list_groups()
     echo $form->render();
 }
 
-  if (! empty($_POST['submit'])) {
-      include 'mygroupperm.php';
-      redirect_header(XOOPS_URL . '/modules/xtorrent/admin/myblocksadmin.php', 1, _AM_SYSTEM_DBUPDATED);
-  }
+if (!empty($_POST['submit'])) {
+    include 'mygroupperm.php';
+    redirect_header(XOOPS_URL . '/modules/xtorrent/admin/myblocksadmin.php', 1, _AM_SYSTEM_DBUPDATED);
+}
 
-  xoops_cp_header();
-  $adminObject = \Xmf\Module\Admin::getInstance();
-  $adminObject->displayNavigation(basename(__FILE__));
+xoops_cp_header();
+$adminObject = \Xmf\Module\Admin::getInstance();
+$adminObject->displayNavigation(basename(__FILE__));
 
-  list_blocks();
-  list_groups();
-  require_once __DIR__ . '/admin_footer.php';
+list_blocks();
+list_groups();
+require_once __DIR__ . '/admin_footer.php';

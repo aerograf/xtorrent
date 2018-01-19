@@ -17,14 +17,14 @@ if (0 != $xoopsModuleConfig['htaccess']) {
         $ret = $xoopsDB->query('SELECT a.title, b.title as cat_title FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' a INNER JOIN ' . $xoopsDB->prefix('xtorrent_cat') . " b ON a.cid = b.cid WHERE a.lid = '$lid'");
         //echo "SELECT a.title, b.title as cat_title FROM ".$xoopsDB->prefix("mylinks_links")." a INNER JOIN ".$xoopsDB->prefix("mylinks_cat")." b ON a.cid = b.cid WHERE a.lid = '$lid'";
         list($title, $cat_title) = $xoopsDB->fetchRow($ret);
-        if (strpos($_SERVER['REQUEST_URI'], 'inglefile.php')>0) {
+        if (strpos($_SERVER['REQUEST_URI'], 'inglefile.php') > 0) {
             header('HTTP/1.1 301 Moved Permanently');
             header('Location: ' . XOOPS_URL . '/torrents/' . xoops_sef($cat_title) . '/' . xoops_sef($title) . '/' . $lid . ',' . $cid);
             exit;
         }
     }
 }
-    
+
 $xoopsOption['template_main'] = 'xtorrent_singlefile.tpl';
 
 $sql      = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_downloads') . " WHERE lid = $lid";
@@ -68,17 +68,17 @@ $xoopsTpl->assign('navitem', 1);
 $groups        = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
 $gperm_handler = xoops_gethandler('groupperm');
 
-$sql = 'SELECT lid, cid, title, published FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' 
+$sql    = 'SELECT lid, cid, title, published FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' 
       	WHERE submitter = ' . $down_arr['submitter'] . ' 
       	AND published > 0 AND published <= ' . time() . ' AND (expired = 0 OR expired > ' . time() . ') 
-      	AND offline = 0 ORDER by published DESC';
+      	AND offline = 0 ORDER BY published DESC';
 $result = $xoopsDB->query($sql, 20, 0);
 
 while ($arr = $xoopsDB->fetchArray($result)) {
     if (!$gperm_handler->checkRight('xtorrentownFilePerm', $arr['lid'], $groups, $xoopsModule->getVar('mid')) || $arr['lid'] == $lid) {
         continue;
     }
- 
+
     $downuid['title']     = $arr['title'];
     $downuid['lid']       = $arr['lid'];
     $downuid['cid']       = $arr['cid'];
@@ -89,7 +89,7 @@ while ($arr = $xoopsDB->fetchArray($result)) {
 /**
  * User reviews
  */
-$sql_review = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_reviews') . ' 
+$sql_review    = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_reviews') . ' 
               WHERE lid = ' . $down_arr['lid'] . ' AND submit = 1';
 $result_review = $xoopsDB->query($sql_review);
 $review_amount = $xoopsDB->getRowsNum($result_review);
@@ -106,7 +106,7 @@ if (isset($xoopsModuleConfig['copyright']) && 1 == $xoopsModuleConfig['copyright
 }
 
 // GETS TORRENT DATA FROM DATABASE
-$sql    =  [];
+$sql    = [];
 $sql[0] = 'SELECT torrent, tracker FROM ' . $xoopsDB->prefix('xtorrent_poll') . ' WHERE lid = ' . $down['id'];
 $sql[1] = 'SELECT seeds, leechers, tracker FROM ' . $xoopsDB->prefix('xtorrent_tracker') . ' WHERE lid = ' . $down['id'];
 $sql[2] = 'SELECT seeds, leechers, totalsize, modifiedby, tname FROM ' . $xoopsDB->prefix('xtorrent_torrent') . ' WHERE lid = ' . $down['id'];
@@ -123,24 +123,25 @@ $torrent = $xoopsDB->fetchArray($ret[2]);
 
 $trkcr = [];
 while ($row = $xoopsDB->fetchArray($ret[1])) {
-    $trkcr[] = [
+    $trkcr[]               = [
         'seeds'   => $row['seeds'],
         'leeches' => $row['leechers'],
-        'tracker' => $row['tracker']];
-    $down['total_seeds']   = $down['total_seeds']+$row['seeds'];
-    $down['total_leeches'] = $down['total_leeches']+$row['leechers'];
+        'tracker' => $row['tracker']
+    ];
+    $down['total_seeds']   = $down['total_seeds'] + $row['seeds'];
+    $down['total_leeches'] = $down['total_leeches'] + $row['leechers'];
 }
 
 $files = [];
 while ($row = $xoopsDB->fetchArray($ret[3])) {
-    $files[]  = ['file' => $row['file']];
+    $files[] = ['file' => $row['file']];
 }
 
 $down['torrent_last_polled'] = date('H:i:s', $poll['torrent']);
 $down['tracker_last_polled'] = date('H:i:s', $poll['tracker']);
 $down['torrent']             = $torrent;
-$down['total_seeds']         = $down['total_seeds']+$torrent['seeds'];
-$down['total_leeches']       = $down['total_leeches']+$torrent['leechers'];
+$down['total_seeds']         = $down['total_seeds'] + $torrent['seeds'];
+$down['total_leeches']       = $down['total_leeches'] + $torrent['leechers'];
 $down['tracker']             = $trkcr;
 $down['files']               = $files;
 //print_r($down);
@@ -150,17 +151,16 @@ $xoopsTpl->assign('xoops_pagetitle', $down['title'] . ' | Torrents ');
 include XOOPS_ROOT_PATH . '/include/comment_view.php';
 include XOOPS_ROOT_PATH . '/footer.php';
 
-
 // START TO CHECK FOR POLLING OF TORRENT
 
 include 'include/pollall.php';
 
 //echo $poll['torrent']+($xoopsModuleConfig['poll_torrent_time']*60). "< time = ".time();
 
-if ((time()>$poll['torrent']+($xoopsModuleConfig['poll_torrent_time']*60)) && 1 == $xoopsModuleConfig['poll_torrent']) {
+if ((time() > $poll['torrent'] + ($xoopsModuleConfig['poll_torrent_time'] * 60)) && 1 == $xoopsModuleConfig['poll_torrent']) {
     $rt = poll_torrent($down['id']);
 }
 
-if ((time()>$poll['tracker']+($xoopsModuleConfig['poll_tracker_time']*60)) && 1 == $xoopsModuleConfig['poll_tracker']) {
+if ((time() > $poll['tracker'] + ($xoopsModuleConfig['poll_tracker_time'] * 60)) && 1 == $xoopsModuleConfig['poll_tracker']) {
     $rt = poll_tracker($rt, $down['id'], $xoopsModuleConfig['poll_tracker_timeout']);
 }

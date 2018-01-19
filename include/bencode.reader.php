@@ -11,19 +11,19 @@
 class BEncodeReader
 {
     public $data;
-    
+
     public $pointer = 0;
-    
+
     public $error = false;
-    
+
     public function __construct($filename = null)
     {
         ini_set('allow_url_fopen', true);
-        
+
         if (null === $filename) {
             return;
         }
-    
+
         if (!is_file($filename)) {
             trigger_error("Could not create BEncodeReader for {$filename}: it does not exist", E_USER_WARNING);
             return;
@@ -74,7 +74,7 @@ class BEncodeReader
                     $current = $value;
                 } else {
                     $dictionary[$current] = $value;
-                    $current = false;
+                    $current              = false;
                 }
             }
 
@@ -83,14 +83,14 @@ class BEncodeReader
                 return false;
             }
 
-            $end = $this->pointer;
+            $end                = $this->pointer;
             $dictionary['hash'] = pack('H*', sha1(substr($this->data, $start, $end - $start)));
             return $dictionary;
         } elseif ('l' == $this->data[$this->pointer]) {
             // An l indicates the start of a list, which is essentially an array, so we will read it as such
             $this->pointer++;
             $list = [];
-            for ($i=0; false !== ($value = $this->readNext()); $i++) {
+            for ($i = 0; false !== ($value = $this->readNext()); $i++) {
                 $list[$i] = $value;
             }
 
@@ -111,8 +111,8 @@ class BEncodeReader
                 return false;
             }
 
-            $readLength = ($endPosition - $this->pointer);
-            $int = substr($this->data, $this->pointer, $readLength);
+            $readLength    = ($endPosition - $this->pointer);
+            $int           = substr($this->data, $this->pointer, $readLength);
             $this->pointer += $readLength + 1;
             return $int;
         } else {
@@ -127,10 +127,10 @@ class BEncodeReader
                 return false;
             }
 
-            $length = substr($this->data, $this->pointer, $nextColon);
-            $readLength = ($nextColon - $this->pointer);
+            $length        = substr($this->data, $this->pointer, $nextColon);
+            $readLength    = ($nextColon - $this->pointer);
             $this->pointer += $readLength + 1;
-            $string = substr($this->data, $this->pointer, $length);
+            $string        = substr($this->data, $this->pointer, $length);
             $this->pointer += strlen($string);
             return $string;
         }

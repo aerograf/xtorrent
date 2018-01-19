@@ -21,16 +21,16 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
 
     public function __construct($db)
     {
-        if (!isset($db)&&!empty($db)) {
+        if (!isset($db) && !empty($db)) {
             $this->db = $db;
         } else {
             global $xoopsDB;
             $this->db = $xoopsDB;
         }
-        $this->db_table = $this->db->prefix('xtorrent_tracker');
+        $this->db_table     = $this->db->prefix('xtorrent_tracker');
         $this->perm_handler = xoops_gethandler('groupperm');
     }
-    
+
     public function getInstance($db)
     {
         static $instance;
@@ -59,11 +59,11 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
         $benc_torrent = $xthdlr_benc->decompile($benc_torrent);
 
         $torrent = $benc_torrent->getVar('object');
-    
+
         if (!$torrent->error) {
             $scrape_result = @tracker_scrape_all($torrent, $timeout);
             $summary       = tracker_scrape_summarise($scrape_result);
-        
+
             $xthdlr_tracker = xoops_load('tracker', 'xtorrent');
             $criteria_y     = new CriteriaCompo(new Criteria('lid', $download->getVar('lid')));
             $xthdlr_tracker->delete($criteria_y);
@@ -97,12 +97,12 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
         $summary = ['seeds' => 0, 'leeches' => 0, 'downloads' => 0];
         foreach ($scrape_results as $result) {
             if (is_array($result)) {
-                $summary['seeds'] += $result['seeds'];
-                $summary['leeches'] += $result['leeches'];
+                $summary['seeds']     += $result['seeds'];
+                $summary['leeches']   += $result['leeches'];
                 $summary['downloads'] += $result['downloads'];
             }
         }
-        
+
         return $summary;
     }
 
@@ -170,12 +170,12 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
             return false;
         }
 
-        $result = [];
-        $result['seeds'] = $trackerInfo['files'][$torrent->getVar('infoHash')]['complete'];
+        $result              = [];
+        $result['seeds']     = $trackerInfo['files'][$torrent->getVar('infoHash')]['complete'];
         $result['downloads'] = $trackerInfo['files'][$torrent->getVar('infoHash')]['downloaded'];
-        $result['leeches'] = $trackerInfo['files'][$torrent->getVar('infoHash')]['incomplete'];
-        $result['tracker'] = $tracker;
-        
+        $result['leeches']   = $trackerInfo['files'][$torrent->getVar('infoHash')]['incomplete'];
+        $result['tracker']   = $tracker;
+
         return $result;
     }
 
@@ -202,11 +202,11 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
         return new $this->obj_class();
     }
 
-    public function get($id, $fields='*')
+    public function get($id, $fields = '*')
     {
         $id = (int)$id;
         if ($id > 0) {
-            $sql = 'SELECT '.$fields.' FROM '.$this->db_table.' WHERE id='.$id;
+            $sql = 'SELECT ' . $fields . ' FROM ' . $this->db_table . ' WHERE id=' . $id;
         } else {
             return false;
         }
@@ -233,36 +233,22 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
         if (!$tracker->cleanVars()) {
             return false;
         }
-        foreach ($tracker->cleanVars as $k=>$v) {
+        foreach ($tracker->cleanVars as $k => $v) {
             ${$k} = $v;
         }
         $myts = MyTextSanitizer::getInstance();
         if ($tracker->isNew() || empty($id)) {
-            $id = $this->db->genId($this->db_table . '_xt_xtorrent_id_seq');
-            $sql = sprintf(
-                'INSERT INTO %s (
+            $id  = $this->db->genId($this->db_table . '_xt_xtorrent_id_seq');
+            $sql = sprintf('INSERT INTO %s (
 				`lid`, `seeds`, `leechers`, `tracker`
 				) VALUES (
 				%u, %s, %s, %s,
-				)',
-                $this->db_table,
-                $this->db->quoteString($lid),
-                $this->db->quoteString($seeds),
-                $this->db->quoteString($leechers),
-                $this->db->quoteString($tracker)
-            );
+				)', $this->db_table, $this->db->quoteString($lid), $this->db->quoteString($seeds), $this->db->quoteString($leechers), $this->db->quoteString($tracker));
         } else {
-            $sql = sprintf(
-                'UPDATE %s SET
+            $sql = sprintf('UPDATE %s SET
 				`seeds` = %s,
 				`leechers` = %s,
-				`tracker` = %s WHERE lid = %s',
-                $this->db_table,
-                $this->db->quoteString($seeds),
-                $this->db->quoteString($leechers),
-                $this->db->quoteString($tracker),
-                $this->db->quoteString($lid)
-            );
+				`tracker` = %s WHERE lid = %s', $this->db_table, $this->db->quoteString($seeds), $this->db->quoteString($leechers), $this->db->quoteString($tracker), $this->db->quoteString($lid));
         }
 
         if (false != $force) {
@@ -297,15 +283,15 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
         return true;
     }
 
-    public function getObjects($criteria = null, $fields='*', $id_as_key = false)
+    public function getObjects($criteria = null, $fields = '*', $id_as_key = false)
     {
         $ret   = [];
         $limit = $start = 0;
-        $sql   = 'SELECT '.$fields.' FROM '.$this->db_table;
+        $sql   = 'SELECT ' . $fields . ' FROM ' . $this->db_table;
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql .= ' '.$criteria->renderWhere();
+            $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->getSort()) {
-                $sql .= ' ORDER BY '.$criteria->getSort().' '.$criteria->getOrder();
+                $sql .= ' ORDER BY ' . $criteria->getSort() . ' ' . $criteria->getOrder();
             }
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
@@ -329,9 +315,9 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
 
     public function getCount($criteria = null)
     {
-        $sql = 'SELECT COUNT(*) FROM '.$this->db_table;
+        $sql = 'SELECT COUNT(*) FROM ' . $this->db_table;
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql .= ' '.$criteria->renderWhere();
+            $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);
         if (!$result) {
@@ -343,9 +329,9 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
 
     public function deleteAll($criteria = null)
     {
-        $sql = 'DELETE FROM '.$this->db_table;
+        $sql = 'DELETE FROM ' . $this->db_table;
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql .= ' '.$criteria->renderWhere();
+            $sql .= ' ' . $criteria->renderWhere();
         }
         if (!$result = $this->db->query($sql)) {
             return false;
@@ -359,7 +345,7 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
         $criteria = new CriteriaCompo();
         $criteria->add(new Criteria('gperm_itemid', $id));
         $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid')));
-        $criteria->add(new Criteria('gperm_name', $this->perm_name.$mode));
+        $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode));
         if ($old_perms = $this->perm_handler->getObjects($criteria)) {
             foreach ($old_perms as $p) {
                 $this->perm_handler->delete($p);
@@ -373,7 +359,7 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
         global $xoopsModule;
         foreach ($group_ids as $id) {
             $perm = $this->perm_handler->create();
-            $perm->setVar('gperm_name', $this->perm_name.$mode);
+            $perm->setVar('gperm_name', $this->perm_name . $mode);
             $perm->setVar('gperm_itemid', $id);
             $perm->setVar('gperm_groupid', $id);
             $perm->setVar('gperm_modid', $xoopsModule->getVar('mid'));
@@ -386,24 +372,24 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
     public function getPermittedTorrents($tracker, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
-        $ret=false;
+        $ret = false;
         if (isset($tracker)) {
             $ret      = [];
             $criteria = new CriteriaCompo();
             $criteria->add(new Criteria('gperm_itemid', $tracker->getVar('lid'), '='), 'AND');
             $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid'), '='), 'AND');
-            $criteria->add(new Criteria('gperm_name', $this->perm_name.$mode, '='), 'AND');
+            $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode, '='), 'AND');
 
             $gtObjperm = $this->perm_handler->getObjects($criteria);
             $groups    = [];
-            
+
             foreach ($gtObjperm as $v) {
                 $ret[] = $v->getVar('gperm_groupid');
             }
             return $ret;
         } else {
-            $ret    = [];
-            $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;
+            $ret      = [];
+            $groups   = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;
             $criteria = new CriteriaCompo();
             $criteria->add(new Criteria('Torrent_order', 1, '>='), 'OR');
             $criteria->setSort('Torrent_order');
@@ -411,7 +397,7 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
             if ($tracker = $this->getObjects($criteria, 'home_list')) {
                 $ret = [];
                 foreach ($tracker as $f) {
-                    if (false != $this->perm_handler->checkRight($this->perm_name.$mode, $f->getVar('lid'), $groups, $xoopsModule->getVar('mid'))) {
+                    if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $f->getVar('lid'), $groups, $xoopsModule->getVar('mid'))) {
                         $ret[] = $f;
                         unset($f);
                     }
@@ -425,7 +411,7 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;
-        if (false != $this->perm_handler->checkRight($this->perm_name.$mode, $id, $groups, $xoopsModule->getVar('mid'))) {
+        if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $id, $groups, $xoopsModule->getVar('mid'))) {
             return true;
         }
         return false;

@@ -5,7 +5,7 @@ include 'header.php';
 define('IS_UPDATE_FILE', true);
 
 global $xoopsDB, $xoopsConfig, $xoopsUser, $xoopsModule;
-if (!is_object($xoopsUser) || !is_object($xoopsModule) || !$xoopsUser -> isAdmin($xoopsModule -> mid())) {
+if (!is_object($xoopsUser) || !is_object($xoopsModule) || !$xoopsUser->isAdmin($xoopsModule->mid())) {
     exit('Access Denied');
 }
 include XOOPS_ROOT_PATH . '/header.php';
@@ -13,27 +13,28 @@ include XOOPS_ROOT_PATH . '/header.php';
 function install_header()
 {
     ?>
-	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-	<html>
-	<head>
-	<title>WF-Downloads Upgrade</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=" />
-	<meta name="AUTHOR" content="WFSECTIONS" />
-	<meta name="GENERATOR" content="WFSECTION---->http://wfsections.xoops2.com" />
-	</head>
-	<body>
-	<br /><div style="text-align:center"><img src="./images/logo-en.gif" alt="" /><h4>WF-Downloads Update</h4>
-<?php
+    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+    <html>
+    <head>
+        <title>WF-Downloads Upgrade</title>
+        <meta http-equiv="Content-Type" content="text/html; charset="/>
+        <meta name="AUTHOR" content="WFSECTIONS"/>
+        <meta name="GENERATOR" content="WFSECTION---->http://wfsections.xoops2.com"/>
+    </head>
+    <body>
+    <br/><div style="text-align:center"><img src="./images/logo-en.gif" alt=""/><h4>WF-Downloads Update</h4>
+    <?php
 }
 
 function install_footer()
 {
     ?>
-	<a href="http://wfsections.xoops2.com/" target="_blank"><img src="images/xtorrent_slogo.png" alt="XOOPS" border="0" /></a></div>
-	</body>
-	</html>
-<?php
+    <a href="http://wfsections.xoops2.com/" target="_blank"><img src="images/xtorrent_slogo.png" alt="XOOPS" border="0"/></a></div>
+    </body>
+    </html>
+    <?php
 }
+
 // echo "Welcome to the WF-Section update script";
 foreach ($_POST as $k => $v) {
     ${$k} = $v;
@@ -51,15 +52,15 @@ if ('message' == $action) {
     install_header();
 
     $modhandler  = xoops_gethandler('module');
-    $mydownloads = $modhandler -> getByDirname('mydownloads');
+    $mydownloads = $modhandler->getByDirname('mydownloads');
     if ($mydownloads) {
         $mydownload_version = round($mydownloads->getVar('version') / 100, 2);
     }
     $modhandler = xoops_gethandler('module');
 
-    $xtorrent   = $modhandler -> getByDirname('xtorrent');
+    $xtorrent = $modhandler->getByDirname('xtorrent');
     if ($xtorrent) {
-        $xtorrentownload_version = $xtorrent -> getVar('version'); //getInfo('version');
+        $xtorrentownload_version = $xtorrent->getVar('version'); //getInfo('version');
         $xtorrentownload_version = round($xtorrent->getVar('version') / 100, 2);
     }
     /**

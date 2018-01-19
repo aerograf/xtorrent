@@ -1,18 +1,18 @@
 <?php
 
 include_once '../../mainfile.php';
-include XOOPS_ROOT_PATH.'/modules/xtorrent/include/functions.php';
+include XOOPS_ROOT_PATH . '/modules/xtorrent/include/functions.php';
 
-$xoopsModule = $module_handler->getByDirname('xtorrent');
+$xoopsModule       = $module_handler->getByDirname('xtorrent');
 $xoopsModuleConfig = $config_handler->getConfigsByCat(0, $xoopsModule->getVar('mid'));
 
 error_reporting(E_ALL);
 
 if (!function_exists('xoops_sef')) {
-    function xoops_sef($datab, $char ='-')
+    function xoops_sef($datab, $char = '-')
     {
         $replacement_chars = [];
-        $accepted = [
+        $accepted          = [
             'a',
             'b',
             'c',
@@ -51,7 +51,7 @@ if (!function_exists('xoops_sef')) {
             '2',
             '1'
         ];
-        for ($i=0;$i<256;$i++) {
+        for ($i = 0; $i < 256; $i++) {
             if (!in_array(strtolower(chr($i)), $accepted)) {
                 $replacement_chars[] = chr($i);
             }
@@ -62,4 +62,4 @@ if (!function_exists('xoops_sef')) {
     }
 }
 
-$myts = MyTextSanitizer :: getInstance(); // MyTextSanitizer object
+$myts = MyTextSanitizer:: getInstance(); // MyTextSanitizer object

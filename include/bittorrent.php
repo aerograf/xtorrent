@@ -4,15 +4,14 @@ error_reporting(E_ALL ^ E_NOTICE);
 require_once 'secrets.php';
 require_once 'cleanup.php';
 
-
 // PHP5 with register_long_arrays off?
 if (!isset($HTTP_POST_VARS) && isset($_POST)) {
-    $HTTP_POST_VARS = $_POST;
-    $HTTP_GET_VARS = $_GET;
+    $HTTP_POST_VARS   = $_POST;
+    $HTTP_GET_VARS    = $_GET;
     $HTTP_SERVER_VARS = $_SERVER;
     $HTTP_COOKIE_VARS = $_COOKIE;
-    $HTTP_ENV_VARS = $_ENV;
-    $HTTP_POST_FILES = $_FILES;
+    $HTTP_ENV_VARS    = $_ENV;
+    $HTTP_POST_FILES  = $_FILES;
 }
 
 function strip_magic_quotes($arr)
@@ -30,16 +29,15 @@ function strip_magic_quotes($arr)
 
 if (get_magic_quotes_gpc()) {
     if (!empty($_GET)) {
-        $_GET    = strip_magic_quotes($_GET);
+        $_GET = strip_magic_quotes($_GET);
     }
     if (!empty($_POST)) {
-        $_POST   = strip_magic_quotes($_POST);
+        $_POST = strip_magic_quotes($_POST);
     }
     if (!empty($_COOKIE)) {
         $_COOKIE = strip_magic_quotes($_COOKIE);
     }
 }
-
 
 //
 // addslashes to vars if magic_quotes_gpc is off
@@ -143,7 +141,7 @@ $minvotes              = 1;
 $max_dead_torrent_time = 6 * 3600;
 
 // Max users on site
-$maxusers              = 75000;
+$maxusers = 75000;
 
 # the first one will be displayed on the pages
 $announce_urls   = [];
@@ -153,28 +151,24 @@ if ('' == $HTTP_SERVER_VARS['HTTP_HOST']) {
     $HTTP_SERVER_VARS['HTTP_HOST'] = $HTTP_SERVER_VARS['SERVER_NAME'];
 }
 
-$BASEURL     = '//' . $HTTP_SERVER_VARS['HTTP_HOST'];
+$BASEURL = '//' . $HTTP_SERVER_VARS['HTTP_HOST'];
 
 //set this to true to make this a tracker that only registered users may use
 $MEMBERSONLY = true;
 
 //maximum number of peers (seeders+leechers) allowed before torrents starts to be deleted to make room...
 //set this to something high if you don't require this feature
-$PEERLIMIT   = $xoopsModuleConfig['peerlimit'];
+$PEERLIMIT = $xoopsModuleConfig['peerlimit'];
 
 //
 //
 // Email for sender/return path.
-$SITEEMAIL   = $xoopsConfig['adminemail'];
+$SITEEMAIL = $xoopsConfig['adminemail'];
 
-$SITENAME    = $xoopsConfig['sitename'];
+$SITENAME = $xoopsConfig['sitename'];
 
 // Set this to your site URL... No ending slash!
 $DEFAULTBASEURL = XOOPS_URL;
-
-
-
-
 
 $autoclean_interval = 900;
 $pic_base_url       = 'pic/';
@@ -187,18 +181,18 @@ $pic_base_url       = 'pic/';
 // IP Validation
 function validip($ip)
 {
-    if (!empty($ip) && ip2long($ip)!=-1) {
+    if (!empty($ip) && ip2long($ip) != -1) {
         // reserved IANA IPv4 addresses
         // http://www.iana.org/assignments/ipv4-address-space
         $reserved_ips = [
-                ['0.0.0.0','2.255.255.255'],
-                ['10.0.0.0','10.255.255.255'],
-                ['127.0.0.0','127.255.255.255'],
-                ['169.254.0.0','169.254.255.255'],
-                ['172.16.0.0','172.31.255.255'],
-                ['192.0.2.0','192.0.2.255'],
-                ['192.168.0.0','192.168.255.255'],
-                ['255.255.255.0','255.255.255.255']
+            ['0.0.0.0', '2.255.255.255'],
+            ['10.0.0.0', '10.255.255.255'],
+            ['127.0.0.0', '127.255.255.255'],
+            ['169.254.0.0', '169.254.255.255'],
+            ['172.16.0.0', '172.31.255.255'],
+            ['192.0.2.0', '192.0.2.255'],
+            ['192.168.0.0', '192.168.255.255'],
+            ['255.255.255.0', '255.255.255.255']
         ];
 
         foreach ($reserved_ips as $r) {
@@ -393,9 +387,9 @@ function mkprettytime($s)
     if ($t['hour']) {
         return sprintf('%d:%02d:%02d', $t['hour'], $t['min'], $t['sec']);
     }
-//    if ($t["min"])
+    //    if ($t["min"])
     return sprintf('%d:%02d', $t['min'], $t['sec']);
-//    return $t["sec"] . " secs";
+    //    return $t["sec"] . " secs";
 }
 
 function mkglobal($vars)
@@ -415,7 +409,7 @@ function mkglobal($vars)
     return 1;
 }
 
-function tr($x, $y, $noesc=0)
+function tr($x, $y, $noesc = 0)
 {
     if ($noesc) {
         $a = $y;
@@ -480,7 +474,7 @@ function stdhead($title = '', $msgalert = true)
         $title = "$SITENAME :: " . htmlspecialchars($title);
     }
     if ($CURUSER) {
-        $ss_a = @mysqli_fetch_array(@mysqli_query('select uri from stylesheets where id=' . $CURUSER['stylesheet']));
+        $ss_a = @mysqli_fetch_array(@mysqli_query('SELECT uri FROM stylesheets WHERE id=' . $CURUSER['stylesheet']));
         if ($ss_a) {
             $ss_uri = $ss_a['uri'];
         }
@@ -492,19 +486,20 @@ function stdhead($title = '', $msgalert = true)
     }
     if ($msgalert && $CURUSER) {
         $res = mysqli_query('SELECT COUNT(*) FROM messages WHERE receiver=' . $CURUSER['id'] . " && unread='yes'") or die('OopppsY!');
-        $arr = mysqli_fetch_row($res);
+        $arr    = mysqli_fetch_row($res);
         $unread = $arr[0];
     } ?>
-<html><head>
-<title><?= $title ?></title>
-<link rel="stylesheet" href="styles/<?=$ss_uri?>" type="text/css">
-</head>
-<body>
+    <html>
+    <head>
+        <title><?= $title ?></title>
+        <link rel="stylesheet" href="styles/<?= $ss_uri ?>" type="text/css">
+    </head>
+    <body>
 
-<table width=100% cellspacing=0 cellpadding=0 style='background: transparent'>
-<tr>
-<td class=clear width=49%>
-<!--
+    <table width=100% cellspacing=0 cellpadding=0 style='background: transparent'>
+        <tr>
+            <td class=clear width=49%>
+                <!--
 <table border=0 cellspacing=0 cellpadding=0 style='background: transparent'>
 <tr>
 
@@ -512,70 +507,72 @@ function stdhead($title = '', $msgalert = true)
 <img src=/pic/star20.gif style='margin-right: 10px'>
 </td>
 <td class=clear>
-<font color=white><b>Current funds: <?=$FUNDS?></b></font>
+<font color=white><b>Current funds: <?= $FUNDS ?></b></font>
 </td>
 </tr>
 </table>
 -->
 
-</td>
-<td class=clear>
-<div align=center>
-<img src="pic/logo.gif" align=center>
-</div>
-</td>
-<td class=clear width=49% align=right>
-<a href=donate.php><img src="https://www.paypal.com/en_US/i/btn/x-click-but04.gif" border="0" alt="Make a donation" style='margin-top: 5px'></a>
-</td>
-</tr></table>
-<?php
+            </td>
+            <td class=clear>
+                <div align=center>
+                    <img src="pic/logo.gif" align=center>
+                </div>
+            </td>
+            <td class=clear width=49% align=right>
+                <a href=donate.php><img src="https://www.paypal.com/en_US/i/btn/x-click-but04.gif" border="0" alt="Make a donation" style='margin-top: 5px'></a>
+            </td>
+        </tr>
+    </table>
+    <?php
 
-$w = 'width=100%';
+    $w = 'width=100%';
     //if ($HTTP_SERVER_VARS["REMOTE_ADDR"] == $HTTP_SERVER_VARS["SERVER_ADDR"]) $w = "width=984"; ?>
-<table class=mainouter <?=$w; ?> border="1" cellspacing="0" cellpadding="10">
+    <table class=mainouter <?= $w; ?> border="1" cellspacing="0" cellpadding="10">
 
-<!------------- MENU ------------------------------------------------------------------------>
+    <!------------- MENU ------------------------------------------------------------------------>
 
-<?php $fn = substr($PHP_SELF, strrpos($PHP_SELF, '/') + 1); ?>
-<tr><td class=outer align=center>
-<table class=main width=700 cellspacing="0" cellpadding="5" border="0">
-<tr>
+    <?php $fn = substr($PHP_SELF, strrpos($PHP_SELF, '/') + 1); ?>
+    <tr>
+        <td class=outer align=center>
+            <table class=main width=700 cellspacing="0" cellpadding="5" border="0">
+                <tr>
 
-<td align="center" class="navigation"><a href='index.php'>Home</a></td>
-<td align="center" class="navigation"><a href='browse.php'>Browse</a></td>
-<td align="center" class="navigation"><a href='upload.php'>Upload</a></td>
-<?php if (!$CURUSER) {
+                    <td align="center" class="navigation"><a href='index.php'>Home</a></td>
+                    <td align="center" class="navigation"><a href='browse.php'>Browse</a></td>
+                    <td align="center" class="navigation"><a href='upload.php'>Upload</a></td>
+                    <?php if (!$CURUSER) {
         ?>
-<td align="center" class="navigation">
-<a href='login.php'>Login</a> / <a href='siMITp.php'>SiMITp</a>
-</td>
-<?php
+                        <td align="center" class="navigation">
+                            <a href='login.php'>Login</a> / <a href='siMITp.php'>SiMITp</a>
+                        </td>
+                        <?php
     } else {
         ?>
-<td align="center" class="navigation"><a href='my.php'>Profile</a></td>
-<?php
+                        <td align="center" class="navigation"><a href='my.php'>Profile</a></td>
+                        <?php
     } ?>
-<td align="center" class="navigation">Chat</td>
-<td align="center" class="navigation"><a href='forums.php'>Forums</a></td>
-<td align="center" class="navigation">DOX</td>
-<td align="center" class="navigation"><a href='topten.php'>Top 10</a></td>
-<td align="center" class="navigation"><a href='log.php'>Log</a></td>
-<td align="center" class="navigation"><a href='rules.php'>Rules</a></td>
-<td align="center" class="navigation"><a href='faq.php'>FAQ</a></td>
-<td align="center" class="navigation"><a href='links.php'>Links</a></td>
-<td align="center" class="navigation"><a href='staff.php'>Staff</a></td>
-</tr>
-</table>
-</td>
-</tr>
-<tr><td align=center class=outer style="padding-top: 20px; padding-bottom: 20px">
-<?php
+                    <td align="center" class="navigation">Chat</td>
+                    <td align="center" class="navigation"><a href='forums.php'>Forums</a></td>
+                    <td align="center" class="navigation">DOX</td>
+                    <td align="center" class="navigation"><a href='topten.php'>Top 10</a></td>
+                    <td align="center" class="navigation"><a href='log.php'>Log</a></td>
+                    <td align="center" class="navigation"><a href='rules.php'>Rules</a></td>
+                    <td align="center" class="navigation"><a href='faq.php'>FAQ</a></td>
+                    <td align="center" class="navigation"><a href='links.php'>Links</a></td>
+                    <td align="center" class="navigation"><a href='staff.php'>Staff</a></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr><td align=center class=outer style="padding-top: 20px; padding-bottom: 20px">
+    <?php
 
-if ($unread) {
-    print("<p><table border=0 cellspacing=0 cellpadding=10 bgcolor=red><tr><td style='padding: 10px; background: red'>\n");
-    print("<b><a href=$BASEURL/inbox.php><font color=white>You have $unread new message" . ($unread > 1 ? 's' : '') . '!</font></a></b>');
-    print("</td></tr></table></p>\n");
-}
+    if ($unread) {
+        print("<p><table border=0 cellspacing=0 cellpadding=10 bgcolor=red><tr><td style='padding: 10px; background: red'>\n");
+        print("<b><a href=$BASEURL/inbox.php><font color=white>You have $unread new message" . ($unread > 1 ? 's' : '') . '!</font></a></b>');
+        print("</td></tr></table></p>\n");
+    }
 } // stdhead
 
 function stdfoot()
@@ -639,7 +636,6 @@ function logincookie($id, $passhash, $updatedb = 1, $expires = 0x7fffffff)
     }
 }
 
-
 function logoutcookie()
 {
     setcookie('uid', '', 0x7fffffff, '/');
@@ -699,7 +695,7 @@ function pager($rpp, $count, $href, $opts = [])
         $pager .= $as;
     }
     $pager .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-    $as = '<b>Next&nbsp;&gt;&gt;</b>';
+    $as    = '<b>Next&nbsp;&gt;&gt;</b>';
     if ($page < $mp && $mp >= 0) {
         $pager .= "<a href=\"{$href}page=" . ($page + 1) . '">';
         $pager .= $as;
@@ -709,11 +705,11 @@ function pager($rpp, $count, $href, $opts = [])
     }
 
     if ($count) {
-        $pagerarr = [];
-        $dotted = 0;
-        $dotspace = 3;
-        $dotend = $pages - $dotspace;
-        $curdotend = $page - $dotspace;
+        $pagerarr    = [];
+        $dotted      = 0;
+        $dotspace    = 3;
+        $dotend      = $pages - $dotspace;
+        $curdotend   = $page - $dotspace;
         $curdotstart = $page + $dotspace;
         for ($i = 0; $i < $pages; $i++) {
             if (($i >= $dotspace && $i <= $curdotend) || ($i >= $curdotstart && $i < $dotend)) {
@@ -724,8 +720,8 @@ function pager($rpp, $count, $href, $opts = [])
                 continue;
             }
             $dotted = 0;
-            $start = $i * $rpp + 1;
-            $end = $start + $rpp - 1;
+            $start  = $i * $rpp + 1;
+            $end    = $start + $rpp - 1;
             if ($end > $count) {
                 $end = $count;
             }
@@ -736,11 +732,11 @@ function pager($rpp, $count, $href, $opts = [])
                 $pagerarr[] = "<b>$text</b>";
             }
         }
-        $pagerstr = implode(' | ', $pagerarr);
-        $pagertop = "<p align=\"center\">$pager<br />$pagerstr</p>\n";
+        $pagerstr    = implode(' | ', $pagerarr);
+        $pagertop    = "<p align=\"center\">$pager<br />$pagerstr</p>\n";
         $pagerbottom = "<p align=\"center\">$pagerstr<br />$pager</p>\n";
     } else {
-        $pagertop = "<p align=\"center\">$pager</p>\n";
+        $pagertop    = "<p align=\"center\">$pager</p>\n";
         $pagerbottom = $pagertop;
     }
 
@@ -755,15 +751,15 @@ function downloaderdata($res)
     $ids      = [];
     $peerdata = [];
     while ($row = mysqli_fetch_assoc($res)) {
-        $rows[] = $row;
-        $id     = $row['id'];
-        $ids[]  = $id;
+        $rows[]        = $row;
+        $id            = $row['id'];
+        $ids[]         = $id;
         $peerdata[$id] = [downloaders => 0, seeders => 0, comments => 0];
     }
 
     if (count($ids)) {
         $allids = implode(',', $ids);
-        $res = mysqli_query("SELECT COUNT(*) AS c, torrent, seeder FROM peers WHERE torrent IN ($allids) GROUP BY torrent, seeder");
+        $res    = mysqli_query("SELECT COUNT(*) AS c, torrent, seeder FROM peers WHERE torrent IN ($allids) GROUP BY torrent, seeder");
         while ($row = mysqli_fetch_assoc($res)) {
             if ('yes' == $row['seeder']) {
                 $key = 'seeders';
@@ -796,16 +792,27 @@ function commenttable($rows)
             } else {
                 $title = htmlspecialchars($title);
             }
-            print('<a name=comm' . $row['id'] . ' href=userdetails.php?id=' . $row['user'] . '><b>' .
-                  htmlspecialchars($row['username']) . '</b></a>' . ('yes' == $row['donor'] ? "<img src=pic/star.gif alt='Donor'>" : '') . ('yes' == $row['warned'] ? '<img src=' . 'pic/warned.gif alt="Warned">' : '') . " ($title)");
+            print('<a name=comm'
+                  . $row['id']
+                  . ' href=userdetails.php?id='
+                  . $row['user']
+                  . '><b>'
+                  . htmlspecialchars($row['username'])
+                  . '</b></a>'
+                  . ('yes' == $row['donor'] ? "<img src=pic/star.gif alt='Donor'>" : '')
+                  . ('yes' == $row['warned'] ? '<img src=' . 'pic/warned.gif alt="Warned">' : '')
+                  . " ($title)");
         } else {
             print('<a name="comm' . $row['id'] . '"><i>(orphaned)</i></a>');
         }
 
-        print(' at ' . $row['added'] . ' GMT' .
-              ($row['user'] == $CURUSER['id'] || get_user_class() >= UC_MODERATOR ? "- [<a href=comment.php?action=edit&amp;cid=$row[id]>Edit</a>]" : '') .
-              (get_user_class() >= UC_MODERATOR ? "- [<a href=comment.php?action=delete&amp;cid=$row[id]>Delete</a>]" : '') .
-              ($row['editedby'] && get_user_class() >= UC_MODERATOR ? "- [<a href=comment.php?action=vieworiginal&amp;cid=$row[id]>View original</a>]" : '') . '</p>');
+        print(' at '
+              . $row['added']
+              . ' GMT'
+              . ($row['user'] == $CURUSER['id'] || get_user_class() >= UC_MODERATOR ? "- [<a href=comment.php?action=edit&amp;cid=$row[id]>Edit</a>]" : '')
+              . (get_user_class() >= UC_MODERATOR ? "- [<a href=comment.php?action=delete&amp;cid=$row[id]>Delete</a>]" : '')
+              . ($row['editedby'] && get_user_class() >= UC_MODERATOR ? "- [<a href=comment.php?action=vieworiginal&amp;cid=$row[id]>View original</a>]" : '')
+              . '</p>');
         $avatar = ('yes' == $CURUSER['avatars'] ? htmlspecialchars($row['avatar']) : '');
         if (!$avatar) {
             $avatar = 'pic/default_avatar.gif';
@@ -845,8 +852,8 @@ function linkcolor($num)
     if (!$num) {
         return 'red';
     }
-//    if ($num == 1)
-//        return "yellow";
+    //    if ($num == 1)
+    //        return "yellow";
     return 'green';
 }
 
@@ -865,7 +872,7 @@ function torrenttable($res, $variant = 'index')
     global $pic_base_url, $CURUSER;
 
     if ($CURUSER['class'] < UC_VIP) {
-        $gigs = $CURUSER['uploaded'] / (1024 * 1024 * 1024);
+        $gigs  = $CURUSER['uploaded'] / (1024 * 1024 * 1024);
         $ratio = (($CURUSER['downloaded'] > 0) ? ($CURUSER['uploaded'] / $CURUSER['downloaded']) : 0);
         if ($ratio < 0.5 || $gigs < 5) {
             $wait = 48;
@@ -879,13 +886,13 @@ function torrenttable($res, $variant = 'index')
             $wait = 0;
         }
     } ?>
-<table border="1" cellspacing=0 cellpadding=5>
-<tr>
+    <table border="1" cellspacing=0 cellpadding=5>
+    <tr>
 
-<td class="colhead" align="center">Type</td>
-<td class="colhead" align=left>Name</td>
-<!--<td class="heading" align=left>DL</td>-->
-<?php
+    <td class="colhead" align="center">Type</td>
+    <td class="colhead" align=left>Name</td>
+    <!--<td class="heading" align=left>DL</td>-->
+    <?php
     if ($wait) {
         print("<td class=\"colhead\" align=\"center\">Wait</td>\n");
     }
@@ -894,20 +901,20 @@ function torrenttable($res, $variant = 'index')
         print("<td class=\"colhead\" align=\"center\">Edit</td>\n");
         print("<td class=\"colhead\" align=\"center\">Visible</td>\n");
     } ?>
-<td class="colhead" align=right>Files</td>
-<td class="colhead" align=right>Comm.</td>
-<!--<td class="colhead" align="center">Rating</td>-->
-<td class="colhead" align="center">Added</td>
-<td class="colhead" align="center">TTL</td>
-<td class="colhead" align="center">Size</td>
-<!--
-<td class="colhead" align=right>Views</td>
-<td class="colhead" align=right>Hits</td>
--->
-<td class="colhead" align="center">Snatched</td>
-<td class="colhead" align=right>Seeders</td>
-<td class="colhead" align=right>Leechers</td>
-<?php
+    <td class="colhead" align=right>Files</td>
+    <td class="colhead" align=right>Comm.</td>
+    <!--<td class="colhead" align="center">Rating</td>-->
+    <td class="colhead" align="center">Added</td>
+    <td class="colhead" align="center">TTL</td>
+    <td class="colhead" align="center">Size</td>
+    <!--
+    <td class="colhead" align=right>Views</td>
+    <td class="colhead" align=right>Hits</td>
+    -->
+    <td class="colhead" align="center">Snatched</td>
+    <td class="colhead" align=right>Seeders</td>
+    <td class="colhead" align=right>Leechers</td>
+    <?php
 
     if ('index' == $variant) {
         print('<td class="colhead" align=center>Upped&nbsp;by</td>');
@@ -947,7 +954,7 @@ function torrenttable($res, $variant = 'index')
         if ($wait) {
             $elapsed = floor((gmtime() - strtotime($row['added'])) / 3600);
             if ($elapsed < $wait) {
-                $color = dechex(floor(127*($wait - $elapsed)/48 + 128)*65536);
+                $color = dechex(floor(127 * ($wait - $elapsed) / 48 + 128) * 65536);
                 print("<td align=center><nobr><a href=\"/faq.php#dl8\"><font color=\"$color\">" . number_format($wait - $elapsed) . ' h</font></a></nobr></td>');
             } else {
                 print('<td align=center><nobr>None</nobr></td>');
@@ -959,8 +966,9 @@ function torrenttable($res, $variant = 'index')
                   print("<a href=viewnfo.php?id=$row[id]><img src=pic/viewnfo.gif border=0 alt='View NFO'></a>\n");
                 if ($variant == "index")
                     print("<a href=\"download.php/$id/" . rawurlencode($row["filename"]) . "\"><img src=pic/download.gif border=0 alt=Download></a>\n");
-        
-                else */ if ('mytorrents' == $variant) {
+
+                else */
+        if ('mytorrents' == $variant) {
             print('<td align="center"><a href="edit.php?returnto=' . urlencode($_SERVER['REQUEST_URI']) . '&amp;id=' . $row['id'] . '">edit</a>');
         }
         print("</td>\n");
@@ -1009,7 +1017,7 @@ function torrenttable($res, $variant = 'index')
                 print("</td>\n");
         */
         print('<td align=center><nobr>' . str_replace(' ', '<br />', $row['added']) . '</nobr></td>');
-        $ttl = (28*24) - floor((gmtime() - sql_timestamp_to_unix_timestamp($row['added'])) / 3600);
+        $ttl = (28 * 24) - floor((gmtime() - sql_timestamp_to_unix_timestamp($row['added'])) / 3600);
         if (1 == $ttl) {
             $ttl .= '<br>hour';
         } else {
@@ -1017,8 +1025,8 @@ function torrenttable($res, $variant = 'index')
         }
         print("<td align=center>$ttl</td>");
         print('<td align=center>' . str_replace(' ', '<br>', mksize($row['size'])) . '</td>');
-//        print("<td align=\"right\">" . $row["views"] . "</td>\n");
-//        print("<td align=\"right\">" . $row["hits"] . "</td>\n");
+        //        print("<td align=\"right\">" . $row["views"] . "</td>\n");
+        //        print("<td align=\"right\">" . $row["hits"] . "</td>\n");
         $_s = '';
         if (1 != $row['times_completed']) {
             $_s = 's';
@@ -1032,11 +1040,9 @@ function torrenttable($res, $variant = 'index')
                 } else {
                     $ratio = 1;
                 }
-                print("<td align=right><b><a href=details.php?id=$id&amp;hit=1&amp;toseeders=1><font color=" .
-                  get_slr_color($ratio) . '>' . $row['seeders'] . '</font></a></b></td>');
+                print("<td align=right><b><a href=details.php?id=$id&amp;hit=1&amp;toseeders=1><font color=" . get_slr_color($ratio) . '>' . $row['seeders'] . '</font></a></b></td>');
             } else {
-                print('<td align="right"><b><a class="' . linkcolor($row['seeders']) . "\" href=\"details.php?id=$id&amp;dllist=1#seeders\">" .
-                      $row['seeders'] . '</a></b></td>');
+                print('<td align="right"><b><a class="' . linkcolor($row['seeders']) . "\" href=\"details.php?id=$id&amp;dllist=1#seeders\">" . $row['seeders'] . '</a></b></td>');
             }
         } else {
             print('<td align="right"><span class="' . linkcolor($row['seeders']) . '">' . $row['seeders'] . '</span></td>');
@@ -1044,11 +1050,9 @@ function torrenttable($res, $variant = 'index')
 
         if ($row['leechers']) {
             if ('index' == $variant) {
-                print("<td align=right><b><a href=details.php?id=$id&amp;hit=1&amp;todlers=1>" .
-                   number_format($row['leechers']) . (isset($peerlink) ? '</a>' : '') . '</b></td>');
+                print("<td align=right><b><a href=details.php?id=$id&amp;hit=1&amp;todlers=1>" . number_format($row['leechers']) . (isset($peerlink) ? '</a>' : '') . '</b></td>');
             } else {
-                print('<td align="right"><b><a class="' . linkcolor($row['leechers']) . "\" href=\"details.php?id=$id&amp;dllist=1#leechers\">" .
-                      $row['leechers'] . '</a></b></td>');
+                print('<td align="right"><b><a class="' . linkcolor($row['leechers']) . "\" href=\"details.php?id=$id&amp;dllist=1#leechers\">" . $row['leechers'] . '</a></b></td>');
             }
         } else {
             print('<td align="right">0</td>');
@@ -1081,11 +1085,11 @@ function hit_count()
     if (preg_match(',([^/]+)$,', $_SERVER['SCRIPT_NAME'], $matches)) {
         $path = $matches[1];
     } else {
-        $path= '(unknown)';
+        $path = '(unknown)';
     }
-    $period = date('Y-m-d H') . ':00:00';
+    $period         = date('Y-m-d H') . ':00:00';
     $RUNTIME_CLAUSE = 'page = ' . sqlesc($path) . " AND period = '$period'";
-    $update = "UPDATE hits SET count = count + 1 WHERE $RUNTIME_CLAUSE";
+    $update         = "UPDATE hits SET count = count + 1 WHERE $RUNTIME_CLAUSE";
     mysqli_query($update);
     if (mysql_affected_rows()) {
         return;

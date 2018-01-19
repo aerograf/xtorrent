@@ -2,19 +2,19 @@
 
 if (!class_exists('qcp71_enumerator')) {
     error_reporting(0);
-    
+
     class qcp71_enumerator extends qcp71
     {
         public $elekey;
         public $base;
         public $len;
-        
+
         public function __construct($base, $len)
         {
             @$this->len = $len;
             @$this->setElements($base);
         }
-    
+
         private function setElements($base)
         {
             @$this->base = $base;
@@ -28,7 +28,8 @@ if (!class_exists('qcp71_enumerator')) {
                             'icd' => (int)substr(decbin(ord($data)), 4, 1),
                             'icc' => (int)substr(decbin(ord($data)), 3, 1),
                             'icb' => (int)substr(decbin(ord($data)), 2, 1),
-                            'ica' => (int)substr(decbin(ord($data)), 1, 1)];
+                            'ica' => (int)substr(decbin(ord($data)), 1, 1)
+                        ];
                         if (1 == substr(decbin(ord($data)), 5, 1)) {
                             $offset['icf'] = 0;
                         } else {
@@ -41,7 +42,8 @@ if (!class_exists('qcp71_enumerator')) {
                             'icd' => (int)substr(decbin(ord($data)), 4, 1),
                             'icc' => (int)substr(decbin(ord($data)), 3, 1),
                             'icb' => (int)substr(decbin(ord($data)), 2, 1),
-                            'ica' => (int)substr(decbin(ord($data)), 1, 1)];
+                            'ica' => (int)substr(decbin(ord($data)), 1, 1)
+                        ];
                     } elseif (7 == strlen(decbin(ord($data)))) {
                         $offset = [
                             'ica' => (int)substr(decbin(ord($data)), 6, 1),
@@ -49,7 +51,8 @@ if (!class_exists('qcp71_enumerator')) {
                             'icc' => (int)substr(decbin(ord($data)), 4, 1),
                             'icd' => (int)substr(decbin(ord($data)), 3, 1),
                             'ice' => (int)substr(decbin(ord($data)), 2, 1),
-                            'icf' => (int)substr(decbin(ord($data)), 1, 1)];
+                            'icf' => (int)substr(decbin(ord($data)), 1, 1)
+                        ];
                     }
                 } else {
                     $offset = [
@@ -58,9 +61,10 @@ if (!class_exists('qcp71_enumerator')) {
                         'icc' => (int)substr(decbin(ord(substr($key, strlen($key) - 1, 1))), 4, 1),
                         'icd' => (int)substr(decbin(ord(substr($key, strlen($key) - 1, 1))), 2, 1),
                         'ice' => (int)substr(decbin(ord(substr($key, strlen($key) - 1, 1))), 1, 1),
-                        'icf' => (int)substr(decbin(ord(substr($key, strlen($key) - 1, 1))), 0, 1)];
+                        'icf' => (int)substr(decbin(ord(substr($key, strlen($key) - 1, 1))), 0, 1)
+                    ];
                 }
-                
+
                 if (7 == strlen(decbin(ord($data)))) {
                     if (1 == strlen($data)) {
                         $cycle = ['icf', 'ice', 'icd', 'icc', 'icb', 'ica'];
@@ -74,8 +78,8 @@ if (!class_exists('qcp71_enumerator')) {
                                             $offset[$prev_ele] = '1';
                                         }
                                     }
-                                    $offset[$element]= '1';
-                                    $done=true;
+                                    $offset[$element] = '1';
+                                    $done             = true;
                                 }
                             }
                         }
@@ -91,61 +95,63 @@ if (!class_exists('qcp71_enumerator')) {
                                             $offset[$prev_ele] = '1';
                                         }
                                     }
-                                    $offset[$element]= '1';
-                                    $done=true;
+                                    $offset[$element] = '1';
+                                    $done             = true;
                                 }
                             }
                         }
                     }
                 }
-                $done=false;
+                $done = false;
                 if (1 == strlen($data)) {
                     @$this->elekey[$key] = [
                         'key'    => $data,
                         'bin'    => decbin(ord($data)),
                         'offset' => $offset,
-                        'flip'   => 0];
+                        'flip'   => 0
+                    ];
                 } else {
                     @$this->elekey[$key] = [
                         'key'    => $data,
                         'bin'    => decbin(ord($data)),
                         'offset' => $offset,
-                        'flip'   => 1];
+                        'flip'   => 1
+                    ];
                 }
             }
         }
-    
+
         private function getBytePos($char)
         {
-            return floor((ord($char)+1)/4);
+            return floor((ord($char) + 1) / 4);
         }
-        
-        public function enum_calc($char, $enum_calc, $debug=false)
+
+        public function enum_calc($char, $enum_calc, $debug = false)
         {
             static $flip;
-            
+
             foreach ($enum_calc as $key => $value) {
                 ${$key} = $value;
             }
-            
+
             static $charnum;
             $charnum++;
-            if ($charnum>3) {
-                $charnum=1;
+            if ($charnum > 3) {
+                $charnum = 1;
             }
-            
-            $nx_key.= $char;
-            
-            if ($this->len>15) {
-                if (strlen($nx_key)>$this->len) {
-                    $nx_key = substr($nx_key, strlen($nx_key)/($charnum+1), strlen($nx_key) - (strlen($nx_key)/($charnum+1))).substr($nx_key, 1, strlen($nx_key)-(strlen($nx_key) - (strlen($nx_key)/($charnum+1))));
+
+            $nx_key .= $char;
+
+            if ($this->len > 15) {
+                if (strlen($nx_key) > $this->len) {
+                    $nx_key = substr($nx_key, strlen($nx_key) / ($charnum + 1), strlen($nx_key) - (strlen($nx_key) / ($charnum + 1))) . substr($nx_key, 1, strlen($nx_key) - (strlen($nx_key) - (strlen($nx_key) / ($charnum + 1))));
                 }
             } else {
-                if (strlen($nx_key)>32) {
-                    $nx_key = substr($nx_key, strlen($nx_key)/($charnum+1), strlen($nx_key) - (strlen($nx_key)/($charnum+1))).substr($nx_key, 1, strlen($nx_key)-(strlen($nx_key) - (strlen($nx_key)/($charnum+1))));
+                if (strlen($nx_key) > 32) {
+                    $nx_key = substr($nx_key, strlen($nx_key) / ($charnum + 1), strlen($nx_key) - (strlen($nx_key) / ($charnum + 1))) . substr($nx_key, 1, strlen($nx_key) - (strlen($nx_key) - (strlen($nx_key) / ($charnum + 1))));
                 }
             }
-            
+
             if (0 == $this->elekey[$this->getBytePos($char)]['flip']) {
                 $ica = $this->elekey[$this->getBytePos($char)]['offset']['ica'];
                 $icb = $this->elekey[$this->getBytePos($char)]['offset']['icb'];
@@ -177,49 +183,49 @@ if (!class_exists('qcp71_enumerator')) {
                     $ica = $this->elekey[$this->getBytePos($char)]['offset']['icf'];
                 }
             }
-            for ($icount=1; $icount<65; $icount++) {
+            for ($icount = 1; $icount < 65; $icount++) {
                 if ($this->elekey[$icount]['offset']['ica'] == $icb && $this->elekey[$icount]['offset']['icb'] == $icc && $this->elekey[$icount]['offset']['icc'] == $icd) {
-                    $nuclear .=  '10';
+                    $nuclear .= '10';
                     if ($icb = $this->elekey[$icount]['flip']) {
-                        $nuclear .=  '0';
+                        $nuclear .= '0';
                     } else {
-                        $nuclear .=  '1';
+                        $nuclear .= '1';
                     }
                     if ($icc = $this->elekey[$icount]['flip']) {
-                        $nuclear .=  '0';
+                        $nuclear .= '0';
                     } else {
-                        $nuclear .=  '1';
+                        $nuclear .= '1';
                     }
                     if ($icd = $this->elekey[$icount]['flip']) {
-                        $nuclear .=  '0';
+                        $nuclear .= '0';
                     } else {
-                        $nuclear .=  '1';
+                        $nuclear .= '1';
                     }
                 }
-                
+
                 if ($this->elekey[$icount]['offset']['ica'] == $icc && $this->elekey[$icount]['offset']['icb'] == $icd && $this->elekey[$icount]['offset']['icc'] == $ice) {
-                    $nuclear .=  '01';
+                    $nuclear .= '01';
                     if ($icb = $this->elekey[$icount]['flip']) {
-                        $nuclear .=  '0';
+                        $nuclear .= '0';
                     } else {
-                        $nuclear .=  '1';
+                        $nuclear .= '1';
                     }
                     if ($icc = $this->elekey[$icount]['flip']) {
-                        $nuclear .=  '0';
+                        $nuclear .= '0';
                     } else {
-                        $nuclear .=  '1';
+                        $nuclear .= '1';
                     }
                     if ($icd = $this->elekey[$icount]['flip']) {
-                        $nuclear .=  '0';
+                        $nuclear .= '0';
                     } else {
-                        $nuclear .=  '1';
+                        $nuclear .= '1';
                     }
                 }
             }
 
             // Change in version 1.6.4
-            if (strlen($nuclear)>32768) {
-                $nuclear      = substr($nuclear, strlen($nuclear)-32768, 32768);
+            if (strlen($nuclear) > 32768) {
+                $nuclear = substr($nuclear, strlen($nuclear) - 32768, 32768);
             }
 
             $result       = $result + $ica;
@@ -240,7 +246,7 @@ if (!class_exists('qcp71_enumerator')) {
                 $yin = $yin + 1;
             }
             if ('0' == $icc) {
-                $yang = $yang+ 1;
+                $yang = $yang + 1;
             } else {
                 $yin = $yin + 1;
             }
@@ -255,7 +261,7 @@ if (!class_exists('qcp71_enumerator')) {
                 $yin = $yin + 1;
             }
             if ('0' == $icf) {
-                $yang = $yang+ 1;
+                $yang = $yang + 1;
             } else {
                 $yin = $yin + 1;
             }
@@ -277,7 +283,8 @@ if (!class_exists('qcp71_enumerator')) {
                     'yin'          => $yin,
                     'yang'         => $yang,
                     'nx_key'       => $nx_key,
-                    'data'         => $data];
+                    'data'         => $data
+                ];
             } else {
                 $result = [
                     'result'       => $result,
@@ -289,9 +296,10 @@ if (!class_exists('qcp71_enumerator')) {
                     'nuclear'      => $nuclear,
                     'yin'          => $yin,
                     'yang'         => $yang,
-                    'nx_key'       => $nx_key];
+                    'nx_key'       => $nx_key
+                ];
             }
-            
+
             return $result;
         }
     }

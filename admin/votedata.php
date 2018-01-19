@@ -38,17 +38,17 @@ switch ($op) {
 
         global $xoopsDB, $imagearray;
 
-            $start         = isset($_GET['start']) ? (int)$_GET['start'] : 0;
+        $start         = isset($_GET['start']) ? (int)$_GET['start'] : 0;
         $useravgrating = '0';
         $uservotes     = '0';
 
-            $sql           = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_votedata') . ' ORDER BY ratingtimestamp DESC';
-        $results       = $xoopsDB->query($sql, 20, $start);
-            $votes         = $xoopsDB->getRowsNum($results);
-        
+        $sql     = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_votedata') . ' ORDER BY ratingtimestamp DESC';
+        $results = $xoopsDB->query($sql, 20, $start);
+        $votes   = $xoopsDB->getRowsNum($results);
+
         $sql           = 'SELECT rating FROM ' . $xoopsDB->prefix('xtorrent_votedata') . '';
         $result2       = $xoopsDB->query($sql, 20, $start);
-            $uservotes     = $xoopsDB->getRowsNum($result2);
+        $uservotes     = $xoopsDB->getRowsNum($result2);
         $useravgrating = 0;
 
         while (list($rating2) = $xoopsDB->fetchRow($result2)) {
@@ -63,14 +63,14 @@ switch ($op) {
         $adminObject = \Xmf\Module\Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));
 
-          echo "<fieldset><legend style='font-weight:bold;color:#900;'>" . _AM_XTORRENT_VOTE_DISPLAYVOTES . "</legend>
+        echo "<fieldset><legend style='font-weight:bold;color:#900;'>" . _AM_XTORRENT_VOTE_DISPLAYVOTES . "</legend>
           		<div style='padding:4px;'><b>" . _AM_XTORRENT_VOTE_USERAVG . ':</b> ' . $useravgrating . "</div>
           		<div style='padding:4px;'><b>" . _AM_XTORRENT_VOTE_TOTALRATE . ':</b> ' . $uservotes . "</div>
           		<div style='padding: 4px;'><li>" . $imagearray['deleteimg'] . ' ' . _AM_XTORRENT_VOTE_DELETEDSC . "</li></div><br>
           		<table class='outer' style='width:100%;'><tr>";
 
         $headingarray = [_AM_XTORRENT_VOTE_ID, _AM_XTORRENT_VOTE_USER, _AM_XTORRENT_VOTE_IP, _AM_XTORRENT_VOTE_FILETITLE, _AM_XTORRENT_VOTE_RATING, _AM_XTORRENT_VOTE_DATE, _AM_XTORRENT_MINDEX_ACTION];
-        for ($i = 0; $i <= count($headingarray)-1; $i++) {
+        for ($i = 0; $i <= count($headingarray) - 1; $i++) {
             $align = 'center';
             echo "<th style='text-align:" . $align . ";'><b>" . $headingarray[$i] . '</th>';
         }
@@ -79,11 +79,11 @@ switch ($op) {
             echo "<tr><td colspan='7' class='head' style='text-align:center;'>" . _AM_XTORRENT_VOTE_NOVOTES . '</td></tr>';
         }
         while (list($ratingid, $lid, $ratinguser, $rating, $ratinghostname, $ratingtimestamp) = $xoopsDB->fetchRow($results)) {
-            $sql = 'SELECT title FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE lid=' . $lid . '';
+            $sql        = 'SELECT title FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE lid=' . $lid . '';
             $down_array = $xoopsDB->fetchArray($xoopsDB->query($sql));
-            
+
             $formatted_date = formatTimestamp($ratingtimestamp, $xoopsModuleConfig['dateformat']);
-            $ratinguname = XoopsUser::getUnameFromId($ratinguser);
+            $ratinguname    = XoopsUser::getUnameFromId($ratinguser);
             echo "<tr>
           		<td class='head' style='text-align:center;'>" . $ratingid . "</td>
           		<td class='even' style='text-align:center;'>" . $ratinguname . "</td>
@@ -96,12 +96,12 @@ switch ($op) {
           		</tr>';
         }
         echo '</table></fieldset>';
-        
-            //Include page navigation
-            include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-        $page = ($votes > 20) ? _AM_XTORRENT_MINDEX_PAGE : '';
+
+        //Include page navigation
+        include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
+        $page    = ($votes > 20) ? _AM_XTORRENT_MINDEX_PAGE : '';
         $pagenav = new XoopsPageNav($page, 20, $start, 'start');
-        echo "<div style='padding:8px;float:right;'>" . $page . '' . $pagenav -> renderNav() . '</div>';
+        echo "<div style='padding:8px;float:right;'>" . $page . '' . $pagenav->renderNav() . '</div>';
         break;
 }
 require_once __DIR__ . '/admin_footer.php';

@@ -3,11 +3,12 @@
 if (!defined('XOOPS_ROOT_PATH')) {
     exit();
 }
+
 /**
  * Class for users
- * @author Kazumi Ono <onokazu@xoops.org>
+ * @author    Kazumi Ono <onokazu@xoops.org>
  * @copyright copyright (c) 2000-2003 XOOPS.org
- * @package kernel
+ * @package   kernel
  */
 class Xtorrent_XoopsUser extends XoopsUser
 {
@@ -17,17 +18,17 @@ class Xtorrent_XoopsUser extends XoopsUser
      * @var array
      * @access private
      */
-    public $_xt_groups   = [];
+    public $_xt_groups = [];
     /**
      * @var bool is the user admin?
      * @access private
      */
-    public $_xt_isAdmin  = null;
+    public $_xt_isAdmin = null;
     /**
      * @var string user's rank
      * @access private
      */
-    public $_xt_rank     = null;
+    public $_xt_rank = null;
     /**
      * @var bool is the user online?
      * @access private
@@ -42,9 +43,9 @@ class Xtorrent_XoopsUser extends XoopsUser
     {
         $this->initVar('passcrc', XOBJ_DTYPE_INT);
         $this->initVar('uname', XOBJ_DTYPE_TXTBOX, null, true, 25);
-        
+
         $id = $this->getVar('id');
-        
+
         // for backward compatibility
         if (isset($id)) {
             if (is_array($id)) {
@@ -74,7 +75,7 @@ class Xtorrent_XoopsUser extends XoopsUser
         $sql     = 'SELECT (1, uname) FROM ' . $xoopsDB->prefix('users') . " WHERE sha1(concat('uname','id')) = " . "'$user_hashinfo'";
         $request = $xoopsDB->prefix($sql);
         if (!empty($request)) {
-            list($passcrc, $uname)   = $xoopsDB->fetchRow($request);
+            list($passcrc, $uname) = $xoopsDB->fetchRow($request);
             $this->setVar('passcrc') = $passcrc;
             return $uname;
         }
@@ -89,7 +90,7 @@ class Xtorrent_XoopsUser extends XoopsUser
      * @param $hashinfo
      * @return bool
      */
-     
+
     public function xoops_check_userhashinfo($hashinfo)
     {
         $result = $this->getuname_fromhash($hashinfo);

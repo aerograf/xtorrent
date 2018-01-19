@@ -6,9 +6,9 @@ if (!defined('XOOPS_ROOT_PATH')) {
 
 /**
  * Class for users
- * @author Simon Roberts <simon@chronolabs.org>
+ * @author    Simon Roberts <simon@chronolabs.org>
  * @copyright copyright (c) 2009 chronolabs.org.au
- * @package xtorrent
+ * @package   xtorrent
  */
 class Xtorrent_XoopsAuth extends XoopsAuth
 {
@@ -32,7 +32,7 @@ class Xtorrent_XoopsAuth extends XoopsAuth
         $request = $xoopsDB->prefix($sql);
         if (!empty($request)) {
             list($passcrc, $uname, $uid) = $xoopsDB->fetchRow($request);
-            $this->passcrc = isset($passcrc)?true:false;
+            $this->passcrc = isset($passcrc) ? true : false;
             return ${$return};
         }
         return false;
@@ -47,17 +47,17 @@ class Xtorrent_XoopsAuth extends XoopsAuth
      * @param $passkey
      * @return
      */
-     
+
     public function xoops_check_userkey($userkey, $passkey)
     {
         $result = $this->getuname_fromhash($userkey, $passkey);
         return $this->passcrc;
     }
-    
+
     public function authenticate_userkey($userkey, $passkey)
     {
         $member_handler = xoops_gethandler('member');
-        $user       = $member_handler->getUser($this->uid_from_userkey($userkey, $passkey));
+        $user           = $member_handler->getUser($this->uid_from_userkey($userkey, $passkey));
         if (false == $user) {
             $this->setErrors(1, _US_INCORRECTLOGIN);
         }

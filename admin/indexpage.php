@@ -21,7 +21,7 @@ switch ($op) {
         $indexheading     = $myts->addslashes($_POST['indexheading']);
         $indexheader      = $myts->addslashes($_POST['indexheader']);
         $indexfooter      = $myts->addslashes($_POST['indexfooter']);
-            $indeximage       = $myts->addslashes($_POST['indeximage']);
+        $indeximage       = $myts->addslashes($_POST['indeximage']);
         $nohtml           = isset($_POST['nohtml']);
         $nosmiley         = isset($_POST['nosmiley']);
         $noxcodes         = isset($_POST['noxcodes']);
@@ -31,7 +31,8 @@ switch ($op) {
         $indexfooteralign = $_POST['indexfooteralign'];
 
         $xoopsDB->query('update '
-                        . $xoopsDB->prefix('xtorrent_indexpage') . " set indexheading='$indexheading', indexheader='$indexheader', indexfooter='$indexfooter', indeximage='$indeximage', indexheaderalign='$indexheaderalign ', indexfooteralign='$indexfooteralign', nohtml='$nohtml', nosmiley='$nosmiley', noxcodes='$noxcodes', noimages='$noimages', nobreak='$nobreak' ");
+                        . $xoopsDB->prefix('xtorrent_indexpage')
+                        . " set indexheading='$indexheading', indexheader='$indexheader', indexfooter='$indexfooter', indeximage='$indeximage', indexheaderalign='$indexheaderalign ', indexfooteralign='$indexfooteralign', nohtml='$nohtml', nosmiley='$nosmiley', noxcodes='$noxcodes', noimages='$noimages', nobreak='$nobreak' ");
         redirect_header('indexpage.php', 1, _AM_XTORRENT_IPAGE_UPDATED);
         exit();
 
@@ -50,10 +51,10 @@ switch ($op) {
         xoops_cp_header();
         $adminObject = \Xmf\Module\Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));
-        
+
         //xtorrent_adminmenu(_AM_XTORRENT_INDEXPAGE);
 
-    echo "
+        echo "
     		<fieldset>
         <legend style='font-weight:bold; color:#900;'>" . _AM_XTORRENT_IPAGE_INFORMATION . "</legend>
     		<div style='padding:8px;'>" . _AM_XTORRENT_MINDEX_PAGEINFOTXT . '</div>
@@ -62,7 +63,7 @@ switch ($op) {
 
         $sform = new XoopsThemeForm(_AM_XTORRENT_IPAGE_MODIFY, 'op', xoops_getenv('PHP_SELF'));
         $sform->addElement(new XoopsFormText(_AM_XTORRENT_IPAGE_CTITLE, 'indexheading', 60, 60, $indexheading), false);
-        $graph_array = XtsLists::getListTypeAsArray(XOOPS_ROOT_PATH . '/' . $xoopsModuleConfig['mainimagedir'], $type = 'images');
+        $graph_array       = XtsLists::getListTypeAsArray(XOOPS_ROOT_PATH . '/' . $xoopsModuleConfig['mainimagedir'], $type = 'images');
         $indeximage_select = new XoopsFormSelect('', 'indeximage', $indeximage);
         $indeximage_select->addOptionArray($graph_array);
         $indeximage_select->setExtra("onchange='showImgSelected(\"image\", \"indeximage\", \"" . $xoopsModuleConfig['mainimagedir'] . '", "", "' . XOOPS_URL . "\")'");
@@ -108,7 +109,7 @@ switch ($op) {
         $sform->addElement($options_tray);
 
         $button_tray = new XoopsFormElementTray('', '');
-        $hidden = new XoopsFormHidden('op', 'save');
+        $hidden      = new XoopsFormHidden('op', 'save');
         $button_tray->addElement($hidden);
         $button_tray->addElement(new XoopsFormButton('', 'post', _AM_XTORRENT_BSAVE, 'submit'));
         $sform->addElement($button_tray);

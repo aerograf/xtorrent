@@ -19,7 +19,7 @@ function tracker_scrape_summarise($scrape_results)
         trigger_error('tracker_scrape_summarise error: Expected array as first parameter.');
         return false;
     }
-    
+
     $summary = ['seeds' => 0, 'leeches' => 0, 'downloads' => 0];
     foreach ($scrape_results as $result) {
         if (is_array($result)) {
@@ -28,7 +28,7 @@ function tracker_scrape_summarise($scrape_results)
             $summary['downloads'] += $result['downloads'];
         }
     }
-    
+
     return $summary;
 }
 
@@ -41,15 +41,15 @@ function tracker_scrape_all($torrent, $timeout = 5)
     if (!count($torrent->announceList)) {
         return [tracker_scrape($torrent)];
     }
-    
+
     $scrape_results = [];
-    
+
     foreach ($torrent->announceList as $tier) {
         foreach ($tier as $tracker) {
             $scrape_results[$tracker] = tracker_scrape($torrent, $tracker, $timeout);
         }
     }
-    
+
     return $scrape_results;
 }
 
@@ -59,58 +59,58 @@ function tracker_scrape_all($torrent, $timeout = 5)
 function tracker_scrape($torrent, $tracker = null, $timeout = 5)
 {
     if (null === $tracker) {
-        $tracker        = $torrent->announce;
+        $tracker = $torrent->announce;
     }
-    
+
     $scrape_address = tracker_get_scrape_address($tracker);
-    
+
     if (false === $scrape_address) {
         trigger_error("Failed to scrape tracker {$tracker}", E_USER_WARNING);
         return false;
     }
-    
+
     if (false !== strpos($scrape_address, '?')) {
         $scrape_address .= '&info_hash=' . urlencode($torrent->infoHash);
     } else {
         $scrape_address .= '?info_hash=' . urlencode($torrent->infoHash);
     }
-    
+
     // Set the timeout before proceeding and reset it when done
     $old_timeout = ini_get('default_socket_timeout');
     ini_set('default_socket_timeout', $timeout);
     $data = @file_get_contents($scrape_address);
     ini_set('default_socket_timeout', $old_timeout);
-    
+
     // Something is wrong with the address or the HTTP response of the tracker, or the request timed out. It's hard to
     // say but something has clearly gone critically wrong.
     if (false === $data) {
         trigger_error('tracker_scrape error: Failed to scrape torrent details from the tracker', E_USER_WARNING);
         return false;
     }
-    
+
     $reader       = new BEncodeReader();
     $reader->data = $data;
     $trackerInfo  = $reader->readNext();
-    
+
     // A bad tracker response might be bad software, something the library doesn't understand or any number
     // of other weird issues. Regardless, we couldn't read it so we can't proceed.
     if (false === $trackerInfo) {
         trigger_error('tracker_scrape error: Tracker returned invalid response to scrape request', E_USER_WARNING);
         return false;
     }
-    
+
     // The tracker doesn't want to give us information on the torrent we requested. They've given us a response as to why.
     if (isset($trackerInfo['failure reason'])) {
         $this->failureReason = $trackerInfo['failure reason'];
         trigger_error("tracker_scrape error: Scrape failed. Tracker gave the following reason: \"{$this->failureReason}\"", E_USER_WARNING);
         return false;
     }
-    
+
     $result              = [];
     $result['seeds']     = $trackerInfo['files'][$torrent->infoHash]['complete'];
     $result['downloads'] = $trackerInfo['files'][$torrent->infoHash]['downloaded'];
     $result['leeches']   = $trackerInfo['files'][$torrent->infoHash]['incomplete'];
-    
+
     return $result;
 }
 
@@ -119,17 +119,17 @@ function tracker_scrape($torrent, $tracker = null, $timeout = 5)
 function tracker_get_scrape_address($announce)
 {
     $last_slash = strrpos($announce, '/');
-    
+
     if (false === $last_slash) {
         trigger_error("Tracker address ({$announce}) is invalid", E_USER_WARNING);
         return false;
     }
-    
+
     $last_part = substr($announce, $last_slash);
     if (false === strpos($last_part, 'announce')) {
         trigger_error("Tracker ({$announce}) does not appear to support scrape", E_USER_WARNING);
         return false;
     }
-    
+
     return substr($announce, 0, $last_slash) . '/' . str_replace($last_part, 'announce', 'scrape');
 }

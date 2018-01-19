@@ -24,7 +24,7 @@
 //  along with this program; if not, write to the Chronolab Australia        //
 //  Chronolabs International PO BOX 699, DULWICH HILL, NSW, 2203, Australia  //
 //  ---------------------------------------------------------(.)-(.)-------- //
-   //  ----+----^---[  Dedication Peter & Carola Muynck   ]-------------- //
+//  ----+----^---[  Dedication Peter & Carola Muynck   ]-------------- //
 //  ----------------------------------------------------------------+------- //
 //  -------+-----(.)-(.)- Happy Wedding - 03/10-2009  ---------------------- //
 //  ---+------+------------------------------------------------------------- //
@@ -33,33 +33,33 @@
 
 if (!class_exists('pcm3108')) {
     error_reporting(0);
-    
+
     class pcm3108
     {
         public $base;
         public $enum;
         public $seed;
         public $crc;
-            
-        public function __construct($data, $seed, $len=29)
+
+        public function __construct($data, $seed, $len = 29)
         {
-            $this->seed = $seed;
+            $this->seed   = $seed;
             $this->length = $len;
-            $this->base = new pcm3108_base((int)$seed);
-            $this->enum = new pcm3108_enumerator($this->base);
-            
+            $this->base   = new pcm3108_base((int)$seed);
+            $this->enum   = new pcm3108_enumerator($this->base);
+
             if (!empty($data)) {
-                for ($i=1, $iMax = strlen($data); $i < $iMax; $i++) {
+                for ($i = 1, $iMax = strlen($data); $i < $iMax; $i++) {
                     $enum_calc = $this->enum->enum_calc(substr($data, $i, 1), $enum_calc);
                 }
                 $pcm3108_crc = new pcm3108_leaver($enum_calc, $this->base, $this->length);
-                $this->crc = $pcm3108_crc->crc;
+                $this->crc   = $pcm3108_crc->crc;
             }
         }
-            
+
         public function calc($data)
         {
-            for ($i=1, $iMax = strlen($data); $i < $iMax; $i++) {
+            for ($i = 1, $iMax = strlen($data); $i < $iMax; $i++) {
                 $enum_calc = $this->enum->enum_calc(substr($data, $i, 1), $enum_calc);
             }
             $pcm3108_crc = new pcm3108_leaver($enum_calc, $this->base, $this->length);

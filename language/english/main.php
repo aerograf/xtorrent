@@ -3,8 +3,6 @@
 //Todo - Still to remove  defines from this area.
 define('_MD_XTORRENT_NODOWNLOAD', 'This download does not exist!');
 
-
-
 // Payment System
 define('_MD_XTORRENT_PAYPAL', 'Paypal email:');
 define('_MD_XTORRENT_PRICEC', 'Price:');
@@ -53,7 +51,10 @@ define('_MD_XTORRENT_THANKSFORINFO', 'Thank-you for your submission. You will be
 define('_MD_XTORRENT_ISAPPROVED', 'Thank-you for your submission. Your request has been approved and will now appear in our listing.');
 define('_MD_XTORRENT_THANKSFORHELP', "Thank-you for helping to maintain this directory's integrity.");
 define('_MD_XTORRENT_FORSECURITY', 'For security reasons your user name and IP address will also be temporarily recorded.');
-define('_MD_XTORRENT_NOPERMISETOLINK', "This file doesn't belong to the site you came from <br /><br />Please e-mail the  Webmasterof the site you came from and tell him:   <br /><b>NOT TO LEECH OTHER SITES LINKS!!</b> <br /><br /><b>Definition of a Leecher:</b> One who is to lazy to link from his own server or steals other peoples hard work and makes it look like his own <br /><br />  Your IP address <b>has been logged</b>.");
+define(
+    '_MD_XTORRENT_NOPERMISETOLINK',
+       "This file doesn't belong to the site you came from <br /><br />Please e-mail the  Webmasterof the site you came from and tell him:   <br /><b>NOT TO LEECH OTHER SITES LINKS!!</b> <br /><br /><b>Definition of a Leecher:</b> One who is to lazy to link from his own server or steals other peoples hard work and makes it look like his own <br /><br />  Your IP address <b>has been logged</b>."
+);
 define('_MD_XTORRENT_DESCRIPTION', 'Description');
 define('_MD_XTORRENT_SUBMITCATHEAD', 'Submit Torrent Form');
 define('_MD_XTORRENT_MAIN', 'HOME');
@@ -215,8 +216,6 @@ define('_MD_XTORRENT_NOUSERREVIEWS', 'Be the first person to review %s.');
 define('_MD_XTORRENT_ERROR', 'Error Updating Database: Information not saved');
 define('_MD_XTORRENT_COPYRIGHT', 'Copyright');
 define('_MD_XTORRENT_INFORUM', 'Discuss In Forum');
-
-
 
 //submit.
 define('_MD_XTORRENT_NOTALLOWESTOSUBMIT', 'You are not allowed to submit files');

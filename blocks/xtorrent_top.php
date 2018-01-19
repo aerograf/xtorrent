@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 include_once XOOPS_ROOT_PATH . '/class/xoopsform/grouppermform.php';
 
@@ -32,7 +32,7 @@ function b_XTORRENT_top_show($options)
             } elseif ('hits' == $options[0]) {
                 $download['hits'] = $myrow['hits'];
             }
-            $download['dirname'] = $xoopsModule->dirname();
+            $download['dirname']  = $xoopsModule->dirname();
             $block['downloads'][] = $download;
         }
     }

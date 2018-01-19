@@ -30,10 +30,10 @@ switch (isset($op) && !empty($op)) {
 
         global $xoopsDB, $xoopsModuleConfig, $myts;
         $start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
-        
+
         $xoopsOption['template_main'] = 'xtorrent_reviews.tpl';
         include XOOPS_ROOT_PATH . '/header.php';
-        
+
         $sql                     = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_indexpage') . ' ';
         $head_arr                = $xoopsDB->fetchArray($xoopsDB->query($sql));
         $catarray['imageheader'] = xtorrent_imageheader();
@@ -41,7 +41,7 @@ switch (isset($op) && !empty($op)) {
         $catarray['toolbar']     = xtorrent_toolbar();
         $xoopsTpl->assign('catarray', $catarray);
 
-        $sql_review    = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_reviews') . ' WHERE lid = ' . $lid . ' AND submit = 1 ORDER by date';
+        $sql_review    = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_reviews') . ' WHERE lid = ' . $lid . ' AND submit = 1 ORDER BY date';
         $result_review = $xoopsDB->query($sql_review, 5, $start);
         $result_count  = $xoopsDB->query($sql_review);
         $review_amount = $xoopsDB->getRowsNum($result_count);
@@ -87,7 +87,7 @@ switch (isset($op) && !empty($op)) {
             $lid    = (int)trim($_POST['lid']);
             $rated  = (int)trim($_POST['rated']);
             $date   = time();
-            $submit = $xoopsModuleConfig['autoapprove'] ? 1 : 0 ;
+            $submit = $xoopsModuleConfig['autoapprove'] ? 1 : 0;
             $sql    = 'INSERT INTO ' . $xoopsDB->prefix('xtorrent_reviews') . " (review_id, lid, title, review, submit, date, uid, rated) VALUES ('', $lid, '$title', '$review', '$submit', $date, $uid, $rated)";
             $result = $xoopsDB->query($sql);
             if (!$result) {
@@ -103,7 +103,7 @@ switch (isset($op) && !empty($op)) {
 
             echo "<div align='center'>" . xtorrent_imageheader() . '</div><br>
 				    <div>' . _MD_XTORRENT_REV_SNEWMNAMEDESC . '</div>';
-            
+
             $sform = new XoopsThemeForm(_MD_XTORRENT_REV_SUBMITREV, 'reviewform', xoops_getenv('PHP_SELF'));
             $sform->addElement(new XoopsFormText(_MD_XTORRENT_REV_TITLE, 'title', 50, 255), true);
             $rating_select = new XoopsFormSelect(_MD_XTORRENT_REV_RATING, 'rated', '10');
