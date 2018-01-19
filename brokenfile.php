@@ -76,7 +76,8 @@ if (!empty($_POST['submit'])) {
     unset($sql);
 
     $sql       = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_broken') . " WHERE lid = $lid";
-    $broke_arr = $xoopsDB->fetchArray($xoopsDB->query($sql));;
+    $broke_arr = $xoopsDB->fetchArray($xoopsDB->query($sql));
+    ;
 
     if (is_array($broke_arr)) {
         global $xoopsModuleConfig;

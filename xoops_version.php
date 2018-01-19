@@ -18,7 +18,7 @@ $modversion = [
     'description'         => _MI_XTORRENT_DESC,
     'dirname'             => $moduleDirName,
     'help'                => 'page=help',
-//    'help'                => 'xtorrent.tpl',
+    //    'help'                => 'xtorrent.tpl',
     'author'              => 'Wishcraft, LordPeter, Eparcyl, Aerograf',
     'credits'             => 'X-Torrent extrapolated from WF-Downloads',
     'license'             => 'GNU GPL 2.0',
@@ -79,7 +79,6 @@ $modversion['helpsection'] = [
     ['name' => _MI_XTORRENT_HELP_LICENSE, 'link' => 'page=license'],
     ['name' => _MI_XTORRENT_HELP_SUPPORT, 'link' => 'page=support'],
 ];
-
 
 /*
 * added by Liquid. Based on code by Marcan

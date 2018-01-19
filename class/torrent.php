@@ -211,14 +211,27 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
         $myts = MyTextSanitizer::getInstance();
         if ($torrent->isNew() || empty($id)) {
             $id  = $this->db->genId($this->db_table . '_xt_torrent_id_seq');
-            $sql = sprintf('INSERT INTO %s (
+            $sql = sprintf(
+                'INSERT INTO %s (
 				`lid`, `seeds`, `leeches`, `totalsize`, `modifiedby`, `tname`, `infoHash`, `announce`, `md5sum`, `added`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s, %s
-				)', $this->db_table, $this->db->quoteString($lid), $this->db->quoteString($seeds), $this->db->quoteString($leeches), $this->db->quoteString($totalsize), $this->db->quoteString($modifiedby), $this->db->quoteString($tname), $this->db->quoteString($infoHash),
-                           $this->db->quoteString($announce), $this->db->quoteString($md5sum), $this->db->quoteString($added));
+				)',
+                $this->db_table,
+                $this->db->quoteString($lid),
+                $this->db->quoteString($seeds),
+                $this->db->quoteString($leeches),
+                $this->db->quoteString($totalsize),
+                $this->db->quoteString($modifiedby),
+                $this->db->quoteString($tname),
+                $this->db->quoteString($infoHash),
+                           $this->db->quoteString($announce),
+                $this->db->quoteString($md5sum),
+                $this->db->quoteString($added)
+            );
         } else {
-            $sql = sprintf('UPDATE %s SET
+            $sql = sprintf(
+                'UPDATE %s SET
 				`seeds` = %s,
 				`leeches` = %s,
 				`totalsize` = %s,
@@ -227,8 +240,19 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
 				`infoHash` = %s,
 				`announce` = %s,
 				`md5sum` = %s,
-				`added` = %s WHERE lid = %s', $this->db_table, $this->db->quoteString($seeds), $this->db->quoteString($leeches), $this->db->quoteString($totalsize), $this->db->quoteString($modifiedby), $this->db->quoteString($tname), $this->db->quoteString($infoHash),
-                           $this->db->quoteString($announce), $this->db->quoteString($md5sum), $this->db->quoteString($added), $this->db->quoteString($lid));
+				`added` = %s WHERE lid = %s',
+                $this->db_table,
+                $this->db->quoteString($seeds),
+                $this->db->quoteString($leeches),
+                $this->db->quoteString($totalsize),
+                $this->db->quoteString($modifiedby),
+                $this->db->quoteString($tname),
+                $this->db->quoteString($infoHash),
+                           $this->db->quoteString($announce),
+                $this->db->quoteString($md5sum),
+                $this->db->quoteString($added),
+                $this->db->quoteString($lid)
+            );
         }
 
         if (false !== $force) {

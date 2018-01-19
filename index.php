@@ -102,8 +102,16 @@ while ($myrow = $xoopsDB->fetchArray($result)) {
 
         if (is_file(XOOPS_ROOT_PATH . '/' . $xoopsModuleConfig['catimage'] . '/' . $myts->htmlSpecialChars($myrow['imgurl'])) && !empty($myrow['imgurl'])) {
             if ($xoopsModuleConfig['usethumbs'] && function_exists('gd_info')) {
-                $imgurl = down_createthumb($myts->htmlSpecialChars($myrow['imgurl']), $xoopsModuleConfig['catimage'], 'thumbs', $xoopsModuleConfig['shotwidth'], $xoopsModuleConfig['shotheight'], $xoopsModuleConfig['imagequality'], $xoopsModuleConfig['updatethumbs'],
-                                           $xoopsModuleConfig['keepaspect']);
+                $imgurl = down_createthumb(
+                    $myts->htmlSpecialChars($myrow['imgurl']),
+                    $xoopsModuleConfig['catimage'],
+                    'thumbs',
+                    $xoopsModuleConfig['shotwidth'],
+                    $xoopsModuleConfig['shotheight'],
+                    $xoopsModuleConfig['imagequality'],
+                    $xoopsModuleConfig['updatethumbs'],
+                                           $xoopsModuleConfig['keepaspect']
+                );
             } else {
                 $imgurl = XOOPS_URL . '/' . $xoopsModuleConfig['catimage'] . '/' . $myts->htmlSpecialChars($myrow['imgurl']);
             }

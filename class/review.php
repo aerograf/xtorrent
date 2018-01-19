@@ -87,22 +87,42 @@ class XtorrentReviewHandler extends XoopsObjectHandler
         $myts = MyTextSanitizer::getInstance();
         if ($review->isNew() || empty($reviewid)) {
             $reviewid = $this->db->genId($this->db_table . '_xt_review_id_seq');
-            $sql      = sprintf('INSERT INTO %s (
+            $sql      = sprintf(
+                'INSERT INTO %s (
 				`reviewid`, `lid`, `title`, `review`, `submit`, `date`, `uid`, `rated`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s
-				)', $this->db_table, $this->db->quoteString($reviewid), $this->db->quoteString($lid), $this->db->quoteString($myts->addslashes($title)), $this->db->quoteString($myts->addslashes($review)), $this->db->quoteString($submit), $this->db->quoteString($date), $this->db->quoteString($uid),
-                                $this->db->quoteString($rated));
+				)',
+                $this->db_table,
+                $this->db->quoteString($reviewid),
+                $this->db->quoteString($lid),
+                $this->db->quoteString($myts->addslashes($title)),
+                $this->db->quoteString($myts->addslashes($review)),
+                $this->db->quoteString($submit),
+                $this->db->quoteString($date),
+                $this->db->quoteString($uid),
+                                $this->db->quoteString($rated)
+            );
         } else {
-            $sql = sprintf('UPDATE %s SET
+            $sql = sprintf(
+                'UPDATE %s SET
 				`lid` = %s,
 				`title` = %s,
 				`review` = %s,
 				`submit` = %s,
 				`date` = %s,
 				`uid` = %s,
-				`rated` = %s WHERE `reviewid` = %s', $this->db_table, $this->db->quoteString($lid), $this->db->quoteString($myts->addslashes($title)), $this->db->quoteString($myts->addslashes($review)), $this->db->quoteString($submit), $this->db->quoteString($date), $this->db->quoteString($uid),
-                           $this->db->quoteString($rated), $this->db->quoteString($reviewid));
+				`rated` = %s WHERE `reviewid` = %s',
+                $this->db_table,
+                $this->db->quoteString($lid),
+                $this->db->quoteString($myts->addslashes($title)),
+                $this->db->quoteString($myts->addslashes($review)),
+                $this->db->quoteString($submit),
+                $this->db->quoteString($date),
+                $this->db->quoteString($uid),
+                           $this->db->quoteString($rated),
+                $this->db->quoteString($reviewid)
+            );
         }
 
         if (false !== $force) {

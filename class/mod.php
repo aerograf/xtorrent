@@ -114,26 +114,93 @@ class XtorrentModHandler extends XoopsObjectHandler
         $myts = MyTextSanitizer::getInstance();
         if ($mod->isNew() || empty($requestid)) {
             $requestid = $this->db->genId($this->db_table . '_xt_mod_id_seq');
-            $sql       = sprintf('INSERT INTO %s (
+            $sql       = sprintf(
+                'INSERT INTO %s (
 				`requestid`, `lid`, `cid`, `title`, `url`, `homepage`,`version`,`size`,`platform`,`screenshot`,`submitter`,`publisher`,`status`,`date`,`hits`,`rating`,`votes`,`comments`,`license`,`mirror`,`price, `paypalemail`,`features`,`requirements`,`homepagetitle`,`forumid`,`limitations`,`dhistory`,`published`,`expired`,`updated`,`offline`,`description`,`modifysubmitter`,`requestdate` ,`currency`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
 				%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
-				)', $this->db_table, $this->db->quoteString($requestid), $this->db->quoteString($lid), $this->db->quoteString($cid), $this->db->quoteString($myts->addslashes($title)), $this->db->quoteString($myts->addslashes($url)), $this->db->quoteString($myts->addslashes($homepage)),
-                                 $this->db->quoteString($version), $this->db->quoteString($size), $this->db->quoteString($platform), $this->db->quoteString($myts->addslashes($screenshot)), $this->db->quoteString($submitter), $this->db->quoteString($publisher), $this->db->quoteString($status),
-                                 $this->db->quoteString($date), $this->db->quoteString($hits), $this->db->quoteString($rating), $this->db->quoteString($votes), $this->db->quoteString($comments), $this->db->quoteString($$myts->addslashes(license)), $this->db->quoteString($myts->addslashes($mirror)),
-                                 $this->db->quoteString($price), $this->db->quoteString($myts->addslashes($paypalemail)), $this->db->quoteString($myts->addslashes($features)), $this->db->quoteString($myts->addslashes($requirements)), $this->db->quoteString($myts->addslashes($homepagetitle)),
-                                 $this->db->quoteString($forumid), $this->db->quoteString($limitations), $this->db->quoteString($myts->addslashes($dhistory)), $this->db->quoteString($published), $this->db->quoteString($expired), $this->db->quoteString($updated), $this->db->quoteString($offline),
-                                 $this->db->quoteString($myts->addslashes($description)), $this->db->quoteString($modifysubmitter), $this->db->quoteString($requestdate), $this->db->quoteString($currency));
+				)',
+                $this->db_table,
+                $this->db->quoteString($requestid),
+                $this->db->quoteString($lid),
+                $this->db->quoteString($cid),
+                $this->db->quoteString($myts->addslashes($title)),
+                $this->db->quoteString($myts->addslashes($url)),
+                $this->db->quoteString($myts->addslashes($homepage)),
+                                 $this->db->quoteString($version),
+                $this->db->quoteString($size),
+                $this->db->quoteString($platform),
+                $this->db->quoteString($myts->addslashes($screenshot)),
+                $this->db->quoteString($submitter),
+                $this->db->quoteString($publisher),
+                $this->db->quoteString($status),
+                                 $this->db->quoteString($date),
+                $this->db->quoteString($hits),
+                $this->db->quoteString($rating),
+                $this->db->quoteString($votes),
+                $this->db->quoteString($comments),
+                $this->db->quoteString($$myts->addslashes(license)),
+                $this->db->quoteString($myts->addslashes($mirror)),
+                                 $this->db->quoteString($price),
+                $this->db->quoteString($myts->addslashes($paypalemail)),
+                $this->db->quoteString($myts->addslashes($features)),
+                $this->db->quoteString($myts->addslashes($requirements)),
+                $this->db->quoteString($myts->addslashes($homepagetitle)),
+                                 $this->db->quoteString($forumid),
+                $this->db->quoteString($limitations),
+                $this->db->quoteString($myts->addslashes($dhistory)),
+                $this->db->quoteString($published),
+                $this->db->quoteString($expired),
+                $this->db->quoteString($updated),
+                $this->db->quoteString($offline),
+                                 $this->db->quoteString($myts->addslashes($description)),
+                $this->db->quoteString($modifysubmitter),
+                $this->db->quoteString($requestdate),
+                $this->db->quoteString($currency)
+            );
         } else {
-            $sql = sprintf('UPDATE %s SET
+            $sql = sprintf(
+                'UPDATE %s SET
 				`lid` = %s, `cid` = %s, `title` = %s, `url` = %s, `homepage` = %s, `version` = %s, `size` = %s, `platform` = %s, `screenshot` = %s, `submitter` = %s, `publisher` = %s, `status` = %s, `date` = %s, `hits` = %s, `rating` = %s, `votes` = %s, `comments` = %s, `license` = %s, `mirror` = %s, `price` = %s, `paypalemail` = %s, `features` = %s, `requirements` = %s, `homepagetitle` = %s, `forumid` = %s, `limitations` = %s, `dhistory` = %s, `published` = %s, `expired` = %s, `updated` = %s, `offline` = %s, `description` = %s, `modifysubmitter` = %s, `requestdate` = %s, `currency` = %s WHERE `requestid` = %s',
-                           $this->db_table, $this->db->quoteString($lid), $this->db->quoteString($cid), $this->db->quoteString($myts->addslashes($title)), $this->db->quoteString($myts->addslashes($url)), $this->db->quoteString($myts->addslashes($homepage)), $this->db->quoteString($version),
-                           $this->db->quoteString($size), $this->db->quoteString($platform), $this->db->quoteString($myts->addslashes($screenshot)), $this->db->quoteString($submitter), $this->db->quoteString($publisher), $this->db->quoteString($status), $this->db->quoteString($date),
-                           $this->db->quoteString($hits), $this->db->quoteString($rating), $this->db->quoteString($votes), $this->db->quoteString($comments), $this->db->quoteString($$myts->addslashes(license)), $this->db->quoteString($myts->addslashes($mirror)), $this->db->quoteString($price),
-                           $this->db->quoteString($myts->addslashes($paypalemail)), $this->db->quoteString($myts->addslashes($features)), $this->db->quoteString($myts->addslashes($requirements)), $this->db->quoteString($myts->addslashes($homepagetitle)), $this->db->quoteString($forumid),
-                           $this->db->quoteString($limitations), $this->db->quoteString($myts->addslashes($dhistory)), $this->db->quoteString($published), $this->db->quoteString($expired), $this->db->quoteString($updated), $this->db->quoteString($offline),
-                           $this->db->quoteString($myts->addslashes($description)), $this->db->quoteString($modifysubmitter), $this->db->quoteString($requestdate), $this->db->quoteString($requestid), $this->db->quoteString($currency));
+                           $this->db_table,
+                $this->db->quoteString($lid),
+                $this->db->quoteString($cid),
+                $this->db->quoteString($myts->addslashes($title)),
+                $this->db->quoteString($myts->addslashes($url)),
+                $this->db->quoteString($myts->addslashes($homepage)),
+                $this->db->quoteString($version),
+                           $this->db->quoteString($size),
+                $this->db->quoteString($platform),
+                $this->db->quoteString($myts->addslashes($screenshot)),
+                $this->db->quoteString($submitter),
+                $this->db->quoteString($publisher),
+                $this->db->quoteString($status),
+                $this->db->quoteString($date),
+                           $this->db->quoteString($hits),
+                $this->db->quoteString($rating),
+                $this->db->quoteString($votes),
+                $this->db->quoteString($comments),
+                $this->db->quoteString($$myts->addslashes(license)),
+                $this->db->quoteString($myts->addslashes($mirror)),
+                $this->db->quoteString($price),
+                           $this->db->quoteString($myts->addslashes($paypalemail)),
+                $this->db->quoteString($myts->addslashes($features)),
+                $this->db->quoteString($myts->addslashes($requirements)),
+                $this->db->quoteString($myts->addslashes($homepagetitle)),
+                $this->db->quoteString($forumid),
+                           $this->db->quoteString($limitations),
+                $this->db->quoteString($myts->addslashes($dhistory)),
+                $this->db->quoteString($published),
+                $this->db->quoteString($expired),
+                $this->db->quoteString($updated),
+                $this->db->quoteString($offline),
+                           $this->db->quoteString($myts->addslashes($description)),
+                $this->db->quoteString($modifysubmitter),
+                $this->db->quoteString($requestdate),
+                $this->db->quoteString($requestid),
+                $this->db->quoteString($currency)
+            );
         }
 
         if (false !== $force) {

@@ -92,15 +92,32 @@ class XtorrentIndexpageHandler extends XoopsObjectHandler
         $myts = MyTextSanitizer::getInstance();
         if ($indexpage->isNew() || empty($id)) {
             $id  = $this->db->genId($this->db_table . '_xt_indexpage_id_seq');
-            $sql = sprintf('INSERT INTO %s (
+            $sql = sprintf(
+                'INSERT INTO %s (
 				`id`, `lid`, `cid`, `indeximage`, `indexheading`, `indexheader`, `indexfooter`, `nohtml`, `nosmiley`, `noxcodes`, `noimages`, `nobreak`, `indexheaderalign`, `indexfooteralign`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
-				)', $this->db_table, $this->db->quoteString($id), $this->db->quoteString($lid), $this->db->quoteString($cid), $this->db->quoteString($myts->addslashes($indeximage)), $this->db->quoteString($myts->addslashes($indexheading)), $this->db->quoteString($myts->addslashes($indexheader)),
-                           $this->db->quoteString($myts->addslashes($indexfooter)), $this->db->quoteString($downloaded), $this->db->quoteString($nohtml), $this->db->quoteString($nosmiley), $this->db->quoteString($noxcodes), $this->db->quoteString($noimages), $this->db->quoteString($nobreak),
-                           $this->db->quoteString($indexheaderalign), $this->db->quoteString($indexfooteralign));
+				)',
+                $this->db_table,
+                $this->db->quoteString($id),
+                $this->db->quoteString($lid),
+                $this->db->quoteString($cid),
+                $this->db->quoteString($myts->addslashes($indeximage)),
+                $this->db->quoteString($myts->addslashes($indexheading)),
+                $this->db->quoteString($myts->addslashes($indexheader)),
+                           $this->db->quoteString($myts->addslashes($indexfooter)),
+                $this->db->quoteString($downloaded),
+                $this->db->quoteString($nohtml),
+                $this->db->quoteString($nosmiley),
+                $this->db->quoteString($noxcodes),
+                $this->db->quoteString($noimages),
+                $this->db->quoteString($nobreak),
+                           $this->db->quoteString($indexheaderalign),
+                $this->db->quoteString($indexfooteralign)
+            );
         } else {
-            $sql = sprintf('UPDATE %s SET
+            $sql = sprintf(
+                'UPDATE %s SET
 					`lid` = %s,
 					`cid` = %s,
 					`indeximage` = %s,
@@ -113,9 +130,24 @@ class XtorrentIndexpageHandler extends XoopsObjectHandler
 					`noimages` = %s,
 					`nobreak` = %s,
 					`indexheaderalign` = %s,
-					`indexfooteralign` = %s WHERE id = %s', $this->db_table, $this->db->quoteString($lid), $this->db->quoteString($cid), $this->db->quoteString($myts->addslashes($indeximage)), $this->db->quoteString($myts->addslashes($indexheading)),
-                           $this->db->quoteString($myts->addslashes($indexheader)), $this->db->quoteString($myts->addslashes($indexfooter)), $this->db->quoteString($downloaded), $this->db->quoteString($nohtml), $this->db->quoteString($nosmiley), $this->db->quoteString($noxcodes),
-                           $this->db->quoteString($noimages), $this->db->quoteString($nobreak), $this->db->quoteString($indexheaderalign), $this->db->quoteString($indexfooteralign), $this->db->quoteString($id));
+					`indexfooteralign` = %s WHERE id = %s',
+                $this->db_table,
+                $this->db->quoteString($lid),
+                $this->db->quoteString($cid),
+                $this->db->quoteString($myts->addslashes($indeximage)),
+                $this->db->quoteString($myts->addslashes($indexheading)),
+                           $this->db->quoteString($myts->addslashes($indexheader)),
+                $this->db->quoteString($myts->addslashes($indexfooter)),
+                $this->db->quoteString($downloaded),
+                $this->db->quoteString($nohtml),
+                $this->db->quoteString($nosmiley),
+                $this->db->quoteString($noxcodes),
+                           $this->db->quoteString($noimages),
+                $this->db->quoteString($nobreak),
+                $this->db->quoteString($indexheaderalign),
+                $this->db->quoteString($indexfooteralign),
+                $this->db->quoteString($id)
+            );
         }
 
         if (false !== $force) {

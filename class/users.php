@@ -90,14 +90,28 @@ class XtorrentUsersHandler extends XoopsObjectHandler
         $myts = MyTextSanitizer::getInstance();
         if ($users->isNew() || empty($id)) {
             $id  = $this->db->genId($this->db_table . '_xt_users_id_seq');
-            $sql = sprintf('INSERT INTO %s (
+            $sql = sprintf(
+                'INSERT INTO %s (
 				`id`, `uid`, `lid`, `username`, `old_password`, `passhash`, `secret`, `uploaded`, `downloaded`, `enabled`, `last_access`, `passkey`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-				)', $this->db_table, $this->db->quoteString($id), $this->db->quoteString($uid), $this->db->quoteString($lid), $this->db->quoteString($username), $this->db->quoteString($old_password), $this->db->quoteString($passhash), $this->db->quoteString($secret),
-                           $this->db->quoteString($uploaded), $this->db->quoteString($downloaded), $this->db->quoteString($last_access), $this->db->quoteString($passkey));
+				)',
+                $this->db_table,
+                $this->db->quoteString($id),
+                $this->db->quoteString($uid),
+                $this->db->quoteString($lid),
+                $this->db->quoteString($username),
+                $this->db->quoteString($old_password),
+                $this->db->quoteString($passhash),
+                $this->db->quoteString($secret),
+                           $this->db->quoteString($uploaded),
+                $this->db->quoteString($downloaded),
+                $this->db->quoteString($last_access),
+                $this->db->quoteString($passkey)
+            );
         } else {
-            $sql = sprintf('UPDATE %s SET
+            $sql = sprintf(
+                'UPDATE %s SET
 				`uid` = %s,
 				`lid` = %s,
 				`username` = %s,
@@ -109,8 +123,20 @@ class XtorrentUsersHandler extends XoopsObjectHandler
 				`enabled` = %s,
 				`last_access` = %s,
 				`passhash` = %s,
-				WHERE id = %s', $this->db_table, $this->db->quoteString($uid), $this->db->quoteString($lid), $this->db->quoteString($username), $this->db->quoteString($old_password), $this->db->quoteString($passhash), $this->db->quoteString($secret), $this->db->quoteString($uploaded),
-                           $this->db->quoteString($downloaded), $this->db->quoteString($last_access), $this->db->quoteString($passkey), $this->db->quoteString($id));
+				WHERE id = %s',
+                $this->db_table,
+                $this->db->quoteString($uid),
+                $this->db->quoteString($lid),
+                $this->db->quoteString($username),
+                $this->db->quoteString($old_password),
+                $this->db->quoteString($passhash),
+                $this->db->quoteString($secret),
+                $this->db->quoteString($uploaded),
+                           $this->db->quoteString($downloaded),
+                $this->db->quoteString($last_access),
+                $this->db->quoteString($passkey),
+                $this->db->quoteString($id)
+            );
         }
 
         if (false !== $force) {

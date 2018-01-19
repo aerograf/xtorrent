@@ -93,15 +93,32 @@ class XtorrentCatHandler extends XoopsObjectHandler
         $myts = MyTextSanitizer::getInstance();
         if ($cat->isNew() || empty($cid)) {
             $cid = $this->db->genId($this->db_table . '_xt_cat_id_seq');
-            $sql = sprintf('INSERT INTO %s (
+            $sql = sprintf(
+                'INSERT INTO %s (
 				`cid`, `pid`, `title`, `imgurl`, `description`, `total`, `summary`, `spotlighttop`, `spotlighthis`, `nohtml`, `nosmiley`, `noxcodes`, `noimages`, `nobreak`, `weight`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
-				)', $this->db_table, $this->db->quoteString($cid), $this->db->quoteString($pid), $this->db->quoteString($myts->addslashes($title)), $this->db->quoteString($myts->addslashes($imgurl)), $this->db->quoteString($myts->addslashes($description)), $this->db->quoteString($total),
-                           $this->db->quoteString($myts->addslashes($summary)), $this->db->quoteString($spotlighttop), $this->db->quoteString($spotlighthis), $this->db->quoteString($nohtml), $this->db->quoteString($nosmiley), $this->db->quoteString($noxcodes), $this->db->quoteString($noimages),
-                           $this->db->quoteString($nobreak), $this->db->quoteString($weight));
+				)',
+                $this->db_table,
+                $this->db->quoteString($cid),
+                $this->db->quoteString($pid),
+                $this->db->quoteString($myts->addslashes($title)),
+                $this->db->quoteString($myts->addslashes($imgurl)),
+                $this->db->quoteString($myts->addslashes($description)),
+                $this->db->quoteString($total),
+                           $this->db->quoteString($myts->addslashes($summary)),
+                $this->db->quoteString($spotlighttop),
+                $this->db->quoteString($spotlighthis),
+                $this->db->quoteString($nohtml),
+                $this->db->quoteString($nosmiley),
+                $this->db->quoteString($noxcodes),
+                $this->db->quoteString($noimages),
+                           $this->db->quoteString($nobreak),
+                $this->db->quoteString($weight)
+            );
         } else {
-            $sql = sprintf('UPDATE %s SET
+            $sql = sprintf(
+                'UPDATE %s SET
  				 `weight` = %s,
 				 `pid` = %s,
 				 `title` = %s,
@@ -116,9 +133,24 @@ class XtorrentCatHandler extends XoopsObjectHandler
 				 `noxcodes` = %s,
 				 `noimages` = %s,
 				 `nobreak` = %s,
-				  WHERE `cid` = %s', $this->db_table, $this->db->quoteString($weight), $this->db->quoteString($pid), $this->db->quoteString($myts->addslashes($title)), $this->db->quoteString($myts->addslashes($imgurl)), $this->db->quoteString($myts->addslashes($description)),
-                           $this->db->quoteString($total), $this->db->quoteString($myts->addslashes($summary)), $this->db->quoteString($spotlighttop), $this->db->quoteString($spotlighthis), $this->db->quoteString($nohtml), $this->db->quoteString($nosmiley), $this->db->quoteString($noxcodes),
-                           $this->db->quoteString($noimages), $this->db->quoteString($nobreak), $this->db->quoteString($cid));
+				  WHERE `cid` = %s',
+                $this->db_table,
+                $this->db->quoteString($weight),
+                $this->db->quoteString($pid),
+                $this->db->quoteString($myts->addslashes($title)),
+                $this->db->quoteString($myts->addslashes($imgurl)),
+                $this->db->quoteString($myts->addslashes($description)),
+                           $this->db->quoteString($total),
+                $this->db->quoteString($myts->addslashes($summary)),
+                $this->db->quoteString($spotlighttop),
+                $this->db->quoteString($spotlighthis),
+                $this->db->quoteString($nohtml),
+                $this->db->quoteString($nosmiley),
+                $this->db->quoteString($noxcodes),
+                           $this->db->quoteString($noimages),
+                $this->db->quoteString($nobreak),
+                $this->db->quoteString($cid)
+            );
         }
 
         if (false !== $force) {

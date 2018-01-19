@@ -80,7 +80,8 @@ switch ($op) {
                 }
             }
             if ('dhistory' == $key) {
-                $content = $myts->displayTarea($content, 1, 0, 0, 0, 1);;
+                $content = $myts->displayTarea($content, 1, 0, 0, 0, 1);
+                ;
             }
             $sform->addElement(new XoopsFormLabel($lang_def, $content));
         }
@@ -131,7 +132,8 @@ switch ($op) {
                 }
             }
             if ('dhistory' == $key) {
-                $content = $myts->displayTarea($content, 1, 0, 0, 0, 1);;
+                $content = $myts->displayTarea($content, 1, 0, 0, 0, 1);
+                ;
             }
             $sform->addElement(new XoopsFormLabel($lang_def, $content));
         }
@@ -235,7 +237,8 @@ switch ($op) {
                 $path      = str_replace('/', '', $path);
                 $path      = str_replace(':', '', trim($path));
                 $title     = trim($path);
-                $submitter = XoopsUserUtility::getUnameFromId($down_arr['modifysubmitter']);;
+                $submitter = XoopsUserUtility::getUnameFromId($down_arr['modifysubmitter']);
+                ;
                 $requestdate = formatTimestamp($down_arr['requestdate'], $xoopsModuleConfig['dateformat']);
                 echo "<tr>
           		<td class='head' style='text-align:center;'>" . $down_arr['requestid'] . "</td>

@@ -908,7 +908,8 @@ function xtorrent_downlistbody($published)
 
     $lid   = $published['lid'];
     $cid   = $published['cid'];
-    $title = "<a href='../singlefile.php?cid=" . $published['cid'] . '&amp;lid=' . $published['lid'] . "'>" . $myts->htmlSpecialChars(trim($published['title'])) . '</a>';;
+    $title = "<a href='../singlefile.php?cid=" . $published['cid'] . '&amp;lid=' . $published['lid'] . "'>" . $myts->htmlSpecialChars(trim($published['title'])) . '</a>';
+    ;
     $submitter = XoopsUserUtility::getUnameFromId((int)$published['submitter']);
     $publish   = formatTimestamp($published['published'], 's');
     $status    = ($published['published'] > 0) ? $imagearray['online'] : "<a href='newdownloads.php'>" . $imagearray['offline'] . '</a>';

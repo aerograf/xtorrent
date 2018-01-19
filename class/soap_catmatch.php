@@ -88,14 +88,26 @@ class XtorrentSoap_catmatchHandler extends XoopsObjectHandler
         $myts = MyTextSanitizer::getInstance();
         if ($soap_catmatch->isNew() || empty($id)) {
             $id  = $this->db->genId($this->db_table . '_xt_soap_catmatch_id_seq');
-            $sql = sprintf('INSERT INTO %s (
+            $sql = sprintf(
+                'INSERT INTO %s (
 				`id`, `cid`, `scid`, `stitle`, `sdescription`, `skey`, `lastimport`, `server`, `username`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s
-				)', $this->db_table, $this->db->quoteString($id), $this->db->quoteString($cid), $this->db->quoteString($scid), $this->db->quoteString($myts->addslashes($stitle)), $this->db->quoteString($myts->addslashes($sdecription)), $this->db->quoteString($skey),
-                           $this->db->quoteString($lastimport), $this->db->quoteString($server), $this->db->quoteString($username));
+				)',
+                $this->db_table,
+                $this->db->quoteString($id),
+                $this->db->quoteString($cid),
+                $this->db->quoteString($scid),
+                $this->db->quoteString($myts->addslashes($stitle)),
+                $this->db->quoteString($myts->addslashes($sdecription)),
+                $this->db->quoteString($skey),
+                           $this->db->quoteString($lastimport),
+                $this->db->quoteString($server),
+                $this->db->quoteString($username)
+            );
         } else {
-            $sql = sprintf('UPDATE %s SET
+            $sql = sprintf(
+                'UPDATE %s SET
 				`cid` = %s,
 				`scid` = %s,
 				`stitle` = %s,
@@ -103,8 +115,16 @@ class XtorrentSoap_catmatchHandler extends XoopsObjectHandler
 				`skey` = %s,
 				`lastimport` = %s,
 				`server` = %s,
-				`username` = %s WHERE id = %s', $this->db_table, $this->db->quoteString($cid), $this->db->quoteString($scid), $this->db->quoteString($myts->addslashes($stitle)), $this->db->quoteString($myts->addslashes($sdecription)), $this->db->quoteString($skey),
-                           $this->db->quoteString($lastimport), $this->db->quoteString($id));
+				`username` = %s WHERE id = %s',
+                $this->db_table,
+                $this->db->quoteString($cid),
+                $this->db->quoteString($scid),
+                $this->db->quoteString($myts->addslashes($stitle)),
+                $this->db->quoteString($myts->addslashes($sdecription)),
+                $this->db->quoteString($skey),
+                           $this->db->quoteString($lastimport),
+                $this->db->quoteString($id)
+            );
         }
 
         if (false !== $force) {

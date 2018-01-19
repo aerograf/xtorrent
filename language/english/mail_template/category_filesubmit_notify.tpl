@@ -1,6 +1,6 @@
 Hello {X_UNAME}, <br/>
 <br/>
-A new file “{FILE_NAME}” was subjected in the category “{CATEGORY_NAME}” has {X_SITENAME} and is on standby of approval. <br/>
+A new file ï¿½{FILE_NAME}ï¿½ was subjected in the category ï¿½{CATEGORY_NAME}ï¿½ has {X_SITENAME} and is on standby of approval. <br/>
 <br/>
 You can consult this file tender here (note this page shows files of waiting in all the categories): <br/>
 {WAITINGFILES_URL} <br/>
@@ -17,5 +17,5 @@ Please not to answer this message. <br/>
 ----------- <br/>
 <br/>
 {X_SITENAME} ({X_SITEURL});<br/>
- Webmaster<br/>
+Webmaster<br/>
 {X_ADMINMAIL} 

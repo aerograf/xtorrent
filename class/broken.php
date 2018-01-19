@@ -91,14 +91,23 @@ class XtorrentBrokenHandler extends XoopsObjectHandler
 				%u, %s, %s, %s, %s, %s, %s
 				)', $this->db_table, $this->db->quoteString($reportid), $this->db->quoteString($lid), $this->db->quoteString($sender), $this->db->quoteString($ip), $this->db->quoteString($date), $this->db->quoteString($confirmed), $this->db->quoteString($acknowledged));
         } else {
-            $sql = sprintf('UPDATE %s SET
+            $sql = sprintf(
+                'UPDATE %s SET
 				`lid` = %s,
 				`sender` = %s,
 				`ip` = %s,
 				`date` = %s,
 				`confirmed` = %s,
-				`acknowledged` = %s WHERE `reportid` = %s', $this->db_table, $this->db->quoteString($lid), $this->db->quoteString($sender), $this->db->quoteString($ip), $this->db->quoteString($date), $this->db->quoteString($confirmed), $this->db->quoteString($acknowledged),
-                           $this->db->quoteString($reportid));
+				`acknowledged` = %s WHERE `reportid` = %s',
+                $this->db_table,
+                $this->db->quoteString($lid),
+                $this->db->quoteString($sender),
+                $this->db->quoteString($ip),
+                $this->db->quoteString($date),
+                $this->db->quoteString($confirmed),
+                $this->db->quoteString($acknowledged),
+                           $this->db->quoteString($reportid)
+            );
         }
 
         if (false !== $force) {

@@ -458,7 +458,6 @@ define('_AM_XTORRENT_REVIEW_DATA_NOT', 'Could not retrive review data');
 define('_AM_XTORRENT_MIME_NOUP_DATA', 'Could not update mimetype information:');
 define('_AM_XTORRENT_NOTE', 'NOTE');
 
-
 define('_AM_XTORRENT_UPGRADEFAILED0', "Update failed - couldn't rename field '%s'");
 define('_AM_XTORRENT_UPGRADEFAILED1', "Update failed - couldn't add new fields");
 define('_AM_XTORRENT_UPGRADEFAILED2', "Update failed - couldn't rename table '%s'");

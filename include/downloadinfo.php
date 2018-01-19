@@ -27,8 +27,16 @@ if (isset($down_arr['screenshot'])) {
     $down['screenshot_full'] = $myts->htmlSpecialChars($down_arr['screenshot']);
     if (!empty($down_arr['screenshot']) && file_exists(XOOPS_ROOT_PATH . '/' . $xoopsModuleConfig['screenshots'] . '/' . xoops_trim($down_arr['screenshot']))) {
         if (isset($xoopsModuleConfig['usethumbs']) && 1 == $xoopsModuleConfig['usethumbs']) {
-            $down['screenshot_thumb'] = down_createthumb($down['screenshot_full'], $xoopsModuleConfig['screenshots'], 'thumbs', $xoopsModuleConfig['shotwidth'], $xoopsModuleConfig['shotheight'], $xoopsModuleConfig['imagequality'], $xoopsModuleConfig['updatethumbs'],
-                                                         $xoopsModuleConfig['keepaspect']);
+            $down['screenshot_thumb'] = down_createthumb(
+                $down['screenshot_full'],
+                $xoopsModuleConfig['screenshots'],
+                'thumbs',
+                $xoopsModuleConfig['shotwidth'],
+                $xoopsModuleConfig['shotheight'],
+                $xoopsModuleConfig['imagequality'],
+                $xoopsModuleConfig['updatethumbs'],
+                                                         $xoopsModuleConfig['keepaspect']
+            );
         } else {
             $down['screenshot_thumb'] = XOOPS_URL . '/' . $xoopsModuleConfig['screenshots'] . '/' . xoops_trim($down_arr['screenshot']);
         }

@@ -527,8 +527,7 @@ function stdhead($title = '', $msgalert = true)
     <?php
 
     $w = 'width=100%';
-    //if ($HTTP_SERVER_VARS["REMOTE_ADDR"] == $HTTP_SERVER_VARS["SERVER_ADDR"]) $w = "width=984";
-    ?>
+    //if ($HTTP_SERVER_VARS["REMOTE_ADDR"] == $HTTP_SERVER_VARS["SERVER_ADDR"]) $w = "width=984"; ?>
     <table class=mainouter <?= $w; ?> border="1" cellspacing="0" cellpadding="10">
 
     <!------------- MENU ------------------------------------------------------------------------>
@@ -543,16 +542,16 @@ function stdhead($title = '', $msgalert = true)
                     <td align="center" class="navigation"><a href='browse.php'>Browse</a></td>
                     <td align="center" class="navigation"><a href='upload.php'>Upload</a></td>
                     <?php if (!$CURUSER) {
-                        ?>
+        ?>
                         <td align="center" class="navigation">
                             <a href='login.php'>Login</a> / <a href='siMITp.php'>SiMITp</a>
                         </td>
                         <?php
-                    } else {
-                        ?>
+    } else {
+        ?>
                         <td align="center" class="navigation"><a href='my.php'>Profile</a></td>
                         <?php
-                    } ?>
+    } ?>
                     <td align="center" class="navigation">Chat</td>
                     <td align="center" class="navigation"><a href='forums.php'>Forums</a></td>
                     <td align="center" class="navigation">DOX</td>

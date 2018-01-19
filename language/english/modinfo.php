@@ -290,10 +290,9 @@ define('_MI_XTORRENT_ADMENU3', 'About');
 define('_MI_XTORRENT_PAYMENTS', 'Payment Register');
 define('_MI_XTORRENT_PCONSOLID', 'Consolidate Payments');
 
-
 //Help
 define('_MI_XTORRENT_DIRNAME', basename(dirname(dirname(__DIR__))));
-define('_MI_XTORRENT_HELP_HEADER', __DIR__.'/help/helpheader.tpl');
+define('_MI_XTORRENT_HELP_HEADER', __DIR__ . '/help/helpheader.tpl');
 define('_MI_XTORRENT_BACK_2_ADMIN', 'Back to Administration of ');
 define('_MI_XTORRENT_OVERVIEW', 'Overview');
 

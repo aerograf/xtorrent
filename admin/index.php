@@ -468,7 +468,8 @@ function addDownload()
     $currency    = $myts->addslashes(trim($_POST['currency']));
     $mirror      = formatURL(trim($_POST['mirror']));
     $license     = $myts->addslashes(trim($_POST['license']));
-    $paypalemail = $myts->addslashes(trim($_POST['paypalemail']));;
+    $paypalemail = $myts->addslashes(trim($_POST['paypalemail']));
+    ;
     $features        = $myts->addslashes(trim($_POST['features']));
     $requirements    = $myts->addslashes(trim($_POST['requirements']));
     $forumid         = (isset($_POST['forumid']) && $_POST['forumid'] > 0) ? (int)$_POST['forumid'] : 0;

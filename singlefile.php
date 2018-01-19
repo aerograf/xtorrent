@@ -82,7 +82,8 @@ while ($arr = $xoopsDB->fetchArray($result)) {
     $downuid['title']     = $arr['title'];
     $downuid['lid']       = $arr['lid'];
     $downuid['cid']       = $arr['cid'];
-    $downuid['published'] = formatTimestamp($arr['published'], $xoopsModuleConfig['dateformat']);;
+    $downuid['published'] = formatTimestamp($arr['published'], $xoopsModuleConfig['dateformat']);
+    ;
     $xoopsTpl->append('down_uid', $downuid);
 }
 /**

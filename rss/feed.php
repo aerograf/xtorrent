@@ -125,7 +125,7 @@ header('Content-type: text/xml; charset=UTF-8');
     <channel>
 
         <?php if (!isset($_REQUEST['ms'])) {
-            ?>
+    ?>
             <description><?php echo htmlspecialchars($xoopsConfig['slogan']) . ' ' . htmlspecialchars(implode(', ', $rssfeed_data['category'])); ?></description>
             <lastBuildDate><?php echo date('D, d-m-y H:i:s e', time()); ?></lastBuildDate>
             <docs>http://backend.userland.com/rss/</docs>
@@ -134,10 +134,10 @@ header('Content-type: text/xml; charset=UTF-8');
             <managingEditor><?php echo $xoopsConfig['adminmail']; ?></managingEditor>
             <webMaster><?php echo $xoopsConfig['adminmail']; ?></webMaster>
             <?php
-        } ?>
+} ?>
         <language>en</language>
         <?php if (!isset($_REQUEST['ms'])) {
-            ?>
+        ?>
             <image>
                 <title><?php echo(htmlspecialchars($xoopsConfig['sitename'])); ?></title>
                 <url><?php echo XOOPS_URL; ?>/images/logo.png</url>
@@ -148,7 +148,7 @@ header('Content-type: text/xml; charset=UTF-8');
             <title>RSS Feed | <?php echo htmlspecialchars($xoopsConfig['sitename']) . ' | ' . ucfirst($rssfeed_data['category'][0]); ?> </title>
             <link><?php echo XOOPS_URL; ?></link>
             <?php
-        } ?>
+    } ?>
         <?php
         foreach ($rssfeed_data as $item) {
             ?>
@@ -157,11 +157,11 @@ header('Content-type: text/xml; charset=UTF-8');
                 <link><?php echo htmlspecialchars($item['url']); ?></link>
                 <description><?php echo $item['description']; ?></description>
                 <?php if (!isset($_REQUEST['ms'])) {
-                    ?>
+                ?>
                     <guid><?php echo htmlspecialchars($item['dossier_url']); ?></guid>
                     <category><?php echo $item['category']; ?></category>
                     <?php
-                } ?>
+            } ?>
                 <pubDate><?php echo $item['date']; ?></pubDate>
             </item>
             <?php

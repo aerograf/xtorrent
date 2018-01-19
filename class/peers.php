@@ -98,15 +98,36 @@ class XtorrentPeersHandler extends XoopsObjectHandler
         $myts = MyTextSanitizer::getInstance();
         if ($peers->isNew() || empty($id)) {
             $id  = $this->db->genId($this->db_table . '_xt_peers_id_seq');
-            $sql = sprintf('INSERT INTO %s (
+            $sql = sprintf(
+                'INSERT INTO %s (
 				`id`, `torrent`, `peer_id`, `ip`, `basename_net`, `port`, `uploaded`, `downloaded`, `to_go`, `seeder`, `started`, `last_action`, `connectable`, `userid`, `agent`, `finishedat`, `downloadoffset`, `uploadoffset`, `passkey`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
-				)', $this->db_table, $this->db->quoteString($id), $this->db->quoteString($torrent), $this->db->quoteString($peer_id), $this->db->quoteString($ip), $this->db->quoteString($basename_net), $this->db->quoteString($port), $this->db->quoteString($uploaded),
-                           $this->db->quoteString($downloaded), $this->db->quoteString($to_go), $this->db->quoteString($seeder), $this->db->quoteString($started), $this->db->quoteString($last_action), $this->db->quoteString($connectable), $this->db->quoteString($userid),
-                           $this->db->quoteString($agent), $this->db->quoteString($finishedat), $this->db->quoteString($downloadoffset), $this->db->quoteString($uploadoffset), $this->db->quoteString($passkey));
+				)',
+                $this->db_table,
+                $this->db->quoteString($id),
+                $this->db->quoteString($torrent),
+                $this->db->quoteString($peer_id),
+                $this->db->quoteString($ip),
+                $this->db->quoteString($basename_net),
+                $this->db->quoteString($port),
+                $this->db->quoteString($uploaded),
+                           $this->db->quoteString($downloaded),
+                $this->db->quoteString($to_go),
+                $this->db->quoteString($seeder),
+                $this->db->quoteString($started),
+                $this->db->quoteString($last_action),
+                $this->db->quoteString($connectable),
+                $this->db->quoteString($userid),
+                           $this->db->quoteString($agent),
+                $this->db->quoteString($finishedat),
+                $this->db->quoteString($downloadoffset),
+                $this->db->quoteString($uploadoffset),
+                $this->db->quoteString($passkey)
+            );
         } else {
-            $sql = sprintf('UPDATE %s SET
+            $sql = sprintf(
+                'UPDATE %s SET
 				`torrent` = %s,
 				`peer_id` = %s,
 				`ip` = %s,
@@ -124,9 +145,28 @@ class XtorrentPeersHandler extends XoopsObjectHandler
 				`finishedat` = %s,
 				`downloadoffset` = %s,
 				`uploadoffset` = %s,
-				`passkey` = %s WHERE id = %s', $this->db_table, $this->db->quoteString($torrent), $this->db->quoteString($peer_id), $this->db->quoteString($ip), $this->db->quoteString($basename_net), $this->db->quoteString($port), $this->db->quoteString($uploaded),
-                           $this->db->quoteString($downloaded), $this->db->quoteString($to_go), $this->db->quoteString($seeder), $this->db->quoteString($started), $this->db->quoteString($last_action), $this->db->quoteString($connectable), $this->db->quoteString($userid),
-                           $this->db->quoteString($agent), $this->db->quoteString($finishedat), $this->db->quoteString($downloadoffset), $this->db->quoteString($uploadoffset), $this->db->quoteString($passkey), $this->db->quoteString($id));
+				`passkey` = %s WHERE id = %s',
+                $this->db_table,
+                $this->db->quoteString($torrent),
+                $this->db->quoteString($peer_id),
+                $this->db->quoteString($ip),
+                $this->db->quoteString($basename_net),
+                $this->db->quoteString($port),
+                $this->db->quoteString($uploaded),
+                           $this->db->quoteString($downloaded),
+                $this->db->quoteString($to_go),
+                $this->db->quoteString($seeder),
+                $this->db->quoteString($started),
+                $this->db->quoteString($last_action),
+                $this->db->quoteString($connectable),
+                $this->db->quoteString($userid),
+                           $this->db->quoteString($agent),
+                $this->db->quoteString($finishedat),
+                $this->db->quoteString($downloadoffset),
+                $this->db->quoteString($uploadoffset),
+                $this->db->quoteString($passkey),
+                $this->db->quoteString($id)
+            );
         }
 
         if (false !== $force) {
