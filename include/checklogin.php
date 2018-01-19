@@ -11,18 +11,18 @@ if ('' == $userkey || '' == $passkey) {
     exit();
 }
 
-$member_handler = xoops_gethandler('member');
-$myts           = MyTextsanitizer::getInstance();
+$memberHandler = xoops_getHandler('member');
+$myts          = MyTextsanitizer::getInstance();
 
 include_once XOOPS_ROOT_PATH . '/class/auth/authfactory.php';
 require_once XOOPS_ROOT_PATH . '/class/auth/auth.php';
-require_once '../class/xoopsauth.php';
+require_once __DIR__ . '/../class/xoopsauth.php';
 include_once XOOPS_ROOT_PATH . '/language/' . $xoopsConfig['language'] . '/auth.php';
 $xoopsAuth = XoopsAuthFactory::getAuthConnection();
 
 $xt_user = $xoopsAuth->authenticate_userkey($myts->addSlashes($userkey), $myts->addSlashes($passkey));
 
-if (false != $xt_user) {
+if (false !== $xt_user) {
     if (0 == $xt_user->getVar('level')) {
         exit();
     }
@@ -39,10 +39,10 @@ if (false != $xt_user) {
         }
     }
     $xt_user->setVar('last_login', time());
-    if (!$member_handler->insertUser($xt_user)) {
+    if (!$memberHandler->insertUser($xt_user)) {
     }
     // Regenrate a new session id and destroy old session
-    $GLOBALS['sess_handler']->regenerate_id(true);
+    $GLOBALS['sessHandler']->regenerate_id(true);
     $_SESSION                    = [];
     $_SESSION['xoopsUserId']     = $xt_user->getVar('uid');
     $_SESSION['xoopsUserGroups'] = $xt_user->getGroups();
@@ -84,6 +84,6 @@ if (false != $xt_user) {
 
     // RMV-NOTIFY
     // Perform some maintenance of notification records
-    $notification_handler = xoops_gethandler('notification');
-    $notification_handler->doLoginMaintenance($xt_user->getVar('uid'));
+    $notificationHandler = xoops_getHandler('notification');
+    $notificationHandler->doLoginMaintenance($xt_user->getVar('uid'));
 }

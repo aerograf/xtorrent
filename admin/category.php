@@ -58,12 +58,12 @@ function createcat($cid = 0)
         $weight       = $cat_arr['weight'];
         $heading      = _AM_XTORRENT_CCATEGORY_MODIFY;
 
-        $member_handler = xoops_gethandler('member');
-        $group_list     = $member_handler->getGroupList();
+        $memberHandler = xoops_getHandler('member');
+        $group_list    = $memberHandler->getGroupList();
 
-        $gperm_handler = xoops_gethandler('groupperm');
-        $groups        = $gperm_handler->getGroupIds('xtorrentownCatPerm', $cid, $xoopsModule->getVar('mid'));
-        $groups        = $groups;
+        $gpermHandler = xoops_getHandler('groupperm');
+        $groups       = $gpermHandler->getGroupIds('xtorrentownCatPerm', $cid, $xoopsModule->getVar('mid'));
+        $groups       = $groups;
     } else {
         $groups = true;
     }
@@ -258,8 +258,8 @@ switch ($op) {
             $tags                  = [];
             $tags['CATEGORY_NAME'] = $title;
             $tags['CATEGORY_URL']  = XOOPS_URL . '/modules/xtorrent/viewcat.php?cid=' . $newid;
-            $notification_handler  = xoops_gethandler('notification');
-            $notification_handler->triggerEvent('global', 0, 'new_category', $tags);
+            $notificationHandler   = xoops_getHandler('notification');
+            $notificationHandler->triggerEvent('global', 0, 'new_category', $tags);
             $database_mess = _AM_XTORRENT_CCATEGORY_CREATED;
         } else {
             $sql           = 'UPDATE ' . $xoopsDB->prefix('xtorrent_cat') . " SET 

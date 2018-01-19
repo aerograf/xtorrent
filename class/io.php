@@ -26,7 +26,7 @@ class XtorrentIoHandler extends XoopsObjectHandler
             $this->db = $xoopsDB;
         }
         $this->db_table = $this->db->prefix('xtorrent_io');
-        //$this->perm_handler =& xoops_gethandler('groupperm');
+        //$this->permHandler = xoops_getHandler('groupperm');
     }
 
     public function getInstance($db)

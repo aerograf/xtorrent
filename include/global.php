@@ -35,7 +35,7 @@ function get_user_timezone($id)
 {
     $sql   = "SELECT * FROM users WHERE id=$id LIMIT 1";
     $query = mysqli_query($sql);
-    if ('0' != mysqli_num_rows($query)) {
+    if ('0' != $GLOBALS['xoopsDB']->getRowsNum($query)) {
         $kasutaja = mysqli_fetch_array($query);
         $timezone = $kasutaja['tzoffset'];
         return "$timezone";
@@ -263,8 +263,8 @@ function get_row_count($table, $suffix = '')
     if ($suffix) {
         $suffix = " $suffix";
     }
-    ($r = mysql_query("SELECT COUNT(*) FROM $table$suffix")) or die(mysql_error());
-    ($a = mysql_fetch_row($r)) or die(mysql_error());
+    ($r = $GLOBALS['xoopsDB']->queryF("SELECT COUNT(*) FROM $table$suffix")) || exit($GLOBALS['xoopsDB']->error());
+    ($a = $GLOBALS['xoopsDB']->fetchRow($r)) || exit($GLOBALS['xoopsDB']->error());
     return $a[0];
 }
 
@@ -288,7 +288,12 @@ function stderr($heading, $text)
 
 function sqlerr($file = '', $line = '')
 {
-    print("<table border=0 bgcolor=blue align=left cellspacing=0 cellpadding=10 style='background: blue'>" . '<tr><td class=embedded><font color=white><h1>SQL Error</h1>' . '<b>' . mysqli_error() . ('' != $file && '' != $line ? "<p>in $file, line $line</p>" : '') . '</b></font></td></tr></table>');
+    print("<table border=0 bgcolor=blue align=left cellspacing=0 cellpadding=10 style='background: blue'>"
+          . '<tr><td class=embedded><font color=white><h1>SQL Error</h1>'
+          . '<b>'
+          . $GLOBALS['xoopsDB']->error()
+          . ('' != $file && '' != $line ? "<p>in $file, line $line</p>" : '')
+          . '</b></font></td></tr></table>');
     die;
 }
 

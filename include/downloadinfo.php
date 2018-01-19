@@ -27,16 +27,8 @@ if (isset($down_arr['screenshot'])) {
     $down['screenshot_full'] = $myts->htmlSpecialChars($down_arr['screenshot']);
     if (!empty($down_arr['screenshot']) && file_exists(XOOPS_ROOT_PATH . '/' . $xoopsModuleConfig['screenshots'] . '/' . xoops_trim($down_arr['screenshot']))) {
         if (isset($xoopsModuleConfig['usethumbs']) && 1 == $xoopsModuleConfig['usethumbs']) {
-            $down['screenshot_thumb'] = down_createthumb(
-                $down['screenshot_full'],
-                $xoopsModuleConfig['screenshots'],
-                'thumbs',
-                $xoopsModuleConfig['shotwidth'],
-                $xoopsModuleConfig['shotheight'],
-                $xoopsModuleConfig['imagequality'],
-                $xoopsModuleConfig['updatethumbs'],
-                                                         $xoopsModuleConfig['keepaspect']
-            );
+            $down['screenshot_thumb'] = down_createthumb($down['screenshot_full'], $xoopsModuleConfig['screenshots'], 'thumbs', $xoopsModuleConfig['shotwidth'], $xoopsModuleConfig['shotheight'], $xoopsModuleConfig['imagequality'], $xoopsModuleConfig['updatethumbs'],
+                                                         $xoopsModuleConfig['keepaspect']);
         } else {
             $down['screenshot_thumb'] = XOOPS_URL . '/' . $xoopsModuleConfig['screenshots'] . '/' . xoops_trim($down_arr['screenshot']);
         }
@@ -68,7 +60,7 @@ $down['description'] = $myts->displayTarea($down_arr['description'], 0); //no ht
 $down['price']       = (0 != $down_arr['price']) ? (int)$down_arr['price'] : _MD_XTORRENT_PRICEFREE;
 $down['limitations'] = empty($down_arr['limitations']) ? _MD_XTORRENT_NOTSPECIFIED : $myts->htmlSpecialChars(trim($xoopsModuleConfig['limitations'][$down_arr['limitations']]));
 $down['license']     = empty($down_arr['license']) ? _MD_XTORRENT_NOTSPECIFIED : $myts->htmlSpecialChars(trim($xoopsModuleConfig['license'][$down_arr['license']]));
-$down['submitter']   = str_replace('<a', '<a style="color:#A033BB;"', xoops_getLinkedUnameFromId((int)$down_arr['submitter']));
+$down['submitter']   = str_replace('<a', '<a style="color:#A033BB;"', XoopsUserUtility::getUnameFromId((int)$down_arr['submitter']));
 $down['publisher']   = (isset($down_arr['publisher']) && !empty($down_arr['publisher'])) ? $myts->htmlSpecialChars($down_arr['publisher']) : _MD_XTORRENT_NOTSPECIFIED;
 $down['platform']    = $myts->htmlSpecialChars($xoopsModuleConfig['platform'][$down_arr['platform']]);
 $down['history']     = $myts->displayTarea($down_arr['dhistory'], 1);
@@ -93,14 +85,14 @@ $down['mail_body']    = rawurlencode(sprintf(_MD_XTORRENT_INTFILEFOUND, $xoopsCo
 $down['isadmin'] = (!empty($xoopsUser) && $xoopsUser->isAdmin($xoopsModule->mid())) ? true : false;
 
 $down['adminlink'] = '';
-if (true == $down['isadmin']) {
+if (true === $down['isadmin']) {
     $down['adminlink'] = '[ <a href="' . XOOPS_URL . '/modules/xtorrent/admin/index.php?op=Download&amp;lid=' . $down_arr['lid'] . '">' . _MD_XTORRENT_EDIT . '</a> | ';
     $down['adminlink'] .= '<a href="' . XOOPS_URL . '/modules/xtorrent/admin/index.php?op=delDownload&amp;lid=' . $down_arr['lid'] . '">' . _MD_XTORRENT_DELETE . '</a> ]';
 }
 $votestring = (1 == $down_arr['votes']) ? _MD_XTORRENT_ONEVOTE : sprintf(_MD_XTORRENT_NUMVOTES, $down_arr['votes']);
 $is_updated = ($down_arr['updated'] > 0) ? _MD_XTORRENT_UPDATEDON : _MD_XTORRENT_SUBMITDATE;
 $xoopsTpl->assign('lang_subdate', $is_updated);
-if (is_object($xoopsUser) && true != $down['isadmin']) {
+if (is_object($xoopsUser) && true !== $down['isadmin']) {
     $down['useradminlink'] = ($xoopsUser->getvar('uid') == $down_arr['submitter']) ? true : false;
 }
 
@@ -123,8 +115,8 @@ if ($down['reviews_num'] > 0) {
 }
 $down['review_rateimg'] = "rate$finalrating.gif";;
 
-$modhandler       = xoops_gethandler('module');
-$xoopsforumModule = $modhandler->getByDirname('newbb');
+$moduleHandler    = xoops_getHandler('module');
+$xoopsforumModule = $moduleHandler->getByDirname('newbb');
 if (is_object($xoopsforumModule) && $xoopsforumModule->getVar('isactive')) {
     $down['forumid'] = ($down_arr['forumid'] > 0) ? $down_arr['forumid'] : 0;
 }

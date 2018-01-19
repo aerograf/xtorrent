@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/admin_header.php';
 
-//include '../functions.php';
+//include __DIR__ . '/../functions.php';
 include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
 include_once XOOPS_ROOT_PATH . '/class/xoopstree.php';
 
@@ -65,12 +65,12 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
     // Call the SOAP method
     $rnd    = rand(-100000, 100000000);
     $result = $client->call('xtorrent_key', [
-                                              'username' => $servers[$server]['username'],
-                                              'password' => $servers[$server]['password'],
-                                              'passhash' => sha1((time() - $rnd) . $servers[$server]['username'] . $servers[$server]['password']),
-                                              'rand'     => $rnd,
-                                              'time'     => time()
-                                          ]);
+        'username' => $servers[$server]['username'],
+        'password' => $servers[$server]['password'],
+        'passhash' => sha1((time() - $rnd) . $servers[$server]['username'] . $servers[$server]['password']),
+        'rand'     => $rnd,
+        'time'     => time()
+    ]);
 
     $srv_key = new XoopsFormLabel('Server Key', $result['RESULT']['response_key']);
     $sform->addElement($srv_key);
@@ -125,12 +125,12 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
                     $adminObject->displayNavigation(basename(__FILE__));
 
                     $result = $client->call('xtorrent_categories', [
-                                                                     'username' => $servers[$server]['username'],
-                                                                     'password' => $servers[$server]['password'],
-                                                                     'passhash' => sha1((time() - $rnd) . $servers[$server]['username'] . $servers[$server]['password']),
-                                                                     'rand'     => $rnd,
-                                                                     'time'     => time()
-                                                                 ]);
+                        'username' => $servers[$server]['username'],
+                        'password' => $servers[$server]['password'],
+                        'passhash' => sha1((time() - $rnd) . $servers[$server]['username'] . $servers[$server]['password']),
+                        'rand'     => $rnd,
+                        'time'     => time()
+                    ]);
 
                     $sql    = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_soap_catmatch') . " WHERE skey = '$server_key'";
                     $ret    = $xoopsDB->queryF($sql);
@@ -226,13 +226,13 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
                     $request['datefield'] = $_REQUEST['datefield'];
 
                     $result = $client->call('xtorrent_listing', [
-                                                                  'username' => $servers[$server]['username'],
-                                                                  'password' => $servers[$server]['password'],
-                                                                  'passhash' => sha1((time() - $rnd) . $servers[$server]['username'] . $servers[$server]['password']),
-                                                                  'rand'     => $rnd,
-                                                                  'time'     => time(),
-                                                                  'request'  => $request
-                                                              ]);
+                        'username' => $servers[$server]['username'],
+                        'password' => $servers[$server]['password'],
+                        'passhash' => sha1((time() - $rnd) . $servers[$server]['username'] . $servers[$server]['password']),
+                        'rand'     => $rnd,
+                        'time'     => time(),
+                        'request'  => $request
+                    ]);
 
                     $sql = 'SELECT scid, slid, scrc FROM ' . $xoopsDB->prefix('xtorrent_soap_transactions') . ' WHERE ssitename = ' . $site_name . ' AND surl = ' . $site_url;
                     if (is_array($_REQUEST['category'])) {
@@ -391,13 +391,13 @@ function importtorrents($req, $client, $servers, $server, $server_key, $site_nam
         if (0 != $v) {
             $request['lid'] = [$req['lid'][$k]];
             $result         = $client->call('xtorrent_send', [
-                                                               'username' => $servers[$server]['username'],
-                                                               'password' => $servers[$server]['password'],
-                                                               'passhash' => sha1((time() - $rnd) . $servers[$server]['username'] . $servers[$server]['password']),
-                                                               'rand'     => $rnd,
-                                                               'time'     => time(),
-                                                               'request'  => $request
-                                                           ]);
+                'username' => $servers[$server]['username'],
+                'password' => $servers[$server]['password'],
+                'passhash' => sha1((time() - $rnd) . $servers[$server]['username'] . $servers[$server]['password']),
+                'rand'     => $rnd,
+                'time'     => time(),
+                'request'  => $request
+            ]);
             //print_r($result);
             $myts   = MyTextSanitizer::getInstance();
             $notify = 0 != $req['notify'] ? 1 : 0;
@@ -424,19 +424,19 @@ function importtorrents($req, $client, $servers, $server, $server_key, $site_nam
                 $version = $myts->addslashes($result['RESULT']['data'][0]['content']['version']);
 
                 foreach ($xoopsModuleConfig['platform'] as $ky => $tp) {
-                    if (false != strpos($result['RESULT']['arrays']['platform'][$result['RESULT']['data'][0]['content']['platform']], substr($tp, 1, strlen($tp) - 2))) {
+                    if (false !== strpos($result['RESULT']['arrays']['platform'][$result['RESULT']['data'][0]['content']['platform']], substr($tp, 1, strlen($tp) - 2))) {
                         $platform = $ky;
                     }
                 }
 
                 foreach ($xoopsModuleConfig['license'] as $ky => $tp) {
-                    if (false != strpos($result['RESULT']['arrays']['license'][$result['RESULT']['data'][0]['content']['license']], substr($tp, 3, strlen($tp) - 6))) {
+                    if (false !== strpos($result['RESULT']['arrays']['license'][$result['RESULT']['data'][0]['content']['license']], substr($tp, 3, strlen($tp) - 6))) {
                         $license = $ky;
                     }
                 }
 
                 foreach ($xoopsModuleConfig['currencies'] as $ky => $tp) {
-                    if (false != strpos($result['RESULT']['arrays']['currency'][$result['RESULT']['data'][0]['content']['currency']], $tp)) {
+                    if (false !== strpos($result['RESULT']['arrays']['currency'][$result['RESULT']['data'][0]['content']['currency']], $tp)) {
                         $currency = $ky;
                     }
                 }
@@ -482,7 +482,7 @@ function importtorrents($req, $client, $servers, $server, $server_key, $site_nam
                         /*
                         *  Notify of new link (anywhere) and new link in category
                         */
-                        $notification_handler  = xoops_gethandler('notification');
+                        $notificationHandler   = xoops_getHandler('notification');
                         $tags                  = [];
                         $tags['FILE_NAME']     = $title;
                         $tags['FILE_URL']      = XOOPS_URL . '/modules/xtorrent/singlefile.php?cid=' . $cid . '&amp;lid=' . $newid;
@@ -492,15 +492,15 @@ function importtorrents($req, $client, $servers, $server, $server_key, $site_nam
                         $tags['CATEGORY_NAME'] = $row['title'];
                         $tags['CATEGORY_URL']  = XOOPS_URL . '/modules/xtorrent/viewcat.php?cid=' . $cid;
                         if (1 == $x_autoapprove) {
-                            $notification_handler->triggerEvent('global', 0, 'new_file', $tags);
-                            $notification_handler->triggerEvent('category', $cid, 'new_file', $tags);
+                            $notificationHandler->triggerEvent('global', 0, 'new_file', $tags);
+                            $notificationHandler->triggerEvent('category', $cid, 'new_file', $tags);
                         } else {
                             $tags['WAITINGFILES_URL'] = XOOPS_URL . '/modules/xtorrent/admin/newdownloads.php';
-                            $notification_handler->triggerEvent('global', 0, 'file_submit', $tags);
-                            $notification_handler->triggerEvent('category', $cid, 'file_submit', $tags);
+                            $notificationHandler->triggerEvent('global', 0, 'file_submit', $tags);
+                            $notificationHandler->triggerEvent('category', $cid, 'file_submit', $tags);
                             if ($notify) {
                                 include_once XOOPS_ROOT_PATH . '/include/notification_constants.php';
-                                $notification_handler->subscribe('file', $newid, 'approve', XOOPS_NOTIFICATION_MODE_SENDONCETHENDELETE);
+                                $notificationHandler->subscribe('file', $newid, 'approve', XOOPS_NOTIFICATION_MODE_SENDONCETHENDELETE);
                             }
                         }
                     } else {

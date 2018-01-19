@@ -1,10 +1,10 @@
 <?php
 
-include_once '../../mainfile.php';
+include_once __DIR__ . '/../../mainfile.php';
 include XOOPS_ROOT_PATH . '/modules/xtorrent/include/functions.php';
 
-$xoopsModule       = $module_handler->getByDirname('xtorrent');
-$xoopsModuleConfig = $config_handler->getConfigsByCat(0, $xoopsModule->getVar('mid'));
+$xoopsModule       = $moduleHandler->getByDirname('xtorrent');
+$xoopsModuleConfig = $configHandler->getConfigsByCat(0, $xoopsModule->getVar('mid'));
 
 error_reporting(E_ALL);
 

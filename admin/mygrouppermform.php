@@ -127,17 +127,17 @@ class MyXoopsGroupPermForm extends XoopsForm
             $this->_itemTree[$item_id]['allchild'] = [];
             $this->_loadAllChildItemIds($item_id, $this->_itemTree[$item_id]['allchild']);
         }
-        $gperm_handler  = xoops_gethandler('groupperm');
-        $member_handler = xoops_gethandler('member');
-        $glist          = $member_handler->getGroupList();
+        $gpermHandler  = xoops_getHandler('groupperm');
+        $memberHandler = xoops_getHandler('member');
+        $glist         = $memberHandler->getGroupList();
         foreach (array_keys($glist) as $i) {
             // get selected item id(s) for each group
-            $selected = $gperm_handler->getItemIds($this->_permName, $i, $this->_modid);
+            $selected = $gpermHandler->getItemIds($this->_permName, $i, $this->_modid);
             $ele      = new MyXoopsGroupFormCheckBox($glist[$i], 'perms[' . $this->_permName . ']', $i, $selected);
             $ele->setOptionTree($this->_itemTree);
 
             foreach ($this->_appendix as $key => $append) {
-                $this->_appendix[$key]['selected'] = $gperm_handler->checkRight($append['permname'], $append['itemid'], $i, $this->_modid);
+                $this->_appendix[$key]['selected'] = $gpermHandler->checkRight($append['permname'], $append['itemid'], $i, $this->_modid);
             }
             $ele->setAppendix($this->_appendix);
             $this->addElement($ele);
@@ -288,7 +288,7 @@ class MyXoopsGroupFormCheckBox extends XoopsFormElement
                     $ret  .= '</tr><tr>';
                     $cols = 1;
                 }
-                $checked = $append['selected'] ? 'checked="checked"' : '';
+                $checked = $append['selected'] ? 'checked' : '';
                 $name    = 'perms[' . $append['permname'] . ']';
                 $itemid  = $append['itemid'];
                 $itemid  = $append['itemid'];
@@ -332,7 +332,7 @@ class MyXoopsGroupFormCheckBox extends XoopsFormElement
         // sure permissions to parent items are added as well.
         foreach ($parentIds as $pid) {
             $parent_ele = $this->getName() . '[groups][' . $this->_groupId . '][' . $pid . ']';
-            $tree       .= "var ele = xoopsGetElementById('" . $parent_ele . "'); if(ele.checked != true) {ele.checked = this.checked;}";
+            $tree       .= "var ele = xoopsGetElementById('" . $parent_ele . "'); if(ele.checked !== true) {ele.checked = this.checked;}";
         }
         // If there are child elements, add javascript that will
         // make them unchecked when this element is unchecked to make
@@ -340,11 +340,11 @@ class MyXoopsGroupFormCheckBox extends XoopsFormElement
         // is no permission to this item.
         foreach ($option['allchild'] as $cid) {
             $child_ele = $this->getName() . '[groups][' . $this->_groupId . '][' . $cid . ']';
-            $tree      .= "var ele = xoopsGetElementById('" . $child_ele . "'); if(this.checked != true) {ele.checked = false;}";
+            $tree      .= "var ele = xoopsGetElementById('" . $child_ele . "'); if(this.checked !== true) {ele.checked = false;}";
         }
         $tree .= '" value="1"';
         if (isset($this->_value) && in_array($option['id'], $this->_value)) {
-            $tree .= ' checked="checked"';
+            $tree .= ' checked';
         }
         $tree .= ' >'
                  . $option['name']

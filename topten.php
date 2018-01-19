@@ -1,16 +1,16 @@
 <?php
 
-include 'header.php';
+include __DIR__ . '/header.php';
 include_once XOOPS_ROOT_PATH . '/class/xoopstree.php';
 
 global $xoopsDB, $xoopsUser;
 
-$mytree                       = new XoopsTree($xoopsDB->prefix('xtorrent_cat'), 'cid', 'pid');
-$xoopsOption['template_main'] = 'xtorrent_topten.tpl';
+$mytree                                  = new XoopsTree($xoopsDB->prefix('xtorrent_cat'), 'cid', 'pid');
+$GLOBALS['xoopsOption']['template_main'] = 'xtorrent_topten.tpl';
 
-$groups        = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
-$module_id     = $xoopsModule->getVar('mid');
-$gperm_handler = xoops_gethandler('groupperm');
+$groups       = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
+$module_id    = $xoopsModule->getVar('mid');
+$gpermHandler = xoops_getHandler('groupperm');
 
 include XOOPS_ROOT_PATH . '/header.php';
 
@@ -33,7 +33,7 @@ $result = $xoopsDB->query('SELECT cid, title FROM ' . $xoopsDB->prefix('xtorrent
 $e        = 0;
 $rankings = [];
 while (list($cid, $ctitle) = $xoopsDB->fetchRow($result)) {
-    if ($gperm_handler->checkRight('xtorrentownCatPerm', $cid, $groups, $module_id)) {
+    if ($gpermHandler->checkRight('xtorrentownCatPerm', $cid, $groups, $module_id)) {
         $query = 'SELECT lid, cid, title, hits, rating, votes, platform FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE published > 0 AND published <= ' . time() . ' AND (expired = 0 OR expired > ' . time() . ") AND offline = 0 AND (cid=$cid";
         $arr   = $mytree->getAllChildId($cid);
         for ($i = 0, $iMax = count($arr); $i < $iMax; $i++) {
@@ -48,7 +48,7 @@ while (list($cid, $ctitle) = $xoopsDB->fetchRow($result)) {
             $rank                  = 1;
 
             while (list($did, $dcid, $dtitle, $hits, $rating, $votes) = $xoopsDB->fetchRow($result2)) {
-                if ($gperm_handler->checkRight('xtorrentownFilePerm', $did, $groups, $xoopsModule->getVar('mid'))) {
+                if ($gpermHandler->checkRight('xtorrentownFilePerm', $did, $groups, $xoopsModule->getVar('mid'))) {
                     $catpath = $mytree->getPathFromId($dcid, 'title');
                     $catpath = basename($catpath);
 
@@ -72,4 +72,4 @@ $xoopsTpl->assign('lang_sortby', $lang_array[$this]);
 $xoopsTpl->assign('rankings', $rankings);
 include XOOPS_ROOT_PATH . '/footer.php';
 
-include 'footer.php';
+include __DIR__ . '/footer.php';

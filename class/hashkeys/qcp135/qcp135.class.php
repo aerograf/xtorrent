@@ -62,6 +62,6 @@ if (!class_exists('qcp135')) {
     }
 }
 
-require 'qcp135.base.php';
-require 'qcp135.enumerator.php';
-require 'qcp135.leaver.php';
+require __DIR__ . '/qcp135.base.php';
+require __DIR__ . '/qcp135.enumerator.php';
+require __DIR__ . '/qcp135.leaver.php';

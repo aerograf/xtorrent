@@ -38,8 +38,8 @@ class XtorrentCatHandler extends XoopsObjectHandler
             global $xoopsDB;
             $this->db = $xoopsDB;
         }
-        $this->db_table     = $this->db->prefix('xtorrent_cat');
-        $this->perm_handler = xoops_gethandler('groupperm');
+        $this->db_table    = $this->db->prefix('xtorrent_cat');
+        $this->permHandler = xoops_getHandler('groupperm');
     }
 
     public function getInstance($db)
@@ -76,7 +76,7 @@ class XtorrentCatHandler extends XoopsObjectHandler
         return false;
     }
 
-    public function insert(&$cat, $force = false)
+    public function insert(XoopsObject $cat, $force = false)
     {
         if (strtolower(get_class($cat)) != strtolower($this->obj_class)) {
             return false;
@@ -93,32 +93,15 @@ class XtorrentCatHandler extends XoopsObjectHandler
         $myts = MyTextSanitizer::getInstance();
         if ($cat->isNew() || empty($cid)) {
             $cid = $this->db->genId($this->db_table . '_xt_cat_id_seq');
-            $sql = sprintf(
-                'INSERT INTO %s (
+            $sql = sprintf('INSERT INTO %s (
 				`cid`, `pid`, `title`, `imgurl`, `description`, `total`, `summary`, `spotlighttop`, `spotlighthis`, `nohtml`, `nosmiley`, `noxcodes`, `noimages`, `nobreak`, `weight`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
-				)',
-                $this->db_table,
-                $this->db->quoteString($cid),
-                $this->db->quoteString($pid),
-                $this->db->quoteString($myts->addslashes($title)),
-                $this->db->quoteString($myts->addslashes($imgurl)),
-                $this->db->quoteString($myts->addslashes($description)),
-                $this->db->quoteString($total),
-                           $this->db->quoteString($myts->addslashes($summary)),
-                $this->db->quoteString($spotlighttop),
-                $this->db->quoteString($spotlighthis),
-                $this->db->quoteString($nohtml),
-                $this->db->quoteString($nosmiley),
-                $this->db->quoteString($noxcodes),
-                $this->db->quoteString($noimages),
-                           $this->db->quoteString($nobreak),
-                $this->db->quoteString($weight)
-            );
+				)', $this->db_table, $this->db->quoteString($cid), $this->db->quoteString($pid), $this->db->quoteString($myts->addslashes($title)), $this->db->quoteString($myts->addslashes($imgurl)), $this->db->quoteString($myts->addslashes($description)), $this->db->quoteString($total),
+                           $this->db->quoteString($myts->addslashes($summary)), $this->db->quoteString($spotlighttop), $this->db->quoteString($spotlighthis), $this->db->quoteString($nohtml), $this->db->quoteString($nosmiley), $this->db->quoteString($noxcodes), $this->db->quoteString($noimages),
+                           $this->db->quoteString($nobreak), $this->db->quoteString($weight));
         } else {
-            $sql = sprintf(
-                'UPDATE %s SET
+            $sql = sprintf('UPDATE %s SET
  				 `weight` = %s,
 				 `pid` = %s,
 				 `title` = %s,
@@ -133,27 +116,12 @@ class XtorrentCatHandler extends XoopsObjectHandler
 				 `noxcodes` = %s,
 				 `noimages` = %s,
 				 `nobreak` = %s,
-				  WHERE `cid` = %s',
-                $this->db_table,
-                $this->db->quoteString($weight),
-                $this->db->quoteString($pid),
-                $this->db->quoteString($myts->addslashes($title)),
-                $this->db->quoteString($myts->addslashes($imgurl)),
-                $this->db->quoteString($myts->addslashes($description)),
-                           $this->db->quoteString($total),
-                $this->db->quoteString($myts->addslashes($summary)),
-                $this->db->quoteString($spotlighttop),
-                $this->db->quoteString($spotlighthis),
-                $this->db->quoteString($nohtml),
-                $this->db->quoteString($nosmiley),
-                $this->db->quoteString($noxcodes),
-                           $this->db->quoteString($noimages),
-                $this->db->quoteString($nobreak),
-                $this->db->quoteString($cid)
-            );
+				  WHERE `cid` = %s', $this->db_table, $this->db->quoteString($weight), $this->db->quoteString($pid), $this->db->quoteString($myts->addslashes($title)), $this->db->quoteString($myts->addslashes($imgurl)), $this->db->quoteString($myts->addslashes($description)),
+                           $this->db->quoteString($total), $this->db->quoteString($myts->addslashes($summary)), $this->db->quoteString($spotlighttop), $this->db->quoteString($spotlighthis), $this->db->quoteString($nohtml), $this->db->quoteString($nosmiley), $this->db->quoteString($noxcodes),
+                           $this->db->quoteString($noimages), $this->db->quoteString($nobreak), $this->db->quoteString($cid));
         }
 
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -177,7 +145,7 @@ class XtorrentCatHandler extends XoopsObjectHandler
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
             $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -248,9 +216,9 @@ class XtorrentCatHandler extends XoopsObjectHandler
         $criteria->add(new Criteria('gperm_itemid', $cid));
         $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid')));
         $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode));
-        if ($old_perms =& $this->perm_handler->getObjects($criteria)) {
+        if ($old_perms =& $this->permHandler->getObjects($criteria)) {
             foreach ($old_perms as $p) {
-                $this->perm_handler->delete($p);
+                $this->permHandler->delete($p);
             }
         }
         return true;
@@ -260,12 +228,12 @@ class XtorrentCatHandler extends XoopsObjectHandler
     {
         global $xoopsModule;
         foreach ($group_ids as $cid) {
-            $perm = $this->perm_handler->create();
+            $perm = $this->permHandler->create();
             $perm->setVar('gperm_name', $this->perm_name . $mode);
             $perm->setVar('gperm_itemid', $cid);
             $perm->setVar('gperm_groupid', $cid);
             $perm->setVar('gperm_modid', $xoopsModule->getVar('mid'));
-            $this->perm_handler->insert($perm);
+            $this->permHandler->insert($perm);
             $ii++;
         }
         return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $cid;
@@ -282,7 +250,7 @@ class XtorrentCatHandler extends XoopsObjectHandler
             $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid'), '='), 'AND');
             $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode, '='), 'AND');
 
-            $gtObjperm = $this->perm_handler->getObjects($criteria);
+            $gtObjperm = $this->permHandler->getObjects($criteria);
             $groups    = [];
 
             foreach ($gtObjperm as $v) {
@@ -299,7 +267,7 @@ class XtorrentCatHandler extends XoopsObjectHandler
             if ($cat = $this->getObjects($criteria, 'home_list')) {
                 $ret = [];
                 foreach ($cat as $f) {
-                    if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $f->getVar('cid'), $groups, $xoopsModule->getVar('mid'))) {
+                    if (false !== $this->permHandler->checkRight($this->perm_name . $mode, $f->getVar('cid'), $groups, $xoopsModule->getVar('mid'))) {
                         $ret[] = $f;
                         unset($f);
                     }
@@ -313,7 +281,7 @@ class XtorrentCatHandler extends XoopsObjectHandler
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;
-        if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $cid, $groups, $xoopsModule->getVar('mid'))) {
+        if (false !== $this->permHandler->checkRight($this->perm_name . $mode, $cid, $groups, $xoopsModule->getVar('mid'))) {
             return true;
         }
         return false;

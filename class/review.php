@@ -31,8 +31,8 @@ class XtorrentReviewHandler extends XoopsObjectHandler
             global $xoopsDB;
             $this->db = $xoopsDB;
         }
-        $this->db_table     = $this->db->prefix('xtorrent_reviews');
-        $this->perm_handler = xoops_gethandler('groupperm');
+        $this->db_table    = $this->db->prefix('xtorrent_reviews');
+        $this->permHandler = xoops_getHandler('groupperm');
     }
 
     public function getInstance($db)
@@ -87,45 +87,25 @@ class XtorrentReviewHandler extends XoopsObjectHandler
         $myts = MyTextSanitizer::getInstance();
         if ($review->isNew() || empty($reviewid)) {
             $reviewid = $this->db->genId($this->db_table . '_xt_review_id_seq');
-            $sql      = sprintf(
-                'INSERT INTO %s (
+            $sql      = sprintf('INSERT INTO %s (
 				`reviewid`, `lid`, `title`, `review`, `submit`, `date`, `uid`, `rated`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s
-				)',
-                $this->db_table,
-                $this->db->quoteString($reviewid),
-                $this->db->quoteString($lid),
-                $this->db->quoteString($myts->addslashes($title)),
-                $this->db->quoteString($myts->addslashes($review)),
-                $this->db->quoteString($submit),
-                $this->db->quoteString($date),
-                $this->db->quoteString($uid),
-                                $this->db->quoteString($rated)
-            );
+				)', $this->db_table, $this->db->quoteString($reviewid), $this->db->quoteString($lid), $this->db->quoteString($myts->addslashes($title)), $this->db->quoteString($myts->addslashes($review)), $this->db->quoteString($submit), $this->db->quoteString($date), $this->db->quoteString($uid),
+                                $this->db->quoteString($rated));
         } else {
-            $sql = sprintf(
-                'UPDATE %s SET
+            $sql = sprintf('UPDATE %s SET
 				`lid` = %s,
 				`title` = %s,
 				`review` = %s,
 				`submit` = %s,
 				`date` = %s,
 				`uid` = %s,
-				`rated` = %s WHERE `reviewid` = %s',
-                $this->db_table,
-                $this->db->quoteString($lid),
-                $this->db->quoteString($myts->addslashes($title)),
-                $this->db->quoteString($myts->addslashes($review)),
-                $this->db->quoteString($submit),
-                $this->db->quoteString($date),
-                $this->db->quoteString($uid),
-                           $this->db->quoteString($rated),
-                $this->db->quoteString($reviewid)
-            );
+				`rated` = %s WHERE `reviewid` = %s', $this->db_table, $this->db->quoteString($lid), $this->db->quoteString($myts->addslashes($title)), $this->db->quoteString($myts->addslashes($review)), $this->db->quoteString($submit), $this->db->quoteString($date), $this->db->quoteString($uid),
+                           $this->db->quoteString($rated), $this->db->quoteString($reviewid));
         }
 
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -149,7 +129,7 @@ class XtorrentReviewHandler extends XoopsObjectHandler
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
             $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -220,9 +200,9 @@ class XtorrentReviewHandler extends XoopsObjectHandler
         $criteria->add(new Criteria('gperm_itemid', $reviewid));
         $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid')));
         $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode));
-        if ($old_perms = $this->perm_handler->getObjects($criteria)) {
+        if ($old_perms = $this->permHandler->getObjects($criteria)) {
             foreach ($old_perms as $p) {
-                $this->perm_handler->delete($p);
+                $this->permHandler->delete($p);
             }
         }
         return true;
@@ -232,12 +212,12 @@ class XtorrentReviewHandler extends XoopsObjectHandler
     {
         global $xoopsModule;
         foreach ($group_ids as $reviewid) {
-            $perm =& $this->perm_handler->create();
+            $perm =& $this->permHandler->create();
             $perm->setVar('gperm_name', $this->perm_name . $mode);
             $perm->setVar('gperm_itemid', $reviewid);
             $perm->setVar('gperm_groupid', $reviewid);
             $perm->setVar('gperm_modid', $xoopsModule->getVar('mid'));
-            $this->perm_handler->insert($perm);
+            $this->permHandler->insert($perm);
             $ii++;
         }
         return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $reviewid;
@@ -254,7 +234,7 @@ class XtorrentReviewHandler extends XoopsObjectHandler
             $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid'), '='), 'AND');
             $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode, '='), 'AND');
 
-            $gtObjperm = $this->perm_handler->getObjects($criteria);
+            $gtObjperm = $this->permHandler->getObjects($criteria);
             $groups    = [];
 
             foreach ($gtObjperm as $v) {
@@ -271,7 +251,7 @@ class XtorrentReviewHandler extends XoopsObjectHandler
             if ($review = $this->getObjects($criteria, 'home_list')) {
                 $ret = [];
                 foreach ($review as $f) {
-                    if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $f->getVar('reviewid'), $groups, $xoopsModule->getVar('mid'))) {
+                    if (false !== $this->permHandler->checkRight($this->perm_name . $mode, $f->getVar('reviewid'), $groups, $xoopsModule->getVar('mid'))) {
                         $ret[] = $f;
                         unset($f);
                     }
@@ -285,7 +265,7 @@ class XtorrentReviewHandler extends XoopsObjectHandler
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;
-        if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $reviewid, $groups, $xoopsModule->getVar('mid'))) {
+        if (false !== $this->permHandler->checkRight($this->perm_name . $mode, $reviewid, $groups, $xoopsModule->getVar('mid'))) {
             return true;
         }
         return false;

@@ -37,6 +37,6 @@ if (!class_exists('qcp71')) {
     }
 }
 
-require 'qcp71.base.php';
-require 'qcp71.enumerator.php';
-require 'qcp71.leaver.php';
+require __DIR__ . '/qcp71.base.php';
+require __DIR__ . '/qcp71.enumerator.php';
+require __DIR__ . '/qcp71.leaver.php';

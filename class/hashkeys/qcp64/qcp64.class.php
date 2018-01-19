@@ -62,6 +62,6 @@ if (!class_exists('qcp64')) {
     }
 }
 
-require 'qcp64.base.php';
-require 'qcp64.enumerator.php';
-require 'qcp64.leaver.php';
+require __DIR__ . '/qcp64.base.php';
+require __DIR__ . '/qcp64.enumerator.php';
+require __DIR__ . '/qcp64.leaver.php';

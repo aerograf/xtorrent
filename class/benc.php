@@ -27,8 +27,8 @@ class XtorrentBencHandler extends XoopsObjectHandler
             global $xoopsDB;
             $this->db = $xoopsDB;
         }
-        $this->db_table     = $this->db->prefix('xtorrent_benc');
-        $this->perm_handler = xoops_gethandler('groupperm');
+        $this->db_table    = $this->db->prefix('xtorrent_benc');
+        $this->permHandler = xoops_getHandler('groupperm');
     }
 
     public function getInstance($db)
@@ -240,7 +240,7 @@ class XtorrentBencHandler extends XoopsObjectHandler
 
     public function decompile($benc, $reimport = false)
     {
-        if (!strlen($benc->getVar('benc') || false != $reimport)) {
+        if (!strlen($benc->getVar('benc') || false !== $reimport)) {
             $filename = $benc->getVar('filename');
 
             ini_set('allow_url_fopen', true);
@@ -364,9 +364,9 @@ class XtorrentBencHandler extends XoopsObjectHandler
         $criteria->add(new Criteria('gperm_itemid', $lid));
         $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid')));
         $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode));
-        if ($old_perms = $this->perm_handler->getObjects($criteria)) {
+        if ($old_perms = $this->permHandler->getObjects($criteria)) {
             foreach ($old_perms as $p) {
-                $this->perm_handler->delete($p);
+                $this->permHandler->delete($p);
             }
         }
         return true;
@@ -376,12 +376,12 @@ class XtorrentBencHandler extends XoopsObjectHandler
     {
         global $xoopsModule;
         foreach ($group_ids as $lid) {
-            $perm = $this->perm_handler->create();
+            $perm = $this->permHandler->create();
             $perm->setVar('gperm_name', $this->perm_name . $mode);
             $perm->setVar('gperm_itemid', $lid);
             $perm->setVar('gperm_groupid', $lid);
             $perm->setVar('gperm_modid', $xoopsModule->getVar('mid'));
-            $this->perm_handler->insert($perm);
+            $this->permHandler->insert($perm);
             $ii++;
         }
         return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $lid;
@@ -398,7 +398,7 @@ class XtorrentBencHandler extends XoopsObjectHandler
             $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid'), '='), 'AND');
             $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode, '='), 'AND');
 
-            $gtObjperm = $this->perm_handler->getObjects($criteria);
+            $gtObjperm = $this->permHandler->getObjects($criteria);
             $groups    = [];
 
             foreach ($gtObjperm as $v) {
@@ -415,7 +415,7 @@ class XtorrentBencHandler extends XoopsObjectHandler
             if ($benc = $this->getObjects($criteria, 'home_list')) {
                 $ret = [];
                 foreach ($benc as $f) {
-                    if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $f->getVar('center_id'), $groups, $xoopsModule->getVar('mid'))) {
+                    if (false !== $this->permHandler->checkRight($this->perm_name . $mode, $f->getVar('center_id'), $groups, $xoopsModule->getVar('mid'))) {
                         $ret[] = $f;
                         unset($f);
                     }
@@ -429,7 +429,7 @@ class XtorrentBencHandler extends XoopsObjectHandler
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;
-        if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $lid, $groups, $xoopsModule->getVar('mid'))) {
+        if (false !== $this->permHandler->checkRight($this->perm_name . $mode, $lid, $groups, $xoopsModule->getVar('mid'))) {
             return true;
         }
         return false;

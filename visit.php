@@ -1,6 +1,6 @@
 <?php
 
-include 'header.php';
+include __DIR__ . '/header.php';
 require XOOPS_ROOT_PATH . '/modules/xtorrent/class/qcp71.class.php';
 
 global $xoopsUser, $xoopsModuleConfig, $myts, $xoopsModule;
@@ -110,7 +110,7 @@ function passkey_paypal($lid, $made)
         $payment_made = true;
     }
 
-    if (false == $payment_made) {
+    if (false === $payment_made) {
         include XOOPS_ROOT_PATH . '/header.php'; ?>
         <table width="100%" border="0" cellspacing="0" cellpadding="4" style="border-collapse: collapse">
             <tr>
@@ -193,7 +193,7 @@ if ($xoopsModuleConfig['showDowndisclaimer'] && 0 == $agreed) {
     exit();
 } else {
     $isadmin = (!empty($xoopsUser) && $xoopsUser->isAdmin($xoopsModule->mid())) ? true : false;
-    if (false == $isadmin) {
+    if (false === $isadmin) {
         $sql = sprintf('UPDATE ' . $xoopsDB->prefix('xtorrent_downloads') . " SET hits = hits+1 WHERE lid =$lid");
         $xoopsDB->queryF($sql);
     }
@@ -210,7 +210,7 @@ if ($xoopsModuleConfig['showDowndisclaimer'] && 0 == $agreed) {
                 ini_set('allow_url_fopen', true);
                 global $xoopsUser, $xoopsDB;
 
-                require_once 'include/bittorrent.php';
+                require_once __DIR__ . '/include/bittorrent.php';
 
                 $passkey = passkey_paypal($lid, $_REQUEST['made']);
 
@@ -234,7 +234,7 @@ if ($xoopsModuleConfig['showDowndisclaimer'] && 0 == $agreed) {
 
                     $fn = str_replace($url_array, XOOPS_ROOT_PATH, $url);
 
-                    require_once 'include/benc.php';
+                    require_once __DIR__ . '/include/benc.php';
                     $dict = bdec_file($fn, 1024 * 1024);
 
                     if (empty($dict['value']['announce'])) {

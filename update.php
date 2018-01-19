@@ -1,6 +1,6 @@
 <?php
 
-include 'header.php';
+include __DIR__ . '/header.php';
 
 define('IS_UPDATE_FILE', true);
 
@@ -51,14 +51,14 @@ if (!isset($action) || '' == $action) {
 if ('message' == $action) {
     install_header();
 
-    $modhandler  = xoops_gethandler('module');
-    $mydownloads = $modhandler->getByDirname('mydownloads');
+    $moduleHandler = xoops_getHandler('module');
+    $mydownloads   = $moduleHandler->getByDirname('mydownloads');
     if ($mydownloads) {
         $mydownload_version = round($mydownloads->getVar('version') / 100, 2);
     }
-    $modhandler = xoops_gethandler('module');
+    $moduleHandler = xoops_getHandler('module');
 
-    $xtorrent = $modhandler->getByDirname('xtorrent');
+    $xtorrent = $moduleHandler->getByDirname('xtorrent');
     if ($xtorrent) {
         $xtorrentownload_version = $xtorrent->getVar('version'); //getInfo('version');
         $xtorrentownload_version = round($xtorrent->getVar('version') / 100, 2);
@@ -131,21 +131,21 @@ if ('upgrade' == $action) {
         case '1.0.1':
         case '1.10':
             echo "Updating Mydownloads $num";
-            include 'update/mydownloads_update.php';
+            include __DIR__ . '/update/mydownloads_update.php';
             break;
         case '2.0':
         case '2.1':
         case '2.2':
             echo "Updating Mydownloads $num";
-            include 'update/xtorrent_v2.0.2.php';
+            include __DIR__ . '/update/xtorrent_v2.0.2.php';
             break;
         case '2.03':
             echo "Updating xtorrent $num";
-            include 'update/xtorrent_v2.0.3.php';
+            include __DIR__ . '/update/xtorrent_v2.0.3.php';
             break;
         case '2.04':
             echo "Updating xtorrent $num";
-            include 'update/xtorrent_v2.0.4.php';
+            include __DIR__ . '/update/xtorrent_v2.0.4.php';
             break;
 
         case '0':

@@ -1,6 +1,6 @@
 <?php
 
-include 'header.php';
+include __DIR__ . '/header.php';
 include_once XOOPS_ROOT_PATH . '/class/xoopstree.php';
 include_once XOOPS_ROOT_PATH . '/include/xoopscodes.php';
 
@@ -124,7 +124,7 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
         // START TO CHECK FOR POLLING OF TORRENT
         //echo "Please wait a moment while we poll the torrent...";
         error_reporting(E_ALL);
-        include 'include/pollall.php';
+        include __DIR__ . '/include/pollall.php';
 
         if (1 == $xoopsModuleConfig['poll_torrent']) {
             $rt = poll_torrent($newid);
@@ -137,7 +137,7 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
         /*
         *  Notify of new link (anywhere) and new link in category
         */
-        $notification_handler  = xoops_gethandler('notification');
+        $notificationHandler   = xoops_getHandler('notification');
         $tags                  = [];
         $tags['FILE_NAME']     = $title;
         $tags['FILE_URL']      = XOOPS_URL . '/modules/xtorrent/singlefile.php?cid=' . $cid . '&amp;lid=' . $newid;
@@ -147,16 +147,16 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
         $tags['CATEGORY_NAME'] = $row['title'];
         $tags['CATEGORY_URL']  = XOOPS_URL . '/modules/xtorrent/viewcat.php?cid=' . $cid;
         if (1 == $xoopsModuleConfig['autoapprove']) {
-            $notification_handler->triggerEvent('global', 0, 'new_file', $tags);
-            $notification_handler->triggerEvent('category', $cid, 'new_file', $tags);
+            $notificationHandler->triggerEvent('global', 0, 'new_file', $tags);
+            $notificationHandler->triggerEvent('category', $cid, 'new_file', $tags);
             redirect_header('index.php', 2, _MD_XTORRENT_ISAPPROVED . '');
         } else {
             $tags['WAITINGFILES_URL'] = XOOPS_URL . '/modules/xtorrent/admin/newdownloads.php';
-            $notification_handler->triggerEvent('global', 0, 'file_submit', $tags);
-            $notification_handler->triggerEvent('category', $cid, 'file_submit', $tags);
+            $notificationHandler->triggerEvent('global', 0, 'file_submit', $tags);
+            $notificationHandler->triggerEvent('category', $cid, 'file_submit', $tags);
             if ($notify) {
                 include_once XOOPS_ROOT_PATH . '/include/notification_constants.php';
-                $notification_handler->subscribe('file', $newid, 'approve', XOOPS_NOTIFICATION_MODE_SENDONCETHENDELETE);
+                $notificationHandler->subscribe('file', $newid, 'approve', XOOPS_NOTIFICATION_MODE_SENDONCETHENDELETE);
             }
             redirect_header('index.php', 2, _MD_XTORRENT_THANKSFORINFO);
         }
@@ -169,7 +169,7 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
             $xoopsDB->query('UPDATE '
                             . $xoopsDB->prefix('xtorrent_downloads')
                             . " SET cid = $cid, title = '$title', url = '$url', mirror = '$mirror', license = '$license', features = '$features', homepage = '$homepage', version = '$version', size = $size, platform = '$platform', screenshot = '$screenshot', publisher = '$publisher', price = '$price', requirements = '$requirements', homepagetitle = '$homepagetitle', limitations = '$limitations', dhistory = '$dhistory', updated = '$updated', offline = '$offline', description = '$description', ipaddress = '$ipaddress', notifypub = '$notifypub', paypalemail = '$paypalemail', currency = '$currency' WHERE lid = $lid");
-            $notification_handler  = xoops_gethandler('notification');
+            $notificationHandler   = xoops_getHandler('notification');
             $tags                  = [];
             $tags['FILE_NAME']     = $title;
             $tags['FILE_URL']      = XOOPS_URL . '/modules/xtorrent/singlefile.php?cid=' . $cid . '&amp;lid=' . $lid;
@@ -194,21 +194,21 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
             }
             $tags                      = [];
             $tags['MODIFYREPORTS_URL'] = XOOPS_URL . '/modules/xtorrent/admin/index.php?op=listModReq';
-            $notification_handler      = xoops_gethandler('notification');
-            $notification_handler->triggerEvent('global', 0, 'file_modify', $tags);
+            $notificationHandler       = xoops_getHandler('notification');
+            $notificationHandler->triggerEvent('global', 0, 'file_modify', $tags);
         }
 
         if (1 == $xoopsModuleConfig['autoapprove']) {
-            $notification_handler->triggerEvent('global', 0, 'new_file', $tags);
-            $notification_handler->triggerEvent('category', $cid, 'new_file', $tags);
+            $notificationHandler->triggerEvent('global', 0, 'new_file', $tags);
+            $notificationHandler->triggerEvent('category', $cid, 'new_file', $tags);
             redirect_header('index.php', 2, _MD_XTORRENT_ISAPPROVED . '');
         } else {
             $tags['WAITINGFILES_URL'] = XOOPS_URL . '/modules/xtorrent/admin/index.php?op=listNewDownloads';
-            $notification_handler->triggerEvent('global', 0, 'file_submit', $tags);
-            $notification_handler->triggerEvent('category', $cid, 'file_submit', $tags);
+            $notificationHandler->triggerEvent('global', 0, 'file_submit', $tags);
+            $notificationHandler->triggerEvent('category', $cid, 'file_submit', $tags);
             if ($notify) {
                 include_once XOOPS_ROOT_PATH . '/include/notification_constants.php';
-                $notification_handler->subscribe('file', $newid, 'approve', XOOPS_NOTIFICATION_MODE_SENDONCETHENDELETE);
+                $notificationHandler->subscribe('file', $newid, 'approve', XOOPS_NOTIFICATION_MODE_SENDONCETHENDELETE);
             }
             redirect_header('index.php', 2, _MD_XTORRENT_THANKSFORINFO);
             exit();

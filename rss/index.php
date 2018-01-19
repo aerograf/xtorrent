@@ -1,6 +1,6 @@
 <?php
 
-include '../../../mainfile.php';
+include __DIR__ . '/../../../mainfile.php';
 
 $source   = $_GET['source'];
 $numitems = isset($_GET['numitems']) ? $_GET['numitems'] : 15;
@@ -15,13 +15,13 @@ function rss_data($cid, $numitems)
     $block = [];
     $myts  = MyTextSanitizer::getInstance();
 
-    $modhandler        = xoops_gethandler('module');
-    $xoopsModule       = $modhandler->getByDirname('xtorrent');
-    $config_handler    = xoops_gethandler('config');
-    $xoopsModuleConfig = $config_handler->getConfigsByCat(0, $xoopsModule->getVar('mid'));
+    $moduleHandler     = xoops_getHandler('module');
+    $xoopsModule       = $moduleHandler->getByDirname('xtorrent');
+    $configHandler     = xoops_getHandler('config');
+    $xoopsModuleConfig = $configHandler->getConfigsByCat(0, $xoopsModule->getVar('mid'));
 
-    $groups        = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
-    $gperm_handler = xoops_gethandler('groupperm');
+    $groups       = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
+    $gpermHandler = xoops_getHandler('groupperm');
 
     if (!empty($cid) || $cid > 0) {
         $pif = " WHERE b.cid = $cid";
@@ -136,7 +136,7 @@ header('Content-type: text/xml; charset=UTF-8');
     <channel>
 
         <?php if (!isset($_REQUEST['ms'])) {
-    ?>
+            ?>
             <description><?php echo htmlspecialchars($xoopsConfig['slogan']) . ' ' . htmlspecialchars(implode(', ', $rssfeed_data['category'])); ?></description>
             <lastBuildDate><?php echo date('D, d-m-y H:i:s e', time()); ?></lastBuildDate>
             <docs>http://backend.userland.com/rss/</docs>
@@ -145,10 +145,10 @@ header('Content-type: text/xml; charset=UTF-8');
             <managingEditor><?php echo $xoopsConfig['adminmail']; ?></managingEditor>
             <webMaster><?php echo $xoopsConfig['adminmail']; ?></webMaster>
             <?php
-} ?>
+        } ?>
         <language>en</language>
         <?php if (!isset($_REQUEST['ms'])) {
-        ?>
+            ?>
             <image>
                 <title><?php echo(htmlspecialchars($xoopsConfig['sitename'])); ?></title>
                 <url><?php echo XOOPS_URL; ?>/images/logo.png</url>
@@ -159,7 +159,7 @@ header('Content-type: text/xml; charset=UTF-8');
             <title>RSS Feed | <?php echo htmlspecialchars($xoopsConfig['sitename']) . ' | ' . ucfirst($rssfeed_data['category'][0]); ?> </title>
             <link><?php echo XOOPS_URL; ?></link>
             <?php
-    } ?>
+        } ?>
         <?php
         foreach ($rssfeed_data as $item) {
             ?>
@@ -176,11 +176,11 @@ header('Content-type: text/xml; charset=UTF-8');
                 <license><?php echo htmlspecialchars($item['license']); ?></license>
                 <description><?php echo $item['description']; ?></description>
                 <?php if (!isset($_REQUEST['ms'])) {
-                ?>
+                    ?>
                     <guid><?php echo htmlspecialchars($item['dossier_url']); ?></guid>
                     <category><?php echo $item['category']; ?></category>
                     <?php
-            } ?>
+                } ?>
                 <pubDate><?php echo $item['date']; ?></pubDate>
             </item>
             <?php

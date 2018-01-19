@@ -96,7 +96,7 @@ if (!class_exists('qcp71_base')) {
                             $sofar++;
                         }
 
-                        if (false == $done) {
+                        if (false === $done) {
                             if (floor($qcb / ($this->roll / $this->num_evr)) > $this->mode) {
                                 switch ($case) {
                                     case true:
@@ -130,7 +130,7 @@ if (!class_exists('qcp71_base')) {
                             $sofar++;
                         }
 
-                        if (false == $done) {
+                        if (false === $done) {
                             if (floor($qcb / ($this->roll / $this->num_evr)) > $this->mode) {
                                 switch ($case) {
                                     case true:
@@ -168,7 +168,7 @@ if (!class_exists('qcp71_base')) {
                             $sofar++;
                         }
 
-                        if (false == $done) {
+                        if (false === $done) {
                             if (floor($qcb / ($this->roll / $this->num_evr)) > $this->mode) {
                                 switch ($case) {
                                     case true:
@@ -202,7 +202,7 @@ if (!class_exists('qcp71_base')) {
                             $sofar++;
                         }
 
-                        if (false == $done) {
+                        if (false === $done) {
                             if (floor($qcb / ($this->roll / $this->num_evr)) > $this->mode) {
                                 switch ($case) {
                                     case true:
@@ -240,7 +240,7 @@ if (!class_exists('qcp71_base')) {
                             $sofar++;
                         }
 
-                        if (false == $done) {
+                        if (false === $done) {
                             if (floor($qcb / ($this->roll / $this->num_evr)) > $this->mode) {
                                 switch ($case) {
                                     case true:
@@ -274,7 +274,7 @@ if (!class_exists('qcp71_base')) {
                             $sofar++;
                         }
 
-                        if (false == $done) {
+                        if (false === $done) {
                             if (floor($qcb / ($this->roll / $this->num_evr)) > $this->mode) {
                                 switch ($case) {
                                     case true:
@@ -308,7 +308,7 @@ if (!class_exists('qcp71_base')) {
                             $sofar++;
                         }
 
-                        if (false == $done) {
+                        if (false === $done) {
                             if (floor($qcb / ($this->roll / $this->num_evr)) > $this->mode) {
                                 switch ($case) {
                                     case true:
@@ -342,7 +342,7 @@ if (!class_exists('qcp71_base')) {
                             $sofar++;
                         }
 
-                        if (false == $done) {
+                        if (false === $done) {
                             if (floor($qcb / ($this->roll / $this->num_evr)) > $this->mode) {
                                 switch ($case) {
                                     case true:
@@ -381,7 +381,7 @@ if (!class_exists('qcp71_base')) {
                             $sofar++;
                         }
 
-                        if (false == $done) {
+                        if (false === $done) {
                             if (floor($qcb / ($this->roll / $this->num_evr)) > $this->mode) {
                                 switch ($case) {
                                     case true:
@@ -415,7 +415,7 @@ if (!class_exists('qcp71_base')) {
                             $sofar++;
                         }
 
-                        if (false == $done) {
+                        if (false === $done) {
                             if (floor($qcb / ($this->roll / $this->num_evr)) > $this->mode) {
                                 switch ($case) {
                                     case true:
@@ -449,7 +449,7 @@ if (!class_exists('qcp71_base')) {
                             $sofar++;
                         }
 
-                        if (false == $done) {
+                        if (false === $done) {
                             if (floor($qcb / ($this->roll / $this->num_evr)) > $this->mode) {
                                 switch ($case) {
                                     case true:

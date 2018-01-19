@@ -5,10 +5,10 @@ function xtorrent_notify_iteminfo($category, $item_id)
     global $xoopsModule, $xoopsModuleConfig, $xoopsConfig;
 
     if (empty($xoopsModule) || 'xtorrent' != $xoopsModule->getVar('dirname')) {
-        $module_handler = xoops_gethandler('module');
-        $module         = $module_handler->getByDirname('xtorrent');
-        $config_handler = xoops_gethandler('config');
-        $config         = $config_handler->getConfigsByCat(0, $module->getVar('mid'));
+        $moduleHandler = xoops_getHandler('module');
+        $module        = $moduleHandler->getByDirname('xtorrent');
+        $configHandler = xoops_getHandler('config');
+        $config        = $configHandler->getConfigsByCat(0, $module->getVar('mid'));
     } else {
         $module = $xoopsModule;
         $config = $xoopsModuleConfig;

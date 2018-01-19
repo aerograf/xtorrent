@@ -44,12 +44,12 @@ switch ($op) {
         $row                   = $xoopsDB->fetchArray($result);
         $tags['CATEGORY_NAME'] = $row['title'];
         $tags['CATEGORY_URL']  = XOOPS_URL . '/modules/xtorrent/viewcat.php?cid=' . $cid;
-        $notification_handler  = xoops_gethandler('notification');
-        $notification_handler->triggerEvent('global', 0, 'new_file', $tags);
-        $notification_handler->triggerEvent('category', $cid, 'new_file', $tags);
+        $notificationHandler   = xoops_getHandler('notification');
+        $notificationHandler->triggerEvent('global', 0, 'new_file', $tags);
+        $notificationHandler->triggerEvent('category', $cid, 'new_file', $tags);
 
         if ($notifypub) {
-            $notification_handler->triggerEvent('file', $lid, 'approve', $tags);
+            $notificationHandler->triggerEvent('file', $lid, 'approve', $tags);
         }
         redirect_header('newdownloads.php', 1, _AM_XTORRENT_SUB_NEXTILECREATED);
         break;
@@ -96,7 +96,7 @@ switch ($op) {
                 $size      = $myts->htmlSpecialChars($new['size']);
                 $platform  = $myts->htmlSpecialChars($new['platform']);
                 $logourl   = $myts->htmlSpecialChars($new['screenshot']);
-                $submitter = xoops_getLinkedUnameFromId($new['submitter']);
+                $submitter = XoopsUserUtility::getUnameFromId($new['submitter']);
                 $datetime  = formatTimestamp($new['date'], $xoopsModuleConfig['dateformat']);
                 $status    = $new['published'] ? $approved : "<a href='newdownloads.php?op=approve&amp;lid=" . $new['lid'] . "'>" . $imagearray['approve'] . '</a>';
                 $modify    = "<a href='index.php?op=Download&amp;lid=" . $new['lid'] . "'>" . $imagearray['editimg'] . '</a>';

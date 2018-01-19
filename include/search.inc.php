@@ -24,12 +24,12 @@ function xtorrent_search($queryarray, $andor, $limit, $offset, $userid)
     $i      = 0;
 
     $groups              = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
-    $modhandler          = xoops_gethandler('module');
-    $xoopsxtorrentModule = $modhandler->getByDirname('xtorrent');
-    $gperm_handler       = xoops_gethandler('groupperm');
+    $moduleHandler       = xoops_getHandler('module');
+    $xoopsxtorrentModule = $moduleHandler->getByDirname('xtorrent');
+    $gpermHandler        = xoops_getHandler('groupperm');
 
     while ($myrow = $xoopsDB->fetchArray($result)) {
-        if (!$gperm_handler->checkRight('xtorrentownFilePerm', $myrow['cid'], $groups, $xoopsxtorrentModule->getVar('mid'))) {
+        if (!$gpermHandler->checkRight('xtorrentownFilePerm', $myrow['cid'], $groups, $xoopsxtorrentModule->getVar('mid'))) {
             continue;
         }
         $ret[$i]['image'] = 'images/size2.gif';

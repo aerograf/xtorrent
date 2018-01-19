@@ -29,8 +29,8 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
             global $xoopsDB;
             $this->db = $xoopsDB;
         }
-        $this->db_table     = $this->db->prefix('xtorrent_votedata');
-        $this->perm_handler = xoops_gethandler('groupperm');
+        $this->db_table    = $this->db->prefix('xtorrent_votedata');
+        $this->permHandler = xoops_getHandler('groupperm');
     }
 
     public function getInstance($db)
@@ -98,7 +98,7 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
 				`ratingtimestamp` = %s WHERE `ratingid` = %s', $this->db_table, $this->db->quoteString($lid), $this->db->quoteString($ratinguser), $this->db->quoteString($rating), $this->db->quoteString($ratinghostname), $this->db->quoteString($ratingtimestamp), $this->db->quoteString($ratingid));
         }
 
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -122,7 +122,7 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
             $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -193,9 +193,9 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
         $criteria->add(new Criteria('gperm_itemid', $ratingid));
         $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid')));
         $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode));
-        if ($old_perms = $this->perm_handler->getObjects($criteria)) {
+        if ($old_perms = $this->permHandler->getObjects($criteria)) {
             foreach ($old_perms as $p) {
-                $this->perm_handler->delete($p);
+                $this->permHandler->delete($p);
             }
         }
         return true;
@@ -205,12 +205,12 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
     {
         global $xoopsModule;
         foreach ($group_ids as $ratingid) {
-            $perm = $this->perm_handler->create();
+            $perm = $this->permHandler->create();
             $perm->setVar('gperm_name', $this->perm_name . $mode);
             $perm->setVar('gperm_itemid', $ratingid);
             $perm->setVar('gperm_groupid', $ratingid);
             $perm->setVar('gperm_modid', $xoopsModule->getVar('mid'));
-            $this->perm_handler->insert($perm);
+            $this->permHandler->insert($perm);
             $ii++;
         }
         return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $ratingid;
@@ -227,7 +227,7 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
             $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid'), '='), 'AND');
             $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode, '='), 'AND');
 
-            $gtObjperm = $this->perm_handler->getObjects($criteria);
+            $gtObjperm = $this->permHandler->getObjects($criteria);
             $groups    = [];
 
             foreach ($gtObjperm as $v) {
@@ -244,7 +244,7 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
             if ($votedata = $this->getObjects($criteria, 'home_list')) {
                 $ret = [];
                 foreach ($votedata as $f) {
-                    if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $f->getVar('ratingid'), $groups, $xoopsModule->getVar('mid'))) {
+                    if (false !== $this->permHandler->checkRight($this->perm_name . $mode, $f->getVar('ratingid'), $groups, $xoopsModule->getVar('mid'))) {
                         $ret[] = $f;
                         unset($f);
                     }
@@ -258,7 +258,7 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;
-        if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $ratingid, $groups, $xoopsModule->getVar('mid'))) {
+        if (false !== $this->permHandler->checkRight($this->perm_name . $mode, $ratingid, $groups, $xoopsModule->getVar('mid'))) {
             return true;
         }
         return false;

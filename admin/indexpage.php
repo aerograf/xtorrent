@@ -40,7 +40,7 @@ switch ($op) {
 
     default:
 
-        include_once '../class/xtorrent_lists.php';
+        include_once __DIR__ . '/../class/xtorrent_lists.php';
         include XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
 
         global $xoopsModuleConfig, $xoopsDB;

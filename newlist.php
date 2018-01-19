@@ -1,16 +1,16 @@
 <?php
 
-include 'header.php';
+include __DIR__ . '/header.php';
 include_once XOOPS_ROOT_PATH . '/class/xoopstree.php';
 
-$xoopsOption['template_main'] = 'xtorrent_newlistindex.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'xtorrent_newlistindex.tpl';
 include XOOPS_ROOT_PATH . '/header.php';
 
 global $xoopsDB, $xoopsModule, $xoopsUser, $xoopsModuleConfig;
 
-$groups        = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
-$module_id     = $xoopsModule->getVar('mid');
-$gperm_handler = xoops_gethandler('groupperm');
+$groups       = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
+$module_id    = $xoopsModule->getVar('mid');
+$gpermHandler = xoops_getHandler('groupperm');
 
 $imageheader = xtorrent_imageheader();
 $xoopsTpl->assign('imageheader', $imageheader);
@@ -27,8 +27,8 @@ while ($counter <= 7 - 1) {
     $result            = $xoopsDB->query('SELECT lid, cid, published, updated FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE published > 0 AND published <= ' . time() . ' AND (expired = 0 OR expired > ' . time() . ') AND offline = 0');
     while ($myrow = $xoopsDB->fetcharray($result)) {
         $published = ($myrow['updated'] > 0) ? $myrow['updated'] : $myrow['published'];
-        if ($gperm_handler->checkRight('xtorrentownCatPerm', $myrow['cid'], $groups, $module_id)) {
-            if ($gperm_handler->checkRight('xtorrentownFilePerm', $myrow['lid'], $groups, $module_id)) {
+        if ($gpermHandler->checkRight('xtorrentownCatPerm', $myrow['cid'], $groups, $module_id)) {
+            if ($gpermHandler->checkRight('xtorrentownFilePerm', $myrow['lid'], $groups, $module_id)) {
                 if (formatTimestamp($published, 's') == $newdownloadDB) {
                     $totaldownloads++;
                 }
@@ -47,8 +47,8 @@ while ($counter <= 30 - 1) {
     $result            = $xoopsDB->query('SELECT lid, cid, published, updated FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE published > 0 AND published <= ' . time() . ' AND (expired = 0 OR expired > ' . time() . ') AND offline = 0');
     while ($myrow = $xoopsDB->fetcharray($result)) {
         $published = ($myrow['updated'] > 0) ? $myrow['updated'] : $myrow['published'];
-        if ($gperm_handler->checkRight('xtorrentownCatPerm', $myrow['cid'], $groups, $module_id)) {
-            if ($gperm_handler->checkRight('xtorrentownFilePerm', $myrow['lid'], $groups, $module_id)) {
+        if ($gpermHandler->checkRight('xtorrentownCatPerm', $myrow['cid'], $groups, $module_id)) {
+            if ($gpermHandler->checkRight('xtorrentownFilePerm', $myrow['lid'], $groups, $module_id)) {
                 if (formatTimestamp($published, 's') == $newdownloadDB) {
                     $totaldownloads++;
                 }
@@ -86,8 +86,8 @@ while ($counter <= $newdownloadshowdays - 1) {
     while ($myrow = $xoopsDB->fetcharray($result)) {
         $published = ($myrow['updated'] > 0) ? $myrow['updated'] : $myrow['published'];
 
-        if ($gperm_handler->checkRight('xtorrentownCatPerm', $myrow['cid'], $groups, $module_id)) {
-            if ($gperm_handler->checkRight('xtorrentownFilePerm', $myrow['lid'], $groups, $module_id)) {
+        if ($gpermHandler->checkRight('xtorrentownCatPerm', $myrow['cid'], $groups, $module_id)) {
+            if ($gpermHandler->checkRight('xtorrentownFilePerm', $myrow['lid'], $groups, $module_id)) {
                 if (formatTimestamp($myrow['published'], 's') == $newdownloadDB) {
                     $totaldownloads++;
                 }
@@ -112,7 +112,7 @@ $sql    .= 'WHERE published > 0 AND published <= ' . time() . '
 
 $result = $xoopsDB->query($sql, $xoopsModuleConfig['perpage'], 0);
 while ($down_arr = $xoopsDB->fetchArray($result)) {
-    if ($gperm_handler->checkRight('xtorrentownFilePerm', $down_arr['lid'], $groups, $xoopsModule->getVar('mid'))) {
+    if ($gpermHandler->checkRight('xtorrentownFilePerm', $down_arr['lid'], $groups, $xoopsModule->getVar('mid'))) {
         include XOOPS_ROOT_PATH . '/modules/xtorrent/include/downloadinfo.php';
     }
 }
@@ -127,4 +127,4 @@ if (isset($xoopsModuleConfig['screenshot']) && 1 == $xoopsModuleConfig['screensh
     $xoopsTpl->assign('shotheight', $xoopsModuleConfig['shotheight']);
     $xoopsTpl->assign('show_screenshot', true);
 }
-include 'footer.php';
+include __DIR__ . '/footer.php';

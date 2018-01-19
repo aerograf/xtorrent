@@ -59,8 +59,8 @@ class XtorrentModHandler extends XoopsObjectHandler
             global $xoopsDB;
             $this->db = $xoopsDB;
         }
-        $this->db_table     = $this->db->prefix('xtorrent_mod');
-        $this->perm_handler = xoops_gethandler('groupperm');
+        $this->db_table    = $this->db->prefix('xtorrent_mod');
+        $this->permHandler = xoops_getHandler('groupperm');
     }
 
     public function getInstance($db)
@@ -114,96 +114,29 @@ class XtorrentModHandler extends XoopsObjectHandler
         $myts = MyTextSanitizer::getInstance();
         if ($mod->isNew() || empty($requestid)) {
             $requestid = $this->db->genId($this->db_table . '_xt_mod_id_seq');
-            $sql       = sprintf(
-                'INSERT INTO %s (
+            $sql       = sprintf('INSERT INTO %s (
 				`requestid`, `lid`, `cid`, `title`, `url`, `homepage`,`version`,`size`,`platform`,`screenshot`,`submitter`,`publisher`,`status`,`date`,`hits`,`rating`,`votes`,`comments`,`license`,`mirror`,`price, `paypalemail`,`features`,`requirements`,`homepagetitle`,`forumid`,`limitations`,`dhistory`,`published`,`expired`,`updated`,`offline`,`description`,`modifysubmitter`,`requestdate` ,`currency`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
 				%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
-				)',
-                $this->db_table,
-                $this->db->quoteString($requestid),
-                $this->db->quoteString($lid),
-                $this->db->quoteString($cid),
-                $this->db->quoteString($myts->addslashes($title)),
-                $this->db->quoteString($myts->addslashes($url)),
-                $this->db->quoteString($myts->addslashes($homepage)),
-                                 $this->db->quoteString($version),
-                $this->db->quoteString($size),
-                $this->db->quoteString($platform),
-                $this->db->quoteString($myts->addslashes($screenshot)),
-                $this->db->quoteString($submitter),
-                $this->db->quoteString($publisher),
-                $this->db->quoteString($status),
-                                 $this->db->quoteString($date),
-                $this->db->quoteString($hits),
-                $this->db->quoteString($rating),
-                $this->db->quoteString($votes),
-                $this->db->quoteString($comments),
-                $this->db->quoteString($$myts->addslashes(license)),
-                $this->db->quoteString($myts->addslashes($mirror)),
-                                 $this->db->quoteString($price),
-                $this->db->quoteString($myts->addslashes($paypalemail)),
-                $this->db->quoteString($myts->addslashes($features)),
-                $this->db->quoteString($myts->addslashes($requirements)),
-                $this->db->quoteString($myts->addslashes($homepagetitle)),
-                                 $this->db->quoteString($forumid),
-                $this->db->quoteString($limitations),
-                $this->db->quoteString($myts->addslashes($dhistory)),
-                $this->db->quoteString($published),
-                $this->db->quoteString($expired),
-                $this->db->quoteString($updated),
-                $this->db->quoteString($offline),
-                                 $this->db->quoteString($myts->addslashes($description)),
-                $this->db->quoteString($modifysubmitter),
-                $this->db->quoteString($requestdate),
-                $this->db->quoteString($currency)
-            );
+				)', $this->db_table, $this->db->quoteString($requestid), $this->db->quoteString($lid), $this->db->quoteString($cid), $this->db->quoteString($myts->addslashes($title)), $this->db->quoteString($myts->addslashes($url)), $this->db->quoteString($myts->addslashes($homepage)),
+                                 $this->db->quoteString($version), $this->db->quoteString($size), $this->db->quoteString($platform), $this->db->quoteString($myts->addslashes($screenshot)), $this->db->quoteString($submitter), $this->db->quoteString($publisher), $this->db->quoteString($status),
+                                 $this->db->quoteString($date), $this->db->quoteString($hits), $this->db->quoteString($rating), $this->db->quoteString($votes), $this->db->quoteString($comments), $this->db->quoteString($$myts->addslashes(license)), $this->db->quoteString($myts->addslashes($mirror)),
+                                 $this->db->quoteString($price), $this->db->quoteString($myts->addslashes($paypalemail)), $this->db->quoteString($myts->addslashes($features)), $this->db->quoteString($myts->addslashes($requirements)), $this->db->quoteString($myts->addslashes($homepagetitle)),
+                                 $this->db->quoteString($forumid), $this->db->quoteString($limitations), $this->db->quoteString($myts->addslashes($dhistory)), $this->db->quoteString($published), $this->db->quoteString($expired), $this->db->quoteString($updated), $this->db->quoteString($offline),
+                                 $this->db->quoteString($myts->addslashes($description)), $this->db->quoteString($modifysubmitter), $this->db->quoteString($requestdate), $this->db->quoteString($currency));
         } else {
-            $sql = sprintf(
-                'UPDATE %s SET
+            $sql = sprintf('UPDATE %s SET
 				`lid` = %s, `cid` = %s, `title` = %s, `url` = %s, `homepage` = %s, `version` = %s, `size` = %s, `platform` = %s, `screenshot` = %s, `submitter` = %s, `publisher` = %s, `status` = %s, `date` = %s, `hits` = %s, `rating` = %s, `votes` = %s, `comments` = %s, `license` = %s, `mirror` = %s, `price` = %s, `paypalemail` = %s, `features` = %s, `requirements` = %s, `homepagetitle` = %s, `forumid` = %s, `limitations` = %s, `dhistory` = %s, `published` = %s, `expired` = %s, `updated` = %s, `offline` = %s, `description` = %s, `modifysubmitter` = %s, `requestdate` = %s, `currency` = %s WHERE `requestid` = %s',
-                           $this->db_table,
-                $this->db->quoteString($lid),
-                $this->db->quoteString($cid),
-                $this->db->quoteString($myts->addslashes($title)),
-                $this->db->quoteString($myts->addslashes($url)),
-                $this->db->quoteString($myts->addslashes($homepage)),
-                $this->db->quoteString($version),
-                           $this->db->quoteString($size),
-                $this->db->quoteString($platform),
-                $this->db->quoteString($myts->addslashes($screenshot)),
-                $this->db->quoteString($submitter),
-                $this->db->quoteString($publisher),
-                $this->db->quoteString($status),
-                $this->db->quoteString($date),
-                           $this->db->quoteString($hits),
-                $this->db->quoteString($rating),
-                $this->db->quoteString($votes),
-                $this->db->quoteString($comments),
-                $this->db->quoteString($$myts->addslashes(license)),
-                $this->db->quoteString($myts->addslashes($mirror)),
-                $this->db->quoteString($price),
-                           $this->db->quoteString($myts->addslashes($paypalemail)),
-                $this->db->quoteString($myts->addslashes($features)),
-                $this->db->quoteString($myts->addslashes($requirements)),
-                $this->db->quoteString($myts->addslashes($homepagetitle)),
-                $this->db->quoteString($forumid),
-                           $this->db->quoteString($limitations),
-                $this->db->quoteString($myts->addslashes($dhistory)),
-                $this->db->quoteString($published),
-                $this->db->quoteString($expired),
-                $this->db->quoteString($updated),
-                $this->db->quoteString($offline),
-                           $this->db->quoteString($myts->addslashes($description)),
-                $this->db->quoteString($modifysubmitter),
-                $this->db->quoteString($requestdate),
-                $this->db->quoteString($requestid),
-                $this->db->quoteString($currency)
-            );
+                           $this->db_table, $this->db->quoteString($lid), $this->db->quoteString($cid), $this->db->quoteString($myts->addslashes($title)), $this->db->quoteString($myts->addslashes($url)), $this->db->quoteString($myts->addslashes($homepage)), $this->db->quoteString($version),
+                           $this->db->quoteString($size), $this->db->quoteString($platform), $this->db->quoteString($myts->addslashes($screenshot)), $this->db->quoteString($submitter), $this->db->quoteString($publisher), $this->db->quoteString($status), $this->db->quoteString($date),
+                           $this->db->quoteString($hits), $this->db->quoteString($rating), $this->db->quoteString($votes), $this->db->quoteString($comments), $this->db->quoteString($$myts->addslashes(license)), $this->db->quoteString($myts->addslashes($mirror)), $this->db->quoteString($price),
+                           $this->db->quoteString($myts->addslashes($paypalemail)), $this->db->quoteString($myts->addslashes($features)), $this->db->quoteString($myts->addslashes($requirements)), $this->db->quoteString($myts->addslashes($homepagetitle)), $this->db->quoteString($forumid),
+                           $this->db->quoteString($limitations), $this->db->quoteString($myts->addslashes($dhistory)), $this->db->quoteString($published), $this->db->quoteString($expired), $this->db->quoteString($updated), $this->db->quoteString($offline),
+                           $this->db->quoteString($myts->addslashes($description)), $this->db->quoteString($modifysubmitter), $this->db->quoteString($requestdate), $this->db->quoteString($requestid), $this->db->quoteString($currency));
         }
 
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -227,7 +160,7 @@ class XtorrentModHandler extends XoopsObjectHandler
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
             $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -298,9 +231,9 @@ class XtorrentModHandler extends XoopsObjectHandler
         $criteria->add(new Criteria('gperm_itemid', $requestid));
         $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid')));
         $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode));
-        if ($old_perms = $this->perm_handler->getObjects($criteria)) {
+        if ($old_perms = $this->permHandler->getObjects($criteria)) {
             foreach ($old_perms as $p) {
-                $this->perm_handler->delete($p);
+                $this->permHandler->delete($p);
             }
         }
         return true;
@@ -310,12 +243,12 @@ class XtorrentModHandler extends XoopsObjectHandler
     {
         global $xoopsModule;
         foreach ($group_ids as $requestid) {
-            $perm = $this->perm_handler->create();
+            $perm = $this->permHandler->create();
             $perm->setVar('gperm_name', $this->perm_name . $mode);
             $perm->setVar('gperm_itemid', $requestid);
             $perm->setVar('gperm_groupid', $requestid);
             $perm->setVar('gperm_modid', $xoopsModule->getVar('mid'));
-            $this->perm_handler->insert($perm);
+            $this->permHandler->insert($perm);
             $ii++;
         }
         return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $requestid;
@@ -332,7 +265,7 @@ class XtorrentModHandler extends XoopsObjectHandler
             $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid'), '='), 'AND');
             $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode, '='), 'AND');
 
-            $gtObjperm = $this->perm_handler->getObjects($criteria);
+            $gtObjperm = $this->permHandler->getObjects($criteria);
             $groups    = [];
 
             foreach ($gtObjperm as $v) {
@@ -349,7 +282,7 @@ class XtorrentModHandler extends XoopsObjectHandler
             if ($mod = $this->getObjects($criteria, 'home_list')) {
                 $ret = [];
                 foreach ($mod as $f) {
-                    if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $f->getVar('requestid'), $groups, $xoopsModule->getVar('mid'))) {
+                    if (false !== $this->permHandler->checkRight($this->perm_name . $mode, $f->getVar('requestid'), $groups, $xoopsModule->getVar('mid'))) {
                         $ret[] = $f;
                         unset($f);
                     }
@@ -363,7 +296,7 @@ class XtorrentModHandler extends XoopsObjectHandler
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;
-        if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $requestid, $groups, $xoopsModule->getVar('mid'))) {
+        if (false !== $this->permHandler->checkRight($this->perm_name . $mode, $requestid, $groups, $xoopsModule->getVar('mid'))) {
             return true;
         }
         return false;

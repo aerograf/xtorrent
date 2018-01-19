@@ -64,7 +64,7 @@ switch ($op) {
 
     case 'default':
     default:
-        include_once '../class/xtorrent_lists.php';
+        include_once __DIR__ . '/../class/xtorrent_lists.php';
 
         $displayimage = '';
         xoops_cp_header();

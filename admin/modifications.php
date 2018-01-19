@@ -34,7 +34,7 @@ switch ($op) {
         unset($sql);
 
         $orig_user      = new XoopsUser($orig_array['submitter']);
-        $submittername  = xoops_getLinkedUnameFromId($orig_array['submitter']); // $orig_user->getvar("uname");
+        $submittername  = XoopsUserUtility::getUnameFromId($orig_array['submitter']); // $orig_user->getvar("uname");
         $submitteremail = $orig_user->getUnameFromId('email');
 
         echo '<div><b>' . _AM_XTORRENT_MOD_MODPOSTER . '</b> ' . $submittername . '</div>';
@@ -56,8 +56,8 @@ switch ($op) {
             }
             if ('forumid' == $key) {
                 $content          = '';
-                $modhandler       = xoops_gethandler('module');
-                $xoopsforumModule = $modhandler->getByDirname('newbb');
+                $moduleHandler    = xoops_getHandler('module');
+                $xoopsforumModule = $moduleHandler->getByDirname('newbb');
                 $sql              = 'SELECT title FROM ' . $xoopsDB->prefix('bb_categories') . ' WHERE cid=' . $content . '';
                 if ($xoopsforumModule && $content > 0) {
                     $content = "<a href='" . XOOPS_URL . '/modules/newbb/viewforum.php?forum=' . $content . "'>Forumid</a>";
@@ -80,15 +80,14 @@ switch ($op) {
                 }
             }
             if ('dhistory' == $key) {
-                $content = $myts->displayTarea($content, 1, 0, 0, 0, 1);
-                ;
+                $content = $myts->displayTarea($content, 1, 0, 0, 0, 1);;
             }
             $sform->addElement(new XoopsFormLabel($lang_def, $content));
         }
         $sform->display();
 
         $orig_user      = new XoopsUser($mod_array['modifysubmitter']);
-        $submittername  = xoops_getLinkedUnameFromId($mod_array['modifysubmitter']);
+        $submittername  = XoopsUserUtility::getUnameFromId($mod_array['modifysubmitter']);
         $submitteremail = $orig_user->getUnameFromId('email');
 
         echo '<div><b>' . _AM_XTORRENT_MOD_MODIFYSUBMITTER . '</b> ' . $submittername . '</div>';
@@ -109,8 +108,8 @@ switch ($op) {
             }
             if ('forumid' == $key) {
                 $content          = '';
-                $modhandler       = xoops_gethandler('module');
-                $xoopsforumModule = $modhandler->getByDirname('newbb');
+                $moduleHandler    = xoops_getHandler('module');
+                $xoopsforumModule = $moduleHandler->getByDirname('newbb');
                 $sql              = 'SELECT title FROM ' . $xoopsDB->prefix('bb_categories') . ' WHERE cid=' . $content . '';
                 $content          = '';
                 if ($xoopsforumModule && $content > 0) {
@@ -132,8 +131,7 @@ switch ($op) {
                 }
             }
             if ('dhistory' == $key) {
-                $content = $myts->displayTarea($content, 1, 0, 0, 0, 1);
-                ;
+                $content = $myts->displayTarea($content, 1, 0, 0, 0, 1);;
             }
             $sform->addElement(new XoopsFormLabel($lang_def, $content));
         }
@@ -237,8 +235,7 @@ switch ($op) {
                 $path      = str_replace('/', '', $path);
                 $path      = str_replace(':', '', trim($path));
                 $title     = trim($path);
-                $submitter = xoops_getLinkedUnameFromId($down_arr['modifysubmitter']);
-                ;
+                $submitter = XoopsUserUtility::getUnameFromId($down_arr['modifysubmitter']);;
                 $requestdate = formatTimestamp($down_arr['requestdate'], $xoopsModuleConfig['dateformat']);
                 echo "<tr>
           		<td class='head' style='text-align:center;'>" . $down_arr['requestid'] . "</td>

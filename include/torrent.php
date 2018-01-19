@@ -1,6 +1,6 @@
 <?php
 
-require_once 'bencode.reader.php';
+require_once __DIR__ . '/bencode.reader.php';
 
 class Torrent
 {

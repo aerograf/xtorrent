@@ -1,11 +1,11 @@
 <?php
 
-include '../../mainfile.php';
+include __DIR__ . '/../../mainfile.php';
 
 global $xoopsModuleConfig, $xoopsDB;
 
-/*include_once 'includes/common.php';
-include_once 'includes/functions.php';
+/*include_once __DIR__ . '/includes/common.php';
+include_once __DIR__ . '/includes/functions.php';
 include_once XOOPS_ROOT_PATH."/class/xoopsformloader.php";
 $xoopsModuleConfig = configInfo();
 */

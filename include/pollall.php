@@ -2,8 +2,8 @@
 
 error_reporting(E_ALL);
 
-include 'torrent.php';
-include 'tracker.php';
+include __DIR__ . '/torrent.php';
+include __DIR__ . '/tracker.php';
 
 function returnfile($id)
 {

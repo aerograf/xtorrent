@@ -56,8 +56,8 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
             global $xoopsDB;
             $this->db = $xoopsDB;
         }
-        $this->db_table     = $this->db->prefix('xtorrent_torrent');
-        $this->perm_handler = xoops_gethandler('groupperm');
+        $this->db_table    = $this->db->prefix('xtorrent_torrent');
+        $this->permHandler = xoops_getHandler('groupperm');
     }
 
     public function getInstance($db)
@@ -211,27 +211,14 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
         $myts = MyTextSanitizer::getInstance();
         if ($torrent->isNew() || empty($id)) {
             $id  = $this->db->genId($this->db_table . '_xt_torrent_id_seq');
-            $sql = sprintf(
-                'INSERT INTO %s (
+            $sql = sprintf('INSERT INTO %s (
 				`lid`, `seeds`, `leeches`, `totalsize`, `modifiedby`, `tname`, `infoHash`, `announce`, `md5sum`, `added`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s, %s
-				)',
-                $this->db_table,
-                $this->db->quoteString($lid),
-                $this->db->quoteString($seeds),
-                $this->db->quoteString($leeches),
-                $this->db->quoteString($totalsize),
-                $this->db->quoteString($modifiedby),
-                $this->db->quoteString($tname),
-                $this->db->quoteString($infoHash),
-                           $this->db->quoteString($announce),
-                $this->db->quoteString($md5sum),
-                $this->db->quoteString($added)
-            );
+				)', $this->db_table, $this->db->quoteString($lid), $this->db->quoteString($seeds), $this->db->quoteString($leeches), $this->db->quoteString($totalsize), $this->db->quoteString($modifiedby), $this->db->quoteString($tname), $this->db->quoteString($infoHash),
+                           $this->db->quoteString($announce), $this->db->quoteString($md5sum), $this->db->quoteString($added));
         } else {
-            $sql = sprintf(
-                'UPDATE %s SET
+            $sql = sprintf('UPDATE %s SET
 				`seeds` = %s,
 				`leeches` = %s,
 				`totalsize` = %s,
@@ -240,22 +227,11 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
 				`infoHash` = %s,
 				`announce` = %s,
 				`md5sum` = %s,
-				`added` = %s WHERE lid = %s',
-                $this->db_table,
-                $this->db->quoteString($seeds),
-                $this->db->quoteString($leeches),
-                $this->db->quoteString($totalsize),
-                $this->db->quoteString($modifiedby),
-                $this->db->quoteString($tname),
-                $this->db->quoteString($infoHash),
-                           $this->db->quoteString($announce),
-                $this->db->quoteString($md5sum),
-                $this->db->quoteString($added),
-                $this->db->quoteString($lid)
-            );
+				`added` = %s WHERE lid = %s', $this->db_table, $this->db->quoteString($seeds), $this->db->quoteString($leeches), $this->db->quoteString($totalsize), $this->db->quoteString($modifiedby), $this->db->quoteString($tname), $this->db->quoteString($infoHash),
+                           $this->db->quoteString($announce), $this->db->quoteString($md5sum), $this->db->quoteString($added), $this->db->quoteString($lid));
         }
 
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -279,7 +255,7 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
             $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -350,9 +326,9 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
         $criteria->add(new Criteria('gperm_itemid', $id));
         $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid')));
         $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode));
-        if ($old_perms =& $this->perm_handler->getObjects($criteria)) {
+        if ($old_perms =& $this->permHandler->getObjects($criteria)) {
             foreach ($old_perms as $p) {
-                $this->perm_handler->delete($p);
+                $this->permHandler->delete($p);
             }
         }
         return true;
@@ -362,12 +338,12 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
     {
         global $xoopsModule;
         foreach ($group_ids as $id) {
-            $perm = $this->perm_handler->create();
+            $perm = $this->permHandler->create();
             $perm->setVar('gperm_name', $this->perm_name . $mode);
             $perm->setVar('gperm_itemid', $id);
             $perm->setVar('gperm_groupid', $id);
             $perm->setVar('gperm_modid', $xoopsModule->getVar('mid'));
-            $this->perm_handler->insert($perm);
+            $this->permHandler->insert($perm);
             $ii++;
         }
         return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $id;
@@ -384,7 +360,7 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
             $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid'), '='), 'AND');
             $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode, '='), 'AND');
 
-            $gtObjperm = $this->perm_handler->getObjects($criteria);
+            $gtObjperm = $this->permHandler->getObjects($criteria);
             $groups    = [];
 
             foreach ($gtObjperm as $v) {
@@ -401,7 +377,7 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
             if ($torrent = $this->getObjects($criteria, 'home_list')) {
                 $ret = [];
                 foreach ($torrent as $f) {
-                    if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $f->getVar('lid'), $groups, $xoopsModule->getVar('mid'))) {
+                    if (false !== $this->permHandler->checkRight($this->perm_name . $mode, $f->getVar('lid'), $groups, $xoopsModule->getVar('mid'))) {
                         $ret[] = $f;
                         unset($f);
                     }
@@ -415,7 +391,7 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;
-        if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $id, $groups, $xoopsModule->getVar('mid'))) {
+        if (false !== $this->permHandler->checkRight($this->perm_name . $mode, $id, $groups, $xoopsModule->getVar('mid'))) {
             return true;
         }
         return false;

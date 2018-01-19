@@ -1,6 +1,6 @@
 <?php
 
-include 'header.php';
+include __DIR__ . '/header.php';
 
 global $myts;
 
@@ -59,7 +59,7 @@ if (!empty($_POST['submit'])) {
     redirect_header('index.php', 4, $ratemessage);
     exit();
 } else {
-    $xoopsOption['template_main'] = 'xtorrent_ratefile.tpl';
+    $GLOBALS['xoopsOption']['template_main'] = 'xtorrent_ratefile.tpl';
     include XOOPS_ROOT_PATH . '/header.php';
     $lid         = (int)$_GET['lid'];
     $cid         = (int)$_GET['cid'];
@@ -71,4 +71,4 @@ if (!empty($_POST['submit'])) {
     $xoopsTpl->assign('navitem', 1);
     include XOOPS_ROOT_PATH . '/footer.php';
 }
-include 'footer.php';
+include __DIR__ . '/footer.php';

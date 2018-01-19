@@ -1,6 +1,6 @@
 <?php
 
-include 'header.php';
+include __DIR__ . '/header.php';
 include_once XOOPS_ROOT_PATH . '/class/xoopstree.php';
 
 $lid   = (int)$_GET['lid'];
@@ -25,7 +25,7 @@ if (0 != $xoopsModuleConfig['htaccess']) {
     }
 }
 
-$xoopsOption['template_main'] = 'xtorrent_singlefile.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'xtorrent_singlefile.tpl';
 
 $sql      = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_downloads') . " WHERE lid = $lid";
 $result   = $xoopsDB->query($sql);
@@ -65,8 +65,8 @@ $xoopsTpl->assign('navitem', 1);
 /**
  * Show other author downloads
  */
-$groups        = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
-$gperm_handler = xoops_gethandler('groupperm');
+$groups       = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
+$gpermHandler = xoops_getHandler('groupperm');
 
 $sql    = 'SELECT lid, cid, title, published FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' 
       	WHERE submitter = ' . $down_arr['submitter'] . ' 
@@ -75,15 +75,14 @@ $sql    = 'SELECT lid, cid, title, published FROM ' . $xoopsDB->prefix('xtorrent
 $result = $xoopsDB->query($sql, 20, 0);
 
 while ($arr = $xoopsDB->fetchArray($result)) {
-    if (!$gperm_handler->checkRight('xtorrentownFilePerm', $arr['lid'], $groups, $xoopsModule->getVar('mid')) || $arr['lid'] == $lid) {
+    if (!$gpermHandler->checkRight('xtorrentownFilePerm', $arr['lid'], $groups, $xoopsModule->getVar('mid')) || $arr['lid'] == $lid) {
         continue;
     }
 
     $downuid['title']     = $arr['title'];
     $downuid['lid']       = $arr['lid'];
     $downuid['cid']       = $arr['cid'];
-    $downuid['published'] = formatTimestamp($arr['published'], $xoopsModuleConfig['dateformat']);
-    ;
+    $downuid['published'] = formatTimestamp($arr['published'], $xoopsModuleConfig['dateformat']);;
     $xoopsTpl->append('down_uid', $downuid);
 }
 /**
@@ -153,7 +152,7 @@ include XOOPS_ROOT_PATH . '/footer.php';
 
 // START TO CHECK FOR POLLING OF TORRENT
 
-include 'include/pollall.php';
+include __DIR__ . '/include/pollall.php';
 
 //echo $poll['torrent']+($xoopsModuleConfig['poll_torrent_time']*60). "< time = ".time();
 

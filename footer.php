@@ -1,3 +1,3 @@
 <?php
 
-include_once '../../footer.php';
+include_once __DIR__ . '/../../footer.php';

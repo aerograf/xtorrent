@@ -1,6 +1,6 @@
 <?php
 
-include 'header.php';
+include __DIR__ . '/header.php';
 include_once XOOPS_ROOT_PATH . '/class/xoopstree.php';
 
 global $xoopsModuleConfig, $myts, $xoopsModules;
@@ -43,9 +43,9 @@ if (0 != $xoopsModuleConfig['htaccess']) {
 
 $orderby = isset($_REQUEST['orderby']) ? convertorderbyin($_REQUEST['orderby']) : 'date DESC';
 
-$xoopsOption['template_main'] = 'xtorrent_viewcat.tpl';
-$groups                       = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
-$gperm_handler                = xoops_gethandler('groupperm');
+$GLOBALS['xoopsOption']['template_main'] = 'xtorrent_viewcat.tpl';
+$groups                                  = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
+$gpermHandler                            = xoops_getHandler('groupperm');
 
 /**
  * Begin Main page Heading etc
@@ -76,7 +76,7 @@ $arr = $mytree->getFirstChild($cid, 'weight');
 if (is_array($arr) > 0 && !empty($list) && !empty($selectdate)) {
     $scount = 1;
     foreach ($arr as $ele) {
-        if (!$gperm_handler->checkRight('xtorrentownCatPerm', $ele['cid'], $groups, $xoopsModule->getVar('mid'))) {
+        if (!$gpermHandler->checkRight('xtorrentownCatPerm', $ele['cid'], $groups, $xoopsModule->getVar('mid'))) {
             continue;
         }
 
@@ -94,7 +94,7 @@ if (is_array($arr) > 0 && !empty($list) && !empty($selectdate)) {
             /**
              * Filter group permissions
              */
-            if ($gperm_handler->checkRight('xtorrentownCatPerm', $sub_ele['cid'], $groups, $xoopsModule->getVar('mid'))) {
+            if ($gpermHandler->checkRight('xtorrentownCatPerm', $sub_ele['cid'], $groups, $xoopsModule->getVar('mid'))) {
                 /**
                  * If subcategory count > 5 then finish adding subcats to $infercategories and end
                  */
@@ -168,7 +168,7 @@ if (!empty($selectdate)) {
  */
 if ($total_numrows['count'] > 0) {
     while ($down_arr = $xoopsDB->fetchArray($result)) {
-        if ($gperm_handler->checkRight('xtorrentownFilePerm', $down_arr['lid'], $groups, $xoopsModule->getVar('mid'))) {
+        if ($gpermHandler->checkRight('xtorrentownFilePerm', $down_arr['lid'], $groups, $xoopsModule->getVar('mid'))) {
             include XOOPS_ROOT_PATH . '/modules/xtorrent/include/downloadinfo.php';
         }
     }

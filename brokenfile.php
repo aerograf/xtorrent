@@ -1,6 +1,6 @@
 <?php
 
-include 'header.php';
+include __DIR__ . '/header.php';
 
 if (!empty($_POST['submit'])) {
     global $xoopsModule, $xoopsModuleConfig, $xoopsUser;
@@ -24,8 +24,8 @@ if (!empty($_POST['submit'])) {
         $newid                     = $xoopsDB->getInsertId();
         $tags                      = [];
         $tags['BROKENREPORTS_URL'] = XOOPS_URL . '/modules/xtorrent/admin/index.php?op=listBrokenDownloads';
-        $notification_handler      = &xoops_gethandler('notification');
-        $notification_handler->triggerEvent('global', 0, 'file_broken', $tags);
+        $notificationHandler       = xoops_getHandler('notification');
+        $notificationHandler->triggerEvent('global', 0, 'file_broken', $tags);
 
         /**
          * Send email to the owner of the download stating that it is broken
@@ -62,7 +62,7 @@ if (!empty($_POST['submit'])) {
         exit();
     }
 } else {
-    $xoopsOption['template_main'] = 'xtorrent_brokenfile.tpl';
+    $GLOBALS['xoopsOption']['template_main'] = 'xtorrent_brokenfile.tpl';
     include XOOPS_ROOT_PATH . '/header.php';
     /**
      * Begin Main page Heading etc
@@ -76,15 +76,14 @@ if (!empty($_POST['submit'])) {
     unset($sql);
 
     $sql       = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_broken') . " WHERE lid = $lid";
-    $broke_arr = $xoopsDB->fetchArray($xoopsDB->query($sql));
-    ;
+    $broke_arr = $xoopsDB->fetchArray($xoopsDB->query($sql));;
 
     if (is_array($broke_arr)) {
         global $xoopsModuleConfig;
 
         $broken['title']        = trim($down_arr['title']);
         $broken['id']           = $broke_arr['reportid'];
-        $broken['reporter']     = xoops_getLinkedUnameFromId((int)$broke_arr['sender']);
+        $broken['reporter']     = XoopsUserUtility::getUnameFromId((int)$broke_arr['sender']);
         $broken['date']         = formatTimestamp($broke_arr['date'], $xoopsModuleConfig['dateformat']);
         $broken['acknowledged'] = (1 == $broke_arr['acknowledged']) ? _YES : _NO;
         $broken['confirmed']    = (1 == $broke_arr['confirmed']) ? _YES : _NO;
@@ -106,7 +105,7 @@ if (!empty($_POST['submit'])) {
         $time              = (0 != $down_arr['updated']) ? $down_arr['updated'] : $down_arr['published'];
         $down['updated']   = formatTimestamp($time, $xoopsModuleConfig['dateformat']);
         $is_updated        = (0 != $down_arr['updated']) ? _MD_XTORRENT_UPDATEDON : _MD_XTORRENT_SUBMITDATE;
-        $down['publisher'] = xoops_getLinkedUnameFromId((int)$down_arr['submitter']);
+        $down['publisher'] = XoopsUserUtility::getUnameFromId((int)$down_arr['submitter']);
 
         $xoopsTpl->assign('file_id', $lid);
         $xoopsTpl->assign('lang_subdate', $is_updated);

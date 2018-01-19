@@ -9,7 +9,7 @@
     Written by Greg Poole | m4dm4n@gmail.com | http://m4dm4n.homelinux.net:8086
 */
 
-require_once 'bencode.reader.php';
+require_once __DIR__ . '/bencode.reader.php';
 
 // Summarise the results of the tracker_scrape_all function, by adding up all of the scrape results
 // into a single array of seeds, leeches and successful downloads.

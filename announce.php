@@ -1,10 +1,10 @@
 <?php
 
 ob_start('ob_gzhandler');
-require_once '../../mainfile.php';
-require_once 'include/functions.php';
-require_once 'include/bittorrent.php';
-require_once 'include/benc.php';
+require_once __DIR__ . '/../../mainfile.php';
+require_once __DIR__ . '/include/functions.php';
+require_once __DIR__ . '/include/bittorrent.php';
+require_once __DIR__ . '/include/benc.php';
 
 global $xoopsDB, $xoopsConfig, $xoopsModuleConfig;
 $filename = XOOPS_ROOT_PATH . '/uploads/test.txt';
@@ -163,7 +163,7 @@ if (isset($_SERVER['PATH_INFO'])) {
         }
 
         echo 'd5:filesd';
-        while ($row = mysqli_fetch_row($query)) {
+        while ($row = $GLOBALS['xoopsDB']->fetchRow($query)) {
             if ($row[1] < 0 || $row[3] < 0) {
                 $row[1] = 0;
                 $row[3] = 0;
@@ -192,7 +192,7 @@ if (0 == strpos($_SERVER['REQUEST_URI'], '?=')) {
     $sql = 'SELECT a.lid, a.id FROM ' . $xoopsDB->prefix('xtorrent_users') . ' a INNER JOIN ' . $xoopsDB->prefix('xtorrent_torrent') . ' b ON a.lid = b.lid WHERE b.hashInfo=' . sqlesc($info_hash) . ' AND a.secret = ' . sqlesc(sha1(xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR']))));
 }
 
-$valid = @mysqli_fetch_row(@$xoopsDB->queryF($sql));
+$valid = @$GLOBALS['xoopsDB']->fetchRow(@$xoopsDB->queryF($sql));
 if (0 == $valid[0] || empty($valid)) {
     err('Invalid passkey or secret! Re-download the .torrent from ' . XOOPS_URL);
 }

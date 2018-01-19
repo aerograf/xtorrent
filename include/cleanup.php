@@ -1,6 +1,6 @@
 <?php
 
-require_once 'bittorrent.php';
+require_once __DIR__ . '/bittorrent.php';
 
 function docleanup()
 {
@@ -145,7 +145,7 @@ function docleanup()
 
     //remove expired warnings
     $res = mysqli_query("SELECT id FROM users WHERE warned='yes' AND warneduntil < NOW() AND warneduntil <> '0000-00-00 00:00:00'") or sqlerr(__FILE__, __LINE__);
-    if (mysqli_num_rows($res) > 0) {
+    if ($GLOBALS['xoopsDB']->getRowsNum($res) > 0) {
         $dt  = sqlesc(get_date_time());
         $msg = sqlesc("Your warning has been removed. Please keep in your best behaviour from now on.\n");
         while ($arr = mysqli_fetch_assoc($res)) {
@@ -159,7 +159,7 @@ function docleanup()
     $minratio = 1.05;
     $maxdt    = sqlesc(get_date_time(gmtime() - 86400 * 28));
     $res = mysqli_query("SELECT id FROM users WHERE class = 0 AND uploaded >= $limit AND uploaded / downloaded >= $minratio AND added < $maxdt") or sqlerr(__FILE__, __LINE__);
-    if (mysqli_num_rows($res) > 0) {
+    if ($GLOBALS['xoopsDB']->getRowsNum($res) > 0) {
         $dt  = sqlesc(get_date_time());
         $msg = sqlesc("Congratulations, you have been auto-promoted to [b]Power User[/b]. :)\nYou can now download dox over 1 meg and view torrent NFOs.\n");
         while ($arr = mysqli_fetch_assoc($res)) {
@@ -171,7 +171,7 @@ function docleanup()
     // demote power users
     $minratio = 0.95;
     $res = mysqli_query("SELECT id FROM users WHERE class = 1 AND uploaded / downloaded < $minratio") or sqlerr(__FILE__, __LINE__);
-    if (mysqli_num_rows($res) > 0) {
+    if ($GLOBALS['xoopsDB']->getRowsNum($res) > 0) {
         $dt  = sqlesc(get_date_time());
         $msg = sqlesc("You have been auto-demoted from [b]Power User[/b] to [b]User[/b] because your share ratio has dropped below $minratio.\n");
         while ($arr = mysqli_fetch_assoc($res)) {
@@ -194,7 +194,7 @@ function docleanup()
         $topics     = mysqli_query("select id from topics where forumid=$forum[id]");
         while ($topic = mysqli_fetch_assoc($topics)) {
             $res       = mysqli_query("select count(*) from posts where topicid=$topic[id]");
-            $arr       = mysqli_fetch_row($res);
+            $arr       = $GLOBALS['xoopsDB']->fetchRow($res);
             $postcount += $arr[0];
             ++$topiccount;
         }

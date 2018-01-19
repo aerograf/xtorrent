@@ -1,6 +1,6 @@
 <?php
 
-include 'header.php';
+include __DIR__ . '/header.php';
 global $xoopsModuleConfig, $xoopsModule, $xoopsUser;
 
 if (0 != $xoopsModuleConfig['htaccess']) {
@@ -15,7 +15,7 @@ include_once XOOPS_ROOT_PATH . '/class/xoopstree.php';
 error_reporting(E_ALL);
 $mytree = new XoopsTree($xoopsDB->prefix('xtorrent_cat'), 'cid', 'pid');
 
-$xoopsOption['template_main'] = 'xtorrent_index.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'xtorrent_index.tpl';
 include XOOPS_ROOT_PATH . '/header.php';
 error_reporting(E_ALL);
 
@@ -48,9 +48,9 @@ $count   = 1;
 $chcount = 0;
 $countin = 0;
 
-$groups        = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
-$module_id     = $xoopsModule->getVar('mid');
-$gperm_handler = xoops_gethandler('groupperm');
+$groups       = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
+$module_id    = $xoopsModule->getVar('mid');
+$gpermHandler = xoops_getHandler('groupperm');
 
 /**
  * Begin Main page download info
@@ -69,7 +69,7 @@ while ($myrow = $xoopsDB->fetchArray($result)) {
     //$subtotaldownload = xtorrent_getTotalItems($myrow['cid'], 1);
     $indicator = xtorrent_isnewimage($totaldownload['published']);
 
-    if ($gperm_handler->checkRight('xtorrentownCatPerm', $myrow['cid'], $groups, $module_id)) {
+    if ($gpermHandler->checkRight('xtorrentownCatPerm', $myrow['cid'], $groups, $module_id)) {
         $title   = $myts->htmlSpecialChars($myrow['title']);
         $summary = $myts->displayTarea($myrow['summary']);
         /**
@@ -83,7 +83,7 @@ while ($myrow = $xoopsDB->fetchArray($result)) {
         $subcategories = '';
 
         foreach ($arr as $ele) {
-            if ($gperm_handler->checkRight('xtorrentownCatPerm', $ele['cid'], $groups, $xoopsModule->getVar('mid'))) {
+            if ($gpermHandler->checkRight('xtorrentownCatPerm', $ele['cid'], $groups, $xoopsModule->getVar('mid'))) {
                 if (1 == $xoopsModuleConfig['subcats']) {
                     $chtitle = $myts->htmlSpecialChars($ele['title']);
                     if ($chcount > 5) {
@@ -102,16 +102,8 @@ while ($myrow = $xoopsDB->fetchArray($result)) {
 
         if (is_file(XOOPS_ROOT_PATH . '/' . $xoopsModuleConfig['catimage'] . '/' . $myts->htmlSpecialChars($myrow['imgurl'])) && !empty($myrow['imgurl'])) {
             if ($xoopsModuleConfig['usethumbs'] && function_exists('gd_info')) {
-                $imgurl = down_createthumb(
-                    $myts->htmlSpecialChars($myrow['imgurl']),
-                    $xoopsModuleConfig['catimage'],
-                    'thumbs',
-                    $xoopsModuleConfig['shotwidth'],
-                    $xoopsModuleConfig['shotheight'],
-                    $xoopsModuleConfig['imagequality'],
-                    $xoopsModuleConfig['updatethumbs'],
-                                           $xoopsModuleConfig['keepaspect']
-                );
+                $imgurl = down_createthumb($myts->htmlSpecialChars($myrow['imgurl']), $xoopsModuleConfig['catimage'], 'thumbs', $xoopsModuleConfig['shotwidth'], $xoopsModuleConfig['shotheight'], $xoopsModuleConfig['imagequality'], $xoopsModuleConfig['updatethumbs'],
+                                           $xoopsModuleConfig['keepaspect']);
             } else {
                 $imgurl = XOOPS_URL . '/' . $xoopsModuleConfig['catimage'] . '/' . $myts->htmlSpecialChars($myrow['imgurl']);
             }
@@ -143,4 +135,4 @@ switch ($total_cat) {
 $xoopsTpl->assign('htaccess', $xoopsModuleConfig['htaccess']);
 $xoopsTpl->assign('lang_thereare', sprintf($lang_ThereAre, $total_cat, $listings['count']));
 $xoopsTpl->assign('navitem', 1);
-include 'footer.php';
+include __DIR__ . '/footer.php';

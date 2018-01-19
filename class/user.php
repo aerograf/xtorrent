@@ -51,8 +51,8 @@ class Xtorrent_XoopsUser extends XoopsUser
             if (is_array($id)) {
                 $this->assignVars($id);
             } else {
-                $member_handler = xoops_gethandler('member');
-                $user           = $member_handler->getUser($id);
+                $memberHandler = xoops_getHandler('member');
+                $user          = $memberHandler->getUser($id);
                 foreach ($user->vars as $k => $v) {
                     $this->assignVar($k, $v['value']);
                 }

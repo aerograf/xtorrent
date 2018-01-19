@@ -94,7 +94,7 @@ if (!class_exists('qcp135_enumerator')) {
                     if (1 == strlen($data)) {
                         $cycle = ['icf', 'ice', 'icd', 'icc', 'icb', 'ica'];
                         foreach ($cycle as $element) {
-                            if (false == $done) {
+                            if (false === $done) {
                                 if ('0' == $offset[$element]) {
                                     if ('' != $prev_ele) {
                                         if ('1' == $offset[$prev_ele]) {
@@ -111,7 +111,7 @@ if (!class_exists('qcp135_enumerator')) {
                     } else {
                         $cycle = ['ica', 'icb', 'icc', 'icd', 'ice', 'icf'];
                         foreach ($cycle as $element) {
-                            if (false == $done) {
+                            if (false === $done) {
                                 if ('0' == $offset[$element]) {
                                     if ('' != $prev_ele) {
                                         if ('1' == $offset[$prev_ele]) {
@@ -291,7 +291,7 @@ if (!class_exists('qcp135_enumerator')) {
                 $yin = $yin + 1;
             }
 
-            if (true == $debug) {
+            if (true === $debug) {
                 $data[count($data) + 1] = [
                     'pos'      => $this->getBytePos($char),
                     'elements' => $this->elekey

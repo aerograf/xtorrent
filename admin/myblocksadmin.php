@@ -1,7 +1,7 @@
 <?php
 
-include_once '../../../include/cp_header.php';
-include_once 'mygrouppermform.php';
+include_once __DIR__ . '/../../../include/cp_header.php';
+include_once __DIR__ . '/mygrouppermform.php';
 include_once XOOPS_ROOT_PATH . '/class/xoopsblock.php';
 include_once XOOPS_ROOT_PATH . '/modules/xtorrent/include/functions.php';
 
@@ -89,7 +89,7 @@ function list_groups()
 }
 
 if (!empty($_POST['submit'])) {
-    include 'mygroupperm.php';
+    include __DIR__ . '/mygroupperm.php';
     redirect_header(XOOPS_URL . '/modules/xtorrent/admin/myblocksadmin.php', 1, _AM_SYSTEM_DBUPDATED);
 }
 

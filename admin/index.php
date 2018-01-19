@@ -118,11 +118,11 @@ function Download()
         if ($ipaddress) {
             $sform->addElement(new XoopsFormLabel(_AM_XTORRENT_FILE_IP, $ipaddress));
         }
-        $member_handler = xoops_gethandler('member');
-        $group_list     = $member_handler->getGroupList();
+        $memberHandler = xoops_getHandler('member');
+        $group_list    = $memberHandler->getGroupList();
 
-        $gperm_handler = xoops_gethandler('groupperm');
-        $groups        = $gperm_handler->getGroupIds('xtorrentownFilePerm', $lid, $xoopsModule->getVar('mid'));
+        $gpermHandler = xoops_getHandler('groupperm');
+        $groups       = $gpermHandler->getGroupIds('xtorrentownFilePerm', $lid, $xoopsModule->getVar('mid'));
 
         $groups = $groups ?: true;
         $sform->addElement(new XoopsFormSelectGroup(_AM_XTORRENT_FCATEGORY_GROUPPROMPT, 'groups', true, $groups, 5, true));
@@ -468,8 +468,7 @@ function addDownload()
     $currency    = $myts->addslashes(trim($_POST['currency']));
     $mirror      = formatURL(trim($_POST['mirror']));
     $license     = $myts->addslashes(trim($_POST['license']));
-    $paypalemail = $myts->addslashes(trim($_POST['paypalemail']));
-    ;
+    $paypalemail = $myts->addslashes(trim($_POST['paypalemail']));;
     $features        = $myts->addslashes(trim($_POST['features']));
     $requirements    = $myts->addslashes(trim($_POST['requirements']));
     $forumid         = (isset($_POST['forumid']) && $_POST['forumid'] > 0) ? (int)$_POST['forumid'] : 0;
@@ -545,12 +544,12 @@ function addDownload()
         $newid = $xoopsDB->getInsertId();
         xtorrent_save_Permissions($groups, $newid, 'xtorrentownFilePerm');
 
-        $tag_handler = xoops_getmodulehandler('tag', 'tag');
-        $tag_handler->updateByItem($_POST['topic_tags'], $newid, 'xtorrent', $cid);
+        $tagHandler = xoops_getModuleHandler('tag', 'tag');
+        $tagHandler->updateByItem($_POST['topic_tags'], $newid, 'xtorrent', $cid);
 
         //echo "Please wait a moment while we poll the torrent...";
         error_reporting(E_ALL);
-        include '../include/pollall.php';
+        include __DIR__ . '/../include/pollall.php';
 
         $rt = poll_torrent($newid);
 
@@ -564,8 +563,8 @@ function addDownload()
   			screenshot = '$screenshot', publisher = '$publisher', status = '$status', price = '$price', requirements = '$requirements', 
   			homepagetitle = '$homepagetitle', forumid = '$forumid', limitations = '$limitations', dhistory = '$dhistory', published = '$publishdate', paypalemail = '$paypalemail', currency = '$currency', 
   			expired = '$expiredate', updated = '$updated', offline = '$offline', description = '$description', topic_tags = '$topic_tags' WHERE lid = $lid");
-        $tag_handler = xoops_getmodulehandler('tag', 'tag');
-        $tag_handler->updateByItem($_POST['topic_tags'], $lid, 'xtorrent', $cid);
+        $tagHandler = xoops_getModuleHandler('tag', 'tag');
+        $tagHandler->updateByItem($_POST['topic_tags'], $lid, 'xtorrent', $cid);
 
         xtorrent_save_Permissions($groups, $lid, 'xtorrentownFilePerm');
     }
@@ -581,9 +580,9 @@ function addDownload()
         $row                   = $xoopsDB->fetchArray($xoopsDB->query($sql));
         $tags['CATEGORY_NAME'] = $row['title'];
         $tags['CATEGORY_URL']  = XOOPS_URL . '/modules/xtorrent/viewcat.php?cid=' . $cid;
-        $notification_handler  = xoops_gethandler('notification');
-        $notification_handler->triggerEvent('global', 0, 'new_file', $tags);
-        $notification_handler->triggerEvent('category', $cid, 'new_file', $tags);
+        $notificationHandler   = xoops_getHandler('notification');
+        $notificationHandler->triggerEvent('global', 0, 'new_file', $tags);
+        $notificationHandler->triggerEvent('category', $cid, 'new_file', $tags);
     }
     if ($lid && $approved && $notifypub) {
         $tags                  = [];
@@ -594,16 +593,16 @@ function addDownload()
         $row                   = $xoopsDB->fetchArray($result);
         $tags['CATEGORY_NAME'] = $row['title'];
         $tags['CATEGORY_URL']  = XOOPS_URL . '/modules/xtorrent/viewcat.php?cid=' . $cid;
-        $notification_handler  = xoops_gethandler('notification');
-        $notification_handler->triggerEvent('global', 0, 'new_file', $tags);
-        $notification_handler->triggerEvent('category', $cid, 'new_file', $tags);
-        $notification_handler->triggerEvent('file', $lid, 'approve', $tags);
+        $notificationHandler   = xoops_getHandler('notification');
+        $notificationHandler->triggerEvent('global', 0, 'new_file', $tags);
+        $notificationHandler->triggerEvent('category', $cid, 'new_file', $tags);
+        $notificationHandler->triggerEvent('file', $lid, 'approve', $tags);
     }
     $message = (!$lid) ? _AM_XTORRENT_FILE_NEXTILEUPLOAD : _AM_XTORRENT_FILE_FILEMODIFIEDUPDATE;
     $message = ($lid && !$_POST['was_published'] && $approved) ? _AM_XTORRENT_FILE_FILEAPPROVED : $message;
     if (1 == $_POST['submitNews']) {
         $title = !empty($_POST['newsTitle']) ? $_POST['newsTitle'] : $title;
-        include_once 'newstory.php';
+        include_once __DIR__ . '/newstory.php';
     }
     redirect_header('index.php', 1, $message);
 }
@@ -837,7 +836,7 @@ switch ($op) {
                 list($title) = $xoopsDB->fetchrow($result2 = $xoopsDB->query($sql2));
                 $title     = $myts->htmlSpecialChars($title);
                 $lid       = (int)$review_array['lid'];
-                $submitter = xoops_getLinkedUnameFromId($review_array['uid']);
+                $submitter = XoopsUserUtility::getUnameFromId($review_array['uid']);
                 $datetime  = formatTimestamp($review_array['date'], $xoopsModuleConfig['dateformat']);
                 $status    = (int)$review_array['submit'] ? $approved : "<a href='index.php?op=approve_review&review_id=" . $review_id . "'>" . $imagearray['approve'] . '</a>';
                 $modify    = "<a href='index.php?op=edit_review&review_id=" . $review_id . "'>" . $imagearray['editimg'] . '</a>';

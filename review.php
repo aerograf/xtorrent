@@ -1,6 +1,6 @@
 <?php
 
-include 'header.php';
+include __DIR__ . '/header.php';
 
 global $xoopsModuleConfig, $myts;
 
@@ -31,7 +31,7 @@ switch (isset($op) && !empty($op)) {
         global $xoopsDB, $xoopsModuleConfig, $myts;
         $start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 
-        $xoopsOption['template_main'] = 'xtorrent_reviews.tpl';
+        $GLOBALS['xoopsOption']['template_main'] = 'xtorrent_reviews.tpl';
         include XOOPS_ROOT_PATH . '/header.php';
 
         $sql                     = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_indexpage') . ' ';
@@ -62,7 +62,7 @@ switch (isset($op) && !empty($op)) {
             $down_review['review']    = $myts->censorstring($arr_review['review']);
             $down_review['review']    = $myts->displayTarea($down_review['review'], 0, 0, 0, 0, 0);
             $down_review['date']      = formatTimestamp($arr_review['date'], $xoopsModuleConfig['dateformat']);
-            $down_review['submitter'] = xoops_getLinkedUnameFromId((int)$arr_review['uid']);
+            $down_review['submitter'] = XoopsUserUtility::getUnameFromId((int)$arr_review['uid']);
             $review_rating            = round(number_format($arr_review['rated'], 0) / 2);
             $rateimg                  = "rate$review_rating.gif";
             $down_review['rated_img'] = $rateimg;

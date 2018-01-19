@@ -4,7 +4,7 @@
 
 function xtorrent_com_update($download_id, $total_num)
 {
-    $db  = Database::getInstance();
+    $db  = XoopsDatabaseFactory::getDatabaseConnection();
     $sql = 'UPDATE ' . $db->prefix('xtorrent_downloads') . ' SET comments = ' . $total_num . ' WHERE lid = ' . $download_id;
     $db->query($sql);
 }

@@ -1,8 +1,8 @@
 <?php
 
 error_reporting(E_ALL ^ E_NOTICE);
-require_once 'secrets.php';
-require_once 'cleanup.php';
+require_once __DIR__ . '/secrets.php';
+require_once __DIR__ . '/cleanup.php';
 
 // PHP5 with register_long_arrays off?
 if (!isset($HTTP_POST_VARS) && isset($_POST)) {
@@ -118,12 +118,12 @@ function local_user()
 /*dbconn();
 $sql = "SELECT *
     FROM config";
-if( !($result = mysql_query($sql)) )
+if( !($result = $GLOBALS['xoopsDB']->queryF($sql)) )
 {
     die("Could not query config information");
 }
 
-while ( $row = mysql_fetch_assoc($result) )
+while ( $row = $GLOBALS['xoopsDB']->fetchArray($result) )
 {
     $config[$row['name']] = $row['value'];
 }
@@ -239,7 +239,7 @@ function dbconn($autoclean = false)
 
     if (!@mysql_connect($mysql_host, $mysql_user, $mysql_pass))
     {
-      switch (mysql_errno())
+      switch ($GLOBALS['xoopsDB']->errno())
       {
         case 1040:
         case 2002:
@@ -248,11 +248,11 @@ function dbconn($autoclean = false)
             else
                 die("Too many users. Please press the Refresh button in your browser to retry.");
         default:
-            die("[" . mysql_errno() . "] dbconn: mysql_connect: " . mysql_error());
+            die("[" . $GLOBALS['xoopsDB']->errno() . "] dbconn: mysql_connect: " . $GLOBALS['xoopsDB']->error());
       }
     }
-    mysql_select_db($mysql_db)
-        or die('dbconn: mysql_select_db: ' + mysql_error());
+    mysqli_select_db($GLOBALS['xoopsDB']->conn, $mysql_db)
+        || exit('dbconn: mysql_select_db: ' + $GLOBALS['xoopsDB']->error());
 
     userlogin();
 
@@ -269,7 +269,7 @@ function userlogin()
     $ip  = getip();
     $nip = ip2long($ip);
     $res = mysqli_query("SELECT * FROM bans WHERE $nip >= first AND $nip <= last") or sqlerr(__FILE__, __LINE__);
-    if (mysqli_num_rows($res) > 0) {
+    if ($GLOBALS['xoopsDB']->getRowsNum($res) > 0) {
         header('HTTP/1.0 403 Forbidden');
         print('<html><body><h1>403 Forbidden</h1>Unauthorized IP address.</body></html>');
         die;
@@ -282,7 +282,7 @@ function userlogin()
     if (!$id || 32 != strlen($_COOKIE['pass'])) {
         return;
     }
-    $res = mysqli_query("SELECT * FROM users WHERE id = $id AND enabled='yes' AND status = 'confirmed'");// or die(mysql_error());
+    $res = mysqli_query("SELECT * FROM users WHERE id = $id AND enabled='yes' AND status = 'confirmed'");// || exit($GLOBALS['xoopsDB']->error());
     $row = mysqli_fetch_array($res);
     if (!$row) {
         return;
@@ -291,7 +291,7 @@ function userlogin()
     if ($_COOKIE['pass'] !== $row['passhash']) {
         return;
     }
-    mysqli_query("UPDATE users SET last_access='" . get_date_time() . "', ip='$ip' WHERE id=" . $row['id']);// or die(mysql_error());
+    mysqli_query("UPDATE users SET last_access='" . get_date_time() . "', ip='$ip' WHERE id=" . $row['id']);// || exit($GLOBALS['xoopsDB']->error());
     $row['ip']          = $ip;
     $GLOBALS['CURUSER'] = $row;
 }
@@ -314,7 +314,7 @@ function autoclean()
         return;
     }
     mysqli_query("UPDATE avps SET value_u=$now WHERE arg='lastcleantime' AND value_u = $ts");
-    if (!mysqli_affected_rows()) {
+    if (!$GLOBALS['xoopsDB']->getAffectedRows()) {
         return;
     }
 
@@ -432,12 +432,12 @@ function validemail($email)
 
 function sqlesc($x)
 {
-    return "'" . mysqli_real_escape_string($x) . "'";
+    return "'" . $GLOBALS['xoopsDB']->escape($x) . "'";
 }
 
 function sqlwildcardesc($x)
 {
-    return str_replace(['%', '_'], ["\\%", "\\_"], mysqli_real_escape_string($x));
+    return str_replace(['%', '_'], ["\\%", "\\_"], $GLOBALS['xoopsDB']->escape($x));
 }
 
 function urlparse($m)
@@ -480,13 +480,13 @@ function stdhead($title = '', $msgalert = true)
         }
     }
     if (!$ss_uri) {
-        ($r = mysqli_query('SELECT uri FROM stylesheets WHERE id=1')) or die(mysqli_error());
-        ($a = mysqli_fetch_array($r)) or die(mysqli_error());
+        ($r = mysqli_query('SELECT uri FROM stylesheets WHERE id=1')) || exit($GLOBALS['xoopsDB']->error());
+        ($a = mysqli_fetch_array($r)) || exit($GLOBALS['xoopsDB']->error());
         $ss_uri = $a['uri'];
     }
     if ($msgalert && $CURUSER) {
-        $res = mysqli_query('SELECT COUNT(*) FROM messages WHERE receiver=' . $CURUSER['id'] . " && unread='yes'") or die('OopppsY!');
-        $arr    = mysqli_fetch_row($res);
+        $res    = mysqli_query('SELECT COUNT(*) FROM messages WHERE receiver=' . $CURUSER['id'] . " && unread='yes'") || exit('OopppsY!');
+        $arr    = $GLOBALS['xoopsDB']->fetchRow($res);
         $unread = $arr[0];
     } ?>
     <html>
@@ -527,7 +527,8 @@ function stdhead($title = '', $msgalert = true)
     <?php
 
     $w = 'width=100%';
-    //if ($HTTP_SERVER_VARS["REMOTE_ADDR"] == $HTTP_SERVER_VARS["SERVER_ADDR"]) $w = "width=984"; ?>
+    //if ($HTTP_SERVER_VARS["REMOTE_ADDR"] == $HTTP_SERVER_VARS["SERVER_ADDR"]) $w = "width=984";
+    ?>
     <table class=mainouter <?= $w; ?> border="1" cellspacing="0" cellpadding="10">
 
     <!------------- MENU ------------------------------------------------------------------------>
@@ -542,16 +543,16 @@ function stdhead($title = '', $msgalert = true)
                     <td align="center" class="navigation"><a href='browse.php'>Browse</a></td>
                     <td align="center" class="navigation"><a href='upload.php'>Upload</a></td>
                     <?php if (!$CURUSER) {
-        ?>
+                        ?>
                         <td align="center" class="navigation">
                             <a href='login.php'>Login</a> / <a href='siMITp.php'>SiMITp</a>
                         </td>
                         <?php
-    } else {
-        ?>
+                    } else {
+                        ?>
                         <td align="center" class="navigation"><a href='my.php'>Profile</a></td>
                         <?php
-    } ?>
+                    } ?>
                     <td align="center" class="navigation">Chat</td>
                     <td align="center" class="navigation"><a href='forums.php'>Forums</a></td>
                     <td align="center" class="navigation">DOX</td>
@@ -622,7 +623,7 @@ function logincookie($id, $password, $secret, $updatedb = 1, $expires = 0x7fffff
     setcookie("pass", $md5, $expires, "/");
 
     if ($updatedb)
-        mysql_query("UPDATE users SET last_login = NOW() WHERE id = $id");
+        $GLOBALS['xoopsDB']->queryF("UPDATE users SET last_login = NOW() WHERE id = $id");
 }
 */
 
@@ -922,7 +923,7 @@ function torrenttable($res, $variant = 'index')
 
     print('</tr>');
 
-    while ($row = mysql_fetch_assoc($res)) {
+    while ($row = $GLOBALS['xoopsDB']->fetchArray($res)) {
         $id = $row['id'];
         print('<tr>');
 
@@ -1091,7 +1092,7 @@ function hit_count()
     $RUNTIME_CLAUSE = 'page = ' . sqlesc($path) . " AND period = '$period'";
     $update         = "UPDATE hits SET count = count + 1 WHERE $RUNTIME_CLAUSE";
     mysqli_query($update);
-    if (mysql_affected_rows()) {
+    if ($GLOBALS['xoopsDB']->getAffectedRows()) {
         return;
     }
     $ret = mysqli_query('INSERT INTO hits (page, period, count) VALUES (' . sqlesc($path) . ", '$period', 1)");
@@ -1148,4 +1149,4 @@ function get_user_icons($arr, $big = false)
     return $pics;
 }
 
-require 'global.php';
+require __DIR__ . '/global.php';

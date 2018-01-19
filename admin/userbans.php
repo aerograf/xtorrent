@@ -10,17 +10,17 @@ xoops_cp_header();
 $adminObject = \Xmf\Module\Admin::getInstance();
 $adminObject->displayNavigation(basename(__FILE__));
 
-$member_handler     = xoops_gethandler('member');
-$thisgroup          = $member_handler->getGroup($g_id);
-$name_value         = $thisgroup->getVar('name', 'E');
-$desc_value         = $thisgroup->getVar('description', 'E');
-$moduleperm_handler = xoops_gethandler('groupperm');
+$memberHandler     = xoops_getHandler('member');
+$thisgroup         = $memberHandler->getGroup($g_id);
+$name_value        = $thisgroup->getVar('name', 'E');
+$desc_value        = $thisgroup->getVar('description', 'E');
+$modulepermHandler = xoops_getHandler('groupperm');
 
-$usercount      = $member_handler->getUserCount(new Criteria('level', 0, '>'));
-$member_handler = xoops_gethandler('member');
-$membercount    = $member_handler->getUserCountByGroup($g_id);
+$usercount     = $memberHandler->getUserCount(new Criteria('level', 0, '>'));
+$memberHandler = xoops_getHandler('member');
+$membercount   = $memberHandler->getUserCountByGroup($g_id);
 
-$members = $member_handler->getUsersByGroup($g_id, true);
+$members = $memberHandler->getUsersByGroup($g_id, true);
 $mlist   = [];
 $mcount  = count($members);
 for ($i = 0; $i < $mcount; $i++) {
@@ -28,7 +28,7 @@ for ($i = 0; $i < $mcount; $i++) {
 }
 $criteria = new Criteria('level', 0, '>');
 $criteria->setSort('uname');
-$userslist = $member_handler->getUserList($criteria);
+$userslist = $memberHandler->getUserList($criteria);
 $users     = array_diff($userslist, $mlist);
 
 echo "<fieldset><legend style='font-weight:bold;color:#900;'>" . _AM_XTORRENT_EDITBANNED . '</legend>';

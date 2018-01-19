@@ -34,22 +34,22 @@ function urlExists($url)
 function xtorrent_save_Permissions($groups, $id, $perm_name)
 {
     $result         = true;
-    $hModule        = xoops_gethandler('module');
+    $hModule        = xoops_getHandler('module');
     $xtorrentModule = $hModule->getByDirname('xtorrent');
 
-    $module_id     = $xtorrentModule->getVar('mid');
-    $gperm_handler = xoops_gethandler('groupperm');
+    $module_id    = $xtorrentModule->getVar('mid');
+    $gpermHandler = xoops_getHandler('groupperm');
 
     /*
     * First, if the permissions are already there, delete them
     */
-    $gperm_handler->deleteByModule($module_id, $perm_name, $id);
+    $gpermHandler->deleteByModule($module_id, $perm_name, $id);
     /*
     *  Save the new permissions
     */
     if (is_array($groups)) {
         foreach ($groups as $group_id) {
-            $gperm_handler->addRight($perm_name, $id, $group_id, $module_id);
+            $gpermHandler->addRight($perm_name, $id, $group_id, $module_id);
         }
     }
     return $result;
@@ -96,7 +96,7 @@ function xtorrent_serverstats()
     echo "<li>" . _AM_XTORRENT_DOWN_GDLIBSTATUS . $gdlib;
     if (function_exists('gd_info'))
     {
-        if (true == $gdlib = gd_info())
+        if (true === $gdlib = gd_info())
         {
             echo "<li>" . _AM_XTORRENT_DOWN_GDLIBVERSION . "<b>" . $gdlib['GD Version'] . "</b>";
         }
@@ -314,8 +314,8 @@ function xtorrent_totalcategory($pid = 0)
 {
     global $xoopsDB, $xoopsModule, $xoopsUser;
 
-    $groups        = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
-    $gperm_handler = xoops_gethandler('groupperm');
+    $groups       = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
+    $gpermHandler = xoops_getHandler('groupperm');
 
     $sql = 'SELECT cid FROM ' . $xoopsDB->prefix('xtorrent_cat') . ' ';
     if ($pid > 0) {
@@ -324,7 +324,7 @@ function xtorrent_totalcategory($pid = 0)
     $result     = $xoopsDB->query($sql);
     $catlisting = 0;
     while (list($cid) = $xoopsDB->fetchRow($result)) {
-        if ($gperm_handler->checkRight('xtorrentownCatPerm', $cid, $groups, $xoopsModule->getVar('mid'))) {
+        if ($gpermHandler->checkRight('xtorrentownCatPerm', $cid, $groups, $xoopsModule->getVar('mid'))) {
             $catlisting++;
         }
     }
@@ -342,8 +342,8 @@ function xtorrent_getTotalItems($sel_id = 0, $get_child = 0)
 {
     global $xoopsDB, $mytree, $xoopsModule, $xoopsUser;
 
-    $groups        = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
-    $gperm_handler = xoops_gethandler('groupperm');
+    $groups       = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
+    $gpermHandler = xoops_getHandler('groupperm');
 
     $count          = 0;
     $published_date = 0;
@@ -356,7 +356,7 @@ function xtorrent_getTotalItems($sel_id = 0, $get_child = 0)
     }
     $result = $xoopsDB->query($query);
     while (list($lid, $published) = $xoopsDB->fetchRow($result)) {
-        if ($gperm_handler->checkRight('xtorrentownFilePerm', $lid, $groups, $xoopsModule->getVar('mid'))) {
+        if ($gpermHandler->checkRight('xtorrentownFilePerm', $lid, $groups, $xoopsModule->getVar('mid'))) {
             $count++;
             $published_date = ($published > $published_date) ? $published : $published_date;
         }
@@ -369,7 +369,7 @@ function xtorrent_getTotalItems($sel_id = 0, $get_child = 0)
             $query2  = 'SELECT lid, published FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE status > 0 AND offline = 0 AND published > 0 AND published <= ' . time() . ' AND (expired = 0 OR expired > ' . time() . ') AND cid=' . $arr[$i] . '';
             $result2 = $xoopsDB->query($query2);
             while (list($lid, $published) = $xoopsDB->fetchRow($result2)) {
-                if ($gperm_handler->checkRight('xtorrentownFilePerm', $lid, $groups, $xoopsModule->getVar('mid'))) {
+                if ($gpermHandler->checkRight('xtorrentownFilePerm', $lid, $groups, $xoopsModule->getVar('mid'))) {
                     $published_date = ($published > $published_date) ? $published : $published_date;
                     $thing++;
                 }
@@ -661,8 +661,8 @@ function xtorrent_adminmenu($header = '', $menu = '', $extra = '', $scount = 4)
     global $xoopsConfig, $xoopsModule;
 
     if (!is_object($xoopsModule)) {
-        $module_handler = xoops_gethandler('module');
-        $xoopsModule    = $module_handler->getByDirname('xtorrent');
+        $moduleHandler = xoops_getHandler('module');
+        $xoopsModule   = $moduleHandler->getByDirname('xtorrent');
     }
 
     if (isset($_SERVER['PHP_SELF'])) {
@@ -908,9 +908,8 @@ function xtorrent_downlistbody($published)
 
     $lid   = $published['lid'];
     $cid   = $published['cid'];
-    $title = "<a href='../singlefile.php?cid=" . $published['cid'] . '&amp;lid=' . $published['lid'] . "'>" . $myts->htmlSpecialChars(trim($published['title'])) . '</a>';
-    ;
-    $submitter = xoops_getLinkedUnameFromId((int)$published['submitter']);
+    $title = "<a href='../singlefile.php?cid=" . $published['cid'] . '&amp;lid=' . $published['lid'] . "'>" . $myts->htmlSpecialChars(trim($published['title'])) . '</a>';;
+    $submitter = XoopsUserUtility::getUnameFromId((int)$published['submitter']);
     $publish   = formatTimestamp($published['published'], 's');
     $status    = ($published['published'] > 0) ? $imagearray['online'] : "<a href='newdownloads.php'>" . $imagearray['offline'] . '</a>';
     $offline   = (0 == $published['offline']) ? $imagearray['online'] : $imagearray['offline'];

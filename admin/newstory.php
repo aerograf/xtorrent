@@ -25,16 +25,16 @@ $nosmiley = empty($nosmiley) ? 0 : 1;
 $story->setNohtml($nohtml);
 $story->setNosmiley($nosmiley);
 $story->store();
-$notification_handler = xoops_gethandler('notification');
-$tags                 = [];
-$tags['STORY_NAME']   = $story->title();
+$notificationHandler = xoops_getHandler('notification');
+$tags                = [];
+$tags['STORY_NAME']  = $story->title();
 
-$modhandler = xoops_gethandler('module');
-$newsModule = $modhandler->getByDirname('news');
+$moduleHandler = xoops_getHandler('module');
+$newsModule    = $moduleHandler->getByDirname('news');
 
 $tags['STORY_URL'] = XOOPS_URL . '/modules/news/article.php?storyid=' . $story->storyid();
 if (!empty($isnew)) {
-    $notification_handler->triggerEvent('story', $story->storyid(), 'approve', $tags);
+    $notificationHandler->triggerEvent('story', $story->storyid(), 'approve', $tags);
 }
-$notification_handler->triggerEvent('global', 0, 'new_story', $tags);
+$notificationHandler->triggerEvent('global', 0, 'new_story', $tags);
 unset($xoopsModule);

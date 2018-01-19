@@ -59,8 +59,8 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
             global $xoopsDB;
             $this->db = $xoopsDB;
         }
-        $this->db_table     = $this->db->prefix('xtorrent_payments');
-        $this->perm_handler = xoops_gethandler('groupperm');
+        $this->db_table    = $this->db->prefix('xtorrent_payments');
+        $this->permHandler = xoops_getHandler('groupperm');
     }
 
     public function getInstance($db)
@@ -114,54 +114,20 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
         $myts = MyTextSanitizer::getInstance();
         if ($payments->isNew() || empty($id)) {
             $id  = $this->db->genId($this->db_table . '_xt_payments_id_seq');
-            $sql = sprintf(
-                'INSERT INTO %s (
+            $sql = sprintf('INSERT INTO %s (
 				`id`, `torrent`, `passkey`, `userid`, `payment`, `business`, `txn_id`, `item_name`, `item_number`, `quantity`, `invoice`, `custom`, `tax`, `option_name1`, `option_selection1`, `option_name2`, `option_selection2`, `memo`, `payment_status`, `payment_date`, 	`txn_type`, `mc_gross`, `mc_fee`, `mc_currency`, `settle_amount`, `exchange_rate`, `first_name`, `last_name`, `address_street`, `address_city`, `address_state`, `address_zip`, `address_country`, `address_status`, `payer_email`, `payer_status`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
 				%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
-				)',
-                $this->db_table,
-                $this->db->quoteString($id),
-                $this->db->quoteString($torrent),
-                $this->db->quoteString($passkey),
-                $this->db->quoteString($userid),
-                $this->db->quoteString($payment),
-                $this->db->quoteString($business),
-                $this->db->quoteString($txn_id),
-                           $this->db->quoteString($item_name),
-                $this->db->quoteString($item_number),
-                $this->db->quoteString($quantity),
-                $this->db->quoteString($invoice),
-                $this->db->quoteString($custom),
-                $this->db->quoteString($tax),
-                $this->db->quoteString($option_name1),
-                           $this->db->quoteString($option_selection1),
-                $this->db->quoteString($option_name2),
-                $this->db->quoteString($option_selection2),
-                $this->db->quoteString($myts->addslashes($memo)),
-                $this->db->quoteString($payment_status),
-                $this->db->quoteString($payment_date),
-                           $this->db->quoteString($txn_type),
-                $this->db->quoteString($mc_gross),
-                $this->db->quoteString($mc_fee),
-                $this->db->quoteString($mc_currency),
-                $this->db->quoteString($settle_amount),
-                $this->db->quoteString($exchange_rate),
-                           $this->db->quoteString($myts->addslashes($first_name)),
-                $this->db->quoteString($myts->addslashes($last_name)),
-                $this->db->quoteString($myts->addslashes($address_street)),
-                $this->db->quoteString($myts->addslashes($address_city)),
-                           $this->db->quoteString($myts->addslashes($address_state)),
-                $this->db->quoteString($myts->addslashes($address_zip)),
-                $this->db->quoteString($myts->addslashes($address_country)),
-                $this->db->quoteString($myts->addslashes($address_status)),
-                           $this->db->quoteString($myts->addslashes($payer_email)),
-                $this->db->quoteString($myts->addslashes($payer_status))
-            );
+				)', $this->db_table, $this->db->quoteString($id), $this->db->quoteString($torrent), $this->db->quoteString($passkey), $this->db->quoteString($userid), $this->db->quoteString($payment), $this->db->quoteString($business), $this->db->quoteString($txn_id),
+                           $this->db->quoteString($item_name), $this->db->quoteString($item_number), $this->db->quoteString($quantity), $this->db->quoteString($invoice), $this->db->quoteString($custom), $this->db->quoteString($tax), $this->db->quoteString($option_name1),
+                           $this->db->quoteString($option_selection1), $this->db->quoteString($option_name2), $this->db->quoteString($option_selection2), $this->db->quoteString($myts->addslashes($memo)), $this->db->quoteString($payment_status), $this->db->quoteString($payment_date),
+                           $this->db->quoteString($txn_type), $this->db->quoteString($mc_gross), $this->db->quoteString($mc_fee), $this->db->quoteString($mc_currency), $this->db->quoteString($settle_amount), $this->db->quoteString($exchange_rate),
+                           $this->db->quoteString($myts->addslashes($first_name)), $this->db->quoteString($myts->addslashes($last_name)), $this->db->quoteString($myts->addslashes($address_street)), $this->db->quoteString($myts->addslashes($address_city)),
+                           $this->db->quoteString($myts->addslashes($address_state)), $this->db->quoteString($myts->addslashes($address_zip)), $this->db->quoteString($myts->addslashes($address_country)), $this->db->quoteString($myts->addslashes($address_status)),
+                           $this->db->quoteString($myts->addslashes($payer_email)), $this->db->quoteString($myts->addslashes($payer_status)));
         } else {
-            $sql = sprintf(
-                'UPDATE %s SET
+            $sql = sprintf('UPDATE %s SET
 				`torrent` = %s,
 				`passkey` = %s,
 				`userid` = %s,
@@ -196,48 +162,16 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
 				`address_country` = %s,
 				`address_status` = %s,
 				`payer_email` = %s,
-				`payer_status` = %s WHERE id = %s',
-                $this->db_table,
-                $this->db->quoteString($torrent),
-                $this->db->quoteString($passkey),
-                $this->db->quoteString($userid),
-                $this->db->quoteString($payment),
-                $this->db->quoteString($business),
-                $this->db->quoteString($txn_id),
-                           $this->db->quoteString($item_name),
-                $this->db->quoteString($item_number),
-                $this->db->quoteString($quantity),
-                $this->db->quoteString($invoice),
-                $this->db->quoteString($custom),
-                $this->db->quoteString($tax),
-                $this->db->quoteString($option_name1),
-                           $this->db->quoteString($option_selection1),
-                $this->db->quoteString($option_name2),
-                $this->db->quoteString($option_selection2),
-                $this->db->quoteString($myts->addslashes($memo)),
-                $this->db->quoteString($payment_status),
-                $this->db->quoteString($payment_date),
-                           $this->db->quoteString($txn_type),
-                $this->db->quoteString($mc_gross),
-                $this->db->quoteString($mc_fee),
-                $this->db->quoteString($mc_currency),
-                $this->db->quoteString($settle_amount),
-                $this->db->quoteString($exchange_rate),
-                           $this->db->quoteString($myts->addslashes($first_name)),
-                $this->db->quoteString($myts->addslashes($last_name)),
-                $this->db->quoteString($myts->addslashes($address_street)),
-                $this->db->quoteString($myts->addslashes($address_city)),
-                           $this->db->quoteString($myts->addslashes($address_state)),
-                $this->db->quoteString($myts->addslashes($address_zip)),
-                $this->db->quoteString($myts->addslashes($address_country)),
-                $this->db->quoteString($myts->addslashes($address_status)),
-                           $this->db->quoteString($myts->addslashes($payer_email)),
-                $this->db->quoteString($myts->addslashes($payer_status)),
-                $this->db->quoteString($id)
-            );
+				`payer_status` = %s WHERE id = %s', $this->db_table, $this->db->quoteString($torrent), $this->db->quoteString($passkey), $this->db->quoteString($userid), $this->db->quoteString($payment), $this->db->quoteString($business), $this->db->quoteString($txn_id),
+                           $this->db->quoteString($item_name), $this->db->quoteString($item_number), $this->db->quoteString($quantity), $this->db->quoteString($invoice), $this->db->quoteString($custom), $this->db->quoteString($tax), $this->db->quoteString($option_name1),
+                           $this->db->quoteString($option_selection1), $this->db->quoteString($option_name2), $this->db->quoteString($option_selection2), $this->db->quoteString($myts->addslashes($memo)), $this->db->quoteString($payment_status), $this->db->quoteString($payment_date),
+                           $this->db->quoteString($txn_type), $this->db->quoteString($mc_gross), $this->db->quoteString($mc_fee), $this->db->quoteString($mc_currency), $this->db->quoteString($settle_amount), $this->db->quoteString($exchange_rate),
+                           $this->db->quoteString($myts->addslashes($first_name)), $this->db->quoteString($myts->addslashes($last_name)), $this->db->quoteString($myts->addslashes($address_street)), $this->db->quoteString($myts->addslashes($address_city)),
+                           $this->db->quoteString($myts->addslashes($address_state)), $this->db->quoteString($myts->addslashes($address_zip)), $this->db->quoteString($myts->addslashes($address_country)), $this->db->quoteString($myts->addslashes($address_status)),
+                           $this->db->quoteString($myts->addslashes($payer_email)), $this->db->quoteString($myts->addslashes($payer_status)), $this->db->quoteString($id));
         }
 
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -261,7 +195,7 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
             $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -332,9 +266,9 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
         $criteria->add(new Criteria('gperm_itemid', $id));
         $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid')));
         $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode));
-        if ($old_perms = $this->perm_handler->getObjects($criteria)) {
+        if ($old_perms = $this->permHandler->getObjects($criteria)) {
             foreach ($old_perms as $p) {
-                $this->perm_handler->delete($p);
+                $this->permHandler->delete($p);
             }
         }
         return true;
@@ -344,12 +278,12 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
     {
         global $xoopsModule;
         foreach ($group_ids as $id) {
-            $perm = $this->perm_handler->create();
+            $perm = $this->permHandler->create();
             $perm->setVar('gperm_name', $this->perm_name . $mode);
             $perm->setVar('gperm_itemid', $id);
             $perm->setVar('gperm_groupid', $id);
             $perm->setVar('gperm_modid', $xoopsModule->getVar('mid'));
-            $this->perm_handler->insert($perm);
+            $this->permHandler->insert($perm);
             $ii++;
         }
         return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $id;
@@ -366,7 +300,7 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
             $criteria->add(new Criteria('gperm_modid', $xoopsModule->getVar('mid'), '='), 'AND');
             $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode, '='), 'AND');
 
-            $gtObjperm = $this->perm_handler->getObjects($criteria);
+            $gtObjperm = $this->permHandler->getObjects($criteria);
             $groups    = [];
 
             foreach ($gtObjperm as $v) {
@@ -383,7 +317,7 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
             if ($payments = $this->getObjects($criteria, 'home_list')) {
                 $ret = [];
                 foreach ($payments as $f) {
-                    if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $f->getVar('id'), $groups, $xoopsModule->getVar('mid'))) {
+                    if (false !== $this->permHandler->checkRight($this->perm_name . $mode, $f->getVar('id'), $groups, $xoopsModule->getVar('mid'))) {
                         $ret[] = $f;
                         unset($f);
                     }
@@ -397,7 +331,7 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;
-        if (false != $this->perm_handler->checkRight($this->perm_name . $mode, $id, $groups, $xoopsModule->getVar('mid'))) {
+        if (false !== $this->permHandler->checkRight($this->perm_name . $mode, $id, $groups, $xoopsModule->getVar('mid'))) {
             return true;
         }
         return false;
