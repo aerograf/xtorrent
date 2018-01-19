@@ -13,11 +13,16 @@ if (!defined('XOOPS_ROOT_PATH')) {
 class Xtorrent_XoopsAuth extends XoopsAuth
 {
     public $passcrc;
+
     /**
      * function for getuname_fromhash
-     * @author Simon Roberts <simon@chronolabs.org>
+     * @author    Simon Roberts <simon@chronolabs.org>
      * @copyright copyright (c) 2009 chronolabs.org.au
-     * @package xtorrent
+     * @package   xtorrent
+     * @param        $user_userkey
+     * @param        $passkey
+     * @param string $return
+     * @return bool
      */
 
     public function uid_from_userkey($user_userkey, $passkey, $return = '')
@@ -32,12 +37,15 @@ class Xtorrent_XoopsAuth extends XoopsAuth
         }
         return false;
     }
-    
+
     /**
      * function for xoops_check_useruserkey
-     * @author Simon Roberts <simon@chronolabs.org>
+     * @author    Simon Roberts <simon@chronolabs.org>
      * @copyright copyright (c) 2009 chronolabs.org.au
-     * @package xtorrent
+     * @package   xtorrent
+     * @param $userkey
+     * @param $passkey
+     * @return
      */
      
     public function xoops_check_userkey($userkey, $passkey)

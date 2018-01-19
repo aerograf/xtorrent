@@ -36,7 +36,6 @@ class Xtorrent_XoopsUser extends XoopsUser
 
     /**
      * constructor
-     * @param array $id Array of key-value-pairs to be assigned to the user. (for backward compatibility only)
      * @param int $id ID of the user to be loaded from the database.
      */
     public function __construct($id = null)
@@ -62,9 +61,11 @@ class Xtorrent_XoopsUser extends XoopsUser
 
     /**
      * function for getuname_fromhash
-     * @author Simon Roberts <simon@chronolabs.org>
+     * @author    Simon Roberts <simon@chronolabs.org>
      * @copyright copyright (c) 2009 chronolabs.org.au
-     * @package xtorrent
+     * @package   xtorrent
+     * @param $user_hashinfo
+     * @return bool
      */
 
     public function getuname_fromhash($user_hashinfo)
@@ -79,12 +80,14 @@ class Xtorrent_XoopsUser extends XoopsUser
         }
         return false;
     }
-    
+
     /**
      * function for xoops_check_userhashinfo
-     * @author Simon Roberts <simon@chronolabs.org>
+     * @author    Simon Roberts <simon@chronolabs.org>
      * @copyright copyright (c) 2009 chronolabs.org.au
-     * @package xtorrent
+     * @package   xtorrent
+     * @param $hashinfo
+     * @return bool
      */
      
     public function xoops_check_userhashinfo($hashinfo)

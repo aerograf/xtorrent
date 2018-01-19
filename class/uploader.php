@@ -76,15 +76,15 @@ class XoopsMediaUploader
      * No admin check for uploads
      */
     public $noadmin_sizecheck;
+
     /**
      * Constructor
      *
      * @param string $uploadDir
-     * @param array $allowedMimeTypes
-     * @param int $maxFileSize
-     * @param int $maxWidth
-     * @param int $maxHeight
-     * @param int $cmodvalue
+     * @param int    $allowedMimeTypes
+     * @param int    $maxFileSize
+     * @param int    $maxWidth
+     * @param int    $maxHeight
      */
     public function __construct($uploadDir, $allowedMimeTypes = 0, $maxFileSize, $maxWidth = 0, $maxHeight = 0)
     {
@@ -268,6 +268,7 @@ class XoopsMediaUploader
     /**
      * Check the file and copy it to the destination
      *
+     * @param int $chmod
      * @return bool
      */
     public function upload($chmod = 0644)
@@ -317,6 +318,7 @@ class XoopsMediaUploader
     /**
      * Copy the file to its destination
      *
+     * @param $chmod
      * @return bool
      */
     public function _copyFile($chmod)
@@ -364,6 +366,7 @@ class XoopsMediaUploader
     /**
      * Is the picture the right width?
      *
+     * @param $dimension
      * @return bool
      */
     public function checkMaxWidth($dimension)
@@ -380,6 +383,7 @@ class XoopsMediaUploader
     /**
      * Is the picture the right height?
      *
+     * @param $dimension
      * @return bool
      */
     public function checkMaxHeight($dimension)

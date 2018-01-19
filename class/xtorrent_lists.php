@@ -18,10 +18,18 @@ class XtsLists
      * Size:
      * emptyselect:
      * $type: Filter which types of files should be returned
-     * 		Html
-     * 		Images
-     * 		files
-     * 		dir
+     *        Html
+     *        Images
+     *        files
+     *        dir
+     * @param string $path
+     * @param null   $value
+     * @param string $selected
+     * @param int    $size
+     * @param int    $emptyselect
+     * @param int    $type
+     * @param string $prefix
+     * @param string $suffix
      */
 
     public function __construct($path = 'uploads', $value = null, $selected = '', $size = 1, $emptyselect = 0, $type = 0, $prefix = '', $suffix = '')
@@ -54,6 +62,8 @@ class XtsLists
 
     /**
      * Private to be called by other parts of the class
+     * @param $dirname
+     * @return array
      */
     public static function getDirListAsArray($dirname)
     {

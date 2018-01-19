@@ -46,6 +46,10 @@ class MyXoopsGroupPermForm extends XoopsForm
 
     /**
      * Constructor
+     * @param $title
+     * @param $modid
+     * @param $permname
+     * @param $permdesc
      */
     public function __construct($title, $modid, $permname, $permdesc)
     {
@@ -78,6 +82,9 @@ class MyXoopsGroupPermForm extends XoopsForm
      * Add appendix
      *
      * @access public
+     * @param $permName
+     * @param $itemId
+     * @param $itemName
      */
     public function addAppendix($permName, $itemId, $itemName)
     {
@@ -209,6 +216,10 @@ class MyXoopsGroupFormCheckBox extends XoopsFormElement
 
     /**
      * Constructor
+     * @param      $caption
+     * @param      $name
+     * @param      $groupId
+     * @param null $values
      */
     public function __construct($caption, $name, $groupId, $values = null)
     {
@@ -252,6 +263,7 @@ class MyXoopsGroupFormCheckBox extends XoopsFormElement
      * Sets appendix of checkboxes
      *
      * @access public
+     * @param $appendix
      */
     public function setAppendix($appendix)
     {

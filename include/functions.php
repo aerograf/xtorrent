@@ -29,8 +29,8 @@ function urlExists($url)
  * @param $groups
  * @param $id
  * @param $perm_name
- * @return
- **/
+ * @return bool
+ */
 function xtorrent_save_Permissions($groups, $id, $perm_name)
 {
     $result         = true;
@@ -58,8 +58,8 @@ function xtorrent_save_Permissions($groups, $id, $perm_name)
 /**
  * toolbar()
  *
- * @return
- **/
+ * @return string
+ */
 function xtorrent_toolbar()
 {
     global $xoopsModuleConfig, $xoopsUser;
@@ -114,10 +114,10 @@ function xtorrent_serverstats()
 /**
  * displayicons()
  *
- * @param  $time
+ * @param         $time
  * @param integer $status
  * @param integer $counter
- * @return
+ * @return string
  */
 function xtorrent_displayicons($time, $status = 0, $counter = 0)
 {
@@ -168,8 +168,8 @@ if (!function_exists('convertorderbyin')) {
      * convertorderbyin()
      *
      * @param $orderby
-     * @return
-     **/
+     * @return string
+     */
     function convertorderbyin($orderby)
     {
         switch (trim($orderby)) {
@@ -267,8 +267,8 @@ if (!function_exists('convertorderbyout')) {
  * PrettySize()
  *
  * @param $size
- * @return
- **/
+ * @return string
+ */
 function xtorrent_PrettySize($size)
 {
     $mb = 1024 * 1024;
@@ -286,8 +286,8 @@ function xtorrent_PrettySize($size)
  * updaterating()
  *
  * @param $sel_id
- * @return updates rating data in itemtable for a given item
- **/
+ * @return void rating data in itemtable for a given item
+ */
 function xtorrent_updaterating($sel_id)
 {
     global $xoopsDB;
@@ -304,13 +304,12 @@ function xtorrent_updaterating($sel_id)
     $xoopsDB -> query($sql);
 }
 
-
 /**
  * totalcategory()
  *
  * @param integer $pid
- * @return
- **/
+ * @return int
+ */
 function xtorrent_totalcategory($pid = 0)
 {
     global $xoopsDB, $xoopsModule, $xoopsUser;
@@ -428,16 +427,16 @@ function xtorrent_displayimage($image = '', $path = '', $imgsource = '', $alttex
 /**
  * down_createthumb()
  *
- * @param $img_name
- * @param $img_path
- * @param $img_savepath
+ * @param         $img_name
+ * @param         $img_path
+ * @param         $img_savepath
  * @param integer $img_w
  * @param integer $img_h
  * @param integer $quality
  * @param integer $update
  * @param integer $aspect
- * @return
- **/
+ * @return string
+ */
 function down_createthumb($img_name, $img_path, $img_savepath, $img_w = 100, $img_h = 100, $quality = 100, $update = 0, $aspect = 1)
 {
     global $xoopsModuleConfig, $xoopsConfig;

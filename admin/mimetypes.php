@@ -26,7 +26,7 @@ if (isset($_POST['op'])) {
  * edit_mimetype()
  *
  * @param integer $mime_id
- * @return
+ * @return void
  */
 function edit_mimetype($mime_id = 0)
 {

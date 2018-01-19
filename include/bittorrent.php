@@ -179,7 +179,10 @@ $DEFAULTBASEURL = XOOPS_URL;
 $autoclean_interval = 900;
 $pic_base_url       = 'pic/';
 
-/**** validip/getip courtesy of manolete <manolete@myway.com> ****/
+/**** validip/getip courtesy of manolete <manolete@myway.com> ***
+ * @param $ip
+ * @return bool
+ */
 
 // IP Validation
 function validip($ip)
