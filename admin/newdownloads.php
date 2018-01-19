@@ -2,33 +2,25 @@
 
 require_once __DIR__ . '/admin_header.php';
 
-if (isset($_POST))
-{
-    foreach ($_POST as $k => $v)
-    {
+if (isset($_POST)) {
+    foreach ($_POST as $k => $v) {
         $$k = $v;
-    } 
-} 
+    }
+}
 
-if (isset($_GET))
-{
-    foreach ($_GET as $k => $v)
-    {
+if (isset($_GET)) {
+    foreach ($_GET as $k => $v) {
         $$k = $v;
-    } 
-} 
+    }
+}
 
-if (!isset($_POST['op']))
-{
+if (!isset($_POST['op'])) {
     $op = isset($_GET['op']) ? $_GET['op'] : 'main';
-} 
-else
-{
+} else {
     $op = $_POST['op'];
-} 
+}
 
-switch ($op)
-{
+switch ($op) {
     case "approve":
 
         global $xoopsModule;
@@ -57,10 +49,10 @@ switch ($op)
         $notification_handler->triggerEvent('category', $cid, 'new_file', $tags);
 
         if ($notifypub) {
-				$notification_handler->triggerEvent('file', $lid, 'approve', $tags);
+            $notification_handler->triggerEvent('file', $lid, 'approve', $tags);
         }
         redirect_header('newdownloads.php', 1, _AM_XTORRENT_SUB_NEXTILECREATED);
-        break; 
+        break;
 
     // List downloads waiting for validation
     case 'main':
@@ -78,7 +70,7 @@ switch ($op)
         $adminObject = \Xmf\Module\Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));
 
-      	echo "<fieldset><legend style='font-weight: bold; color: #900;'>" . _AM_XTORRENT_SUB_FILESWAITINGINFO . "</legend>
+          echo "<fieldset><legend style='font-weight: bold; color: #900;'>" . _AM_XTORRENT_SUB_FILESWAITINGINFO . "</legend>
           		<div  style='padding:4px;'><b>" . _AM_XTORRENT_SUB_FILESWAITINGVALIDATION . "</b> " . $new_array_count . "</div>
           		<div  style='padding:4px;'>
           		<li>" . $imagearray['approve'] . " " . _AM_XTORRENT_SUB_APPROVEWAITINGFILE . "
@@ -93,10 +85,8 @@ switch ($op)
           		<th style='text-align:center;width:7%;'>" . _AM_XTORRENT_MINDEX_ACTION . "</th>
           		</tr>";
 
-        if ($new_array_count > 0)
-        {
-            while ($new = $xoopsDB->fetchArray($new_array))
-            {
+        if ($new_array_count > 0) {
+            while ($new = $xoopsDB->fetchArray($new_array)) {
                 $rating    = number_format($new['rating'], 2);
                 $title     = $myts->htmlSpecialChars($new['title']);
                 $url       = $myts->htmlSpecialChars($new['url']);
@@ -112,19 +102,17 @@ switch ($op)
                 $modify    = "<a href='index.php?op=Download&amp;lid=" . $new['lid'] . "'>" . $imagearray['editimg'] . "</a>";
                 $delete    = "<a href='index.php?op=delDownload&amp;lid=" . $new['lid'] . "'>" . $imagearray['deleteimg'] . "</a>";
 
-              	echo "<tr>
+                echo "<tr>
                   		<td class='head' style='text-align:center;'>" . $new['lid'] . "</td>
                   		<td class='even' style='white-space:nowrap;'><a href='newdownloads.php?op=edit&lid=" . $new['lid'] . "'>" . $title . "</a></td>
                   		<td class='even' style='text-align:center; white-space:nowrap;'>$submitter</td>
                   		<td class='even' style='text-align:center;'>" . $datetime . "</td>
                   		<td class='even' style='text-align:center; white-space:nowrap;'>" . $status . " " . $modify . " " . $delete . "</td>
                   		</tr>";
-            } 
-        } 
-        else
-        {
+            }
+        } else {
             echo "<tr ><td class='head' colspan='6' style='text-align:center;'>" . _AM_XTORRENT_SUB_NOFILESWAITING . "</td></tr>";
-        } 
+        }
         echo "</table></fieldset>";
 
         include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
@@ -133,4 +121,4 @@ switch ($op)
         echo "<div style='padding:8px;float:right;'>" . $page . '' . $pagenav -> renderNav() . '</div>';
         require_once __DIR__ . '/admin_footer.php';
         break;
-} 
+}

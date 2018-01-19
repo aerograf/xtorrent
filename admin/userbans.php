@@ -8,7 +8,7 @@ $g_id = 1;
 
 xoops_cp_header();
 $adminObject = \Xmf\Module\Admin::getInstance();
-$adminObject->displayNavigation(basename(__FILE__)); 
+$adminObject->displayNavigation(basename(__FILE__));
 
 $member_handler     = xoops_gethandler('member');
 $thisgroup          = $member_handler -> getGroup($g_id);
@@ -23,10 +23,9 @@ $membercount    = $member_handler -> getUserCountByGroup($g_id);
 $members        = $member_handler -> getUsersByGroup($g_id, true);
 $mlist          = [];
 $mcount         = count($members);
-for ($i = 0; $i < $mcount; $i++)
-{
+for ($i = 0; $i < $mcount; $i++) {
     $mlist[$members[$i] -> getVar('uid')] = $members[$i] -> getVar('uname');
-} 
+}
 $criteria  = new Criteria('level', 0, '>');
 $criteria -> setSort('uname');
 $userslist = $member_handler -> getUserList($criteria);
@@ -41,10 +40,9 @@ echo '</tr>
 		<tr><td class="even">
 		<form action="admin.php" method="post">
 		<select name="uids[]" size="10" multiple="multiple">';
-    foreach ($mlist as $m_id => $m_name)
-    {
+    foreach ($mlist as $m_id => $m_name) {
         echo '<option value="' . $m_id . '">' . $m_name . '</option>';
-    } 
+    }
 
 echo "</select>";
 echo "</td><td align='center' class='odd'>
@@ -61,10 +59,9 @@ echo "</td><td align='center' class='odd'>
   		</td>
   		<td class='even'>";
 echo "<select name='uids[]' size='10' multiple='multiple'>";
-foreach ($users as $u_id => $u_name)
-{
+foreach ($users as $u_id => $u_name) {
     echo '<option value="' . $u_id . '">' . $u_name . '</option>';
-} 
+}
 echo "</select>";
 echo "</td></tr></form></table></fieldset>";
 

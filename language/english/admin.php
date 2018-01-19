@@ -1,5 +1,5 @@
-<?
- 
+<?php
+
 // %%%%%%	Module NMDe 'X-Torrent' (Admin)	  %%%%%
 // Buttons
 define('_AM_XTORRENT_PAYPAL', 'Paypal email:');
@@ -91,7 +91,7 @@ define('_AM_XTORRENT_FCATEGORY_CIMAGE', 'Select Category Image:');
 define('_AM_XTORRENT_FCATEGORY_DESCRIPTION', 'Set Category Description:');
 define('_AM_XTORRENT_FCATEGORY_SUMMARY', 'Set Category Summary:');
 /* Index page Defines
-*/ 
+*/
 define('_AM_XTORRENT_IPAGE_UPDATED', 'Index Page Modified and Database Updated Successfully!');
 define('_AM_XTORRENT_IPAGE_INFORMATION', 'Index Page Information');
 define('_AM_XTORRENT_IPAGE_MODIFY', 'Modify Index Page');
@@ -106,7 +106,7 @@ define('_AM_XTORRENT_IPAGE_CCENTER', 'Align Center');
 define('_AM_XTORRENT_IPAGE_CRIGHT', 'Align Right');
 /*
 /*  Permissions defines
-*/ 
+*/
 define('_AM_XTORRENT_PERM_MANAGEMENT', 'Permissions Management');
 define('_AM_XTORRENT_PERM_PERMSNOTE', '<div><b>NOTE:</b> Please be aware that even if you&#8217ve set correct viewing permissions here, a group might not see the articles or blocks if you don&#8217t also grant that group permissions to access the module. To do that, go to <b>System admin > Groups</b>, choose the appropriate group and click the checkboxes to grant its members the access.</div>');
 define('_AM_XTORRENT_PERM_CPERMISSIONS', 'Category Permissions');
@@ -116,7 +116,7 @@ define('_AM_XTORRENT_PERM_FPERMISSIONS', 'File Permissions');
 define('_AM_XTORRENT_PERM_FNOFILES', 'Cannot set permission\'s: No files have been created yet!');
 define('_AM_XTORRENT_PERM_FSELECTPERMISSIONS', 'Select the files that each group is allowed to view');
 /* Upload defines
-*/ 
+*/
 define('_AM_XTORRENT_DOWN_IMAGEUPLOAD', 'Image successfully uploaded to server destination');
 define('_AM_XTORRENT_DOWN_NOIMAGEEXIST', 'Error: No file was selected for uploading.  Please try again!');
 define('_AM_XTORRENT_DOWN_IMAGEEXIST', 'Image already exists in upload area!');
@@ -393,7 +393,7 @@ define('_AM_XTORRENT_BROKEN_NOFILEMATCH', 'There are no Broken reports that matc
 define('_AM_XTORRENT_BROKENFILEDELETED', 'Download description removed from database and broken report removed');
 
 /*
-/* About defines 
+/* About defines
 */
 define('_AM_XTORRENT_BY', 'by');
 
@@ -413,7 +413,7 @@ define('_AM_XTORRENT_CBCENTER', 'Center Middle');
 define('_AM_XTORRENT_ACTIVERIGHTS', 'Active Rights');
 define('_AM_XTORRENT_ACCESSRIGHTS', 'Access Rights');
 
-//image admin icon 
+//image admin icon
 define('_AM_XTORRENT_ICO_EDIT', 'Edit This Item');
 define('_AM_XTORRENT_ICO_DELETE', 'Delete This Item');
 define('_AM_XTORRENT_ICO_ONLINE', 'Online');

@@ -1,4 +1,4 @@
-<?
+<?php
 // $Id: pcm3108.class.php 1.1.0 - pcm3108 2009-08-15 9:22:20 wishcraft $
 //  ------------------------------------------------------------------------ //
 //                    CLORA - Chronolabs Australia                           //
@@ -31,49 +31,43 @@
 //  ------B===>-----+----------+------------<{:']-- Wishcraft & Purrrrr ---- //
 //  -----+-----------+------------------------------------------------------ //
 
-if (!class_exists('pcm3108'))
-{
+if (!class_exists('pcm3108')) {
+    error_reporting(0);
+    
+    class pcm3108
+    {
+        public $base;
+        public $enum;
+        public $seed;
+        public $crc;
+            
+        public function __construct($data, $seed, $len=29)
+        {
+            $this->seed = $seed;
+            $this->length = $len;
+            $this->base = new pcm3108_base((int)$seed);
+            $this->enum = new pcm3108_enumerator($this->base);
+            
+            if (!empty($data)) {
+                for ($i=1; $i<strlen($data); $i++) {
+                    $enum_calc = $this->enum->enum_calc(substr($data, $i, 1), $enum_calc);
+                }
+                $pcm3108_crc = new pcm3108_leaver($enum_calc, $this->base, $this->length);
+                $this->crc = $pcm3108_crc->crc;
+            }
+        }
+            
+        public function calc($data)
+        {
+            for ($i=1; $i<strlen($data); $i++) {
+                $enum_calc = $this->enum->enum_calc(substr($data, $i, 1), $enum_calc);
+            }
+            $pcm3108_crc = new pcm3108_leaver($enum_calc, $this->base, $this->length);
+            return $pcm3108_crc->crc;
+        }
+    }
+}
 
-	error_reporting(0);
-	
-	class pcm3108
-	{
-		var $base;
-		var $enum;
-		var $seed;
-		var $crc;
-			
-		function __construct($data, $seed, $len=29)
-		{
-			$this->seed = $seed;
-			$this->length = $len;
-			$this->base = new pcm3108_base((int)$seed);
-			$this->enum = new pcm3108_enumerator($this->base);
-			
-			if (!empty($data))
-			{
-				for ($i=1; $i<strlen($data); $i++)
-				{
-					$enum_calc = $this->enum->enum_calc(substr($data,$i,1),$enum_calc);
-				}		
-				$pcm3108_crc = new pcm3108_leaver($enum_calc, $this->base, $this->length);	
-				$this->crc = $pcm3108_crc->crc;			
-			}
-			
-		}
-			
-		function calc($data)
-		{
-			for ($i=1; $i<strlen($data); $i++)
-			{
-				$enum_calc = $this->enum->enum_calc(substr($data,$i,1),$enum_calc);
-			}		
-			$pcm3108_crc = new pcm3108_leaver($enum_calc, $this->base, $this->length);	
-			return $pcm3108_crc->crc;
-		}
-	}
-}				
-
-require ('pcm3108.base.php');
-require ('pcm3108.enumerator.php');
-require ('pcm3108.leaver.php');		
+require('pcm3108.base.php');
+require('pcm3108.enumerator.php');
+require('pcm3108.leaver.php');

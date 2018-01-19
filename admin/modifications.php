@@ -2,17 +2,13 @@
 
 require_once __DIR__ . '/admin_header.php';
 
-if (!isset($_POST['op']))
-{
+if (!isset($_POST['op'])) {
     $op = isset($_GET['op']) ? $_GET['op'] : 'main';
-} 
-else
-{
+} else {
     $op = $_POST['op'];
-} 
+}
 
-switch ($op)
-{
+switch ($op) {
     case "listModReqshow":
 
         include XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
@@ -29,8 +25,8 @@ switch ($op)
   			license, limitations, price, description, features, requirements, dhistory, screenshot, modifysubmitter, requestid
   			FROM " . $xoopsDB->prefix('xtorrent_mod') . " WHERE requestid=" . $_GET['requestid'];
         $mod_array = $xoopsDB->fetchArray($xoopsDB->query($sql));
-        unset($sql);		
-		
+        unset($sql);
+        
         $sql = "SELECT lid, title, url, mirror, homepage, homepagetitle, cid, version, publisher, size, platform,  
   			license, limitations, price, description, features, requirements, dhistory, screenshot, submitter 
   			FROM " . $xoopsDB->prefix('xtorrent_downloads') . " WHERE lid=" . $mod_array['lid'];
@@ -44,60 +40,51 @@ switch ($op)
         echo "<div><b>" . _AM_XTORRENT_MOD_MODPOSTER . "</b> " . $submittername . "</div>";
         $not_allowed = ["lid", "submitter", "requestid", "modifysubmitter"];
         $sform       = new XoopsThemeForm(_AM_XTORRENT_MOD_ORIGINAL, "storyform", "index.php");
-        foreach ($orig_array as $key => $content)
-        {
-            if (in_array($key , $not_allowed))
-            {
+        foreach ($orig_array as $key => $content) {
+            if (in_array($key, $not_allowed)) {
                 continue;
-            } 
+            }
             $lang_def = constant("_AM_XTORRENT_MOD_" . strtoupper($key));
 
-            if ($key == "platform" || $key == "license" || $key == "limitations")
+            if ($key == "platform" || $key == "license" || $key == "limitations") {
                 $content = $xoopsModuleConfig[$key][$orig_array[$key]];
-            if ($key == "cid")
-            {
+            }
+            if ($key == "cid") {
                 $sql     = "SELECT title FROM " . $xoopsDB->prefix('xtorrent_cat') . " WHERE cid=" . $content . "";
                 $row     = $xoopsDB->fetchArray($xoopsDB->query($sql));
                 $content = $row['title'];
-            } 
-            if ($key == "forumid")
-            {
+            }
+            if ($key == "forumid") {
                 $content          = '';
                 $modhandler       = xoops_gethandler('module');
                 $xoopsforumModule = $modhandler->getByDirname('newbb');
                 $sql              = "SELECT title FROM " . $xoopsDB->prefix('bb_categories') . " WHERE cid=" . $content . "";
-                if ($xoopsforumModule && $content > 0)
-                {
+                if ($xoopsforumModule && $content > 0) {
                     $content = "<a href='" . XOOPS_URL . "/modules/newbb/viewforum.php?forum=" . $content . "'>Forumid</a>";
-                } 
-                else
-                {
+                } else {
                     $content = '';
-                } 
-            } 
-            if ($key == "screenshot")
-            {
+                }
+            }
+            if ($key == "screenshot") {
                 $content = '';
-                if ($content > 0)
+                if ($content > 0) {
                     $content = "<img src='" . XOOPS_URL . "/" . $xoopsModuleConfig['screenshots'] . "/" . $logourl . "' width='" . $xoopsModuleConfig['shotwidth'] . "' alt='' >";
-            } 
-            if ($key == "features" || $key == "requirements")
-            {
-                if ($content != '')
-                {
+                }
+            }
+            if ($key == "features" || $key == "requirements") {
+                if ($content != '') {
                     $downrequirements = explode('|', trim($content));
-                    foreach ($downrequirements as $bi)
-                    {
+                    foreach ($downrequirements as $bi) {
                         $content = "<li>" . $bi;
-                    } 
-                } 
-            } 
-            if ($key == "dhistory")
-            {
-	            $content = $myts->displayTarea($content, 1, 0, 0, 0, 1);;
-            } 
+                    }
+                }
+            }
+            if ($key == "dhistory") {
+                $content = $myts->displayTarea($content, 1, 0, 0, 0, 1);
+                ;
+            }
             $sform->addElement(new XoopsFormLabel($lang_def, $content));
-        } 
+        }
         $sform->display();
 
         $orig_user      = new XoopsUser($mod_array['modifysubmitter']);
@@ -106,69 +93,61 @@ switch ($op)
 
         echo "<div><b>" . _AM_XTORRENT_MOD_MODIFYSUBMITTER . "</b> " . $submittername . "</div>";
         $sform = new XoopsThemeForm(_AM_XTORRENT_MOD_PROPOSED, "storyform", "modifications.php");
-        foreach ($mod_array as $key => $content)
-        {
-            if (in_array($key, $not_allowed))
-            {
-                Continue;
-            } 
+        foreach ($mod_array as $key => $content) {
+            if (in_array($key, $not_allowed)) {
+                continue;
+            }
             $lang_def = constant("_AM_XTORRENT_MOD_" . strtoupper($key));
 
-            if ($key == "platform" || $key == "license" || $key == "limitations")
+            if ($key == "platform" || $key == "license" || $key == "limitations") {
                 $content = $xoopsModuleConfig[$key][$orig_array[$key]];
-            if ($key == "cid")
-            {
+            }
+            if ($key == "cid") {
                 $sql     = "SELECT title FROM " . $xoopsDB->prefix('xtorrent_cat') . " WHERE cid=" . $content . "";
                 $row     = $xoopsDB->fetchArray($xoopsDB->query($sql));
                 $content = $row['title'];
-            } 
-            if ($key == "forumid")
-            {
+            }
+            if ($key == "forumid") {
                 $content          = '';
                 $modhandler       = xoops_gethandler('module');
                 $xoopsforumModule = $modhandler->getByDirname('newbb');
                 $sql              = "SELECT title FROM " . $xoopsDB->prefix('bb_categories') . " WHERE cid=" . $content . "";
                 $content          = '';
-                if ($xoopsforumModule && $content > 0)
-                {
+                if ($xoopsforumModule && $content > 0) {
                     $content = "<a href='" . XOOPS_URL . "/modules/newbb/viewforum.php?forum=" . $content . "'>Forumid</a>";
-                } 
-            } 
-            if ($key == "screenshot")
-            {
+                }
+            }
+            if ($key == "screenshot") {
                 $content = '';
-                if ($content > 0)
+                if ($content > 0) {
                     $content = "<img src='" . XOOPS_URL . "/" . $xoopsModuleConfig['screenshots'] . "/" . $logourl . "' width='" . $xoopsModuleConfig['shotwidth'] . "' alt='' >";
-            } 
-            if ($key == "features" || $key == "requirements")
-            {
-                if ($content != '')
-                {
+                }
+            }
+            if ($key == "features" || $key == "requirements") {
+                if ($content != '') {
                     $downrequirements = explode('|', trim($content));
-                    foreach ($downrequirements as $bi)
-                    {
+                    foreach ($downrequirements as $bi) {
                         $content = "<li>" . $bi;
-                    } 
-                } 
-            } 
-            if ($key == "dhistory")
-            {
-	            $content = $myts->displayTarea($content, 1, 0, 0, 0, 1);;
-            } 
+                    }
+                }
+            }
+            if ($key == "dhistory") {
+                $content = $myts->displayTarea($content, 1, 0, 0, 0, 1);
+                ;
+            }
             $sform->addElement(new XoopsFormLabel($lang_def, $content));
-        } 
+        }
 
         $button_tray = new XoopsFormElementTray('', '');
         $button_tray->addElement(new XoopsFormHidden('requestid', $requestid));
         $button_tray->addElement(new XoopsFormHidden('lid', $mod_array['requestid']));
         $hidden = new XoopsFormHidden('op', 'changeModReq');
         $button_tray->addElement($hidden);
-        if ($mod_array)
-        {
+        if ($mod_array) {
             $butt_dup = new XoopsFormButton('', '', _AM_XTORRENT_BAPPROVE, 'submit');
             $butt_dup->setExtra('onclick="this.form.elements.op.value=\'changeModReq\'"');
             $button_tray->addElement($butt_dup);
-        } 
+        }
         $butt_dupct2 = new XoopsFormButton('', '', _AM_XTORRENT_BIGNORE, 'submit');
         $butt_dupct2->setExtra('onclick="this.form.elements.op.value=\'ignoreModReq\'"');
         $button_tray->addElement($butt_dupct2);
@@ -205,7 +184,7 @@ switch ($op)
         $limitations   = $down_array['limitations'];
         $dhistory      = $down_array['dhistory'];
         $submitter     = $down_array['submitter'];
-		    $updated       = time();
+            $updated       = time();
 
         $xoopsDB->query("UPDATE " . $xoopsDB->prefix('xtorrent_downloads') . " SET cid = $cid, title = '$title', 
   			url = '$url', mirror = '$mirror', license = '$license', features = '$features', homepage = '$homepage', version = '$version', size = $size, platform = '$platform',
@@ -235,14 +214,14 @@ switch ($op)
 
         global $xoopsDB, $myts, $mytree, $xoopsModuleConfig;
         $sql              = "SELECT * FROM " . $xoopsDB->prefix('xtorrent_mod') . " ORDER BY requestdate DESC" ;
-        $result           = $xoopsDB->query($sql, $xoopsModuleConfig['admin_perpage'] , $start);
+        $result           = $xoopsDB->query($sql, $xoopsModuleConfig['admin_perpage'], $start);
         $totalmodrequests = $xoopsDB->getRowsNum($xoopsDB->query($sql));
 
         xoops_cp_header();
         $adminObject = \Xmf\Module\Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));
 
-      	echo "<fieldset><legend style='font-weight:bold;color:#900;'>" . _AM_XTORRENT_MOD_MODREQUESTSINFO . "</legend>
+          echo "<fieldset><legend style='font-weight:bold;color:#900;'>" . _AM_XTORRENT_MOD_MODREQUESTSINFO . "</legend>
           		<div style='padding:4px;'><b>" . _AM_XTORRENT_MOD_TOTMODREQUESTS . "</b> " . $totalmodrequests . "</div><br>
           		<table class='outer' style='width:100%;'>
           		<tr>
@@ -252,29 +231,26 @@ switch ($op)
           		<th style='text-align:center;'>" . _AM_XTORRENT_MOD_DATE . "</th>
           		<th style='text-align:center;'>" . _AM_XTORRENT_MINDEX_ACTION . "</th>
           		</tr>";
-        if ($totalmodrequests > 0)
-        {
-            while ($down_arr = $xoopsDB->fetchArray($result))
-            {
+        if ($totalmodrequests > 0) {
+            while ($down_arr = $xoopsDB->fetchArray($result)) {
                 $path        = $mytree->getNicePathFromId($down_arr['requestid'], "title", "modifications.php?op=listModReqshow&requestid");
                 $path        = str_replace("/", "", $path);
                 $path        = str_replace(":", "", trim($path));
                 $title       = trim($path);
-                $submitter   = xoops_getLinkedUnameFromId($down_arr['modifysubmitter']);;
+                $submitter   = xoops_getLinkedUnameFromId($down_arr['modifysubmitter']);
+                ;
                 $requestdate = formatTimestamp($down_arr['requestdate'], $xoopsModuleConfig['dateformat']);
-      	echo "<tr>
+                echo "<tr>
           		<td class='head' style='text-align:center;'>" . $down_arr['requestid'] . "</td>
           		<td class='even'>" . $title . "</td>
           		<td class='even' style='text-align:center;'>" . $submitter . "</td>
           		<td class='even' style='text-align:center;'>" . $requestdate . "</td>
           		<td class='even' style='text-align:center;'><a href='modifications.php?op=listModReqshow&amp;requestid=" . $down_arr['requestid'] . "'>" . _AM_XTORRENT_MOD_VIEW . "</a></td>
           		</tr>";
-            } 
-        } 
-        else
-        {
+            }
+        } else {
             echo "<tr><td class='head' colspan='7' style='text-align:center;'>" . _AM_XTORRENT_MOD_NOMODREQUEST . "</td></tr>";
-        } 
+        }
         echo "</table></fieldset>";
 
         include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
@@ -282,4 +258,4 @@ switch ($op)
         $pagenav = new XoopsPageNav($totalmodrequests, $xoopsModuleConfig['admin_perpage'], $start, 'start');
         echo "<div style='padding:8px;float:right;'>" . $page . '' . $pagenav -> renderNav() . '</div>';
         require_once __DIR__ . '/admin_footer.php';
-} 
+}

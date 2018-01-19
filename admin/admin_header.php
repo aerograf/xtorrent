@@ -11,13 +11,13 @@ require_once '../include/functions.php';
 include_once XOOPS_ROOT_PATH . '/class/xoopstree.php';
 include_once XOOPS_ROOT_PATH . '/class/xoopslists.php';
 include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
-	
+    
 if (is_object($xoopsUser)) {
     $xoopsModule = XoopsModule::getByDirname("xtorrent");
     if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
         redirect_header(XOOPS_URL . "/", 3, _NOPERM);
         exit();
-    } 
+    }
 } else {
     redirect_header(XOOPS_URL . "/", 1, _NOPERM);
     exit();
@@ -36,7 +36,7 @@ $helper->loadLanguage('modinfo');
 $myts = MyTextSanitizer::getInstance();
 
 $imagearray = [
-	'editimg'     => "<img src='../" . $pathModIcon32 . "/edit.gif' alt='" . _AM_XTORRENT_ICO_EDIT . "' align='middle'>",
+    'editimg'     => "<img src='../" . $pathModIcon32 . "/edit.gif' alt='" . _AM_XTORRENT_ICO_EDIT . "' align='middle'>",
   'deleteimg'   => "<img src='../" . $pathModIcon32 . "/delete.gif' alt='" . _AM_XTORRENT_ICO_DELETE . "' align='middle'>",
   'online'      => "<img src='../" . $pathModIcon32 . "/on.gif' alt='" . _AM_XTORRENT_ICO_ONLINE . "' align='middle'>",
   'offline'     => "<img src='../" . $pathModIcon32 . "/off.gif' alt='" . _AM_XTORRENT_ICO_OFFLINE . "' align='middle'>",
@@ -47,9 +47,9 @@ $imagearray = [
   'addfaq'      => "<img src='../" . $pathModIcon32 . "/add.gif' alt='" . _AM_XTORRENT_ICO_ADD . "' align='middle'>",
   'approve'     => "<img src='../" . $pathModIcon32 . "/approve.gif' alt='" . _AM_XTORRENT_ICO_APPROVE . "' align='middle'>",
   'statsimg'    => "<img src='../" . $pathModIcon32 . "/stats.gif' alt='" . _AM_XTORRENT_ICO_STATS . "' align='middle'>",
-	'ignore'      => "<img src='../" . $pathModIcon32 . "/ignore.gif' alt='" . _AM_XTORRENT_ICO_IGNORE . "' align='middle'>",
+    'ignore'      => "<img src='../" . $pathModIcon32 . "/ignore.gif' alt='" . _AM_XTORRENT_ICO_IGNORE . "' align='middle'>",
   'ack_yes'     => "<img src='../" . $pathModIcon32 . "/on.gif' alt='" . _AM_XTORRENT_ICO_ACK . "' align='middle'>",
-	'ack_no'      => "<img src='../" . $pathModIcon32 . "/off.gif' alt='" . _AM_XTORRENT_ICO_REPORT . "' align='middle'>",
+    'ack_no'      => "<img src='../" . $pathModIcon32 . "/off.gif' alt='" . _AM_XTORRENT_ICO_REPORT . "' align='middle'>",
   'con_yes'     => "<img src='../" . $pathModIcon32 . "/on.gif' alt='" . _AM_XTORRENT_ICO_CONFIRM . "' align='middle'>",
-	'con_no'      => "<img src='../" . $pathModIcon32 . "/off.gif' alt='" . _AM_XTORRENT_ICO_CONBROKEN . "' align='middle'>"
-	];
+    'con_no'      => "<img src='../" . $pathModIcon32 . "/off.gif' alt='" . _AM_XTORRENT_ICO_CONBROKEN . "' align='middle'>"
+    ];

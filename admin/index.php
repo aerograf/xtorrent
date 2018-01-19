@@ -24,12 +24,12 @@ function Download()
     $platform      = '';
     $screenshot    = '';
     $price         = '0.00';
-	  $paypalemail   = '';
+    $paypalemail   = '';
     $description   = '';
     $mirror        = 'https://';
     $license       = '';
     $paypalemail   = '';
-	  $currency      = 'USD';
+    $currency      = 'USD';
     $features      = '';
     $requirements  = '';
     $forumid       = 0;
@@ -46,43 +46,36 @@ function Download()
     $ipaddress     = '';
     $notifypub     = '';
 
-    if (isset($_POST['lid']))
-    {
+    if (isset($_POST['lid'])) {
         $lid = intval($_POST['lid']);
-    } elseif (isset($_GET['lid']))
-    {
+    } elseif (isset($_GET['lid'])) {
         $lid = intval($_GET['lid']);
-    } 
-    else
-    {
+    } else {
         $lid = 0;
-    } 
+    }
     $directory     = $xoopsModuleConfig['screenshots'];
     $result        = $xoopsDB -> query("SELECT COUNT(*) FROM " . $xoopsDB -> prefix('xtorrent_cat') . "");
     list($numrows) = $xoopsDB -> fetchRow($result);
     $down_array    = '';
 
-    if ($numrows)
-    {
+    if ($numrows) {
         xoops_cp_header();
         $adminObject = \Xmf\Module\Admin::getInstance();
-        $adminObject->displayNavigation(basename(__FILE__)); 
+        $adminObject->displayNavigation(basename(__FILE__));
 
-    		echo "<fieldset><legend style='font-weight:bold; color:#900;'>" . _AM_XTORRENT_FILE_ALLOWEDAMIME . "</legend>
+        echo "<fieldset><legend style='font-weight:bold; color:#900;'>" . _AM_XTORRENT_FILE_ALLOWEDAMIME . "</legend>
     		<div style='padding:8px;'>";
         $query          = "select mime_ext from " . $xoopsDB -> prefix('xtorrent_mimetypes') . " WHERE mime_admin = 1 ORDER by mime_ext";
         $result         = $xoopsDB -> query($query);
         $allowmimetypes = '';
-        while ($mime_arr = $xoopsDB -> fetchArray($result))
-        {
+        while ($mime_arr = $xoopsDB -> fetchArray($result)) {
             echo $mime_arr['mime_ext'] . " | ";
-        } 		
-    		echo "</div>
+        }
+        echo "</div>
     		</fieldset><br>		
     		";
 
-        if ($lid)
-        {
+        if ($lid) {
             $sql = "SELECT * FROM " . $xoopsDB -> prefix('xtorrent_downloads') . " WHERE lid=" . $lid . "";
             $down_array    = $xoopsDB -> fetchArray($xoopsDB -> query($sql));
             $lid           = $down_array['lid'];
@@ -97,8 +90,8 @@ function Download()
             $publisher     = $myts -> htmlSpecialChars($down_array['publisher']);
             $screenshot    = $myts -> htmlSpecialChars($down_array['screenshot']);
             $price         = $myts -> htmlSpecialChars($down_array['price']);
-      			$paypalemail   = $myts -> htmlSpecialChars($down_array['paypalemail']);
-      			$currency      = $myts -> htmlSpecialChars($down_array['currency']);
+            $paypalemail   = $myts -> htmlSpecialChars($down_array['paypalemail']);
+            $currency      = $myts -> htmlSpecialChars($down_array['currency']);
             $description   = $myts -> htmlSpecialChars($down_array['description']);
             $mirror        = $myts -> htmlSpecialChars($down_array['mirror']);
             $license       = $myts -> htmlSpecialChars($down_array['license']);
@@ -116,11 +109,15 @@ function Download()
             $sform         = new XoopsThemeForm(_AM_XTORRENT_FILE_MODIFYFILE, "storyform", xoops_getenv('PHP_SELF'));
         } else {
             $sform         = new XoopsThemeForm(_AM_XTORRENT_FILE_CREATENEXTILE, "storyform", xoops_getenv('PHP_SELF'));
-        } 
+        }
 
         $sform -> setExtra('enctype="multipart/form-data"');
-        if ($lid) $sform -> addElement(new XoopsFormLabel(_AM_XTORRENT_FILE_ID, $lid));
-        if ($ipaddress) $sform -> addElement(new XoopsFormLabel(_AM_XTORRENT_FILE_IP, $ipaddress));
+        if ($lid) {
+            $sform -> addElement(new XoopsFormLabel(_AM_XTORRENT_FILE_ID, $lid));
+        }
+        if ($ipaddress) {
+            $sform -> addElement(new XoopsFormLabel(_AM_XTORRENT_FILE_IP, $ipaddress));
+        }
         $member_handler = xoops_gethandler('member');
         $group_list = $member_handler -> getGroupList();
 
@@ -148,7 +145,7 @@ function Download()
         $mytree -> makeMySelBox('title', 'title', $cid, 0);
         $sform -> addElement(new XoopsFormLabel(_AM_XTORRENT_FILE_CATEGORY, ob_get_contents()));
         ob_end_clean();
-		    //$sform -> addElement(new XoopsFormTag("topic_tags", 60, 255, $lid, $cid));
+        //$sform -> addElement(new XoopsFormTag("topic_tags", 60, 255, $lid, $cid));
         $sform -> addElement(new XoopsFormText(_AM_XTORRENT_FILE_HOMEPAGETITLE, 'homepagetitle', 50, 255, $homepagetitle), false);
         $sform -> addElement(new XoopsFormText(_AM_XTORRENT_FILE_HOMEPAGE, 'homepage', 50, 255, $homepage), false);
         $sform -> addElement(new XoopsFormText(_AM_XTORRENT_FILE_VERSION, 'version', 10, 20, $version), false);
@@ -175,39 +172,35 @@ function Download()
         $limitations_tray = new XoopsFormElementTray(_AM_XTORRENT_FILE_LIMITATIONS, '&nbsp;');
         $limitations_tray -> addElement($limitations_select);
         $sform -> addElement($limitations_tray);
-		
-		$price_array  = $xoopsModuleConfig['currencies'];
-		$price_select = new XoopsFormSelect('', 'currency', $currency, '', '', 0);
-		$price_select->addOptionArray($price_array);
-		$price_tray = new XoopsFormElementTray(_AM_XTORRENT_PRICEC, '&nbsp;');
-		$price_tray->addElement(new XoopsFormText('', 'price', 10, 20, $price), false);
-		$price_tray->addElement($price_select);
-		$sform->addElement($price_tray);
-		
-		$sform->addElement(new XoopsFormText(_AM_XTORRENT_PAYPAL, 'paypalemail', 50, 190, $paypalemail), false);
+        
+        $price_array  = $xoopsModuleConfig['currencies'];
+        $price_select = new XoopsFormSelect('', 'currency', $currency, '', '', 0);
+        $price_select->addOptionArray($price_array);
+        $price_tray = new XoopsFormElementTray(_AM_XTORRENT_PRICEC, '&nbsp;');
+        $price_tray->addElement(new XoopsFormText('', 'price', 10, 20, $price), false);
+        $price_tray->addElement($price_select);
+        $sform->addElement($price_tray);
+        
+        $sform->addElement(new XoopsFormText(_AM_XTORRENT_PAYPAL, 'paypalemail', 50, 190, $paypalemail), false);
 
         $sform -> addElement(new XoopsFormDhtmlTextArea(_AM_XTORRENT_FILE_DESCRIPTION, 'description', $description, 15, 60), true);
         $sform -> addElement(new XoopsFormTextArea(_AM_XTORRENT_FILE_KEYFEATURES, 'features', $features, 7, 60), false);
         $sform -> addElement(new XoopsFormTextArea(_AM_XTORRENT_FILE_REQUIREMENTS, 'requirements', $requirements, 7, 60), false);
         $sform -> addElement(new XoopsFormTextArea(_AM_XTORRENT_FILE_HISTORY, 'dhistory', $dhistory, 7, 60), false);
-        if ($lid && !empty($dhistory))
-        {
+        if ($lid && !empty($dhistory)) {
             $sform -> addElement(new XoopsFormTextArea(_AM_XTORRENT_FILE_HISTORYD, 'dhistoryaddedd', "", 7, 60), false);
-        } 
+        }
         $graph_array = XtsLists :: getListTypeAsArray(XOOPS_ROOT_PATH . "/" . $xoopsModuleConfig['screenshots'], $type = "images");
         $indeximage_select = new XoopsFormSelect('', 'screenshot', $screenshot);
         $indeximage_select -> addOptionArray($graph_array);
         $indeximage_select -> setExtra("onchange='showImgSelected(\"image\", \"screenshot\", \"" . $xoopsModuleConfig['screenshots'] . "\", \"\", \"" . XOOPS_URL . "\")'");
         $indeximage_tray = new XoopsFormElementTray(_AM_XTORRENT_FILE_SHOTIMAGE, '&nbsp;');
         $indeximage_tray -> addElement($indeximage_select);
-        if (!empty($imgurl))
-        {
+        if (!empty($imgurl)) {
             $indeximage_tray -> addElement(new XoopsFormLabel('', "<br><br><img src='" . XOOPS_URL . "/" . $xoopsModuleConfig['screenshots'] . "/" . $screenshot . "' name='image' id='image' alt='' >"));
-        } 
-        else
-        {
+        } else {
             $indeximage_tray -> addElement(new XoopsFormLabel('', "<br><br><img src='" . XOOPS_URL . "/uploads/blank.gif' name='image' id='image' alt='' >"));
-        } 
+        }
         $sform -> addElement($indeximage_tray);
 
         $sform -> insertBreak(sprintf(_AM_XTORRENT_FILE_MUSTBEVALID, "<b>" . $directory . "</b>"), "even");
@@ -217,20 +210,18 @@ function Download()
         ob_end_clean();
 
         $publishtext = (!$lid && !$published) ? _AM_XTORRENT_FILE_SETPUBLISHDATE : _AM_XTORRENT_FILE_SETNEWPUBLISHDATE;
-        if ($published > time())
-        {
+        if ($published > time()) {
             $publishtext = _AM_XTORRENT_FILE_SETPUBDATESETS;
-        } 
+        }
         $ispublished  = ($published > time()) ? 1 : 0 ;
         $publishdates = ($published > time()) ? _AM_XTORRENT_FILE_PUBLISHDATESET . formatTimestamp($published, "Y-m-d H:s") : _AM_XTORRENT_FILE_SETDATETIMEPUBLISH;
         $publishdate_checkbox = new XoopsFormCheckBox('', 'publishdateactivate', $ispublished);
         $publishdate_checkbox -> addOption(1, $publishdates . "<br><br>");
 
-        if ($lid)
-        {
+        if ($lid) {
             $sform -> addElement(new XoopsFormHidden('was_published', $published));
             $sform -> addElement(new XoopsFormHidden('was_expired', $expired));
-        } 
+        }
 
         $publishdate_tray = new XoopsFormElementTray(_AM_XTORRENT_FILE_PUBLISHDATE, '');
         $publishdate_tray -> addElement($publishdate_checkbox);
@@ -270,29 +261,25 @@ function Download()
         ob_end_clean();
         $sform -> addElement(new XoopsFormText(_AM_XTORRENT_FILE_NEWSTITLE, 'newsTitle', 50, 255, ''), false);
 
-        if ($lid && $published == 0)
-        {
+        if ($lid && $published == 0) {
             $approved = ($published == 0) ? 0 : 1;
             $approve_checkbox = new XoopsFormCheckBox(_AM_XTORRENT_FILE_EDITAPPROVE, "approved", 1);
             $approve_checkbox -> addOption(1, " ");
             $sform -> addElement($approve_checkbox);
-        } 
+        }
 
-        if (!$lid)
-        {
+        if (!$lid) {
             $button_tray = new XoopsFormElementTray('', '');
             $button_tray -> addElement(new XoopsFormHidden('status', 1));
             $button_tray -> addElement(new XoopsFormHidden('notifypub', $notifypub));
             $button_tray -> addElement(new XoopsFormHidden('op', 'addDownload'));
             $button_tray -> addElement(new XoopsFormButton('', '', _AM_XTORRENT_BSAVE, 'submit'));
             $sform -> addElement($button_tray);
-        } 
-        else
-        {
+        } else {
             $button_tray = new XoopsFormElementTray('', '');
             $button_tray -> addElement(new XoopsFormHidden('lid', $lid));
             $button_tray -> addElement(new XoopsFormHidden('status', 2));
-			$hidden = new XoopsFormHidden('op', 'addDownload');
+            $hidden = new XoopsFormHidden('op', 'addDownload');
             $button_tray -> addElement($hidden);
 
             $butt_dup = new XoopsFormButton('', '', _AM_XTORRENT_BMODIFY, 'submit');
@@ -307,19 +294,16 @@ function Download()
             $butt_dupct2 -> setExtra('onclick="this.form.elements.op.value=\'downloadsConfigMenu\'"');
             $button_tray -> addElement($butt_dupct2);
             $sform -> addElement($button_tray);
-        } 
+        }
         $sform -> display();
         unset($hidden);
-    } 
-    else
-    {
+    } else {
         redirect_header("category.php?", 1, _AM_XTORRENT_CCATEGORY_NOEXISTS);
         exit();
-    } 
+    }
 
-    if ($lid)
-    {
-        global $imagearray; 
+    if ($lid) {
+        global $imagearray;
         // Vote data
         $result01 = $xoopsDB -> query("SELECT COUNT(*) FROM " . $xoopsDB -> prefix('xtorrent_votedata') . " ");
         list($totalvotes) = $xoopsDB -> fetchRow($result01);
@@ -354,20 +338,17 @@ function Download()
     		</tr>
     		";
 
-        if ($votesreg == 0)
-        {
+        if ($votesreg == 0) {
             echo "<tr><td colspan='7' class='even' style='text-align:center;'><b>" . _AM_XTORRENT_VOTE_NOREGVOTES . "</b></td></tr>";
-        } 
-        while (list($ratingid, $ratinguser, $rating, $ratinghostname, $ratingtimestamp) = $xoopsDB -> fetchRow($result02))
-        {
+        }
+        while (list($ratingid, $ratinguser, $rating, $ratinghostname, $ratingtimestamp) = $xoopsDB -> fetchRow($result02)) {
             $result04       = $xoopsDB -> query("SELECT rating FROM " . $xoopsDB -> prefix('xtorrent_votedata') . " WHERE ratinguser = $ratinguser");
             $uservotes      = $xoopsDB -> getRowsNum($result04);
             $formatted_date = formatTimestamp($ratingtimestamp, $xoopsModuleConfig['dateformat']);
             $useravgrating  = 0;
-            while (list($rating2) = $xoopsDB -> fetchRow($result04))
-            {
+            while (list($rating2) = $xoopsDB -> fetchRow($result04)) {
                 $useravgrating = $useravgrating + $rating2;
-            } 
+            }
             $useravgrating = $useravgrating / $uservotes;
             $useravgrating = number_format($useravgrating, 1);
             $ratinguname   = XoopsUser :: getUnameFromId($ratinguser);
@@ -384,7 +365,7 @@ function Download()
         		<a href='index.php?op=delVote&amp;lid=" . $lid . "&amp;rid=" . $ratingid . "'>" . $imagearray['deleteimg'] . "</a></td>
             </tr>
         		";
-        } 
+        }
         echo "
     		</table>
     		<br>
@@ -399,20 +380,17 @@ function Download()
     		<th style='text-align:center;'>" . _AM_XTORRENT_MINDEX_ACTION . "</th>
     		</tr>
     		";
-        if ($votesanon == 0)
-        {
+        if ($votesanon == 0) {
             echo "<tr><td colspan='7' class='even' style='text-align:center;'><b>" . _AM_XTORRENT_VOTE_NOUNREGVOTES . "</b></td></tr>";
-        } 
-        while (list($ratingid, $ratinguser, $rating, $ratinghostname, $ratingtimestamp) = $xoopsDB -> fetchRow($result03))
-        {
+        }
+        while (list($ratingid, $ratinguser, $rating, $ratinghostname, $ratingtimestamp) = $xoopsDB -> fetchRow($result03)) {
             $result05       = $xoopsDB -> query("SELECT rating FROM " . $xoopsDB -> prefix('xtorrent_votedata') . " WHERE ratinguser = $ratinguser");
             $uservotes      = $xoopsDB -> getRowsNum($result05);
             $formatted_date = formatTimestamp($ratingtimestamp, $xoopsModuleConfig['dateformat']);
             $useravgrating  = 0;
-            while (list($rating2) = $xoopsDB -> fetchRow($result04))
-            {
+            while (list($rating2) = $xoopsDB -> fetchRow($result04)) {
                 $useravgrating = $useravgrating + $rating2;
-            } 
+            }
             $useravgrating = $useravgrating / $uservotes;
             $useravgrating = number_format($useravgrating, 1);
             $ratinguname   = XoopsUser :: getUnameFromId($ratinguser);
@@ -429,11 +407,11 @@ function Download()
         		<a href='index.php?op=delVote&amp;lid=" . $lid . "&amp;rid=" . $ratingid . "'>" . $imagearray['deleteimg'] . "</a></td>
             </tr>
         		";
-            } 
-            echo "</table></fieldset>";
-            }
-    require_once __DIR__ . '/admin_footer.php'; 
-} 
+        }
+        echo "</table></fieldset>";
+    }
+    require_once __DIR__ . '/admin_footer.php';
+}
 
 function delVote()
 {
@@ -441,7 +419,7 @@ function delVote()
     $xoopsDB -> queryF("DELETE FROM " . $xoopsDB -> prefix('xtorrent_votedata') . " WHERE ratingid = " . $_GET['rid'] . "");
     xtorrent_updaterating(intval($_GET['lid']));
     redirect_header("index.php", 1, _AM_XTORRENT_VOTE_VOTEDELETED);
-} 
+}
 
 function addDownload()
 {
@@ -454,23 +432,20 @@ function addDownload()
     /**
      * Define URL
      */
-    if (empty($_FILES['userfile']['name']) && $_POST["url"] && $_POST["url"] != "" && $_POST["url"] != "http://")
-    {
+    if (empty($_FILES['userfile']['name']) && $_POST["url"] && $_POST["url"] != "" && $_POST["url"] != "http://") {
         $url   = ($_POST["url"] != "http://") ? $myts -> addslashes($_POST["url"]) : '';
         $size  = ((empty($size) || !is_numeric($size))) ? $myts -> addslashes($_POST["size"]) : 0;
         $title = $myts -> addslashes(trim($_POST["title"]));
-    } 
-    else
-    {
+    } else {
         global $_FILES;
         $down  = xtorrent_uploading($_FILES, $xoopsModuleConfig['uploaddir'], "", "index.php", 0, 0);
-        $url   = $myts -> addslashes ($down['url']);
+        $url   = $myts -> addslashes($down['url']);
         $size  = $down['size'];
         $title = $_FILES['userfile']['name'];
         $ext   = rtrim(strrchr($title, '.'), '.');
         $title = str_replace($ext, '', $title);
         $title = (isset($_POST["title_checkbox"]) && $_POST["title_checkbox"] == 1) ? $title : $myts -> addslashes(trim($_POST["title"]));
-    } 
+    }
     /**
      * Get data from form
      */
@@ -478,87 +453,77 @@ function addDownload()
     $homepage      = '';
     $homepagetitle = '';
 
-    if (!empty($_POST["homepage"]) || $_POST["homepage"] != "http://")
-    {
+    if (!empty($_POST["homepage"]) || $_POST["homepage"] != "http://") {
         $homepage      = $myts -> addslashes(trim($_POST["homepage"]));
         $homepagetitle = $myts -> addslashes(trim($_POST["homepagetitle"]));
-    } 
+    }
 
-	  $topic_tags      = $myts -> addslashes(trim($_POST["topic_tags"]));
+    $topic_tags      = $myts -> addslashes(trim($_POST["topic_tags"]));
     $version         = (!empty($_POST["version"])) ? $myts -> addslashes(trim($_POST["version"])) : 0;
     $platform        = $myts -> addslashes(trim($_POST["platform"]));
     $description     = $myts -> addslashes(trim($_POST["description"]));
     $submitter       = $xoopsUser -> uid();
     $publisher       = $myts -> addslashes(trim($_POST["publisher"]));
     $price           = $myts -> addslashes(trim($_POST["price"]));
-	  $currency        = $myts -> addslashes(trim($_POST["currency"]));
+    $currency        = $myts -> addslashes(trim($_POST["currency"]));
     $mirror          = formatURL(trim($_POST["mirror"]));
     $license         = $myts -> addslashes(trim($_POST["license"]));
-    $paypalemail     = $myts -> addslashes(trim($_POST["paypalemail"]));;
+    $paypalemail     = $myts -> addslashes(trim($_POST["paypalemail"]));
+    ;
     $features        = $myts -> addslashes(trim($_POST["features"]));
     $requirements    = $myts -> addslashes(trim($_POST["requirements"]));
     $forumid         = (isset($_POST["forumid"]) && $_POST["forumid"] > 0) ? intval($_POST["forumid"]) : 0;
     $limitations     = (isset($_POST["limitations"])) ? $myts -> addslashes($_POST["limitations"]) : '';
     $dhistory        = (isset($_POST["dhistory"])) ? $myts -> addslashes($_POST["dhistory"]) : '';
     $dhistoryhistory = (isset($_POST["dhistoryaddedd"])) ? $myts -> addslashes($_POST["dhistoryaddedd"]) : '';
-    if ($lid > 0 && !empty($dhistoryhistory))
-    {
+    if ($lid > 0 && !empty($dhistoryhistory)) {
         $dhistory  = $dhistory . "\n\n";
         $time      = time();
         $dhistory .= _AM_XTORRENT_FILE_HISTORYVERS . $version . _AM_XTORRENT_FILE_HISTORDATE . formatTimestamp($time, $xoopsModuleConfig['dateformat']) . "\n\n";
         $dhistory .= $dhistoryhistory;
-    } 
+    }
     $updated = (isset($_POST['was_published']) && $_POST['was_published'] == 0) ? 0 : time();
-	
-  	if ($_POST['up_dated'] == 0) {
-  	    $updated = 0;
-  		  $status  = 1; 
-  	}
-  	
-  	$offline   = ($_POST['offline'] == 1) ? 1 : 0;
+    
+    if ($_POST['up_dated'] == 0) {
+        $updated = 0;
+        $status  = 1;
+    }
+    
+    $offline   = ($_POST['offline'] == 1) ? 1 : 0;
     $approved  = (isset($_POST['approved']) && $_POST['approved'] == 1) ? 1 : 0;
     $notifypub = (isset($_POST['notifypub']) && $_POST['notifypub'] == 1);
 
-    if (!$lid)
-    {
+    if (!$lid) {
         $date        = time();
         $publishdate = time();
-    } 
-    else
-    {
+    } else {
         $publishdate = $_POST['was_published'];
         $expiredate = $_POST['was_expired'];
-    } 
+    }
 
-    if ($approved == 1 && empty($publishdate))
-    {
+    if ($approved == 1 && empty($publishdate)) {
         $publishdate = time();
-    } 
+    }
 
-    if (isset($_POST['publishdateactivate']))
-    {
+    if (isset($_POST['publishdateactivate'])) {
         $publishdate = strtotime($_POST['published']['date']) + $_POST['published']['time'];
-    } 
-    if ($_POST['clearpublish'])
-    {
+    }
+    if ($_POST['clearpublish']) {
         $result      = $xoopsDB -> query("SELECT date FROM " . $xoopsDB -> prefix('xtorrent_downloads') . " WHERE lid=$lid");
         list($date)  = $xoopsDB -> fetchRow($result);
         $publishdate = $date;
-    } 
+    }
 
-    if (isset($_POST['expiredateactivate']))
-    {
+    if (isset($_POST['expiredateactivate'])) {
         $expiredate = strtotime($_POST['expired']['date']) + $_POST['expired']['time'];
-    } 
-    if ($_POST['clearexpire'])
-    {
+    }
+    if ($_POST['clearexpire']) {
         $expiredate = '0';
-    } 
+    }
     /**
      * Update or insert download data into database
      */
-    if (!$lid)
-    {
+    if (!$lid) {
         $date        = time();
         $publishdate = time();
         $ipaddress   = $_SERVER['REMOTE_ADDR'];
@@ -574,44 +539,40 @@ function addDownload()
         $result = $xoopsDB -> queryF($query);
         $error = "Information not saved to database: <br><br>";
         $error .= $query;
-        if (!$result)
-        {
+        if (!$result) {
             trigger_error($error, E_USER_ERROR);
-        } 
+        }
         $newid = $xoopsDB -> getInsertId();
         xtorrent_save_Permissions($groups, $newid, 'xtorrentownFilePerm');
 
-		$tag_handler = xoops_getmodulehandler('tag', 'tag');
-		$tag_handler->updateByItem($_POST["topic_tags"], $newid, 'xtorrent', $cid);		
+        $tag_handler = xoops_getmodulehandler('tag', 'tag');
+        $tag_handler->updateByItem($_POST["topic_tags"], $newid, 'xtorrent', $cid);
 
-		//echo "Please wait a moment while we poll the torrent...";
-		error_reporting(E_ALL);
-		include "../include/pollall.php";
-		
-		$rt = poll_torrent($newid);
-				
-		if ($xoopsModuleConfig['poll_tracker']==1){
-			$rt = poll_tracker($rt, $newid, $xoopsModuleConfig['poll_tracker_timeout']);
-		}
-    } 
-    else
-    {
+        //echo "Please wait a moment while we poll the torrent...";
+        error_reporting(E_ALL);
+        include "../include/pollall.php";
+        
+        $rt = poll_torrent($newid);
+                
+        if ($xoopsModuleConfig['poll_tracker']==1) {
+            $rt = poll_tracker($rt, $newid, $xoopsModuleConfig['poll_tracker_timeout']);
+        }
+    } else {
         $xoopsDB -> query("UPDATE " . $xoopsDB -> prefix("xtorrent_downloads") . " SET cid = $cid, title = '$title', 
   			url = '$url', mirror = '$mirror', license = '$license', 
   			features = '$features', homepage = '$homepage', version = '$version', size = $size, platform = '$platform',
   			screenshot = '$screenshot', publisher = '$publisher', status = '$status', price = '$price', requirements = '$requirements', 
   			homepagetitle = '$homepagetitle', forumid = '$forumid', limitations = '$limitations', dhistory = '$dhistory', published = '$publishdate', paypalemail = '$paypalemail', currency = '$currency', 
   			expired = '$expiredate', updated = '$updated', offline = '$offline', description = '$description', topic_tags = '$topic_tags' WHERE lid = $lid");
-    		$tag_handler = xoops_getmodulehandler('tag', 'tag');
-    		$tag_handler->updateByItem($_POST["topic_tags"], $lid, 'xtorrent', $cid);		
+        $tag_handler = xoops_getmodulehandler('tag', 'tag');
+        $tag_handler->updateByItem($_POST["topic_tags"], $lid, 'xtorrent', $cid);
 
         xtorrent_save_Permissions($groups, $lid, 'xtorrentownFilePerm');
-    } 
+    }
     /**
      * Send notifications
      */
-    if (!$lid)
-    {
+    if (!$lid) {
         $tags = [];
         $tags['FILE_NAME'] = $title;
         $tags['FILE_URL'] = XOOPS_URL . '/modules/xtorrent/singlefile.php?cid=' . $cid . '&amp;lid=' . $newid;
@@ -623,9 +584,8 @@ function addDownload()
         $notification_handler = xoops_gethandler('notification');
         $notification_handler -> triggerEvent('global', 0, 'new_file', $tags);
         $notification_handler -> triggerEvent('category', $cid, 'new_file', $tags);
-    } 
-    if ($lid && $approved && $notifypub)
-    {
+    }
+    if ($lid && $approved && $notifypub) {
         $tags = [];
         $tags['FILE_NAME'] = $title;
         $tags['FILE_URL'] = XOOPS_URL . '/modules/xtorrent/singlefile.php?cid=' . $cid . '&amp;lid=' . $lid;
@@ -638,44 +598,35 @@ function addDownload()
         $notification_handler -> triggerEvent('global', 0, 'new_file', $tags);
         $notification_handler -> triggerEvent('category', $cid, 'new_file', $tags);
         $notification_handler -> triggerEvent('file', $lid, 'approve', $tags);
-    } 
+    }
     $message = (!$lid) ? _AM_XTORRENT_FILE_NEXTILEUPLOAD : _AM_XTORRENT_FILE_FILEMODIFIEDUPDATE ;
     $message = ($lid && !$_POST['was_published'] && $approved) ? _AM_XTORRENT_FILE_FILEAPPROVED : $message;
-    if ($_POST['submitNews'] == 1)
-    {
+    if ($_POST['submitNews'] == 1) {
         $title = (!empty($_POST['newsTitle'])) ? $_POST['newsTitle'] : $title;
         include_once "newstory.php";
-    } 
+    }
     redirect_header("index.php", 1, $message);
-} 
+}
 // Page start here
-if (isset($_POST))
-{
-    foreach ($_POST as $k => $v)
-    {
+if (isset($_POST)) {
+    foreach ($_POST as $k => $v) {
         $$k = $v;
-    } 
-} 
+    }
+}
 
-if (isset($_GET))
-{
-    foreach ($_GET as $k => $v)
-    {
+if (isset($_GET)) {
+    foreach ($_GET as $k => $v) {
         $$k = $v;
-    } 
-} 
+    }
+}
 
-if (!isset($_POST['op']))
-{
+if (!isset($_POST['op'])) {
     $op = isset($_GET['op']) ? $_GET['op'] : 'main';
-} 
-else
-{
+} else {
     $op = $_POST['op'];
-} 
+}
 
-switch ($op)
-{
+switch ($op) {
     case "addDownload":
         addDownload();
         break;
@@ -688,35 +639,31 @@ switch ($op)
 
         global $xoopsDB, $_POST, $xoopsModule, $xoopsModuleConfig;
         $confirm = (isset($confirm)) ? 1 : 0;
-        if ($confirm)
-        {
+        if ($confirm) {
             $file = XOOPS_ROOT_PATH . "/" . $xoopsModuleConfig['uploaddir'] . "/" . basename($_POST['url']);
-            if (is_file($file))
-            {
+            if (is_file($file)) {
                 @unlink($file);
-            } 
+            }
             $xoopsDB -> queryF("DELETE FROM " . $xoopsDB -> prefix("xtorrent_downloads") . " WHERE lid = " . $_POST['lid'] . "");
-      			$xoopsDB -> queryF("DELETE FROM " . $xoopsDB -> prefix("xtorrent_tracker") . " WHERE lid = " . $_POST['lid'] . "");
-      			$xoopsDB -> queryF("DELETE FROM " . $xoopsDB -> prefix("xtorrent_torrent") . " WHERE lid = " . $_POST['lid'] . "");
-      			$xoopsDB -> queryF("DELETE FROM " . $xoopsDB -> prefix("xtorrent_peers") . " WHERE torrent = " . $_POST['lid'] . "");
+            $xoopsDB -> queryF("DELETE FROM " . $xoopsDB -> prefix("xtorrent_tracker") . " WHERE lid = " . $_POST['lid'] . "");
+            $xoopsDB -> queryF("DELETE FROM " . $xoopsDB -> prefix("xtorrent_torrent") . " WHERE lid = " . $_POST['lid'] . "");
+            $xoopsDB -> queryF("DELETE FROM " . $xoopsDB -> prefix("xtorrent_peers") . " WHERE torrent = " . $_POST['lid'] . "");
             $xoopsDB -> queryF("DELETE FROM " . $xoopsDB -> prefix("xtorrent_votedata") . " WHERE lid = " . $_POST['lid'] . "");
-			      $xoopsDB -> queryF("DELETE FROM " . $xoopsDB -> prefix("xtorrent_soap_transactions") . " WHERE lid = " . $_POST['lid'] . ""); 
+            $xoopsDB -> queryF("DELETE FROM " . $xoopsDB -> prefix("xtorrent_soap_transactions") . " WHERE lid = " . $_POST['lid'] . "");
             // delete comments
             xoops_comment_delete($xoopsModule -> getVar('mid'), $_POST['lid']);
             redirect_header("index.php", 1, sprintf(_AM_XTORRENT_FILE_FILEWASDELETED, $title));
             exit();
-        } 
-        else
-        {
+        } else {
             $lid    = (isset($_POST['lid'])) ? $_POST['lid'] : $lid;
             $result = $xoopsDB -> query("SELECT lid, title, url FROM " . $xoopsDB -> prefix("xtorrent_downloads") . " WHERE lid = $lid");
             list($lid, $title, $url) = $xoopsDB -> fetchrow($result);
             xoops_cp_header();
             $adminObject = \Xmf\Module\Admin::getInstance();
-            $adminObject->displayNavigation(basename(__FILE__)); 
+            $adminObject->displayNavigation(basename(__FILE__));
             xoops_confirm(['op' => 'delDownload', 'lid' => $lid, 'confirm' => 1, 'title' => $title, 'url' => $url], 'index.php', _AM_XTORRENT_FILE_REALLYDELETEDTHIS . "<br /><br>" . $title, _DELETE);
             require_once __DIR__ . '/admin_footer.php';
-        } 
+        }
         break;
     case "delVote":
         delVote();
@@ -726,24 +673,21 @@ switch ($op)
 
         global $xoopsDB, $_POST, $xoopsModule;
         $confirm = (isset($confirm)) ? 1 : 0;
-        if ($confirm)
-        {
+        if ($confirm) {
             $xoopsDB -> query("DELETE FROM " . $xoopsDB -> prefix("xtorrent_reviews") . " WHERE review_id = " . $_POST['review_id'] . "");
             redirect_header("index.php", 1, sprintf(_AM_XTORRENT_FILE_FILEWASDELETED, $title));
             exit();
-        } 
-        else
-        {
+        } else {
             $review_id = (isset($_POST['review_id'])) ? $_POST['review_id'] : $review_id;
             $sql       = "SELECT review_id, title FROM " . $xoopsDB -> prefix("xtorrent_reviews") . " WHERE review_id = $review_id";
             $result    = $xoopsDB -> query($sql);
             list($review_id, $title) = $xoopsDB -> fetchrow($result);
             xoops_cp_header();
             $adminObject = \Xmf\Module\Admin::getInstance();
-            $adminObject->displayNavigation(basename(__FILE__)); 
+            $adminObject->displayNavigation(basename(__FILE__));
             xoops_confirm(['op' => 'del_review', 'review_id' => $review_id, 'confirm' => 1, 'title' => $title], 'index.php', _AM_XTORRENT_FILE_REALLYDELETEDTHIS . "<br><br>" . $title, _AM_XTORRENT_BDELETE);
             require_once __DIR__ . '/admin_footer.php';
-        } 
+        }
         break;
 
     case "approve_review":
@@ -755,18 +699,16 @@ switch ($op)
         $error     = "<a href='javascript:history.go(-1)'>" . _AM_XTORRENT_BRETURN . "</a><br><br>";
         $error    .= "Could not retrive review data: <br><br>";
         $error    .= $sql;
-        if (!$result)
-        {
+        if (!$result) {
             trigger_error($error, E_USER_ERROR);
-        } 
+        }
         redirect_header("index.php?op=reviews", 1, _AM_XTORRENT_REV_REVIEW_UPDATED);
         break;
 
     case "edit_review":
 
         $confirm = (isset($confirm)) ? 1 : 0;
-        if ($confirm)
-        {
+        if ($confirm) {
             $review_id = intval($_POST['review_id']);
             $title     = $myts -> addSlashes(trim($_POST['title']));
             $review    = $myts -> addSlashes(trim($_POST['review']));
@@ -777,14 +719,12 @@ switch ($op)
       			WHERE review_id = '$review_id'");
             redirect_header("index.php", 1, _AM_XTORRENT_REV_REVIEW_UPDATED);
             exit();
-        } 
-        else
-        {
+        } else {
             $sql = "SELECT * FROM " . $xoopsDB -> prefix('xtorrent_reviews') . " WHERE review_id = " . $_GET['review_id'] . "" ;
             $arr = $xoopsDB -> fetchArray($xoopsDB -> query($sql));
             xoops_cp_header();
             $adminObject = \Xmf\Module\Admin::getInstance();
-            $adminObject->displayNavigation(basename(__FILE__)); 
+            $adminObject->displayNavigation(basename(__FILE__));
 
             $sform = new XoopsThemeForm(_AM_XTORRENT_REV_SNEWMNAMEDESC, "reviewform", xoops_getenv('PHP_SELF'));
             $sform -> addElement(new XoopsFormText(_AM_XTORRENT_REV_FTITLE, 'title', 30, 40, $arr['title']), true);
@@ -793,20 +733,19 @@ switch ($op)
             $sform -> addElement($rating_select);
             $sform -> addElement(new XoopsFormDhtmlTextArea(_AM_XTORRENT_REV_FDESCRIPTION, 'review', $arr['review'], 15, 60), true);
             
-			      $approved = ($arr['submit'] == 0) ? 0 : 1;
+            $approved = ($arr['submit'] == 0) ? 0 : 1;
             $approve_checkbox = new XoopsFormCheckBox(_AM_XTORRENT_REV_FAPPROVE, "approve", 1);
             $approve_checkbox -> addOption(1, " ");
             $sform -> addElement($approve_checkbox);
-			            
-			      $sform -> addElement(new XoopsFormHidden("lid", $arr['lid']));
+                        
+            $sform -> addElement(new XoopsFormHidden("lid", $arr['lid']));
             $sform -> addElement(new XoopsFormHidden("review_id", $arr['review_id']));
             $sform -> addElement(new XoopsFormHidden("confirm", 1));
             $button_tray = new XoopsFormElementTray('', '');
             $hidden      = new XoopsFormHidden('op', 'save');
             $button_tray -> addElement($hidden);
 
-            if (!$arr['lid'])
-            {
+            if (!$arr['lid']) {
                 $butt_create = new XoopsFormButton('', '', _AM_XTORRENT_BSAVE, 'submit');
                 $butt_create -> setExtra('onclick="this.form.elements.op.value=\'edit_review\'"');
                 $button_tray -> addElement($butt_create);
@@ -817,9 +756,7 @@ switch ($op)
                 $butt_cancel = new XoopsFormButton('', '', _AM_XTORRENT_BCANCEL, 'button');
                 $butt_cancel -> setExtra('onclick="history.go(-1)"');
                 $button_tray -> addElement($butt_cancel);
-            } 
-            else
-            {
+            } else {
                 $butt_create = new XoopsFormButton('', '', _AM_XTORRENT_BSAVE, 'submit');
                 $butt_create -> setExtra('onclick="this.form.elements.op.value=\'edit_review\'"');
                 $button_tray -> addElement($butt_create);
@@ -831,11 +768,11 @@ switch ($op)
                 $butt_cancel = new XoopsFormButton('', '', _AM_XTORRENT_BCANCEL, 'button');
                 $butt_cancel -> setExtra('onclick="history.go(-1)"');
                 $button_tray -> addElement($butt_cancel);
-            } 
+            }
             $sform -> addElement($button_tray);
             $sform -> display();
             require_once __DIR__ . '/admin_footer.php';
-        } 
+        }
         break;
 
     //Index page Finance
@@ -843,18 +780,18 @@ switch ($op)
         xoops_cp_header();
         $adminObject = \Xmf\Module\Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));
-		    $i = payments();
+            $i = payments();
         require_once __DIR__ . '/admin_footer.php';
-    		break;
+            break;
 
-	  case "ipnrec":
+      case "ipnrec":
         xoops_cp_header();
         $adminObject = \Xmf\Module\Admin::getInstance();
-        $adminObject->displayNavigation(basename(__FILE__));                
-		    $i = ipnrec();
+        $adminObject->displayNavigation(basename(__FILE__));
+            $i = ipnrec();
         require_once __DIR__ . '/admin_footer.php';
-    		break;
-		
+            break;
+        
     //Index page Reviews
     case "reviews":
         include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
@@ -866,10 +803,9 @@ switch ($op)
         $error  = "<a href='javascript:history.go(-1)'>" . _AM_XTORRENT_BRETURN . "</a><br><br>";
         $error .= _AM_XTORRENT_REVIEW_DATA_NOT . ": <br><br>";
         $error .= $sql;
-        if (!$result)
-        {
+        if (!$result) {
             trigger_error($error, E_USER_ERROR);
-        } 
+        }
 
         xoops_cp_header();
         $adminObject = \Xmf\Module\Admin::getInstance();
@@ -893,21 +829,19 @@ switch ($op)
     		<th style='text-align:center; width:7%;'>" . _AM_XTORRENT_REV_ACTION . "</th>
     		</tr>
   		  ";
-        if ($num)
-        {
-            while ($review_array = $xoopsDB -> fetchArray($result))
-            {
+        if ($num) {
+            while ($review_array = $xoopsDB -> fetchArray($result)) {
                 $review_id   = intval($review_array['review_id']);
-				        $sql2        = "SELECT title FROM " . $xoopsDB -> prefix("xtorrent_downloads") . " WHERE lid = " . $review_array['lid'] . "" ;
+                $sql2        = "SELECT title FROM " . $xoopsDB -> prefix("xtorrent_downloads") . " WHERE lid = " . $review_array['lid'] . "" ;
                 list($title) = $xoopsDB -> fetchrow($result2 = $xoopsDB -> query($sql2));
-				        $title       = $myts -> htmlSpecialChars($title);
+                $title       = $myts -> htmlSpecialChars($title);
                 $lid         = intval($review_array['lid']);
                 $submitter   = xoops_getLinkedUnameFromId($review_array['uid']);
                 $datetime    = formatTimestamp($review_array['date'], $xoopsModuleConfig['dateformat']);
                 $status      = (intval($review_array['submit'])) ? $approved : "<a href='index.php?op=approve_review&review_id=" . $review_id . "'>" . $imagearray['approve'] . "</a>";
                 $modify      = "<a href='index.php?op=edit_review&review_id=" . $review_id . "'>" . $imagearray['editimg'] . "</a>";
                 $delete      = "<a href='index.php?op=del_review&review_id=" . $review_id . "'>" . $imagearray['deleteimg'] . "</a>";
-        echo "
+                echo "
     		<tr>
     		<td class='head' style='text-align:center;'>" . $review_id . "</td>
     		<td class='even' style='white-space:nowrap;'><a href='index.php?op=Download&amp;lid=" . $lid . "'>" . $title . "</a></td>
@@ -916,14 +850,12 @@ switch ($op)
     		<td class='even' style='text-align:center; white-space:nowrap;'>" . $status . " " . $modify . " " . $delete . "</td>
     		</tr>
     		";
-            } 
-        } 
-        else
-        {
+            }
+        } else {
             echo "<tr><td class='head' colspan='6' style='text-align:center;'>" . _AM_XTORRENT_REV_NOWAITINGREVIEWS . "</td></tr>";
-        } 
+        }
         echo "</table>";
-        $pagenav = new XoopsPageNav($num, $xoopsModuleConfig['admin_perpage'] , $start, 'start');
+        $pagenav = new XoopsPageNav($num, $xoopsModuleConfig['admin_perpage'], $start, 'start');
         echo "<div style='text-align:right;'>" . $pagenav -> renderNav() . '</div></fieldset>';
         require_once __DIR__ . '/admin_footer.php';
         break;
@@ -971,8 +903,7 @@ switch ($op)
 
         //xtorrent_serverstats();
 
-        if ($totalcats > 0)
-        {
+        if ($totalcats > 0) {
             include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
             $mytree = new XoopsTree($xoopsDB -> prefix("xtorrent_cat"), "cid", "pid");
             $sform = new XoopsThemeForm(_AM_XTORRENT_CCATEGORY_MODIFY, "category", "category.php");
@@ -991,26 +922,21 @@ switch ($op)
             $dup_tray -> addElement($butt_dupct);
             $sform -> addElement($dup_tray);
             $sform -> display();
-        } 
+        }
 
-        if ($totaldownloads > 0)
-        {
+        if ($totaldownloads > 0) {
             $sql = "SELECT * FROM " . $xoopsDB -> prefix("xtorrent_downloads") . "WHERE published > 0 AND published <= " . time() . " AND (expired = 0 OR expired > " . time() . ")	AND offline = 0 ORDER BY lid DESC" ;
             $published_array = $xoopsDB -> query($sql, $xoopsModuleConfig['admin_perpage'], $start);
             $published_array_count = $xoopsDB -> getRowsNum($xoopsDB -> query($sql));
 
             xtorrent_downlistheader(_AM_XTORRENT_MINDEX_PUBLISHEDDOWN);
-            if ($published_array_count > 0)
-            {
-                while ($published = $xoopsDB -> fetchArray($published_array))
-                {
+            if ($published_array_count > 0) {
+                while ($published = $xoopsDB -> fetchArray($published_array)) {
                     xtorrent_downlistbody($published);
-                } 
-            } 
-            else
-            {
+                }
+            } else {
                 xtorrent_downlistfooter();
-            } 
+            }
             xtorrent_downlistpagenav($published_array_count, $start, 'art');
             /**
              * Auto Publish
@@ -1019,17 +945,13 @@ switch ($op)
             $auto_publish_array = $xoopsDB -> query($sql, $xoopsModuleConfig['admin_perpage'], $start2);
             $auto_publish_count = $xoopsDB -> getRowsNum($xoopsDB -> query($sql));
             xtorrent_downlistheader(_AM_XTORRENT_MINDEX_AUTOPUBLISHEDDOWN);
-            if ($auto_publish_count > 0)
-            {
-                while ($auto_publish = $xoopsDB -> fetchArray($auto_publish_array))
-                {
+            if ($auto_publish_count > 0) {
+                while ($auto_publish = $xoopsDB -> fetchArray($auto_publish_array)) {
                     xtorrent_downlistbody($auto_publish);
-                } 
-            } 
-            else
-            {
+                }
+            } else {
                 xtorrent_downlistfooter();
-            } 
+            }
             xtorrent_downlistpagenav($auto_publish_count, $start2, 'art2');
             /**
              * Auto expire FAQ
@@ -1039,17 +961,13 @@ switch ($op)
             $auto_expire_count = $xoopsDB -> getRowsNum($xoopsDB -> query($sql));
 
             xtorrent_downlistheader(_AM_XTORRENT_MINDEX_AUTOEXPIRE);
-            if ($auto_expire_count > 0)
-            {
-                while ($auto_expire = $xoopsDB -> fetchArray($auto_expire_array))
-                {
+            if ($auto_expire_count > 0) {
+                while ($auto_expire = $xoopsDB -> fetchArray($auto_expire_array)) {
                     xtorrent_downlistbody($auto_expire);
-                } 
-            } 
-            else
-            {
+                }
+            } else {
                 xtorrent_downlistfooter();
-            } 
+            }
             xtorrent_downlistpagenav($auto_expire_count, $start3, 'art3');
             /**
              * Offline FAQ
@@ -1059,163 +977,155 @@ switch ($op)
             $offline_count = $xoopsDB -> getRowsNum($xoopsDB -> query($sql));
 
             xtorrent_downlistheader(_AM_XTORRENT_MINDEX_OFFLINEDOWN);
-            if ($offline_count > 0)
-            {
-                while ($is_offline = $xoopsDB -> fetchArray($offline_array))
-                {
+            if ($offline_count > 0) {
+                while ($is_offline = $xoopsDB -> fetchArray($offline_array)) {
                     xtorrent_downlistbody($is_offline);
-                } 
-            } 
-            else
-            {
+                }
+            } else {
                 xtorrent_downlistfooter();
-            } 
+            }
             xtorrent_downlistpagenav($offline_count, $start4, 'art4');
         }
-        require_once __DIR__ . '/admin_footer.php'; 
+        require_once __DIR__ . '/admin_footer.php';
         break;
-} 
+}
 
 function ipnrec()
 {
     global $modversion, $xoopsDB;
     $query_recset1 = "select `date` as recdate from " . $xoopsDB->prefix("xtorrent_financial") . "" . " where name='PayPal IPN' order by date desc limit 1";
-  	$recset1       = $xoopsDB->query($query_recset1);
-  	$row_recset1   = $xoopsDB->fetchArray($recset1);
-  	if($row_recset1){
-  		  $recdate = "payment_date > '" . $row_recset1['recdate'] . "' and";
-    	} else {
-    		$recdate = '';
-    	}
+    $recset1       = $xoopsDB->query($query_recset1);
+    $row_recset1   = $xoopsDB->fetchArray($recset1);
+    if ($row_recset1) {
+        $recdate = "payment_date > '" . $row_recset1['recdate'] . "' and";
+    } else {
+        $recdate = '';
+    }
 
     $query_recset1 = "select `payment_date` as curdate from " . $xoopsDB->prefix("xtorrent_payments") . "" . " where payment_status='Completed' and (txn_type='send_money' or txn_type='web_accept')" . " order by payment_date desc limit 1";
-  	$recset1       = $xoopsDB->query($query_recset1);
-  	$row_recset1   = $xoopsDB->fetchArray($recset1);
-  	$curdate       = $row_recset1['curdate'];
+    $recset1       = $xoopsDB->query($query_recset1);
+    $row_recset1   = $xoopsDB->fetchArray($recset1);
+    $curdate       = $row_recset1['curdate'];
     $query_recset1 = "select sum(mc_gross - mc_fee) as ipn_total, count(*) as numrecs" . " from " . $xoopsDB->prefix("xtorrent_payments") . " where ($recdate payment_date <= '$curdate')" . " and payment_status = 'Completed' and (txn_type='send_money' or txn_type='web_accept')";
-  	$recset1       = $xoopsDB->query($query_recset1);
-  	$row_recset1   = $xoopsDB->fetchArray($recset1);
+    $recset1       = $xoopsDB->query($query_recset1);
+    $row_recset1   = $xoopsDB->fetchArray($recset1);
 
     echo "
     <fieldset><legend style='font-weight:bold; color:#900;'>" . _AM_XTORRENT_PCONSOLID . "</legend>
     <center><font class='title'><b>" . _AM_XTORRENT_PAYPAL_IPN_UP . "</b></font></center>
     <br><br>
     ";
-  	if( $row_recset1['numrecs'] == 0 )
-  		echo _AM_XTORRENT_PAYPAL_IPN_RECORD;
-    	else
-    	{
-    		$insert_set = "INSERT INTO `" . $xoopsDB->prefix('xtorrent_financial') . "` (`date`,`num`,`name`,`descr`,`amount`) VALUES ('" . $curdate . "','','PayPal IPN','Auto-Reconcile','" . $row_recset1['ipn_total'] . "')";
-    		if($xoopsDB->query($insert_set))
-    			echo "<b>" . $row_recset1['numrecs'] . "</b> " . _AM_XTORRENT_PAYPAL_IPN_IMPORT . "" . sprintf("%0.2f", $row_recset1['ipn_total']);
-    		else
-    			echo "<b>ERROR : There are " . $row_recset1['numrecs'] . " to import, but there was an<br>error encoutered during db record insertion into Financial table. Insertion<br>FAILED</b>";
-    	}
-  	echo "<br><br><form action='index.php?op=payment#AdminTop' method='post'>";
-  	echo "<input type='hidden' name='op' value='payment'><input type='submit' value='Return'></form>";
+    if ($row_recset1['numrecs'] == 0) {
+        echo _AM_XTORRENT_PAYPAL_IPN_RECORD;
+    } else {
+        $insert_set = "INSERT INTO `" . $xoopsDB->prefix('xtorrent_financial') . "` (`date`,`num`,`name`,`descr`,`amount`) VALUES ('" . $curdate . "','','PayPal IPN','Auto-Reconcile','" . $row_recset1['ipn_total'] . "')";
+        if ($xoopsDB->query($insert_set)) {
+            echo "<b>" . $row_recset1['numrecs'] . "</b> " . _AM_XTORRENT_PAYPAL_IPN_IMPORT . "" . sprintf("%0.2f", $row_recset1['ipn_total']);
+        } else {
+            echo "<b>ERROR : There are " . $row_recset1['numrecs'] . " to import, but there was an<br>error encoutered during db record insertion into Financial table. Insertion<br>FAILED</b>";
+        }
+    }
+    echo "<br><br><form action='index.php?op=payment#AdminTop' method='post'>";
+    echo "<input type='hidden' name='op' value='payment'><input type='submit' value='Return'></form>";
     echo "</fieldset>";
 }
 
-function payments() 
+function payments()
 {
     global $xoopsDB, $modversion;
-  	// Register paging
-  	$maxRows_recset1 = 10;
-  	$pageNum_recset1 = 0;
-  	if (isset($_POST['pageNum_recset1'])) {
-  	  $pageNum_recset1 = $_POST['pageNum_recset1'];
-  	}
-  	$startRow_recset1    = $pageNum_recset1 * $maxRows_recset1;
-  	$query_recset1       = "SELECT id, date, DATE_FORMAT(date, '%d-%b-%Y') as fdate, DATE_FORMAT(date, '%d') as day, DATE_FORMAT(date, '%m') as mon, DATE_FORMAT(date, '%Y') as year, num, name, descr, amount FROM " . $xoopsDB->prefix('xtorrent_financial') . " order by date DESC";
-  	$query_limit_recset1 = "$query_recset1 LIMIT $startRow_recset1, $maxRows_recset1";
-  	$recset1             = $xoopsDB->query($query_limit_recset1);
-  	$row_recset1         = $xoopsDB->fetchArray($recset1);
-  	
-  	if (isset($_POST['totalRows_recset1'])) {
-  	  $totalRows_recset1 = $_POST['totalRows_recset1'];
-  	} else {
-  	  $all_recset1       = $xoopsDB->query($query_recset1);
-  	  $totalRows_recset1 = $xoopsDB->getRowsNum($all_recset1);
-  	}
-  	$totalPages_recset1  = ceil($totalRows_recset1/$maxRows_recset1)-1;
-  	$queryString_recset1 = "&totalRows_recset1=" . $totalRows_recset1 . "#AdminTop";
+    // Register paging
+    $maxRows_recset1 = 10;
+    $pageNum_recset1 = 0;
+    if (isset($_POST['pageNum_recset1'])) {
+        $pageNum_recset1 = $_POST['pageNum_recset1'];
+    }
+    $startRow_recset1    = $pageNum_recset1 * $maxRows_recset1;
+    $query_recset1       = "SELECT id, date, DATE_FORMAT(date, '%d-%b-%Y') as fdate, DATE_FORMAT(date, '%d') as day, DATE_FORMAT(date, '%m') as mon, DATE_FORMAT(date, '%Y') as year, num, name, descr, amount FROM " . $xoopsDB->prefix('xtorrent_financial') . " order by date DESC";
+    $query_limit_recset1 = "$query_recset1 LIMIT $startRow_recset1, $maxRows_recset1";
+    $recset1             = $xoopsDB->query($query_limit_recset1);
+    $row_recset1         = $xoopsDB->fetchArray($recset1);
+    
+    if (isset($_POST['totalRows_recset1'])) {
+        $totalRows_recset1 = $_POST['totalRows_recset1'];
+    } else {
+        $all_recset1       = $xoopsDB->query($query_recset1);
+        $totalRows_recset1 = $xoopsDB->getRowsNum($all_recset1);
+    }
+    $totalPages_recset1  = ceil($totalRows_recset1/$maxRows_recset1)-1;
+    $queryString_recset1 = "&totalRows_recset1=" . $totalRows_recset1 . "#AdminTop";
   
-  	// Collect IPN reconcile data
-  	// First, get the date of the last time we reconciled
-  	$query_recset2 = "SELECT `date` as recdate FROM " . $xoopsDB->prefix('xtorrent_financial') . " WHERE name = 'PayPal IPN' ORDER BY date DESC LIMIT 1";
-  	$recset2       = $xoopsDB->query($query_recset2);
-  	$row_recset2   = $xoopsDB->fetchArray($recset2);
-  	$recdate       = $row_recset2['recdate'];
-  	
-  	// Get the date of the last donation
-  	$query_recset2 = "SELECT `payment_date` as curdate FROM " . $xoopsDB->prefix('xtorrent_payments') . " WHERE payment_status = 'Completed' AND (txn_type = 'send_money' OR txn_type = 'web_accept' ) ORDER BY payment_date DESC LIMIT 1";
-  	$recset2       = $xoopsDB->query($query_recset2);
-  	$row_recset2   = $xoopsDB->fetchArray($recset2);
-  	$curdate       = $row_recset2['curdate'];
+    // Collect IPN reconcile data
+    // First, get the date of the last time we reconciled
+    $query_recset2 = "SELECT `date` as recdate FROM " . $xoopsDB->prefix('xtorrent_financial') . " WHERE name = 'PayPal IPN' ORDER BY date DESC LIMIT 1";
+    $recset2       = $xoopsDB->query($query_recset2);
+    $row_recset2   = $xoopsDB->fetchArray($recset2);
+    $recdate       = $row_recset2['recdate'];
+    
+    // Get the date of the last donation
+    $query_recset2 = "SELECT `payment_date` as curdate FROM " . $xoopsDB->prefix('xtorrent_payments') . " WHERE payment_status = 'Completed' AND (txn_type = 'send_money' OR txn_type = 'web_accept' ) ORDER BY payment_date DESC LIMIT 1";
+    $recset2       = $xoopsDB->query($query_recset2);
+    $row_recset2   = $xoopsDB->fetchArray($recset2);
+    $curdate       = $row_recset2['curdate'];
   
-  	// Collect the IPN transactions between recdate and curdate
-  	$query_recset2 = "SELECT custom, SUM(mc_gross) AS gross, SUM(mc_gross - mc_fee) AS net FROM " . $xoopsDB->prefix('xtorrent_payments') . " WHERE (payment_date > '" . $recdate . "' AND payment_date <= '" . $curdate . "') GROUP BY txn_id";
-  	$recset2       = $xoopsDB->query($query_recset2);
+    // Collect the IPN transactions between recdate and curdate
+    $query_recset2 = "SELECT custom, SUM(mc_gross) AS gross, SUM(mc_gross - mc_fee) AS net FROM " . $xoopsDB->prefix('xtorrent_payments') . " WHERE (payment_date > '" . $recdate . "' AND payment_date <= '" . $curdate . "') GROUP BY txn_id";
+    $recset2       = $xoopsDB->query($query_recset2);
   
-  	// Iterate over the records skipping the ones that total out to zero(refunds)
-  	$ipn_tot = 0;
-  	$num_ipn = 0;
-  	while( $row_recset2 = $xoopsDB->fetchArray($recset2) )
-  	{
-  		if( $row_recset2['gross'] > 0 )
-  		{
-  			$ipn_tot += $row_recset2['net'];
-  			$num_ipn++;
-  		}
-  	}
+    // Iterate over the records skipping the ones that total out to zero(refunds)
+    $ipn_tot = 0;
+    $num_ipn = 0;
+    while ($row_recset2 = $xoopsDB->fetchArray($recset2)) {
+        if ($row_recset2['gross'] > 0) {
+            $ipn_tot += $row_recset2['net'];
+            $num_ipn++;
+        }
+    }
   
-  	// Get the register balance
-  	$query_recset4 = "SELECT SUM(amount) as total FROM " . $xoopsDB->prefix('xtorrent_financial') . "";
-  	$recset4       = $xoopsDB->query($query_recset4);
-  	$row_recset4   = $xoopsDB->fetchArray($recset4);
-  	$total         = $row_recset4['total'];
-  	
-  	// Query to remove the Edit/Delete buttons if no results will be listed.
-  	$query   = "select * from " . $xoopsDB->prefix('xtorrent_financial') . "";
-  	$recsetQ = $xoopsDB->query($query);
-  	$numRec  = $xoopsDB->getRowsNum($recsetQ);
+    // Get the register balance
+    $query_recset4 = "SELECT SUM(amount) as total FROM " . $xoopsDB->prefix('xtorrent_financial') . "";
+    $recset4       = $xoopsDB->query($query_recset4);
+    $row_recset4   = $xoopsDB->fetchArray($recset4);
+    $total         = $row_recset4['total'];
+    
+    // Query to remove the Edit/Delete buttons if no results will be listed.
+    $query   = "select * from " . $xoopsDB->prefix('xtorrent_financial') . "";
+    $recsetQ = $xoopsDB->query($query);
+    $numRec  = $xoopsDB->getRowsNum($recsetQ);
   
-  // Output the page
-  	echo "<fieldset><legend style='font-weight:bold; color:#900;'>" . _AM_XTORRENT_PAYMENTREG . "</legend>";
+    // Output the page
+    echo "<fieldset><legend style='font-weight:bold; color:#900;'>" . _AM_XTORRENT_PAYMENTREG . "</legend>";
     echo "<div style='display:inline-block;width:49%;float:left;vertical-align:middle;'>" . _AM_XTORRENT_PAYPAL_IPN_RECORDS . " " . $num_ipn . " - " . _AM_XTORRENT_PAYPAL_IPN_TOTALING . "" . $ipn_tot;
-  	echo "</div>";
-  	echo "<div style='display:inline-block;width:49%;text-align:right;vertical-align:middle;'><form action=\"index.php?op=ipnrec#AdminTop\" method=\"post\">";
-  	echo "<input type='hidden' name='op' value='ipnrec'><input type='submit' value='PayPal IPN reconcile' onClick=\"return confirm('" . _AM_XTORRENT_PAYPAL_IPN_RECENT_1 . "" . '\n' . "" . _AM_XTORRENT_PAYPAL_IPN_RECENT_2 . "" . '\n\n' . "" . _AM_XTORRENT_PAYPAL_IPN_RECENT_3 . "')\"></form></div>";
+    echo "</div>";
+    echo "<div style='display:inline-block;width:49%;text-align:right;vertical-align:middle;'><form action=\"index.php?op=ipnrec#AdminTop\" method=\"post\">";
+    echo "<input type='hidden' name='op' value='ipnrec'><input type='submit' value='PayPal IPN reconcile' onClick=\"return confirm('" . _AM_XTORRENT_PAYPAL_IPN_RECENT_1 . "" . '\n' . "" . _AM_XTORRENT_PAYPAL_IPN_RECENT_2 . "" . '\n\n' . "" . _AM_XTORRENT_PAYPAL_IPN_RECENT_3 . "')\"></form></div>";
   
-  	echo "<table border=\"0\" align='center'><tr>";
-  	if( $pageNum_recset1 > 0 )
-  	{
-  		echo '<td><form action="index.php#AdminTop" method="post">'
-  		   . '<input type="hidden" name="op" value="payment">'
-  		   . '<input type="hidden" name="pageNum_recset1" value="0">'
-  		   . '<input type="hidden" name="totalRows_recset1" value="' . $totalRows_recset1 . '">'
-  		   . '<input type="submit" name="navig" value="|&lt;" title="Current"></form></td>';
-  		echo '<td><form action="index.php#AdminTop" method="post">'
-  		   . '<input type="hidden" name="op" value="payment">'
-  		   . '<input type="hidden" name="pageNum_recset1" value="' . max(0, $pageNum_recset1 - 1) . '">'
-  		   . '<input type="hidden" name="totalRows_recset1" value="' . $totalRows_recset1 . '">'
-  		   . '<input type="submit" name="navig" value="&lt;" title="Next newest"></form></td>';
-  	}
-  	if( $pageNum_recset1 < $totalPages_recset1 )
-  	{
-  		echo '<td><form action="index.php#AdminTop" method="post">'
-  		   . '<input type="hidden" name="op" value="payment">'
-  		   . '<input type="hidden" name="pageNum_recset1" value="' . min($totalPages_recset1, $pageNum_recset1 + 1) . '">'
-  		   . '<input type="hidden" name="totalRows_recset1" value="' . $totalRows_recset1 . '">'
-  		   . '<input type="submit" name="navig" value="&gt;" title="Next Oldest"></form></td>';
-  		echo '<td><form action="index.php#AdminTop" method="post">'
-  		   . '<input type="hidden" name="op" value="payment">'
-  		   . '<input type="hidden" name="pageNum_recset1" value="' . $totalPages_recset1 . '">'
-  		   . '<input type="hidden" name="totalRows_recset1" value="' . $totalRows_recset1 . '">'
-  		   . '<input type="submit" name="navig" value="&gt;|" title="Oldest"></form></td>';
-  	}
-  	echo "</tr></table>";
-  	
+    echo "<table border=\"0\" align='center'><tr>";
+    if ($pageNum_recset1 > 0) {
+        echo '<td><form action="index.php#AdminTop" method="post">'
+           . '<input type="hidden" name="op" value="payment">'
+           . '<input type="hidden" name="pageNum_recset1" value="0">'
+           . '<input type="hidden" name="totalRows_recset1" value="' . $totalRows_recset1 . '">'
+           . '<input type="submit" name="navig" value="|&lt;" title="Current"></form></td>';
+        echo '<td><form action="index.php#AdminTop" method="post">'
+           . '<input type="hidden" name="op" value="payment">'
+           . '<input type="hidden" name="pageNum_recset1" value="' . max(0, $pageNum_recset1 - 1) . '">'
+           . '<input type="hidden" name="totalRows_recset1" value="' . $totalRows_recset1 . '">'
+           . '<input type="submit" name="navig" value="&lt;" title="Next newest"></form></td>';
+    }
+    if ($pageNum_recset1 < $totalPages_recset1) {
+        echo '<td><form action="index.php#AdminTop" method="post">'
+           . '<input type="hidden" name="op" value="payment">'
+           . '<input type="hidden" name="pageNum_recset1" value="' . min($totalPages_recset1, $pageNum_recset1 + 1) . '">'
+           . '<input type="hidden" name="totalRows_recset1" value="' . $totalRows_recset1 . '">'
+           . '<input type="submit" name="navig" value="&gt;" title="Next Oldest"></form></td>';
+        echo '<td><form action="index.php#AdminTop" method="post">'
+           . '<input type="hidden" name="op" value="payment">'
+           . '<input type="hidden" name="pageNum_recset1" value="' . $totalPages_recset1 . '">'
+           . '<input type="hidden" name="totalRows_recset1" value="' . $totalRows_recset1 . '">'
+           . '<input type="submit" name="navig" value="&gt;|" title="Oldest"></form></td>';
+    }
+    echo "</tr></table>";
+    
     echo "<table style='width:100%; text-align:left;'><tr>"
       ."<th style='text-align:left; width:4px;'>&nbsp;</th>"
       ."<th style='text-align:left;'>" . _AM_XTORRENT_PAYPAL_IPN_DATE . "</th>"
@@ -1225,42 +1135,43 @@ function payments()
       ."<th style='text-align:left;'>" . _AM_XTORRENT_PAYPAL_IPN_AMOUNT . "</th>"
       ."</tr><tr>";
   
-  	$row=0;
-  do {
-  	$row += 1;
-      echo "<tr>"
-  	."<td align=\"left\">";
-  	if($numRec!=0){
-  		echo "<a href=\"javascript: void 0\" onclick=\""
-  		."document.recedit.id.value = '" . $row_recset1['id'] . "'; "
-  		."document.recedit.StartMonth.value = '" . $row_recset1['mon'] . "'; "
-  		."document.recedit.StartDay.value = '" . $row_recset1['day'] . "'; "
-  		."document.recedit.StartYear.value = '" . $row_recset1['year'] . "'; "
-  		."document.recedit.Num.value = '" . $row_recset1['num'] . "'; "
-  		."document.recedit.Name.value = '" . $row_recset1['name'] . "'; "
-  		."document.recedit.Descr.value = '" . $row_recset1['descr'] . "'; "
-  		."document.recedit.Amount.value = '" . $row_recset1['amount'] . "'; "
-  		."document.recedit.Submit.value = '" . _AM_XTORRENT_PAYPAL_IPN_MODIFY . "'; "
-  		."document.recedit.op.value = '" . _AM_XTORRENT_PAYPAL_IPN_FRE . "'; "			
-  		."return false;\">"
-  		."<img style='width:12px; height:13px' src='../assets/images/admin/treasury_edit.png'></a>&nbsp;"
-  		."<a href='index.php?op=FinRegDel&id=" . $row_recset1['id'] . "'>"
-  		."<img style='width:12px; height:13px' src='../assets/images/admin/treasury_drop.png' onClick=\"return confirm('" . _AM_XTORRENT_PAYPAL_IPN_DEL_1 . "" . '\n\n' . "" . _AM_XTORRENT_PAYPAL_IPN_RECENT_3 . "')\""
-  		."></a>";
-  	}
-  	echo "</td>"      
-  	."<td style='text-align:left;'>" . $row_recset1['fdate'] . "</td>"
-  	."<td style='text-align:left; width:8px;'>" . $row_recset1['num'] . "</td>"
-  	."<td style='text-align:left;'>" . $row_recset1['name'] . "</td>"
-  	."<td style='text-align:left;'>" . $row_recset1['descr'] . "</td>"
-  	."<td style='text-align:right;'><font ";
-  	$amt =  sprintf("%10.2f",$row_recset1['amount']);
-  	if( $amt < 0 )
-  		echo "color=\"#FF0000\"";
-  	echo ">\$" . $amt . "</font></td></tr>";
-  } while ($row_recset1 = $xoopsDB->fetchArray($recset1));
-      echo "</table><div class='footer' style='float:right;padding-top:5px;'><b>" . _AM_XTORRENT_PAYPAL_IPN_NB;
-  	  echo sprintf("%0.2f", $total) . "</b>";
-      echo "</div>";
-      echo "</td></tr></table></fieldset>";
+    $row=0;
+    do {
+        $row += 1;
+        echo "<tr>"
+    ."<td align=\"left\">";
+        if ($numRec!=0) {
+            echo "<a href=\"javascript: void 0\" onclick=\""
+        ."document.recedit.id.value = '" . $row_recset1['id'] . "'; "
+        ."document.recedit.StartMonth.value = '" . $row_recset1['mon'] . "'; "
+        ."document.recedit.StartDay.value = '" . $row_recset1['day'] . "'; "
+        ."document.recedit.StartYear.value = '" . $row_recset1['year'] . "'; "
+        ."document.recedit.Num.value = '" . $row_recset1['num'] . "'; "
+        ."document.recedit.Name.value = '" . $row_recset1['name'] . "'; "
+        ."document.recedit.Descr.value = '" . $row_recset1['descr'] . "'; "
+        ."document.recedit.Amount.value = '" . $row_recset1['amount'] . "'; "
+        ."document.recedit.Submit.value = '" . _AM_XTORRENT_PAYPAL_IPN_MODIFY . "'; "
+        ."document.recedit.op.value = '" . _AM_XTORRENT_PAYPAL_IPN_FRE . "'; "
+        ."return false;\">"
+        ."<img style='width:12px; height:13px' src='../assets/images/admin/treasury_edit.png'></a>&nbsp;"
+        ."<a href='index.php?op=FinRegDel&id=" . $row_recset1['id'] . "'>"
+        ."<img style='width:12px; height:13px' src='../assets/images/admin/treasury_drop.png' onClick=\"return confirm('" . _AM_XTORRENT_PAYPAL_IPN_DEL_1 . "" . '\n\n' . "" . _AM_XTORRENT_PAYPAL_IPN_RECENT_3 . "')\""
+        ."></a>";
+        }
+        echo "</td>"
+    ."<td style='text-align:left;'>" . $row_recset1['fdate'] . "</td>"
+    ."<td style='text-align:left; width:8px;'>" . $row_recset1['num'] . "</td>"
+    ."<td style='text-align:left;'>" . $row_recset1['name'] . "</td>"
+    ."<td style='text-align:left;'>" . $row_recset1['descr'] . "</td>"
+    ."<td style='text-align:right;'><font ";
+        $amt =  sprintf("%10.2f", $row_recset1['amount']);
+        if ($amt < 0) {
+            echo "color=\"#FF0000\"";
+        }
+        echo ">\$" . $amt . "</font></td></tr>";
+    } while ($row_recset1 = $xoopsDB->fetchArray($recset1));
+    echo "</table><div class='footer' style='float:right;padding-top:5px;'><b>" . _AM_XTORRENT_PAYPAL_IPN_NB;
+    echo sprintf("%0.2f", $total) . "</b>";
+    echo "</div>";
+    echo "</td></tr></table></fieldset>";
 }

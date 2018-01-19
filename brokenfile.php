@@ -3,27 +3,25 @@
 include 'header.php';
 
 if (!empty($_POST['submit'])) {
-    
-	global $xoopsModule, $xoopsModuleConfig, $xoopsUser;
+    global $xoopsModule, $xoopsModuleConfig, $xoopsUser;
 
     $sender = (is_object($xoopsUser)) ? $xoopsUser->getVar('uid') : 0;
     $ip = getenv("REMOTE_ADDR");
-    $lid = intval($_POST['lid']); 
-	$time = time();
+    $lid = intval($_POST['lid']);
+    $time = time();
     /*
-	*  Check if REG user is trying to report twice.
-	*/ 
+    *  Check if REG user is trying to report twice.
+    */
     $result = $xoopsDB->query("SELECT COUNT(*) FROM " . $xoopsDB->prefix('xtorrent_broken') . " WHERE lid=$lid");
-    list ($count) = $xoopsDB->fetchRow($result);
+    list($count) = $xoopsDB->fetchRow($result);
     if ($count > 0) {
         redirect_header('index.php', 2, _MD_XTORRENT_ALREADYREPORTED);
         exit();
     } else {
-
-		$sql = sprintf("INSERT INTO ".$xoopsDB->prefix('xtorrent_broken')." (reportid, lid, sender, ip, date, confirmed, acknowledged ) VALUES ( '', '$lid', '$sender', '$ip', '$time', '0', '0')");
+        $sql = sprintf("INSERT INTO ".$xoopsDB->prefix('xtorrent_broken')." (reportid, lid, sender, ip, date, confirmed, acknowledged ) VALUES ( '', '$lid', '$sender', '$ip', '$time', '0', '0')");
         $result = $xoopsDB->query($sql);
 
-		$newid = $xoopsDB->getInsertId();
+        $newid = $xoopsDB->getInsertId();
         $tags = array();
         $tags['BROKENREPORTS_URL'] = XOOPS_URL . '/modules/xtorrent/admin/index.php?op=listBrokenDownloads';
         $notification_handler = &xoops_gethandler('notification');
@@ -58,11 +56,11 @@ if (!empty($_POST['submit'])) {
         $xoopsMailer->assign("X_TITLE", $title);
         $xoopsMailer->assign("X_SUB_DATE", $subdate);
         $xoopsMailer->assign('X_DOWNLOAD', XOOPS_URL . '/modules/xtorrent/singlefile.php?cid=' . $cid . '&amp;lid=' . $lid);
-        $xoopsMailer->setSubject($subject); 
+        $xoopsMailer->setSubject($subject);
         $xoopsMailer->send();
         redirect_header('index.php', 2, _MD_XTORRENT_BROKENREPORTED);
         exit();
-    } 
+    }
 } else {
     $xoopsOption['template_main'] = 'xtorrent_brokenfile.tpl';
     include XOOPS_ROOT_PATH . '/header.php';
@@ -78,7 +76,8 @@ if (!empty($_POST['submit'])) {
     unset($sql);
 
     $sql = "SELECT * FROM " . $xoopsDB->prefix('xtorrent_broken') . " WHERE lid = $lid";
-    $broke_arr = $xoopsDB->fetchArray($xoopsDB->query($sql));;
+    $broke_arr = $xoopsDB->fetchArray($xoopsDB->query($sql));
+    ;
 
     if (is_array($broke_arr)) {
         global $xoopsModuleConfig;
@@ -96,9 +95,9 @@ if (!empty($_POST['submit'])) {
         $amount = $xoopsDB->getRowsNum($sql);
 
         if (!is_array($down_arr)) {
-            redirect_header('index.php', 0 , _MD_XTORRENT_THISFILEDOESNOTEXIST);
+            redirect_header('index.php', 0, _MD_XTORRENT_THISFILEDOESNOTEXIST);
             exit();
-        } 
+        }
         /**
          * file info
          */
@@ -110,10 +109,8 @@ if (!empty($_POST['submit'])) {
         $down['publisher'] = xoops_getLinkedUnameFromId(intval($down_arr['submitter']));
 
         $xoopsTpl->assign('file_id', $lid);
-        $xoopsTpl->assign('lang_subdate' , $is_updated);
+        $xoopsTpl->assign('lang_subdate', $is_updated);
         $xoopsTpl->assign('down', $down);
-    } 
+    }
     include_once XOOPS_ROOT_PATH . '/footer.php';
-} 
-
-?>
+}

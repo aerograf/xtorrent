@@ -33,9 +33,8 @@ $modhandler = xoops_gethandler('module');
 $newsModule = $modhandler -> getByDirname("news");
 
 $tags['STORY_URL'] = XOOPS_URL . '/modules/news/article.php?storyid=' . $story -> storyid();
-if (!empty($isnew))
-{
+if (!empty($isnew)) {
     $notification_handler -> triggerEvent('story', $story -> storyid(), 'approve', $tags);
-} 
+}
 $notification_handler -> triggerEvent('global', 0, 'new_story', $tags);
 unset($xoopsModule);

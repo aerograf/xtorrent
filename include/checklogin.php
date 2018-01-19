@@ -52,32 +52,32 @@ if (false != $xt_user) {
     }
     
     // Set cookie for rememberme
-    if ( !empty($xoopsConfig['usercookie']) ) {
-        if ( !empty($_POST["rememberme"]) ) {
-            setcookie($xoopsConfig['usercookie'], $_SESSION['xoopsUserId'], time() + 31536000, '/',  '', 0);
+    if (!empty($xoopsConfig['usercookie'])) {
+        if (!empty($_POST["rememberme"])) {
+            setcookie($xoopsConfig['usercookie'], $_SESSION['xoopsUserId'], time() + 31536000, '/', '', 0);
         } else {
-            setcookie($xoopsConfig['usercookie'], 0, -1, '/',  '', 0);
+            setcookie($xoopsConfig['usercookie'], 0, -1, '/', '', 0);
         }
     }
     
     if (!empty($_POST['xoops_redirect']) && !strpos($_POST['xoops_redirect'], 'register')) {
-		$_POST['xoops_redirect'] = trim( $_POST['xoops_redirect'] );
+        $_POST['xoops_redirect'] = trim($_POST['xoops_redirect']);
         $parsed = parse_url(XOOPS_URL);
         $url = isset($parsed['scheme']) ? $parsed['scheme'].'://' : 'http://';
-        if ( isset( $parsed['host'] ) ) {
-        	$url .= $parsed['host'];
-			if ( isset( $parsed['port'] ) ) {
-				$url .= ':' . $parsed['port'];
-			}
+        if (isset($parsed['host'])) {
+            $url .= $parsed['host'];
+            if (isset($parsed['port'])) {
+                $url .= ':' . $parsed['port'];
+            }
         } else {
-        	$url .= $_SERVER['HTTP_HOST'];
+            $url .= $_SERVER['HTTP_HOST'];
         }
-        if ( @$parsed['path'] ) {
-        	if ( strncmp( $parsed['path'], $_POST['xoops_redirect'], strlen( $parsed['path'] ) ) ) {
-	        	$url .= $parsed['path'];
-        	}
+        if (@$parsed['path']) {
+            if (strncmp($parsed['path'], $_POST['xoops_redirect'], strlen($parsed['path']))) {
+                $url .= $parsed['path'];
+            }
         }
-		$url .= $_POST['xoops_redirect'];
+        $url .= $_POST['xoops_redirect'];
     } else {
         $url = XOOPS_URL.'/index.php';
     }

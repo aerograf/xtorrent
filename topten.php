@@ -32,29 +32,23 @@ $result = $xoopsDB -> query("SELECT cid, title FROM " . $xoopsDB -> prefix('xtor
 
 $e        = 0;
 $rankings = [];
-while (list($cid, $ctitle) = $xoopsDB -> fetchRow($result))
-{
-    if ($gperm_handler -> checkRight('xtorrentownCatPerm', $cid , $groups, $module_id))
-    {
+while (list($cid, $ctitle) = $xoopsDB -> fetchRow($result)) {
+    if ($gperm_handler -> checkRight('xtorrentownCatPerm', $cid, $groups, $module_id)) {
         $query = "SELECT lid, cid, title, hits, rating, votes, platform FROM " . $xoopsDB -> prefix('xtorrent_downloads') . " WHERE published > 0 AND published <= " . time() . " AND (expired = 0 OR expired > " . time() . ") AND offline = 0 AND (cid=$cid";
         $arr   = $mytree -> getAllChildId($cid);
-        for($i = 0;$i < count($arr);$i++)
-        {
+        for ($i = 0;$i < count($arr);$i++) {
             $query .= " or cid=" . $arr[$i] . "";
-        } 
+        }
         $query     .= ") order by " . $sortDB . " DESC";
         $result2   = $xoopsDB -> query($query, 10, 0);
         $filecount = $xoopsDB -> getRowsNum($result2);
 
-        if ($filecount > 0)
-        {
+        if ($filecount > 0) {
             $rankings[$e]['title'] = $myts -> htmlSpecialChars($ctitle);
             $rank = 1;
 
-            while (list($did, $dcid, $dtitle, $hits, $rating, $votes) = $xoopsDB -> fetchRow($result2))
-            {
-                if ($gperm_handler -> checkRight('xtorrentownFilePerm', $did, $groups, $xoopsModule -> getVar('mid')))
-                {
+            while (list($did, $dcid, $dtitle, $hits, $rating, $votes) = $xoopsDB -> fetchRow($result2)) {
+                if ($gperm_handler -> checkRight('xtorrentownFilePerm', $did, $groups, $xoopsModule -> getVar('mid'))) {
                     $catpath = $mytree -> getPathFromId($dcid, "title");
                     $catpath = basename($catpath);
 
@@ -62,18 +56,18 @@ while (list($cid, $ctitle) = $xoopsDB -> fetchRow($result))
                     //if ($catpath != $ctitle)
                     //{
                     //    $dtitle = $myts -> htmlSpecialChars($ctitle); //. $ctitle;
-                    //} 
+                    //}
 
                     $rankings[$e]['file'][] = array('id' => $did, 'cid' => $dcid, 'rank' => $rank, 'title' => $dtitle, 'category' => $catpath, 'hits' => $hits, 'rating' => number_format($rating, 2), 'votes' => $votes);
                     $rank++;
-                } 
-            } 
+                }
+            }
             $e++;
-        } 
-    } 
-} 
+        }
+    }
+}
 
-$xoopsTpl -> assign('lang_sortby' , $lang_array[$this]);
+$xoopsTpl -> assign('lang_sortby', $lang_array[$this]);
 
 $xoopsTpl -> assign('rankings', $rankings);
 include XOOPS_ROOT_PATH . '/footer.php';

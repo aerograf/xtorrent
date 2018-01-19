@@ -1,6 +1,6 @@
 <?php
 
-//Todo - Still to remove  defines from this area. 
+//Todo - Still to remove  defines from this area.
 define("_MD_XTORRENT_NODOWNLOAD", "This download does not exist!");
 
 
@@ -10,42 +10,42 @@ define("_MD_XTORRENT_PAYPAL", "Paypal email:");
 define("_MD_XTORRENT_PRICEC", "Price:");
 
 ### IPN DEBUG DEFINITIONS ###
-define("_MD_XT_DEBUGACTIVE","Debug mode activated");
-define("_MD_XT_OPENCONN","Opening connection and validating request with PayPal...");
-define("_MD_XT_CONNFAIL","FAILED to connect to PayPal");
-define("_MD_XT_RCVINVALID","Incorrect receiver email: %s , aborting...");
-define("_MD_XT_VERIFIED","PayPal Verified");
-define("_MD_XT_REFUND","Transaction is a Refund");
-define("_MD_XT_TRANSMISSING","IPN Error: Received refund but missing prior completed transaction");
-define("_MD_XT_MULTITXNS","IPN Error: Received refund but multiple prior txn_id\'s encountered, aborting");
-define("_MD_XT_DUPLICATETXN","Valid IPN, but DUPLICATE txn_id! aborting...");
-define("_MD_XT_NOTINTERESTED","Valid IPN, but not interested in this transaction");
-define("_MD_XT_INVALIDIPN","Invalid IPN transaction, this is an abnormal condition");
-define("_MD_XT_DEBUGPASS","PASSED!");
-define("_MD_XT_DEBUGFAIL","FAILED!");
-define("_MD_XT_RCVEMAIL","PayPal Receiver Email: %s");
-define("_MD_XT_LOGBEGIN","Logging events");
-define("_MD_XT_IFNOERROR","If you don\'t see any error messages, you should be good to go!");
+define("_MD_XT_DEBUGACTIVE", "Debug mode activated");
+define("_MD_XT_OPENCONN", "Opening connection and validating request with PayPal...");
+define("_MD_XT_CONNFAIL", "FAILED to connect to PayPal");
+define("_MD_XT_RCVINVALID", "Incorrect receiver email: %s , aborting...");
+define("_MD_XT_VERIFIED", "PayPal Verified");
+define("_MD_XT_REFUND", "Transaction is a Refund");
+define("_MD_XT_TRANSMISSING", "IPN Error: Received refund but missing prior completed transaction");
+define("_MD_XT_MULTITXNS", "IPN Error: Received refund but multiple prior txn_id\'s encountered, aborting");
+define("_MD_XT_DUPLICATETXN", "Valid IPN, but DUPLICATE txn_id! aborting...");
+define("_MD_XT_NOTINTERESTED", "Valid IPN, but not interested in this transaction");
+define("_MD_XT_INVALIDIPN", "Invalid IPN transaction, this is an abnormal condition");
+define("_MD_XT_DEBUGPASS", "PASSED!");
+define("_MD_XT_DEBUGFAIL", "FAILED!");
+define("_MD_XT_RCVEMAIL", "PayPal Receiver Email: %s");
+define("_MD_XT_LOGBEGIN", "Logging events");
+define("_MD_XT_IFNOERROR", "If you don\'t see any error messages, you should be good to go!");
 
 ### DONAT-O-METER BLOCK DEFINITIONS ###
-define("_MD_XT_STAT","Donat-o-Meter Stats");
-define("_MD_XT_MONGOAL","%s\'s Goal");
-define("_MD_XT_DUEDATE","Due Date");
-define("_MD_XT_GROSSAMT","Gross Amount");
-define("_MD_XT_NETBAL","Net Balance");
-define("_MD_XT_LEFT2GO","Left to go");
-define("_MD_XT_DONATIONS","Payments");
-define("_MD_XT_MAKEDON","Make payments with PayPal!");
-define("_MD_XT_SURPLUS","Surplus");
+define("_MD_XT_STAT", "Donat-o-Meter Stats");
+define("_MD_XT_MONGOAL", "%s\'s Goal");
+define("_MD_XT_DUEDATE", "Due Date");
+define("_MD_XT_GROSSAMT", "Gross Amount");
+define("_MD_XT_NETBAL", "Net Balance");
+define("_MD_XT_LEFT2GO", "Left to go");
+define("_MD_XT_DONATIONS", "Payments");
+define("_MD_XT_MAKEDON", "Make payments with PayPal!");
+define("_MD_XT_SURPLUS", "Surplus");
 
-define("_MD_XTORRENT_SEEDS","Seeds");
-define("_MD_XTORRENT_LEECHES","Leeches");
-define("_MD_XTORRENT_TTLSEEDS","Total Seeds");
-define("_MD_XTORRENT_TTLLEECHES","Total Leeches");
-define("_MD_XTORRENT_TOTALSIZE","Torrent Size");
-define("_MD_XTORRENT_TNAME","Name");
-define("_MD_XTORRENT_POLLED","Torrent Last Polled");
-define("_MD_XTORRENT_TRACKERPOLLED","Tracker Last Polled");
+define("_MD_XTORRENT_SEEDS", "Seeds");
+define("_MD_XTORRENT_LEECHES", "Leeches");
+define("_MD_XTORRENT_TTLSEEDS", "Total Seeds");
+define("_MD_XTORRENT_TTLLEECHES", "Total Leeches");
+define("_MD_XTORRENT_TOTALSIZE", "Torrent Size");
+define("_MD_XTORRENT_TNAME", "Name");
+define("_MD_XTORRENT_POLLED", "Torrent Last Polled");
+define("_MD_XTORRENT_TRACKERPOLLED", "Tracker Last Polled");
 
 define("_MD_XTORRENT_SUBCATLISTING", "Category Listing");
 define("_MD_XTORRENT_ISADMINNOTICE", "Webmaster: There is a problem with this image.");
@@ -219,15 +219,15 @@ define("_MD_XTORRENT_INFORUM", "Discuss In Forum");
 
 
 //submit.
-define("_MD_XTORRENT_NOTALLOWESTOSUBMIT","You are not allowed to submit files");
-define("_MD_XTORRENT_INFONOSAVEDB","Information not saved to database: <br /><br />");
+define("_MD_XTORRENT_NOTALLOWESTOSUBMIT", "You are not allowed to submit files");
+define("_MD_XTORRENT_INFONOSAVEDB", "Information not saved to database: <br /><br />");
 
 //review.
-define("_MD_XTORRENT_ERROR_CREATCHANNEL","Create Channel first");
+define("_MD_XTORRENT_ERROR_CREATCHANNEL", "Create Channel first");
 
 //
-define("_MD_XTORRENT_NEWLAST","New Submitted Before Last Week");
-define("_MD_XTORRENT_NEWTHIS","New Submitted Within This week");
-define("_MD_XTORRENT_THREE","New Submitted Within Last Three days");
-define("_MD_XTORRENT_TODAY","New Submitted Today");
-define("_MD_XTORRENT_NO_FILES","No Files Yet");
+define("_MD_XTORRENT_NEWLAST", "New Submitted Before Last Week");
+define("_MD_XTORRENT_NEWTHIS", "New Submitted Within This week");
+define("_MD_XTORRENT_THREE", "New Submitted Within Last Three days");
+define("_MD_XTORRENT_TODAY", "New Submitted Today");
+define("_MD_XTORRENT_NO_FILES", "No Files Yet");

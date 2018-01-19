@@ -2,23 +2,23 @@
 
 class XtsLists
 {
-    var $value;
-    var $selected;
-    var $path = 'uploads';
-    var $size;
-    var $emptyselect;
-    var $type;
-    var $prefix;
-    var $suffix;
+    public $value;
+    public $selected;
+    public $path = 'uploads';
+    public $size;
+    public $emptyselect;
+    public $type;
+    public $prefix;
+    public $suffix;
 
     /**
-     * $value: 
+     * $value:
      * Selection:
      * Path:
      * Size:
      * emptyselect:
      * $type: Filter which types of files should be returned
-     * 		Html 
+     * 		Html
      * 		Images
      * 		files
      * 		dir
@@ -37,16 +37,13 @@ class XtsLists
     public static function getarray($this_array)
     {
         $ret = "<select size='" . $this->size() . "' name='$this->value()'>";
-        if ($this->emptyselect)
-        {
+        if ($this->emptyselect) {
             $ret .= "<option value='" . $this->value() . "'>----------------------</option>";
         }
-        foreach($this_array as $content)
-        {
+        foreach ($this_array as $content) {
             $opt_selected = "";
 
-            if ($content[0] == $this->selected())
-            {
+            if ($content[0] == $this->selected()) {
                 $opt_selected = "selected='selected'";
             }
             $ret .= "<option value='" . $content . "' $opt_selected>" . $content . "</option>";
@@ -61,19 +58,15 @@ class XtsLists
     public static function getDirListAsArray($dirname)
     {
         $dirlist = [];
-        if (is_dir($dirname) && $handle = opendir($dirname))
-        {
-            while (false !== ($file = readdir($handle)))
-            {
-                if (!preg_match("/^[.]{1,2}$/", $file))
-                {
-                    if (strtolower($file) != 'cvs' && is_dir($dirname . $file))
-                    {
+        if (is_dir($dirname) && $handle = opendir($dirname)) {
+            while (false !== ($file = readdir($handle))) {
+                if (!preg_match("/^[.]{1,2}$/", $file)) {
+                    if (strtolower($file) != 'cvs' && is_dir($dirname . $file)) {
                         $dirlist[$file] = $file;
                     }
                 }
             }
-            closedir($handle); 
+            closedir($handle);
 
             reset($dirlist);
         }
@@ -83,38 +76,37 @@ class XtsLists
     public static function getListTypeAsArray($dirname, $type = '', $prefix = "", $noselection = 1)
     {
         $filelist = [];
-        switch (trim($type))
-        {
+        switch (trim($type)) {
             case "images":
                 $types = "[.gif|.jpg|.png]";
-                if ($noselection)
+                if ($noselection) {
                     $filelist[""] = "Show No Image";
+                }
                 break;
             case "html":
                 $types = "[.htm|.html|.xhtml|.php|.php3|.phtml|.txt]";
-                if ($noselection)
+                if ($noselection) {
                     $filelist[""] = "No Selection";
+                }
                 break;
             default:
                 $types = "";
-                if ($noselection)
+                if ($noselection) {
                     $filelist[""] = "No Selected File";
+                }
                 break;
         }
 
-        if (substr($dirname, -1) == '/')
-        {
+        if (substr($dirname, -1) == '/') {
             $dirname = substr($dirname, 0, -1);
         }
 
-        if (is_dir($dirname) && $handle = opendir($dirname))
-        {
-            while (false !== ($file = readdir($handle)))
-            {
-                if (!preg_match("/^[.]{1,2}$/", $file) && preg_match("/$types$/i", $file) && is_file($dirname . '/' . $file))
-                {
-                    if (strtolower($file) == "blank.png")
-                        Continue;
+        if (is_dir($dirname) && $handle = opendir($dirname)) {
+            while (false !== ($file = readdir($handle))) {
+                if (!preg_match("/^[.]{1,2}$/", $file) && preg_match("/$types$/i", $file) && is_file($dirname . '/' . $file)) {
+                    if (strtolower($file) == "blank.png") {
+                        continue;
+                    }
                     $file = $prefix . $file;
                     $filelist[$file] = $file;
                 }

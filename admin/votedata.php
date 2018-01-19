@@ -3,27 +3,26 @@
 require_once __DIR__ . '/admin_header.php';
 
 $op = "";
-if (isset($_POST))
-{
-    foreach ($_POST as $k => $v)
-    {
+if (isset($_POST)) {
+    foreach ($_POST as $k => $v) {
         ${$k} = $v;
     }
 }
 
-if (isset($_GET))
-{
-    foreach ($_GET as $k => $v)
-    {
+if (isset($_GET)) {
+    foreach ($_GET as $k => $v) {
         ${$k} = $v;
     }
 }
 
-if (isset($_GET['op'])) $op = $_GET['op'];
-if (isset($_POST['op'])) $op = $_POST['op'];
+if (isset($_GET['op'])) {
+    $op = $_GET['op'];
+}
+if (isset($_POST['op'])) {
+    $op = $_POST['op'];
+}
 
-switch ($op)
-{
+switch ($op) {
     case "delVote":
         global $xoopsDB, $_GET;
         $rid = intval($_GET['rid']);
@@ -39,58 +38,53 @@ switch ($op)
 
         global $xoopsDB, $imagearray;
 
-		    $start         = isset($_GET['start']) ? intval($_GET['start']) : 0;
+            $start         = isset($_GET['start']) ? intval($_GET['start']) : 0;
         $useravgrating = '0';
         $uservotes     = '0';
 
-		    $sql           = "SELECT * FROM " . $xoopsDB->prefix('xtorrent_votedata') . " ORDER BY ratingtimestamp DESC";
+            $sql           = "SELECT * FROM " . $xoopsDB->prefix('xtorrent_votedata') . " ORDER BY ratingtimestamp DESC";
         $results       = $xoopsDB->query($sql, 20, $start);
-		    $votes         = $xoopsDB->getRowsNum($results);
-		
+            $votes         = $xoopsDB->getRowsNum($results);
+        
         $sql           = "SELECT rating FROM " . $xoopsDB->prefix('xtorrent_votedata') . "";
         $result2       = $xoopsDB->query($sql, 20, $start);
-		    $uservotes     = $xoopsDB->getRowsNum($result2);
+            $uservotes     = $xoopsDB->getRowsNum($result2);
         $useravgrating = 0;
 
-        while (list($rating2) = $xoopsDB->fetchRow($result2))
-        {
+        while (list($rating2) = $xoopsDB->fetchRow($result2)) {
             $useravgrating = $useravgrating + $rating2;
         }
-        if ($useravgrating > 0)
-        {
+        if ($useravgrating > 0) {
             $useravgrating = $useravgrating / $uservotes;
             $useravgrating = number_format($useravgrating, 2);
         }
 
         xoops_cp_header();
         $adminObject = \Xmf\Module\Admin::getInstance();
-        $adminObject->displayNavigation(basename(__FILE__)); 		
+        $adminObject->displayNavigation(basename(__FILE__));
 
-      	echo "<fieldset><legend style='font-weight:bold;color:#900;'>" . _AM_XTORRENT_VOTE_DISPLAYVOTES . "</legend>
+          echo "<fieldset><legend style='font-weight:bold;color:#900;'>" . _AM_XTORRENT_VOTE_DISPLAYVOTES . "</legend>
           		<div style='padding:4px;'><b>" . _AM_XTORRENT_VOTE_USERAVG . ":</b> " . $useravgrating . "</div>
           		<div style='padding:4px;'><b>" . _AM_XTORRENT_VOTE_TOTALRATE . ":</b> " . $uservotes . "</div>
           		<div style='padding: 4px;'><li>" . $imagearray['deleteimg'] . " " . _AM_XTORRENT_VOTE_DELETEDSC . "</li></div><br>
           		<table class='outer' style='width:100%;'><tr>";
 
         $headingarray = [_AM_XTORRENT_VOTE_ID, _AM_XTORRENT_VOTE_USER, _AM_XTORRENT_VOTE_IP, _AM_XTORRENT_VOTE_FILETITLE, _AM_XTORRENT_VOTE_RATING, _AM_XTORRENT_VOTE_DATE, _AM_XTORRENT_MINDEX_ACTION];
-        for($i = 0; $i <= count($headingarray)-1; $i++)
-        {
+        for ($i = 0; $i <= count($headingarray)-1; $i++) {
             $align = 'center';
             echo "<th style='text-align:" . $align . ";'><b>" . $headingarray[$i] . "</th>";
         }
-        echo "</tr>"; 
-        if ($votes == 0)
-        {
+        echo "</tr>";
+        if ($votes == 0) {
             echo "<tr><td colspan='7' class='head' style='text-align:center;'>" . _AM_XTORRENT_VOTE_NOVOTES . "</td></tr>";
         }
-        while (list($ratingid, $lid, $ratinguser, $rating, $ratinghostname, $ratingtimestamp) = $xoopsDB->fetchRow($results))
-        {
+        while (list($ratingid, $lid, $ratinguser, $rating, $ratinghostname, $ratingtimestamp) = $xoopsDB->fetchRow($results)) {
             $sql = "SELECT title FROM " . $xoopsDB->prefix('xtorrent_downloads') . " WHERE lid=" . $lid . "";
             $down_array = $xoopsDB->fetchArray($xoopsDB->query($sql));
-			
+            
             $formatted_date = formatTimestamp($ratingtimestamp, $xoopsModuleConfig['dateformat']);
             $ratinguname = XoopsUser::getUnameFromId($ratinguser);
-      	echo "<tr>
+            echo "<tr>
           		<td class='head' style='text-align:center;'>" . $ratingid . "</td>
           		<td class='even' style='text-align:center;'>" . $ratinguname . "</td>
           		<td class='even' style='text-align:center;'>" . $ratinghostname . "</td>
@@ -103,8 +97,8 @@ switch ($op)
         }
         echo "</table></fieldset>";
         
-    		//Include page navigation
-    		include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
+            //Include page navigation
+            include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
         $page = ($votes > 20) ? _AM_XTORRENT_MINDEX_PAGE : '';
         $pagenav = new XoopsPageNav($page, 20, $start, 'start');
         echo "<div style='padding:8px;float:right;'>" . $page . '' . $pagenav -> renderNav() . '</div>';

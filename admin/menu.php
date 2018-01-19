@@ -2,7 +2,6 @@
 
 use XoopsModules\Xtorrent;
 
-
 $moduleDirName = basename(dirname(__DIR__));
 
 $helper = Xtorrent\Helper::getInstance();
@@ -86,14 +85,14 @@ $adminmenu = [
      'desc'    =>  '',
      'icon'    => $pathIcon32 . '/about.png'
     ]
-]; 
+];
  
 /*
 global $xoopsModule, $xoopsUser;
 $xoopsModule = XoopsModule::getByDirname("xsoap");
 if (!empty($xoopsModule)&&isset($xoopsUser))
 if ($xoopsUser->isAdmin($xoopsModule->mid())) {
-	$server = isset($_REQUEST['srv'])?$_REQUEST['srv']:0;
+    $server = isset($_REQUEST['srv'])?$_REQUEST['srv']:0;
 $adminmenu = [
     [
      'title'   =>  _MI_TORRENT_XSOAP_CATEGORY,
@@ -106,7 +105,7 @@ $adminmenu = [
      'link'    =>  'admin/xsoap.php?op=listing&srv=' . $server,
      'desc'    =>  '',
      //'icon'    =>    $pathModIcon32 . '/slogo.png'
-    ], 
+    ],
     [
      'title'   =>  _MI_TORRENT_XSOAP_RETRIEVE,
      'link'    =>  'admin/xsoap.php?op=retrieve&srv=' . $server,

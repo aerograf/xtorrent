@@ -1,4 +1,4 @@
-<?
+<?php
 // $Id: qcp64.class.php 1.6.4 2009-08-15 13:40:00 (final) wishcraft $
 //  ------------------------------------------------------------------------ //
 //                    CLORA - Chronolabs Australia                           //
@@ -25,51 +25,43 @@
 //  Chronolabs International PO BOX 699, DULWICH HILL, NSW, 2203, Australia  //
 //  ------------------------------------------------------------------------ //
 
-if (!class_exists('qcp64'))
-{
+if (!class_exists('qcp64')) {
+    class qcp64
+    {
+        public $base;
+        public $enum;
+        public $seed;
+        public $crc;
+            
+        public function __construct($data, $seed, $len=29)
+        {
+            $this->seed = $seed;
+            $this->length = $len;
+            $this->base = new qcp64_base((int)$seed);
+            $this->enum = new qcp64_enumerator($this->base);
+            
+            if (!empty($data)) {
+                for ($i=1; $i<strlen($data); $i++) {
+                    $enum_calc = $this->enum->enum_calc(substr($data, $i, 1), $enum_calc);
+                }
+                $qcp64_crc = new qcp64_leaver($enum_calc, $this->base, $this->length);
+                $qcp64_crc->reset_leaver();
+                $this->crc = $qcp64_crc->crc;
+            }
+        }
+            
+        public function calc($data)
+        {
+            for ($i=1; $i<strlen($data); $i++) {
+                $enum_calc = $this->enum->enum_calc(substr($data, $i, 1), $enum_calc);
+            }
+            $qcp64_crc = new qcp64_leaver($enum_calc, $this->base, $this->length);
+            $qcp64_crc->reset_leaver();
+            return $qcp64_crc->crc;
+        }
+    }
+}
 
-	
-	class qcp64
-	{
-		var $base;
-		var $enum;
-		var $seed;
-		var $crc;
-			
-		function __construct($data, $seed, $len=29)
-		{
-			$this->seed = $seed;
-			$this->length = $len;
-			$this->base = new qcp64_base((int)$seed);
-			$this->enum = new qcp64_enumerator($this->base);
-			
-			if (!empty($data))
-			{
-				for ($i=1; $i<strlen($data); $i++)
-				{
-					$enum_calc = $this->enum->enum_calc(substr($data,$i,1),$enum_calc);
-				}		
-				$qcp64_crc = new qcp64_leaver($enum_calc, $this->base, $this->length);	
-				$qcp64_crc->reset_leaver();				
-				$this->crc = $qcp64_crc->crc;			
-			}
-			
-		}
-			
-		function calc($data)
-		{
-			for ($i=1; $i<strlen($data); $i++)
-			{
-				$enum_calc = $this->enum->enum_calc(substr($data,$i,1),$enum_calc);
-			}		
-			$qcp64_crc = new qcp64_leaver($enum_calc, $this->base, $this->length);	
-			$qcp64_crc->reset_leaver();
-			return $qcp64_crc->crc;
-		}
-		
-	}
-}				
-
-require ('qcp64.base.php');
-require ('qcp64.enumerator.php');
-require ('qcp64.leaver.php');		
+require('qcp64.base.php');
+require('qcp64.enumerator.php');
+require('qcp64.leaver.php');

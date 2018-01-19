@@ -2,19 +2,18 @@
 
 require_once __DIR__ . '/admin_header.php';
 
-if (isset($_POST))
-{
-    foreach ($_POST as $k => $v)
-    {
+if (isset($_POST)) {
+    foreach ($_POST as $k => $v) {
         ${$k} = $v;
     }
 }
 
 $op = "";
-if (isset($_POST['op'])) $op = $_POST['op'];
+if (isset($_POST['op'])) {
+    $op = $_POST['op'];
+}
 
-switch ($op)
-{
+switch ($op) {
     case "save":
 
         global $xoopsDB;
@@ -22,7 +21,7 @@ switch ($op)
         $indexheading     = $myts->addslashes($_POST['indexheading']);
         $indexheader      = $myts->addslashes($_POST['indexheader']);
         $indexfooter      = $myts->addslashes($_POST['indexfooter']);
-		    $indeximage       = $myts->addslashes($_POST['indeximage']);
+            $indeximage       = $myts->addslashes($_POST['indeximage']);
         $nohtml           = isset($_POST['nohtml']);
         $nosmiley         = isset($_POST['nosmiley']);
         $noxcodes         = isset($_POST['noxcodes']);
@@ -53,7 +52,7 @@ switch ($op)
         
         //xtorrent_adminmenu(_AM_XTORRENT_INDEXPAGE);
 
-  	echo "
+    echo "
     		<fieldset>
         <legend style='font-weight:bold; color:#900;'>" . _AM_XTORRENT_IPAGE_INFORMATION . "</legend>
     		<div style='padding:8px;'>" . _AM_XTORRENT_MINDEX_PAGEINFOTXT . "</div>
@@ -68,12 +67,9 @@ switch ($op)
         $indeximage_select->setExtra("onchange='showImgSelected(\"image\", \"indeximage\", \"" . $xoopsModuleConfig['mainimagedir'] . "\", \"\", \"" . XOOPS_URL . "\")'");
         $indeximage_tray = new XoopsFormElementTray(_AM_XTORRENT_IPAGE_CIMAGE, '&nbsp;');
         $indeximage_tray->addElement($indeximage_select);
-        if (!empty($indeximage))
-        {
+        if (!empty($indeximage)) {
             $indeximage_tray->addElement(new XoopsFormLabel('', "<br><br><img src='" . XOOPS_URL . "/" . $xoopsModuleConfig['mainimagedir'] . "/" . $indeximage . "' name='image' id='image' alt='' >"));
-        }
-        else
-        {
+        } else {
             $indeximage_tray->addElement(new XoopsFormLabel('', "<br><br><img src='" . XOOPS_URL . "/uploads/blank.gif' name='image' id='image' alt='' >"));
         }
         $sform->addElement($indeximage_tray);

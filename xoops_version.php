@@ -70,7 +70,7 @@ $modversion     = [
 /*
 * added by Liquid. Based on code by Marcan
 */
-/* 
+/*
 $modversion['author_realname'] = "Simon Roberts";
 $modversion['author_website_url'] = "http://www.chronolabs.org.au";
 $modversion['author_website_name'] = "Chronolabs Australia";
@@ -115,26 +115,20 @@ global $xoopsModuleConfig, $xoopsUser, $xoopsDLModule;
 
 $submissions = 0;
 
-if (is_object($xoopsUser) && isset($xoopsModuleConfig['submissions']))
-{
-	$groups = $xoopsUser->getGroups();
-	if (array_intersect($xoopsModuleConfig['submitarts'], $groups))
-	{
-		$submissions = 1;
-	}
-}
-else
-{
-	if (isset($xoopsModuleConfig['anonpost']) && $xoopsModuleConfig['anonpost'] == 1)
-	{
-		$submissions = 1;
-	}
+if (is_object($xoopsUser) && isset($xoopsModuleConfig['submissions'])) {
+    $groups = $xoopsUser->getGroups();
+    if (array_intersect($xoopsModuleConfig['submitarts'], $groups)) {
+        $submissions = 1;
+    }
+} else {
+    if (isset($xoopsModuleConfig['anonpost']) && $xoopsModuleConfig['anonpost'] == 1) {
+        $submissions = 1;
+    }
 }
 
 
 $i = 0;
-if ($submissions)
-{
+if ($submissions) {
     $i++;
     $modversion['sub'][$i]['name'] = _MI_TORRENT_SMNAME1;
     $modversion['sub'][$i]['url'] = "submit.php";
@@ -564,7 +558,7 @@ The rainbow Open Music License|
 Open Publication License (v. 1.0)| 
 Open Source Music License (OSML)| 
 OR Magazine License| 
-Public Documentation License (PDL)'; 
+Public Documentation License (PDL)';
 
 $modversion['config'][27]['name'] = 'license';
 $modversion['config'][27]['title'] = '_MI_TORRENT_LICENSE';
@@ -803,7 +797,7 @@ $modversion['config'][65]['title'] = '_MI_XSOAP_SERVERKEY';
 $modversion['config'][65]['description'] = '_MI_XSOAP_SERVERKEYDESC';
 $modversion['config'][65]['formtype'] = 'textarea';
 $modversion['config'][65]['valuetype'] = 'text';
-$modversion['config'][65]['default'] = sha1($xoopsConfig['sitename'].XOOPS_URL.time().XOOPS_ROOT_PATH.$xoopsConfig['adminmail']).substr(sha1(XOOPS_URL.$xoopsConfig['adminmail'].time().$xoopsConfig['sitename'].XOOPS_ROOT_PATH),0, mt_rand(13, strlen(sha1(0))));
+$modversion['config'][65]['default'] = sha1($xoopsConfig['sitename'].XOOPS_URL.time().XOOPS_ROOT_PATH.$xoopsConfig['adminmail']).substr(sha1(XOOPS_URL.$xoopsConfig['adminmail'].time().$xoopsConfig['sitename'].XOOPS_ROOT_PATH), 0, mt_rand(13, strlen(sha1(0))));
 
 $modversion['config'][66]['name'] = 'hashkeys';
 $modversion['config'][66]['title'] = '_MI_TORRENT_HASHKEYS';

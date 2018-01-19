@@ -23,31 +23,33 @@ $xoopsTpl->assign('lang_dltimes', sprintf(_MD_XTORRENT_DLTIMES, $down['hits']));
 $down['title'] = $down_arr['title'];
 $down['url']   = $down_arr['url'];
 
-if (isset($down_arr['screenshot']))
-{
+if (isset($down_arr['screenshot'])) {
     $down['screenshot_full'] = $myts->htmlSpecialChars($down_arr['screenshot']);
-    if (!empty($down_arr['screenshot']) && file_exists(XOOPS_ROOT_PATH . "/" . $xoopsModuleConfig['screenshots'] . "/" . xoops_trim($down_arr['screenshot'])))
-    {
-        if (isset($xoopsModuleConfig['usethumbs']) && $xoopsModuleConfig['usethumbs'] == 1)
-        {
-            $down['screenshot_thumb'] = down_createthumb($down['screenshot_full'], $xoopsModuleConfig['screenshots'], "thumbs", $xoopsModuleConfig['shotwidth'], $xoopsModuleConfig['shotheight'], 
-				$xoopsModuleConfig['imagequality'], $xoopsModuleConfig['updatethumbs'], $xoopsModuleConfig['keepaspect']);
+    if (!empty($down_arr['screenshot']) && file_exists(XOOPS_ROOT_PATH . "/" . $xoopsModuleConfig['screenshots'] . "/" . xoops_trim($down_arr['screenshot']))) {
+        if (isset($xoopsModuleConfig['usethumbs']) && $xoopsModuleConfig['usethumbs'] == 1) {
+            $down['screenshot_thumb'] = down_createthumb(
+                $down['screenshot_full'],
+                $xoopsModuleConfig['screenshots'],
+                "thumbs",
+                $xoopsModuleConfig['shotwidth'],
+                $xoopsModuleConfig['shotheight'],
+                $xoopsModuleConfig['imagequality'],
+                $xoopsModuleConfig['updatethumbs'],
+                $xoopsModuleConfig['keepaspect']
+            );
         } else {
             $down['screenshot_thumb'] = XOOPS_URL . "/" . $xoopsModuleConfig['screenshots'] . "/" . xoops_trim($down_arr['screenshot']);
-		}
-    } 
-} 
+        }
+    }
+}
 
 $down['homepage'] = (!$down_arr['homepage'] || $down_arr['homepage'] == "http://") ? '' : $myts->htmlSpecialChars(trim($down_arr['homepage']));
-if ($down['homepage'] && !empty($down['homepage']))
-{
+if ($down['homepage'] && !empty($down['homepage'])) {
     $down['homepagetitle'] = (empty($down_arr['homepagetitle'])) ? trim($down['homepage']) : $myts->htmlSpecialChars(trim($down_arr['homepagetitle']));
     $down['homepage'] = "<a style=\"color:#A033BB;\" href='" . $down['homepage'] . "' target='_blank'>" . $down['homepagetitle'] . "</a>";
-} 
-else
-{
+} else {
     $down['homepage'] = _MD_XTORRENT_NOTSPECIFIED;
-} 
+}
 
 $down['mirror']   = ($down_arr['mirror'] == "https://") ? '' : $myts->htmlSpecialChars(trim($down_arr['mirror']));
 $down['mirror']   = ($down['mirror']) ? "<a style=\"color:#A033BB;\" href='" . $down['mirror'] . "' target='_blank'>" . _MD_XTORRENT_MIRRORSITE . "</a>" : _MD_XTORRENT_NOTSPECIFIED;
@@ -60,53 +62,47 @@ $down['size']     = xtorrent_PrettySize(intval($down_arr['size']));
 $time            = ($down_arr['updated'] != 0) ? $down_arr['updated'] : $down_arr['published'];
 $down['updated'] = formatTimestamp($time, $xoopsModuleConfig['dateformat']);
 $is_updated      = ($down_arr['updated'] != 0) ? _MD_XTORRENT_UPDATEDON : _MD_XTORRENT_SUBMITDATE;
-$xoopsTpl->assign('lang_subdate' , $is_updated);
+$xoopsTpl->assign('lang_subdate', $is_updated);
 
 $down['description'] = $myts->displayTarea($down_arr['description'], 0); //no html
 $down['price']       = ($down_arr['price'] != 0) ? intval($down_arr['price']) : _MD_XTORRENT_PRICEFREE;
 $down['limitations'] = (empty($down_arr['limitations'])) ? _MD_XTORRENT_NOTSPECIFIED : $myts->htmlSpecialChars(trim($xoopsModuleConfig['limitations'][$down_arr['limitations']]));
 $down['license']     = (empty($down_arr['license'])) ? _MD_XTORRENT_NOTSPECIFIED : $myts->htmlSpecialChars(trim($xoopsModuleConfig['license'][$down_arr['license']]));
-$down['submitter']   = str_replace("<a", "<a style=\"color:#A033BB;\"",xoops_getLinkedUnameFromId(intval($down_arr['submitter'])));
+$down['submitter']   = str_replace("<a", "<a style=\"color:#A033BB;\"", xoops_getLinkedUnameFromId(intval($down_arr['submitter'])));
 $down['publisher']   = (isset($down_arr['publisher']) && !empty($down_arr['publisher'])) ? $myts->htmlSpecialChars($down_arr['publisher']) : _MD_XTORRENT_NOTSPECIFIED;
 $down['platform']    = $myts->htmlSpecialChars($xoopsModuleConfig['platform'][$down_arr['platform']]);
-$down['history']     = $myts->displayTarea($down_arr['dhistory'],1);
+$down['history']     = $myts->displayTarea($down_arr['dhistory'], 1);
 $down['features']    = '';
-if ($down_arr['features'])
-{
+if ($down_arr['features']) {
     $downfeatures = explode('|', trim($down_arr['features']));
-    foreach ($downfeatures as $bi)
-    {
+    foreach ($downfeatures as $bi) {
         $down['features'][] = $bi;
-    } 
-} 
+    }
+}
 
 $down['requirements'] = '';
-if ($down_arr['requirements'])
-{
+if ($down_arr['requirements']) {
     $downrequirements = explode('|', trim($down_arr['requirements']));
-    foreach ($downrequirements as $bi)
-    {
+    foreach ($downrequirements as $bi) {
         $down['requirements'][] = $bi;
-    } 
-} 
+    }
+}
 $down['mail_subject'] = rawurlencode(sprintf(_MD_XTORRENT_INTFILEFOUND, $xoopsConfig['sitename']));
-$down['mail_body']    = rawurlencode(sprintf(_MD_XTORRENT_INTFILEFOUND, $xoopsConfig['sitename']) . ':  ' . XOOPS_URL . '/modules/xtorrent/singlefile.php?cid=' . $down_arr['cid'] . '&amp;lid=' . $down_arr['lid']); 
+$down['mail_body']    = rawurlencode(sprintf(_MD_XTORRENT_INTFILEFOUND, $xoopsConfig['sitename']) . ':  ' . XOOPS_URL . '/modules/xtorrent/singlefile.php?cid=' . $down_arr['cid'] . '&amp;lid=' . $down_arr['lid']);
 
 $down['isadmin']      = (!empty($xoopsUser) && $xoopsUser->isAdmin($xoopsModule->mid())) ? true : false;
 
 $down['adminlink']    = '';
-if ($down['isadmin'] == true)
-{
-   $down['adminlink'] = '[ <a href="' . XOOPS_URL . '/modules/xtorrent/admin/index.php?op=Download&amp;lid=' . $down_arr['lid'] . '">' . _MD_XTORRENT_EDIT . '</a> | ';
-   $down['adminlink'] .= '<a href="' . XOOPS_URL . '/modules/xtorrent/admin/index.php?op=delDownload&amp;lid=' . $down_arr['lid'] . '">' . _MD_XTORRENT_DELETE . '</a> ]';
-} 
+if ($down['isadmin'] == true) {
+    $down['adminlink'] = '[ <a href="' . XOOPS_URL . '/modules/xtorrent/admin/index.php?op=Download&amp;lid=' . $down_arr['lid'] . '">' . _MD_XTORRENT_EDIT . '</a> | ';
+    $down['adminlink'] .= '<a href="' . XOOPS_URL . '/modules/xtorrent/admin/index.php?op=delDownload&amp;lid=' . $down_arr['lid'] . '">' . _MD_XTORRENT_DELETE . '</a> ]';
+}
 $votestring = ($down_arr['votes'] == 1) ? _MD_XTORRENT_ONEVOTE : sprintf(_MD_XTORRENT_NUMVOTES, $down_arr['votes']);
 $is_updated = ($down_arr['updated'] > 0) ? _MD_XTORRENT_UPDATEDON : _MD_XTORRENT_SUBMITDATE;
-$xoopsTpl->assign('lang_subdate' , $is_updated);
-if (is_object($xoopsUser) && $down['isadmin'] != true)
-{
+$xoopsTpl->assign('lang_subdate', $is_updated);
+if (is_object($xoopsUser) && $down['isadmin'] != true) {
     $down['useradminlink'] = ($xoopsUser->getvar('uid') == $down_arr['submitter']) ? true : false;
-} 
+}
 
 $sql2    = "SELECT rated FROM " . $xoopsDB->prefix('xtorrent_reviews') . " WHERE lid = " . $down_arr['lid'] . " AND submit = 1";
 $results = $xoopsDB->query($sql2);
@@ -117,26 +113,23 @@ $down['reviews_num'] = ($numrows) ? $numrows : 0;
 $finalrating = 0;
 $totalrating = 0;
 
-while ($review_text = $xoopsDB->fetchArray($results))
-{
+while ($review_text = $xoopsDB->fetchArray($results)) {
     $totalrating += $review_text['rated'];
-} 
+}
 
-if ($down['reviews_num'] > 0)
-{
+if ($down['reviews_num'] > 0) {
     $finalrating = $totalrating / $down['reviews_num'];
     $finalrating = round(number_format($finalrating, 0) / 2);
-} 
+}
 $down['review_rateimg'] = "rate$finalrating.gif";;
 
 $modhandler       = xoops_gethandler('module');
 $xoopsforumModule = $modhandler->getByDirname("newbb");
-if (is_object($xoopsforumModule) && $xoopsforumModule->getVar('isactive'))
-{
+if (is_object($xoopsforumModule) && $xoopsforumModule->getVar('isactive')) {
     $down['forumid'] = ($down_arr['forumid'] > 0) ? $down_arr['forumid'] : 0;
-} 
+}
 
-$down['icons'] = xtorrent_displayicons($down_arr['published'], $down_arr['status'], $down_arr['hits']);  
+$down['icons'] = xtorrent_displayicons($down_arr['published'], $down_arr['status'], $down_arr['hits']);
 
 // GETS TORRENT DATA FROM DATABASE
 $sql    = [];
@@ -163,18 +156,17 @@ $poll    = $xoopsDB->fetchArray($ret[0]);
 $torrent = $xoopsDB->fetchArray($ret[2]);
 
 $trkcr = [];
-while ($row = $xoopsDB->fetchArray($ret[1])){
-	$trkcr[] = ["seeds" => $row['seeds'],
-    					"leeches" => $row['leechers'],
-    				  "tracker" => $row['tracker']];
-	$down['total_seeds']   = $down['total_seeds']+$row['seeds'];
-	$down['total_leeches'] = $down['total_leeches']+$row['leechers'];
-
+while ($row = $xoopsDB->fetchArray($ret[1])) {
+    $trkcr[] = ["seeds" => $row['seeds'],
+                        "leeches" => $row['leechers'],
+                      "tracker" => $row['tracker']];
+    $down['total_seeds']   = $down['total_seeds']+$row['seeds'];
+    $down['total_leeches'] = $down['total_leeches']+$row['leechers'];
 }
 
 $files = [];
-while ($row = $xoopsDB->fetchArray($ret[3])){
-	$files[] = ["file" => $row['file']];
+while ($row = $xoopsDB->fetchArray($ret[3])) {
+    $files[] = ["file" => $row['file']];
 }
 
 $down['torrent_last_polled'] = date("H:i:s", $poll['torrent']);

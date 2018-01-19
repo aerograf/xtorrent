@@ -5,21 +5,17 @@ include_once XOOPS_ROOT_PATH . '/class/xoopsform/grouppermform.php';
 
 $op = '';
 
-if (isset($_POST))
-{
-    foreach ($_POST as $k => $v)
-    {
+if (isset($_POST)) {
+    foreach ($_POST as $k => $v) {
         ${$k} = $v;
-    } 
-} 
+    }
+}
 
-if (isset($_GET))
-{
-    foreach ($_GET as $k => $v)
-    {
+if (isset($_GET)) {
+    foreach ($_GET as $k => $v) {
         ${$k} = $v;
-    } 
-} 
+    }
+}
 
 function createcat($cid = 0)
 {
@@ -45,8 +41,7 @@ function createcat($cid = 0)
     $heading      = _AM_XTORRENT_CCATEGORY_CREATENEW;
     $totalcats    = xtorrent_totalcategory();
 
-    if ($cid > 0)
-    {
+    if ($cid > 0) {
         $sql            = "SELECT * FROM " . $xoopsDB -> prefix('xtorrent_cat') . " WHERE cid = $cid";
         $cat_arr        = $xoopsDB -> fetchArray($xoopsDB -> query($sql));
         $title          = $myts -> htmlSpecialChars($cat_arr['title']);
@@ -69,22 +64,21 @@ function createcat($cid = 0)
         $gperm_handler  = xoops_gethandler('groupperm');
         $groups         = $gperm_handler -> getGroupIds('xtorrentownCatPerm', $cid, $xoopsModule -> getVar('mid'));
         $groups         = $groups;
-     } else {
-    		$groups         = true;
-     }
+    } else {
+        $groups         = true;
+    }
     
     $sform = new XoopsThemeForm($heading, "op", xoops_getenv('PHP_SELF'));
     $sform -> setExtra('enctype="multipart/form-data"');
 
     $sform -> addElement(new XoopsFormSelectGroup(_AM_XTORRENT_FCATEGORY_GROUPPROMPT, "groups", true, $groups, 5, true));
-    if ($totalcats > 0)
-    {
+    if ($totalcats > 0) {
         $mytreechose = new XoopsTree($xoopsDB -> prefix("xtorrent_cat"), "cid", "pid");
         ob_start();
-        $mytreechose -> makeMySelBox("title", "title", 0 , 1, "pid");
+        $mytreechose -> makeMySelBox("title", "title", 0, 1, "pid");
         $sform -> addElement(new XoopsFormLabel(_AM_XTORRENT_FCATEGORY_SUBCATEGORY, ob_get_contents()));
         ob_end_clean();
-    } 
+    }
     $sform -> addElement(new XoopsFormText(_AM_XTORRENT_FCATEGORY_TITLE, 'title', 50, 80, $title), true);
     $sform -> addElement(new XoopsFormText(_AM_XTORRENT_FCATEGORY_WEIGHT, 'weight', 10, 80, $weight), false);
 
@@ -94,14 +88,11 @@ function createcat($cid = 0)
     $indeximage_select -> setExtra("onchange='showImgSelected(\"image\", \"imgurl\", \"" . $xoopsModuleConfig['catimage'] . "\", \"\", \"" . XOOPS_URL . "\")'");
     $indeximage_tray = new XoopsFormElementTray(_AM_XTORRENT_FCATEGORY_CIMAGE, '&nbsp;');
     $indeximage_tray -> addElement($indeximage_select);
-    if (!empty($imgurl))
-    {
+    if (!empty($imgurl)) {
         $indeximage_tray -> addElement(new XoopsFormLabel('', "<br><br><img src='" . XOOPS_URL . "/" . $xoopsModuleConfig['catimage'] . "/" . $imgurl . "' name='image' id='image' alt='' />"));
-    } 
-    else
-    {
+    } else {
         $indeximage_tray -> addElement(new XoopsFormLabel('', "<br><br><img src='" . XOOPS_URL . "/uploads/blank.gif' name='image' id='image' alt='' >"));
-    } 
+    }
     $sform -> addElement($indeximage_tray);
     $sform -> addElement(new XoopsFormDhtmlTextArea(_AM_XTORRENT_FCATEGORY_DESCRIPTION, 'description', $description, 15, 60), true);
     $sform -> addElement(new XoopsFormTextArea(_AM_XTORRENT_FCATEGORY_SUMMARY, 'summary', $summary, 10, 60));
@@ -137,8 +128,7 @@ function createcat($cid = 0)
     $hidden = new XoopsFormHidden('op', 'save');
     $button_tray -> addElement($hidden);
 
-    if (!$cid)
-    {
+    if (!$cid) {
         $butt_create = new XoopsFormButton('', '', _AM_XTORRENT_BSAVE, 'submit');
         $butt_create -> setExtra('onclick="this.form.elements.op.value=\'addCat\'"');
         $button_tray -> addElement($butt_create);
@@ -149,9 +139,7 @@ function createcat($cid = 0)
         $butt_cancel = new XoopsFormButton('', '', _AM_XTORRENT_BCANCEL, 'button');
         $butt_cancel -> setExtra('onclick="history.go(-1)"');
         $button_tray -> addElement($butt_cancel);
-    } 
-    else
-    {
+    } else {
         $butt_create = new XoopsFormButton('', '', _AM_XTORRENT_BMODIFY, 'submit');
         $butt_create -> setExtra('onclick="this.form.elements.op.value=\'addCat\'"');
         $button_tray -> addElement($butt_create);
@@ -163,28 +151,23 @@ function createcat($cid = 0)
         $butt_cancel = new XoopsFormButton('', '', _AM_XTORRENT_BCANCEL, 'button');
         $butt_cancel -> setExtra('onclick="history.go(-1)"');
         $button_tray -> addElement($butt_cancel);
-    } 
+    }
     $sform -> addElement($button_tray);
     $sform -> display();
 
     $result2 = $xoopsDB -> query("SELECT COUNT(*) FROM " . $xoopsDB -> prefix("xtorrent_cat") . "");
     list($numrows) = $xoopsDB -> fetchRow($result2);
-} 
+}
 
-if (!isset($_POST['op']))
-{
+if (!isset($_POST['op'])) {
     $op = isset($_GET['op']) ? $_GET['op'] : 'main';
-} 
-else
-{
+} else {
     $op = isset($_POST['op']) ? $_POST['op'] : 'main';
-} 
+}
 
-switch ($op)
-{
+switch ($op) {
     case "move":
-        if (!isset($_POST['ok']))
-        {
+        if (!isset($_POST['ok'])) {
             $cid = (isset($_POST['cid'])) ? intval($_POST['cid']) : intval($_GET['cid']);
 
             xoops_cp_header();
@@ -196,7 +179,7 @@ switch ($op)
             $mytree = new XoopsTree($xoopsDB -> prefix("xtorrent_cat"), "cid", "pid");
             $sform = new XoopsThemeForm(_AM_XTORRENT_CCATEGORY_MOVE, "move", xoops_getenv('PHP_SELF'));
             ob_start();
-            $mytree -> makeMySelBox("title", "title", 0 , 0, "target");
+            $mytree -> makeMySelBox("title", "title", 0, 0, "target");
             $sform -> addElement(new XoopsFormLabel(_AM_XTORRENT_BMODIFY, ob_get_contents()));
             ob_end_clean();
             $create_tray = new XoopsFormElementTray('', '');
@@ -212,32 +195,27 @@ switch ($op)
             $sform -> addElement($create_tray);
             $sform -> display();
             require_once __DIR__ . '/admin_footer.php';
-        } 
-        else
-        {
+        } else {
             global $xoopsDB;
 
             $source = $_POST['source'];
             $target = $_POST['target'];
-            if ($target == $source)
-            {
+            if ($target == $source) {
                 redirect_header("category.php?op=move&amp;ok=0&amp;cid=$source", 5, _AM_XTORRENT_CCATEGORY_MODIFY_FAILED);
-            } 
+            }
 
-            if (!$target)
-            {
+            if (!$target) {
                 redirect_header("category.php?op=move&amp;ok=0&amp;cid=$source", 5, _AM_XTORRENT_CCATEGORY_MODIFY_FAILEDT);
-            } 
+            }
             $sql = "UPDATE " . $xoopsDB -> prefix("xtorrent_downloads") . " set cid = " . $target . " WHERE cid =" . $source;
             $result = $xoopsDB -> queryF($sql);
             $error = _AM_XTORRENT_DBERROR . ":<br><br>" . $sql;
-            if (!$result)
-            {
+            if (!$result) {
                 trigger_error($error, E_USER_ERROR);
-            } 
+            }
             redirect_header("category.php?op=default", 1, _AM_XTORRENT_CCATEGORY_MODIFY_MOVED);
             exit();
-        } 
+        }
         break;
 
     case "addCat":
@@ -260,8 +238,7 @@ switch ($op)
         $noimages     = isset($_POST['noimages']);
         $nobreak      = isset($_POST['nobreak']);
 
-        if (!$cid)
-        {
+        if (!$cid) {
             $sql = "INSERT INTO " . $xoopsDB -> prefix('xtorrent_cat') . " 
     				(cid, pid, title, imgurl, description, summary, nohtml, nosmiley, 
     				noxcodes, noimages, nobreak, weight, spotlighttop, spotlighthis) VALUES 
@@ -270,7 +247,9 @@ switch ($op)
             $result = $xoopsDB -> query($sql);
             $error = _AM_XTORRENT_DBERROR . ":<br><br>" . $sql;
 
-            if ($cid == 0) $newid = $xoopsDB -> getInsertId();
+            if ($cid == 0) {
+                $newid = $xoopsDB -> getInsertId();
+            }
             xtorrent_save_Permissions($groups, $newid, 'xtorrentownCatPerm');
             /**
              * Notify of new category
@@ -282,9 +261,7 @@ switch ($op)
             $notification_handler = xoops_gethandler('notification');
             $notification_handler -> triggerEvent('global', 0, 'new_category', $tags);
             $database_mess = _AM_XTORRENT_CCATEGORY_CREATED;
-        } 
-        else
-        {
+        } else {
             $sql = "UPDATE " . $xoopsDB -> prefix('xtorrent_cat') . " SET 
     				title ='$title', imgurl = '$imgurl', pid =$pid, description = '$description', summary = '$summary', 
     				spotlighthis = '$spotlighthis' , spotlighttop = '$spotlighttop', nohtml='$nohtml', nosmiley='$nosmiley', 
@@ -293,11 +270,10 @@ switch ($op)
             $error         = _AM_XTORRENT_DBERROR . ":<br><br>" . $sql;
             $database_mess = _AM_XTORRENT_CCATEGORY_MODIFIED;
             xtorrent_save_Permissions($groups, $cid, 'xtorrentownCatPerm');
-        } 
-        if (!$result)
-        {
+        }
+        if (!$result) {
             trigger_error($error, E_USER_ERROR);
-        } 
+        }
         redirect_header("category.php", 1, $database_mess);
         break;
 
@@ -309,60 +285,53 @@ switch ($op)
         $ok     = (isset($_POST['ok']) && $_POST['ok'] == 1) ? intval($_POST['ok']) : 0;
         $mytree = new XoopsTree($xoopsDB -> prefix("xtorrent_cat"), "cid", "pid");
 
-        if ($ok == 1)
-        { 
+        if ($ok == 1) {
             // get all subcategories under the specified category
             $arr    = $mytree -> getAllChildId($cid);
             $lcount = count($arr);
 
-            for ($i = 0; $i < $lcount; $i++)
-            { 
+            for ($i = 0; $i < $lcount; $i++) {
                 // get all downloads in each subcategory
-                $result = $xoopsDB -> query("SELECT lid FROM " . $xoopsDB -> prefix("xtorrent_downloads") . " WHERE cid=" . $arr[$i] . ""); 
+                $result = $xoopsDB -> query("SELECT lid FROM " . $xoopsDB -> prefix("xtorrent_downloads") . " WHERE cid=" . $arr[$i] . "");
                 // now for each download, delete the text data and vote ata associated with the download
-                while (list($lid) = $xoopsDB -> fetchRow($result))
-                {
+                while (list($lid) = $xoopsDB -> fetchRow($result)) {
                     $sql     = sprintf("DELETE FROM %s WHERE lid = %u", $xoopsDB -> prefix("xtorrent_votedata"), $lid);
                     $xoopsDB -> query($sql);
                     $sql     = sprintf("DELETE FROM %s WHERE lid = %u", $xoopsDB -> prefix("xtorrent_downloads"), $lid);
-                    $xoopsDB -> query($sql); 
+                    $xoopsDB -> query($sql);
                     // delete comments
-                    xoops_groupperm_deletebymoditem ($xoopsModule -> getVar('mid'), 'xtorrentownFilePerm', $lid);
+                    xoops_groupperm_deletebymoditem($xoopsModule -> getVar('mid'), 'xtorrentownFilePerm', $lid);
                     xoops_comment_delete($xoopsModule -> getVar('mid'), $lid);
-                } 
+                }
                 // all downloads for each subcategory is deleted, now delete the subcategory data
                 $sql     = sprintf("DELETE FROM %s WHERE cid = %u", $xoopsDB -> prefix("xtorrent_cat"), $arr[$i]);
                 $xoopsDB -> query($sql);
-            } 
+            }
             // all subcategory and associated data are deleted, now delete category data and its associated data
             $result = $xoopsDB -> query("SELECT lid FROM " . $xoopsDB -> prefix("xtorrent_downloads") . " WHERE cid=" . $cid . "");
-            while (list($lid) = $xoopsDB -> fetchRow($result))
-            {
+            while (list($lid) = $xoopsDB -> fetchRow($result)) {
                 $sql     = sprintf("DELETE FROM %s WHERE lid = %u", $xoopsDB -> prefix("xtorrent_downloads"), $lid);
-                $xoopsDB -> query($sql); 
+                $xoopsDB -> query($sql);
                 // delete comments
                 xoops_comment_delete($xoopsModule -> getVar('mid'), $lid);
                 $sql     = sprintf("DELETE FROM %s WHERE lid = %u", $xoopsDB -> prefix("xtorrent_votedata"), $lid);
                 $xoopsDB -> query($sql);
-            } 
+            }
             $sql   = sprintf("DELETE FROM %s WHERE cid = %u", $xoopsDB -> prefix("xtorrent_cat"), $cid);
             $error = _AM_XTORRENT_DBERROR . ": <br><br>" . $sql;
-            xoops_groupperm_deletebymoditem ($xoopsModule -> getVar('mid'), 'xtorrentownCatPerm', $cid);
-            if (!$result = $xoopsDB -> query($sql))
-            {
+            xoops_groupperm_deletebymoditem($xoopsModule -> getVar('mid'), 'xtorrentownCatPerm', $cid);
+            if (!$result = $xoopsDB -> query($sql)) {
                 trigger_error($error, E_USER_ERROR);
-            } 
+            }
             redirect_header("category.php", 1, _AM_XTORRENT_CCATEGORY_DELETED);
             exit();
-        } 
-        else
-        {
+        } else {
             xoops_cp_header();
             $adminObject = \Xmf\Module\Admin::getInstance();
             $adminObject->displayNavigation(basename(__FILE__));
             xoops_confirm(['op' => 'del', 'cid' => $cid, 'ok' => 1], 'category.php', _AM_XTORRENT_CCATEGORY_AREUSURE);
             require_once __DIR__ . '/admin_footer.php';
-        } 
+        }
         break;
 
     case "modCat":
@@ -386,8 +355,7 @@ switch ($op)
         $sform     = new XoopsThemeForm(_AM_XTORRENT_CCATEGORY_MODIFY, "category", xoops_getenv('PHP_SELF'));
         $totalcats = xtorrent_totalcategory();
 
-        if ($totalcats > 0)
-        {
+        if ($totalcats > 0) {
             ob_start();
             $sform -> addElement(new XoopsFormHidden('cid', ''));
             $mytree -> makeMySelBox("title", "title");
@@ -406,8 +374,8 @@ switch ($op)
             $dup_tray -> addElement($butt_dupct);
             $sform -> addElement($dup_tray);
             $sform -> display();
-        } 
+        }
         createcat(0);
         require_once __DIR__ . '/admin_footer.php';
         break;
-} 
+}

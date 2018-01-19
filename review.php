@@ -4,35 +4,29 @@ include 'header.php';
 
 global $xoopsModuleConfig, $myts;
 
-if (!is_object($xoopsUser) && !$xoopsModuleConfig['anonpost'])
-{
+if (!is_object($xoopsUser) && !$xoopsModuleConfig['anonpost']) {
     redirect_header(XOOPS_URL . '/user.php', 1, _MD_XTORRENT_MUSTREGFIRST);
     exit();
-} 
+}
 
 $op = '';
 
-if (isset($_POST))
-{
-    foreach ($_POST as $k => $v)
-    {
+if (isset($_POST)) {
+    foreach ($_POST as $k => $v) {
         ${$k} = $v;
-    } 
-} 
-if (isset($_GET))
-{
-    foreach ($_GET as $k => $v)
-    {
+    }
+}
+if (isset($_GET)) {
+    foreach ($_GET as $k => $v) {
         ${$k} = $v;
-    } 
-} 
+    }
+}
 
 $cid = intval($cid);
 $lid = intval($lid);
 
-switch (isset($op) && !empty($op))
-{
-    case "list";
+switch (isset($op) && !empty($op)) {
+    case "list":
 
         global $xoopsDB, $xoopsModuleConfig, $myts;
         $start = isset($_GET['start']) ? intval($_GET['start']) : 0;
@@ -60,8 +54,7 @@ switch (isset($op) && !empty($op))
         $down_arr['description'] = $myts->displayTarea($down_arr_text['description'], 1, 1, 1, 1, 0);
         $xoopsTpl->assign('down_arr', $down_arr);
 
-        while ($arr_review = $xoopsDB->fetchArray($result_review))
-        {
+        while ($arr_review = $xoopsDB->fetchArray($result_review)) {
             $down_review['review_id'] = intval($arr_review['review_id']);
             $down_review['lid']       = intval($arr_review['lid']);
             $down_review['title']     = $myts->censorstring($arr_review['title']);
@@ -74,49 +67,43 @@ switch (isset($op) && !empty($op))
             $rateimg                  = "rate$review_rating.gif";
             $down_review['rated_img'] = $rateimg;
             $xoopsTpl->append('down_review', $down_review);
-        } 
+        }
         $xoopsTpl->assign('lang_review_found', sprintf(_MD_XTORRENT_REVIEWTOTAL, $review_amount));
 
         include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-        $pagenav          = new XoopsPageNav($review_amount, 5 , $start, 'start', 'op=list&amp;cid=' . $cid . '&amp;lid=' . $lid . '', 1);
+        $pagenav          = new XoopsPageNav($review_amount, 5, $start, 'start', 'op=list&amp;cid=' . $cid . '&amp;lid=' . $lid . '', 1);
         $navbar['navbar'] = $pagenav->renderNav();
         $xoopsTpl->assign('navbar', $navbar);
 
         include XOOPS_ROOT_PATH . '/footer.php';
         break;
 
-    case "default";
+    case "default":
     default:
-        if (!empty($_POST['submit']))
-        {
+        if (!empty($_POST['submit'])) {
             $uid    = !empty($xoopsUser) ? $xoopsUser->getVar('uid') : 0;
             $title  = $myts->addslashes(trim($_POST["title"]));
             $review = $myts->addslashes(trim($_POST["review"]));
             $lid    = intval(trim($_POST["lid"]));
             $rated  = intval(trim($_POST["rated"]));
             $date   = time();
-            $submit = ($xoopsModuleConfig['autoapprove']) ? 1 : 0 ; 
+            $submit = ($xoopsModuleConfig['autoapprove']) ? 1 : 0 ;
             $sql    = "INSERT INTO " . $xoopsDB->prefix('xtorrent_reviews') . " (review_id, lid, title, review, submit, date, uid, rated) VALUES ('', $lid, '$title', '$review', '$submit', $date, $uid, $rated)";
             $result = $xoopsDB->query($sql);
-            if (!$result)
-            {
+            if (!$result) {
                 $error = _MD_XTORRENT_ERROR_CREATCHANNEL . $sql;
                 trigger_error($error, E_USER_ERROR);
-            } 
-            else
-            {
+            } else {
                 $database_mess = ($xoopsModuleConfig['autoapprove']) ? _MD_XTORRENT_ISAPPROVED : _MD_XTORRENT_ISNOTAPPROVED;
                 redirect_header('index.php', 2, $database_mess);
-            } 
-        } 
-        else
-        {
+            }
+        } else {
             include XOOPS_ROOT_PATH . '/header.php';
             include XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
 
-			echo "<div align='center'>" . xtorrent_imageheader() . "</div><br>
+            echo "<div align='center'>" . xtorrent_imageheader() . "</div><br>
 				    <div>" . _MD_XTORRENT_REV_SNEWMNAMEDESC . "</div>";
-			
+            
             $sform = new XoopsThemeForm(_MD_XTORRENT_REV_SUBMITREV, "reviewform", xoops_getenv('PHP_SELF'));
             $sform->addElement(new XoopsFormText(_MD_XTORRENT_REV_TITLE, 'title', 50, 255), true);
             $rating_select = new XoopsFormSelect(_MD_XTORRENT_REV_RATING, "rated", '10');
@@ -129,5 +116,5 @@ switch (isset($op) && !empty($op))
             $sform->addElement($button_tray);
             $sform->display();
             include XOOPS_ROOT_PATH . '/footer.php';
-        } 
+        }
 }

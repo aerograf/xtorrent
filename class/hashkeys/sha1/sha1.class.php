@@ -1,4 +1,4 @@
-<?
+<?php
 // $Id: sha1.class.php 1.1.0 - sha1 2009-08-15 9:22:20 wishcraft $
 //  ------------------------------------------------------------------------ //
 //                    CLORA - Chronolabs Australia                           //
@@ -31,33 +31,29 @@
 //  ------B===>-----+----------+------------<{:']-- Wishcraft & Purrrrr ---- //
 //  -----+-----------+------------------------------------------------------ //
 
-if (!class_exists('sha1'))
-{
-
-	error_reporting(0);
-	
-	class sha1
-	{
-		var $base;
-		var $enum;
-		var $seed;
-		var $crc;
-			
-		function __construct($data, $seed, $len=42)
-		{
-			$this->seed = $seed;
-			$this->length = $len;
-			
-			if (!empty($data))
-			{
-				$this->crc = sha1($data);			
-			}
-			
-		}
-			
-		function calc($data)
-		{
-			return sha1($data);
-		}
-	}
-}				
+if (!class_exists('sha1')) {
+    error_reporting(0);
+    
+    class sha1
+    {
+        public $base;
+        public $enum;
+        public $seed;
+        public $crc;
+            
+        public function __construct($data, $seed, $len=42)
+        {
+            $this->seed = $seed;
+            $this->length = $len;
+            
+            if (!empty($data)) {
+                $this->crc = sha1($data);
+            }
+        }
+            
+        public function calc($data)
+        {
+            return sha1($data);
+        }
+    }
+}
