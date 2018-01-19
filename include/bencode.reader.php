@@ -1,131 +1,138 @@
-<?PHP
+<?php
 
 /*
-	bencode.reader.php
-	Contains classes and functions to assist in the reading and processing of bencoded files and strings.
-	This is a component of a Bitorrent tracker/torrent library.
-	This library is free to redistribute, but I'd appreciate if you left the credit in if you use it.
-	Written by Greg Poole | m4dm4n@gmail.com | http://m4dm4n.homelinux.net:8086
+    bencode.reader.php
+    Contains classes and functions to assist in the reading and processing of bencoded files and strings.
+    This is a component of a Bitorrent tracker/torrent library.
+    This library is free to redistribute, but I'd appreciate if you left the credit in if you use it.
+    Written by Greg Poole | m4dm4n@gmail.com | http://m4dm4n.homelinux.net:8086
 */
 
-class BEncodeReader {
-	
-	var	$data,
-		$pointer = 0,
-		$error = false;
-	
-	function __construct($filename = null) {
-		ini_set('allow_url_fopen',true);
-		
-		if(is_null($filename))
-			return;
-	
-		if(!is_file($filename)) {
-			trigger_error("Could not create BEncodeReader for {$filename}: it does not exist", E_USER_WARNING);
-			return;
-		}
+class BEncodeReader
+{
+    public $data;
 
-		$h = @fopen($filename, "rb");
-		if($h === false) {
-			trigger_error("Could not create BEncodeReader for {$filename}: failed to open for reading", E_USER_WARNING);
-			return;
-		}
+    public $pointer = 0;
 
-		$filesize = @filesize($filename);
-		if($filesize === false) {
-			trigger_error("Could not create BEncodeReader for {$filename}: the file is empty", E_USER_WARNING);
-			return;
-		}
+    public $error = false;
 
-		$this->data = @fread($h, $filesize);
+    public function __construct($filename = null)
+    {
+        ini_set('allow_url_fopen', true);
 
-		if($this->data === false)
-			trigger_error("Error creating BEncodeReader for {$filename}: error reading from file", E_USER_WARNING);
+        if (null === $filename) {
+            return;
+        }
 
-		@fclose($h);
-	}
+        if (!is_file($filename)) {
+            trigger_error("Could not create BEncodeReader for {$filename}: it does not exist", E_USER_WARNING);
+            return;
+        }
 
-	// Read the next part in the current file
-	function readNext() {
+        $h = @fopen($filename, 'rb');
+        if (false === $h) {
+            trigger_error("Could not create BEncodeReader for {$filename}: failed to open for reading", E_USER_WARNING);
+            return;
+        }
 
-		if(!isset($this->data)) {
-			return false;
-		}
+        $filesize = @filesize($filename);
+        if (false === $filesize) {
+            trigger_error("Could not create BEncodeReader for {$filename}: the file is empty", E_USER_WARNING);
+            return;
+        }
 
-		if($this->data[$this->pointer] == 'e') {
-			// Except in the case of an error or malformed data string, the letter e will mark the end of anything we've been reading, so we move
-			// the pointer and retreat.
-			$this->pointer++;
-			return false;
-		} if($this->data[$this->pointer] == 'd') {
-			// d marks the start of a dictionary, which is essentially an associative array
-			$start = $this->pointer;
-			$this->pointer++;
-			$dictionary = [];
-			$current    = false;
-			while(($value = $this->readNext()) !== false) {
-				if($current === false) {
-					$current = $value;
-				} else {
-					$dictionary[$current] = $value;
-					$current = false;
-				}
-			}
+        $this->data = @fread($h, $filesize);
 
-			if(count($dictionary) == 0 || $this->error) {
-				$this->error = true;
-				return false;
-			}
+        if (false === $this->data) {
+            trigger_error("Error creating BEncodeReader for {$filename}: error reading from file", E_USER_WARNING);
+        }
 
-			$end = $this->pointer;
-			$dictionary['hash'] = pack("H*", sha1(substr($this->data,$start,$end - $start)));
-			return $dictionary;
-		} else if($this->data[$this->pointer] == 'l') {
-			// An l indicates the start of a list, which is essentially an array, so we will read it as such
-			$this->pointer++;
-			$list = [];
-			for($i=0;($value = $this->readNext()) !== false;$i++) {
-				$list[$i] = $value;
-			}
+        @fclose($h);
+    }
 
-			if(count($list) == 0 || $this->error)
-				return false;
+    // Read the next part in the current file
+    public function readNext()
+    {
+        if (!isset($this->data)) {
+            return false;
+        }
 
-			return $list;
-		} else if($this->data[$this->pointer] == 'i') {
-			// The following data is an integer, so it will be read until the next "e", after which it will be returned
-			$this->pointer++;
+        if ('e' == $this->data[$this->pointer]) {
+            // Except in the case of an error or malformed data string, the letter e will mark the end of anything we've been reading, so we move
+            // the pointer and retreat.
+            $this->pointer++;
+            return false;
+        }
+        if ('d' == $this->data[$this->pointer]) {
+            // d marks the start of a dictionary, which is essentially an associative array
+            $start = $this->pointer;
+            $this->pointer++;
+            $dictionary = [];
+            $current    = false;
+            while (false !== ($value = $this->readNext())) {
+                if (false === $current) {
+                    $current = $value;
+                } else {
+                    $dictionary[$current] = $value;
+                    $current              = false;
+                }
+            }
 
-			$endPosition = strpos($this->data, 'e', $this->pointer);
+            if (0 == count($dictionary) || $this->error) {
+                $this->error = true;
+                return false;
+            }
 
-			// A failure to find an endpoint within a resonable distance means that this is not a valid integer definition.
-			if($endPosition === false || ($endPosition - $this->pointer) > 10) {
-				$this->error = true;
-				return false;
-			}
+            $end                = $this->pointer;
+            $dictionary['hash'] = pack('H*', sha1(substr($this->data, $start, $end - $start)));
+            return $dictionary;
+        } elseif ('l' == $this->data[$this->pointer]) {
+            // An l indicates the start of a list, which is essentially an array, so we will read it as such
+            $this->pointer++;
+            $list = [];
+            for ($i = 0; false !== ($value = $this->readNext()); $i++) {
+                $list[$i] = $value;
+            }
 
-			$readLength = ($endPosition - $this->pointer);
-			$int = substr($this->data, $this->pointer, $readLength);
-			$this->pointer += $readLength + 1;
-			return $int;
-		} else {
-			$nextColon = strpos($this->data, ':', $this->pointer);
+            if (0 == count($list) || $this->error) {
+                return false;
+            }
 
-			// The only thing possible here is a string definition, which is ###:string. Without a colon,
-			// this is not a string definition and we can assume the file is broken. I'm also including
-			// a check to make sure that colons over 5 characters away will be ignored to prevent a
-			// broken file from locking up the system.
-			if($nextColon === false || ($nextColon - $this->pointer) > 5) {
-				$this->error = true;
-				return false;
-			}
+            return $list;
+        } elseif ('i' == $this->data[$this->pointer]) {
+            // The following data is an integer, so it will be read until the next "e", after which it will be returned
+            $this->pointer++;
 
-			$length = substr($this->data, $this->pointer, $nextColon);
-			$readLength = ($nextColon - $this->pointer);
-			$this->pointer += $readLength + 1;
-			$string = substr($this->data, $this->pointer, $length);
-			$this->pointer += strlen($string);
-			return $string;
-		}
-	}
+            $endPosition = strpos($this->data, 'e', $this->pointer);
+
+            // A failure to find an endpoint within a resonable distance means that this is not a valid integer definition.
+            if (false === $endPosition || ($endPosition - $this->pointer) > 10) {
+                $this->error = true;
+                return false;
+            }
+
+            $readLength    = ($endPosition - $this->pointer);
+            $int           = substr($this->data, $this->pointer, $readLength);
+            $this->pointer += $readLength + 1;
+            return $int;
+        } else {
+            $nextColon = strpos($this->data, ':', $this->pointer);
+
+            // The only thing possible here is a string definition, which is ###:string. Without a colon,
+            // this is not a string definition and we can assume the file is broken. I'm also including
+            // a check to make sure that colons over 5 characters away will be ignored to prevent a
+            // broken file from locking up the system.
+            if (false === $nextColon || ($nextColon - $this->pointer) > 5) {
+                $this->error = true;
+                return false;
+            }
+
+            $length        = substr($this->data, $this->pointer, $nextColon);
+            $readLength    = ($nextColon - $this->pointer);
+            $this->pointer += $readLength + 1;
+            $string        = substr($this->data, $this->pointer, $length);
+            $this->pointer += strlen($string);
+            return $string;
+        }
+    }
 }
