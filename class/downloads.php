@@ -93,7 +93,7 @@ class XtorrentDownloadsHandler extends XoopsObjectHandler
             return false;
         }
         $numrows = $this->db->getRowsNum($result);
-        if ($numrows == 1) {
+        if (1 == $numrows) {
             $downloads = new $this->obj_class();
             $downloads->assignVars($this->db->fetchArray($result));
             return $downloads;
@@ -244,7 +244,7 @@ class XtorrentDownloadsHandler extends XoopsObjectHandler
         $sql   = 'SELECT '.$fields.' FROM '.$this->db_table;
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
             $sql .= ' '.$criteria->renderWhere();
-            if ($criteria->getSort() != '') {
+            if ('' != $criteria->getSort()) {
                 $sql .= ' ORDER BY '.$criteria->getSort().' '.$criteria->getOrder();
             }
             $limit = $criteria->getLimit();

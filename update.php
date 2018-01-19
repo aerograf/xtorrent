@@ -43,11 +43,11 @@ foreach ($_GET as $k => $v) {
     ${$k} = $v;
 }
 
-if (!isset($action) || $action == '') {
+if (!isset($action) || '' == $action) {
     $action = 'message';
 }
 
-if ($action == 'message') {
+if ('message' == $action) {
     install_header();
 
     $modhandler  = xoops_gethandler('module');
@@ -66,7 +66,7 @@ if ($action == 'message') {
      * Set version number
      */
     echo $xtorrentownload_version;
-    if ($xtorrentownload_version == 2.05 && !$mydownload_version) {
+    if (2.05 == $xtorrentownload_version && !$mydownload_version) {
         echo '<h4>Latest version of WF-Downloads installed. No Update Required</h4>';
         install_footer();
         include_once XOOPS_ROOT_PATH . '/footer.php';
@@ -77,14 +77,14 @@ if ($action == 'message') {
     if (isset($mydownload_version)) {
         $down_num = $mydownload_version;
     }
-    if (isset($xtorrentownload_version) && $xtorrentownload_version != 2.05) {
+    if (isset($xtorrentownload_version) && 2.05 != $xtorrentownload_version) {
         $down_num = $xtorrentownload_version;
     }
 
     echo '<div><b>Welcome to the WF-Downloads Update script</b></div><br>';
     echo '<div>This script will upgrade My-Downloads or WF-Downloads.</div><br><br>';
 
-    if ($down_num != 0) {
+    if (0 != $down_num) {
         echo "<div><span style='color:#ff0000;font-weight:bold;'>WARNING: If upgrading from My Downloads. The My Download Module will **NOT** function after the upgrade and should be unistalled. </span></div><br>";
         echo '<div><b>Before upgrading Wf-Downloads, make sure that you have:</b></div><br>';
         echo "<div><span style='color:#ff0000; '>1. <b>Important:</b> First, create a back-up your database before proceeding further. </span></div>";
@@ -122,7 +122,7 @@ if ($action == 'message') {
     exit();
 }
 // THIS IS THE UPDATE DATABASE FROM HERE!!!!!!!!! DO NOT TOUCH THIS!!!!!!!!
-if ($action == 'upgrade') {
+if ('upgrade' == $action) {
     install_header();
 
     $num = $_POST['down_num'];

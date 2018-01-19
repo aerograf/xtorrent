@@ -86,8 +86,8 @@ if (!empty($_POST['submit'])) {
         $broken['id'] = $broke_arr['reportid'];
         $broken['reporter'] = xoops_getLinkedUnameFromId(intval($broke_arr['sender']));
         $broken['date'] = formatTimestamp($broke_arr['date'], $xoopsModuleConfig['dateformat']);
-        $broken['acknowledged'] = ($broke_arr['acknowledged'] == 1) ? _YES : _NO ;
-        $broken['confirmed'] = ($broke_arr['confirmed'] == 1) ? _YES : _NO ;
+        $broken['acknowledged'] = (1 == $broke_arr['acknowledged']) ? _YES : _NO ;
+        $broken['confirmed'] = (1 == $broke_arr['confirmed']) ? _YES : _NO ;
 
         $xoopsTpl->assign('broken', $broken);
         $xoopsTpl->assign('brokenreport', true);
@@ -103,9 +103,9 @@ if (!empty($_POST['submit'])) {
          */
         $down['title'] = trim($down_arr['title']);
         $down['homepage'] = $myts->makeClickable(formatURL(trim($down_arr['homepage'])));
-        $time = ($down_arr['updated'] != 0) ? $down_arr['updated'] : $down_arr['published'];
+        $time = (0 != $down_arr['updated']) ? $down_arr['updated'] : $down_arr['published'];
         $down['updated'] = formatTimestamp($time, $xoopsModuleConfig['dateformat']);
-        $is_updated = ($down_arr['updated'] != 0) ? _MD_XTORRENT_UPDATEDON : _MD_XTORRENT_SUBMITDATE;
+        $is_updated = (0 != $down_arr['updated']) ? _MD_XTORRENT_UPDATEDON : _MD_XTORRENT_SUBMITDATE;
         $down['publisher'] = xoops_getLinkedUnameFromId(intval($down_arr['submitter']));
 
         $xoopsTpl->assign('file_id', $lid);

@@ -70,7 +70,7 @@ if (!class_exists('qcp64_base')) {
                 $this->mode = '4';
             }
             
-            if ($this->num_evr==0) {
+            if (0 == $this->num_evr) {
                 $this->num_evr = floor(($this->seed / $this->mode) / ($this->mode * 3.015));
             } elseif ($this->num_evr>8) {
                 $this->num_evr = $this->num_evr - floor($this->mode*1.35);
@@ -98,7 +98,7 @@ if (!class_exists('qcp64_base')) {
                         $sofar++;
                     }
                     
-                    if ($done == false) {
+                    if (false == $done) {
                         if (floor($qcb / ($this->roll/$this->num_evr))>$this->mode) {
                             switch ($case) {
                             case true:
@@ -132,7 +132,7 @@ if (!class_exists('qcp64_base')) {
                         $sofar++;
                     }
                     
-                    if ($done == false) {
+                    if (false == $done) {
                         if (floor($qcb / ($this->roll/$this->num_evr))>$this->mode) {
                             switch ($case) {
                             case true:
@@ -170,7 +170,7 @@ if (!class_exists('qcp64_base')) {
                         $sofar++;
                     }
                     
-                    if ($done == false) {
+                    if (false == $done) {
                         if (floor($qcb / ($this->roll/$this->num_evr))>$this->mode) {
                             switch ($case) {
                             case true:
@@ -204,7 +204,7 @@ if (!class_exists('qcp64_base')) {
                         $sofar++;
                     }
                     
-                    if ($done == false) {
+                    if (false == $done) {
                         if (floor($qcb / ($this->roll/$this->num_evr))>$this->mode) {
                             switch ($case) {
                             case true:
@@ -242,7 +242,7 @@ if (!class_exists('qcp64_base')) {
                         $sofar++;
                     }
                     
-                    if ($done == false) {
+                    if (false == $done) {
                         if (floor($qcb / ($this->roll/$this->num_evr))>$this->mode) {
                             switch ($case) {
                             case true:
@@ -276,7 +276,7 @@ if (!class_exists('qcp64_base')) {
                         $sofar++;
                     }
                     
-                    if ($done == false) {
+                    if (false == $done) {
                         if (floor($qcb / ($this->roll/$this->num_evr))>$this->mode) {
                             switch ($case) {
                             case true:
@@ -310,7 +310,7 @@ if (!class_exists('qcp64_base')) {
                         $sofar++;
                     }
                     
-                    if ($done == false) {
+                    if (false == $done) {
                         if (floor($qcb / ($this->roll/$this->num_evr))>$this->mode) {
                             switch ($case) {
                             case true:
@@ -345,7 +345,7 @@ if (!class_exists('qcp64_base')) {
                         $sofar++;
                     }
                     
-                    if ($done == false) {
+                    if (false == $done) {
                         if (floor($qcb / ($this->roll/$this->num_evr))>$this->mode) {
                             switch ($case) {
                             case true:
@@ -384,7 +384,7 @@ if (!class_exists('qcp64_base')) {
                         $sofar++;
                     }
                     
-                    if ($done == false) {
+                    if (false == $done) {
                         if (floor($qcb / ($this->roll/$this->num_evr))>$this->mode) {
                             switch ($case) {
                             case true:
@@ -418,7 +418,7 @@ if (!class_exists('qcp64_base')) {
                         $sofar++;
                     }
                     
-                    if ($done == false) {
+                    if (false == $done) {
                         if (floor($qcb / ($this->roll/$this->num_evr))>$this->mode) {
                             switch ($case) {
                             case true:
@@ -452,7 +452,7 @@ if (!class_exists('qcp64_base')) {
                         $sofar++;
                     }
                     
-                    if ($done == false) {
+                    if (false == $done) {
                         if (floor($qcb / ($this->roll/$this->num_evr))>$this->mode) {
                             switch ($case) {
                             case true:

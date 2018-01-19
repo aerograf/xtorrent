@@ -19,7 +19,7 @@ function debugtxt($str, $filename)
         // that's where $somecontent will go when we fwrite() it.
         if (!$handle = fopen($filename, 'a')) {
         }
-        if (fwrite($handle, $str.chr(13).chr(10)) === false) {
+        if (false === fwrite($handle, $str . chr(13) . chr(10))) {
         }
         fclose($handle);
     }
@@ -87,7 +87,7 @@ if (strpos($passkey, '?')) {
     $GLOBALS[$tmpname] = $tmpvalue;
 }
 
-if (strlen($peer_id) == 20) {
+if (20 == strlen($peer_id)) {
     $peer_id = bin2hex($peer_id);
 }
 
@@ -128,12 +128,12 @@ if (!isset($event)) {
     $event = '';
 }
 
-$seeder = ($left == 0) ? 'yes' : 'no';
+$seeder = (0 == $left) ? 'yes' : 'no';
 
 
 
 if (isset($_SERVER['PATH_INFO'])) {
-    if (substr($_SERVER['PATH_INFO'], -7) == '/scrape') {
+    if ('/scrape' == substr($_SERVER['PATH_INFO'], -7)) {
         /*
          * Was an individual hash requested?
          */
@@ -144,8 +144,8 @@ if (isset($_SERVER['PATH_INFO'])) {
                 $info_hash = $_GET['info_hash'];
             }
 
-            if (strlen($info_hash) == 20) {
-            } elseif (strlen($info_hash) == 40) {
+            if (20 == strlen($info_hash)) {
+            } elseif (40 == strlen($info_hash)) {
             } else {
                 err('Invalid info hash value.');
             }
@@ -187,14 +187,14 @@ $res = $xoopsDB->queryF('DELETE FROM ' . $xoopsDB->prefix('xtorrent_peers') . " 
 $res = $xoopsDB->queryF('DELETE FROM ' . $xoopsDB->prefix('xtorrent_users') . " WHERE `last_action` = '' OR `last_action` = NULL");
 $res = $xoopsDB->queryF('DELETE FROM ' . $xoopsDB->prefix('xtorrent_peers') . " WHERE `last_access` = '' OR `last_access` = NULL");
 
-if (strpos($_SERVER['REQUEST_URI'], '?=') == 0) {
+if (0 == strpos($_SERVER['REQUEST_URI'], '?=')) {
     $sql = 'SELECT lid, id FROM ' . $xoopsDB->prefix('xtorrent_users') . ' WHERE passkey=' . sqlesc($passkey) . ' and secret = ' . sqlesc(sha1(xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR']))));
 } else {
     $sql = 'SELECT a.lid, a.id FROM ' . $xoopsDB->prefix('xtorrent_users') . ' a INNER JOIN ' . $xoopsDB->prefix('xtorrent_torrent') . ' b on a.lid = b.lid WHERE b.hashInfo=' . sqlesc($info_hash) . ' and a.secret = ' . sqlesc(sha1(xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR']))));
 }
 
 $valid = @mysqli_fetch_row(@$xoopsDB->queryF($sql));
-if ($valid[0] == 0||empty($valid)) {
+if (0 == $valid[0] || empty($valid)) {
     err('Invalid passkey or secret! Re-download the .torrent from ' . XOOPS_URL);
 }
 $res = $xoopsDB->queryF('UPDATE ' . $xoopsDB->prefix('xtorrent_users') . " set last_access = '" . date('Y-m-d H:i:s') . "' WHERE id = " . $valid[1]);
@@ -229,7 +229,7 @@ unset($self);
              . '12:min intervali' . ($xoopsModuleConfig['announce_interval'] * 30) . 'e'
              . '5:seeds';
         
-    if (isset($_GET['compact']) && $_GET['compact'] == '1') {
+    if (isset($_GET['compact']) && '1' == $_GET['compact']) {
         $p = '';
         $s = '';
         while ($row = $xoopsDB->fetchArray($res)) {
@@ -317,7 +317,7 @@ if (!isset($self)) {
     $az = $xoopsDB->fetchArray($rz);
     $userid = $az['id'];
 
-    if ($xoopsDB->getRowsNum($rz) == 0) {
+    if (0 == $xoopsDB->getRowsNum($rz)) {
         err('Unknown passkey or secret. Please redownload the torrent from ' . XOOPS_URL);
     }
 } else {
@@ -329,7 +329,7 @@ if (!isset($self)) {
     $upthis   = max(0, $uploaded - $self['uploaded']);
     $downthis = max(0, $downloaded - $self['downloaded']);
 
-    if (($upthis > 0 || $downthis > 0) && $userid<>0) {
+    if (($upthis > 0 || $downthis > 0) && 0 <> $userid) {
         $rt=$xoopsDB->queryF('UPDATE ' . $xoopsDB->prefix('xtorrent_users') . " SET uploaded = uploaded + $upthis, downloaded = downloaded + $downthis WHERE id=$userid") or err('Tracker error 3');
     }
 }
@@ -349,7 +349,7 @@ function portblacklisted($port)
     }
 
     // kazaa
-    if ($port == 1214) {
+    if (1214 == $port) {
         return true;
     }
 
@@ -359,12 +359,12 @@ function portblacklisted($port)
     }
 
     // emule
-    if ($port == 4662) {
+    if (4662 == $port) {
         return true;
     }
 
     // winmx
-    if ($port == 6699) {
+    if (6699 == $port) {
         return true;
     }
 
@@ -373,13 +373,13 @@ function portblacklisted($port)
 
 $updateset = [];
 
-if ($event == 'stopped') {
+if ('stopped' == $event) {
     //$rt=debugtxt("start stopped 1", $filename);
 
     if (isset($self)) {
         $xoopsDB->queryF('DELETE FROM ' . $xoopsDB->prefix('xtorrent_peers') . " WHERE $selfwhere");
         if ($xoopsDB->getAffectedRows()) {
-            if ($self['seeder'] == 'yes') {
+            if ('yes' == $self['seeder']) {
                 $updateset[] = 'seeds = seeds - 1';
             } else {
                 $updateset[] = 'leechers = leechers - 1';
@@ -387,17 +387,17 @@ if ($event == 'stopped') {
         }
     }
 } else {
-    if ($event == 'completed') {
+    if ('completed' == $event) {
         $updateset[] = 'finished = finished + 1';
     }
 
     if (isset($self)) {
         $xoopsDB->queryF('UPDATE ' . $xoopsDB->prefix('xtorrent_peers') . " SET uploaded = $uploaded, ip='$ip', downloaded = $downloaded, to_go = $left, last_action = NOW(), seeder = '$seeder'"
-                         . ($seeder == 'yes' && $self['seeder'] != $seeder ? ', finishedat = ' . time() : '') . " WHERE $selfwhere");
+                         . ('yes' == $seeder && $self['seeder'] != $seeder ? ', finishedat = ' . time() : '') . " WHERE $selfwhere");
 
             
         if ($xoopsDB->getAffectedRows() && $self['seeder'] != $seeder) {
-            if ($seeder == 'yes') {
+            if ('yes' == $seeder) {
                 $updateset[] = 'seeds = seeds + 1';
                 $updateset[] = 'leechers = leechers - 1';
             } else {
@@ -434,7 +434,7 @@ if ($event == 'stopped') {
         $ret = $xoopsDB->queryF($sql) or err('Tracker error - Update Peer Failed');
          
         if ($ret) {
-            if ($seeder == 'yes') {
+            if ('yes' == $seeder) {
                 $updateset[] = 'seeds = seeds + 1';
             } else {
                 $updateset[] = 'leechers = leechers + 1';
@@ -443,7 +443,7 @@ if ($event == 'stopped') {
     }
 }
 
-if ($seeder == 'yes') {
+if ('yes' == $seeder) {
     /*if ($torrent["banned"] != "yes")
         $updateset[] = "visible = 'yes'";*/
     $updateset[] = 'last_action = NOW()';

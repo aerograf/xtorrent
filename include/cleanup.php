@@ -27,7 +27,7 @@ function docleanup()
         }
 
         $ar2 = [];
-        while (($file = readdir($dp)) !== false) {
+        while (false !== ($file = readdir($dp))) {
             if (!preg_match('/^(\d+)\.torrent$/', $file, $m)) {
                 continue;
             }
@@ -96,7 +96,7 @@ function docleanup()
     $torrents = [];
     $res      = mysqli_query('SELECT torrent, seeder, COUNT(*) AS c FROM peers GROUP BY torrent, seeder');
     while ($row = mysqli_fetch_assoc($res)) {
-        if ($row['seeder'] == 'yes') {
+        if ('yes' == $row['seeder']) {
             $key = 'seeders';
         } else {
             $key = 'leechers';

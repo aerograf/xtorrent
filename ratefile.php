@@ -17,12 +17,12 @@ if (!empty($_POST['submit'])) {
     $cid          = intval($_POST['cid']);
     $rating       = intval($_POST['rating']);
     // Check if Rating is Null
-    if ($rating == '--') {
+    if ('--' == $rating) {
         redirect_header('ratefile.php?cid=' . $cid . '&amp;lid=' . $lid . '', 4, _MD_XTORRENT_NORATING);
         exit();
     }
     // Check if Download POSTER is voting (UNLESS Anonymous users allowed to post)
-    if ($ratinguser != 0) {
+    if (0 != $ratinguser) {
         $result = $xoopsDB -> query('SELECT submitter FROM ' . $xoopsDB-> prefix('xtorrent_downloads') . " WHERE lid=$lid");
         while (list($ratinguserDB) = $xoopsDB -> fetchRow($result)) {
             if ($ratinguserDB == $ratinguser) {

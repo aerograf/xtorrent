@@ -3,7 +3,7 @@
 include 'header.php';
 global $xoopsModuleConfig, $xoopsModule, $xoopsUser;
 
-if ($xoopsModuleConfig['htaccess']!=0) {
+if (0 != $xoopsModuleConfig['htaccess']) {
     if (strpos($_SERVER['REQUEST_URI'], 'odules/')>0||strpos($_SERVER['REQUEST_URI'], 'ndex.php')>0) {
         header('HTTP/1.1 301 Moved Permanently');
         header('Location: ' . XOOPS_URL . '/torrents/');
@@ -84,7 +84,7 @@ while ($myrow = $xoopsDB->fetchArray($result)) {
 
         foreach ($arr as $ele) {
             if ($gperm_handler->checkRight('xtorrentownCatPerm', $ele['cid'], $groups, $xoopsModule->getVar('mid'))) {
-                if ($xoopsModuleConfig['subcats'] == 1) {
+                if (1 == $xoopsModuleConfig['subcats']) {
                     $chtitle = $myts->htmlSpecialChars($ele['title']);
                     if ($chcount > 5) {
                         $subcategories .= '...';

@@ -12,10 +12,10 @@ $selectdate = isset($_REQUEST['selectdate'])?$_REQUEST['selectdate']: 0 ;
 $list       = isset($_REQUEST['list'])?$_REQUEST['list']: 0 ;
 $cat        = empty($_REQUEST['cat']) ? '' : xoops_sef($_REQUEST['cat'], '_');
 
-if ($xoopsModuleConfig['htaccess']!=0) {
-    if ($cid!=0) {
+if (0 != $xoopsModuleConfig['htaccess']) {
+    if (0 != $cid) {
         global $xoopsDB;
-        if ($cat!=''&&$cid==0) {
+        if ('' != $cat && 0 == $cid) {
             $sql = 'SELECT b.title, b.cid FROM ' . $xoopsDB->prefix('xtorrent_cat') . " b WHERE b.title LIKE '$cat'";
             $ret = $xoopsDB->query($sql);
             $rt = $xoopsDB->fetchArray($ret);
@@ -24,7 +24,7 @@ if ($xoopsModuleConfig['htaccess']!=0) {
             header('Location: ' . XOOPS_URL . '/torrents/' . xoops_sef($rt['title']) . '/' . $rt['cid'] . ",$start,$selectdate,$list,$orderby");
             exit;
         }
-        if ($cat==''||strpos($_SERVER['REQUEST_URI'], 'iewcat.php')>0) {
+        if ('' == $cat || strpos($_SERVER['REQUEST_URI'], 'iewcat.php') > 0) {
             $sql = 'SELECT b.title, b.cid FROM ' . $xoopsDB->prefix('xtorrent_cat') . " b WHERE b.cid=$cid";
             $ret = $xoopsDB->query($sql);
             $rt = $xoopsDB->fetchArray($ret);
@@ -176,7 +176,7 @@ if ($total_numrows['count'] > 0) {
      * Show order box
      */
     $xoopsTpl->assign('show_links', false);
-    if ($total_numrows['count'] > 1 && $cid != 0) {
+    if ($total_numrows['count'] > 1 && 0 != $cid) {
         $xoopsTpl->assign('show_links', true);
         $orderbyTrans = convertorderbytrans($orderby);
         $xoopsTpl->assign('lang_cursortedby', sprintf(_MD_XTORRENT_CURSORTBY, convertorderbytrans($orderby)));
@@ -186,7 +186,7 @@ if ($total_numrows['count'] > 0) {
      * Screenshots display
      */
     $xoopsTpl->assign('show_screenshot', false);
-    if (isset($xoopsModuleConfig['screenshot']) && $xoopsModuleConfig['screenshot'] == 1) {
+    if (isset($xoopsModuleConfig['screenshot']) && 1 == $xoopsModuleConfig['screenshot']) {
         $xoopsTpl->assign('shots_dir', $xoopsModuleConfig['screenshots']);
         $xoopsTpl->assign('shotwidth', $xoopsModuleConfig['shotwidth']);
         $xoopsTpl->assign('shotheight', $xoopsModuleConfig['shotheight']);

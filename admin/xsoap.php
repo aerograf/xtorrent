@@ -26,7 +26,7 @@ if (!$xoopsModule->mid())
 			}
 		}
 		
-		if ($native!=true) {
+		if (true != $native) {
 			define('XOOPS_SOAP_LIB', 'NUSOAP');
 			require_once XOOPS_ROOT_PATH . '/modules/xsoap/include/nusoap/nusoap.php';
 		} else {
@@ -98,7 +98,7 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 			case 'scribe':
 				for ($r=1; $r<$_REQUEST['total']+1; $r++)
 				{
-					if ($_REQUEST['new'][$r]!=true)
+					if (true != $_REQUEST['new'][$r])
 					{
 						$sql = 'UPDATE ' . $xoopsDB->prefix('xtorrent_soap_catmatch') . " SET cid = '" . $_REQUEST['catassign'][$r] . "', scid = '" . $_REQUEST['scid'][$r] . "', auto_approval = '" . $_REQUEST['auto_import'][$r] . "' WHERE id = '" . $_REQUEST['id'][$r] . "'";
 						
@@ -172,7 +172,7 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 						}
 					}
 					
-					if ($found!=true)
+					if (true != $found)
 					{
 						$ii++;
 					  /*
@@ -387,7 +387,7 @@ function decodespecialchars($rec)
 	$res = [];
 	foreach ($rec as $k => $l)
 	{
-		if ($k != 'crc')
+		if ('crc' != $k)
 		{
 			$res[$k] = convert_uudecode($l);
 		} else {
@@ -403,7 +403,7 @@ function importtorrents($req, $client, $servers, $server, $server_key, $site_nam
 
 	foreach ($req['import'] as $k => $v)
 	{
-		if ($v!=0)
+		if (0 != $v)
 		{
 			$request['lid'] = [$req['lid'][$k]];
 			$result = $client->call('xtorrent_send', 
@@ -416,7 +416,7 @@ function importtorrents($req, $client, $servers, $server, $server_key, $site_nam
               ]);			
 		  //print_r($result);
 			$myts   = MyTextSanitizer::getInstance();
-			$notify = $req['notify']!=0 ? 1 : 0;
+			$notify = 0 != $req['notify'] ? 1 : 0;
 			$slid   = !empty($result['RESULT']['data'][0]['content']['lid']) ? intval($result['RESULT']['data'][0]['content']['lid']) : 0 ;
 			$scid   = !empty($result['RESULT']['data'][0]['content']['cid']) ? intval($result['RESULT']['data'][0]['content']['cid']) : 0 ;
 			$sql    = 'SELECT cid, auto_approval FROM ' . $xoopsDB->prefix('xtorrent_soap_catmatch') . ' WHERE scid = ' . $scid . ' and skey = ' . $server_key;
@@ -434,7 +434,7 @@ function importtorrents($req, $client, $servers, $server, $server_key, $site_nam
 
 				$homepage      = '';
 				$homepagetitle = '';
-				if (!empty($result['RESULT']['data'][0]['content']['homepage']) || $result['RESULT']['data'][0]['content']['homepage'] != 'http://')
+				if (!empty($result['RESULT']['data'][0]['content']['homepage']) || 'http://' != $result['RESULT']['data'][0]['content']['homepage'])
 				{
 					$homepage = $myts->addslashes(formatURL(trim($result['RESULT']['data'][0]['content']['homepage'])));
 					$homepagetitle = $myts->addslashes(trim($result['RESULT']['data'][0]['content']['homepagetitle']));
@@ -443,21 +443,21 @@ function importtorrents($req, $client, $servers, $server, $server_key, $site_nam
 
 				foreach($xoopsModuleConfig['platform'] as $ky => $tp)
 				{
-					if (strpos($result['RESULT']['arrays']['platform'][$result['RESULT']['data'][0]['content']['platform']], substr($tp, 1, strlen($tp) - 2)) != false) {
+					if (false != strpos($result['RESULT']['arrays']['platform'][$result['RESULT']['data'][0]['content']['platform']], substr($tp, 1, strlen($tp) - 2))) {
 						$platform = $ky;
 					}
 				}
 
 				foreach($xoopsModuleConfig['license'] as $ky => $tp)
 				{
-					if (strpos($result['RESULT']['arrays']['license'][$result['RESULT']['data'][0]['content']['license']], substr($tp, 3, strlen($tp) - 6)) != false) {
+					if (false != strpos($result['RESULT']['arrays']['license'][$result['RESULT']['data'][0]['content']['license']], substr($tp, 3, strlen($tp) - 6))) {
 						$license = $ky;
 					}
 				}
 
 				foreach($xoopsModuleConfig['currencies'] as $ky => $tp)
 				{
-					if (strpos($result['RESULT']['arrays']['currency'][$result['RESULT']['data'][0]['content']['currency']], $tp) != false) {
+					if (false != strpos($result['RESULT']['arrays']['currency'][$result['RESULT']['data'][0]['content']['currency']], $tp)) {
 						$currency = $ky;
 					}
 				}
@@ -474,22 +474,22 @@ function importtorrents($req, $client, $servers, $server, $server_key, $site_nam
 				$requirements = $myts->addslashes(trim($result['RESULT']['data'][0]['content']['requirements']));
 				$limitations  = isset($result['RESULT']['data'][0]['content']['limitations']) ? $myts->addslashes($result['RESULT']['data'][0]['content']['limitations']) : '';
 				$dhistory     = isset($result['RESULT']['data'][0]['content']['dhistory']) ? $myts->addslashes($result['RESULT']['data'][0]['content']['dhistory']) : '';
-				$offline      = (isset($result['RESULT']['data'][0]['content']['offline']) && $result['RESULT']['data'][0]['content']['offline'] == 1) ? 1 : 0;
+				$offline      = (isset($result['RESULT']['data'][0]['content']['offline']) && 1 == $result['RESULT']['data'][0]['content']['offline']) ? 1 : 0;
 				$date         = isset($result['RESULT']['data'][0]['content']['date']) ? $myts->addslashes($result['RESULT']['data'][0]['content']['date']) : '';
 				$publishdate  = isset($result['RESULT']['data'][0]['content']['publishdate']) ? $myts->addslashes($result['RESULT']['data'][0]['content']['publishdate']) : '';
-				$notifypub    = (isset($result['RESULT']['data'][0]['content']['notifypub']) && $result['RESULT']['data'][0]['content']['notifypub'] == 1) ? 1 : 0;
+				$notifypub    = (isset($result['RESULT']['data'][0]['content']['notifypub']) && 1 == $result['RESULT']['data'][0]['content']['notifypub']) ? 1 : 0;
 				$scrc         = isset($result['RESULT']['data'][0]['content']['crc']) ? $result['RESULT']['data'][0]['content']['crc'] : '';
 				$screenshot   = isset($result['RESULT']['data'][0]['content']['screenshot']) ? $myts->addslashes($result['RESULT']['data'][0]['content']['screenshot']) : '';
 				$ipaddress    = isset($result['RESULT']['data'][0]['content']['ipaddress']) ? $myts->addslashes($result['RESULT']['data'][0]['content']['ipaddress']) : '';
 
-				if ($lid == 0)
+				if (0 == $lid)
 				{
-					if ($x_autoapprove == 1)
+					if (1 == $x_autoapprove)
 					{
 						$publishdate = time();
 						$status = 1;
 					} 
-					$status = ($x_autoapprove == 1) ? 1 : 0 ;
+					$status = (1 == $x_autoapprove) ? 1 : 0 ;
 					$query  = 'INSERT INTO ' . $xoopsDB->prefix('xtorrent_downloads') . ' 
 						(lid, cid, title, url, homepage, version, size, platform, screenshot, submitter, publisher, status, date, hits, rating, votes, comments, price, mirror, license, paypalemail, features, requirements, homepagetitle, forumid, limitations, dhistory, published, expired,offline, description, ipaddress, notifypub, currency)';
 					$query .= " VALUES 	('', $cid, '$title', '$url', '$homepage', '$version', '$size', '$platform', '$screenshot', '$submitter', '$publisher','$status', '$date', 0, 0, 0, 0, '$price', '$mirror', '$license', '$paypalemail', '$features', '$requirements', '$homepagetitle', '$forumid', '$limitations', '$dhistory', '$publishdate', 0, '$offline', '$description', '$ipaddress', '$notifypub', '$currency')";
@@ -515,7 +515,7 @@ function importtorrents($req, $client, $servers, $server, $server_key, $site_nam
 						$row                   = $xoopsDB->fetchArray($result);
 						$tags['CATEGORY_NAME'] = $row['title'];
 						$tags['CATEGORY_URL']  = XOOPS_URL . '/modules/xtorrent/viewcat.php?cid=' . $cid;
-						if ($x_autoapprove == 1)
+						if (1 == $x_autoapprove)
 						{
 							$notification_handler->triggerEvent('global', 0, 'new_file', $tags);
 							$notification_handler->triggerEvent('category', $cid, 'new_file', $tags);

@@ -7,7 +7,7 @@ include_once XOOPS_ROOT_PATH.'/language/'.$xoopsConfig['language'].'/user.php';
 
 $passkey = !isset($_POST['passkey']) ? '' : trim($_POST['passkey']);
 $userkey = !isset($_POST['userkey']) ? '' : trim($_POST['userkey']);
-if ($userkey == '' || $passkey == '') {
+if ('' == $userkey || '' == $passkey) {
     exit();
 }
 
@@ -26,7 +26,7 @@ if (false != $xt_user) {
     if (0 == $xt_user->getVar('level')) {
         exit();
     }
-    if ($xoopsConfig['closesite'] == 1) {
+    if (1 == $xoopsConfig['closesite']) {
         $allowed = false;
         foreach ($xt_user->getGroups() as $group) {
             if (in_array($group, $xoopsConfig['closesite_okgrp']) || XOOPS_GROUP_ADMIN == $group) {

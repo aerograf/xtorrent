@@ -121,7 +121,7 @@ while ($down_arr = $xoopsDB->fetchArray($result)) {
      * Screenshots display
      */
     $xoopsTpl->assign('show_screenshot', false);
-    if (isset($xoopsModuleConfig['screenshot']) && $xoopsModuleConfig['screenshot'] == 1) {
+    if (isset($xoopsModuleConfig['screenshot']) && 1 == $xoopsModuleConfig['screenshot']) {
         $xoopsTpl->assign('shots_dir', $xoopsModuleConfig['screenshots']);
         $xoopsTpl->assign('shotwidth', $xoopsModuleConfig['shotwidth']);
         $xoopsTpl->assign('shotheight', $xoopsModuleConfig['shotheight']);

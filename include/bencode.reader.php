@@ -30,20 +30,20 @@ class BEncodeReader
         }
 
         $h = @fopen($filename, 'rb');
-        if ($h === false) {
+        if (false === $h) {
             trigger_error("Could not create BEncodeReader for {$filename}: failed to open for reading", E_USER_WARNING);
             return;
         }
 
         $filesize = @filesize($filename);
-        if ($filesize === false) {
+        if (false === $filesize) {
             trigger_error("Could not create BEncodeReader for {$filename}: the file is empty", E_USER_WARNING);
             return;
         }
 
         $this->data = @fread($h, $filesize);
 
-        if ($this->data === false) {
+        if (false === $this->data) {
             trigger_error("Error creating BEncodeReader for {$filename}: error reading from file", E_USER_WARNING);
         }
 
@@ -57,20 +57,20 @@ class BEncodeReader
             return false;
         }
 
-        if ($this->data[$this->pointer] == 'e') {
+        if ('e' == $this->data[$this->pointer]) {
             // Except in the case of an error or malformed data string, the letter e will mark the end of anything we've been reading, so we move
             // the pointer and retreat.
             $this->pointer++;
             return false;
         }
-        if ($this->data[$this->pointer] == 'd') {
+        if ('d' == $this->data[$this->pointer]) {
             // d marks the start of a dictionary, which is essentially an associative array
             $start = $this->pointer;
             $this->pointer++;
             $dictionary = [];
             $current    = false;
-            while (($value = $this->readNext()) !== false) {
-                if ($current === false) {
+            while (false !== ($value = $this->readNext())) {
+                if (false === $current) {
                     $current = $value;
                 } else {
                     $dictionary[$current] = $value;
@@ -78,7 +78,7 @@ class BEncodeReader
                 }
             }
 
-            if (count($dictionary) == 0 || $this->error) {
+            if (0 == count($dictionary) || $this->error) {
                 $this->error = true;
                 return false;
             }
@@ -86,27 +86,27 @@ class BEncodeReader
             $end = $this->pointer;
             $dictionary['hash'] = pack('H*', sha1(substr($this->data, $start, $end - $start)));
             return $dictionary;
-        } elseif ($this->data[$this->pointer] == 'l') {
+        } elseif ('l' == $this->data[$this->pointer]) {
             // An l indicates the start of a list, which is essentially an array, so we will read it as such
             $this->pointer++;
             $list = [];
-            for ($i=0;($value = $this->readNext()) !== false;$i++) {
+            for ($i=0; false !== ($value = $this->readNext()); $i++) {
                 $list[$i] = $value;
             }
 
-            if (count($list) == 0 || $this->error) {
+            if (0 == count($list) || $this->error) {
                 return false;
             }
 
             return $list;
-        } elseif ($this->data[$this->pointer] == 'i') {
+        } elseif ('i' == $this->data[$this->pointer]) {
             // The following data is an integer, so it will be read until the next "e", after which it will be returned
             $this->pointer++;
 
             $endPosition = strpos($this->data, 'e', $this->pointer);
 
             // A failure to find an endpoint within a resonable distance means that this is not a valid integer definition.
-            if ($endPosition === false || ($endPosition - $this->pointer) > 10) {
+            if (false === $endPosition || ($endPosition - $this->pointer) > 10) {
                 $this->error = true;
                 return false;
             }
@@ -122,7 +122,7 @@ class BEncodeReader
             // this is not a string definition and we can assume the file is broken. I'm also including
             // a check to make sure that colons over 5 characters away will be ignored to prevent a
             // broken file from locking up the system.
-            if ($nextColon === false || ($nextColon - $this->pointer) > 5) {
+            if (false === $nextColon || ($nextColon - $this->pointer) > 5) {
                 $this->error = true;
                 return false;
             }

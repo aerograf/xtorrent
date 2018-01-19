@@ -124,7 +124,7 @@ if (is_object($xoopsUser) && isset($xoopsModuleConfig['submissions'])) {
         $submissions = 1;
     }
 } else {
-    if (isset($xoopsModuleConfig['anonpost']) && $xoopsModuleConfig['anonpost'] == 1) {
+    if (isset($xoopsModuleConfig['anonpost']) && 1 == $xoopsModuleConfig['anonpost']) {
         $submissions = 1;
     }
 }

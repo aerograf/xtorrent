@@ -113,7 +113,7 @@ global $xoopsDB;
     }
 
 
-if ($cat == '') {
+if ('' == $cat) {
     $cat = 'Latest Torrents';
 }
 

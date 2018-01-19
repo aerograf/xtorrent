@@ -5,7 +5,7 @@ function xtorrent_search($queryarray, $andor, $limit, $offset, $userid)
     global $xoopsDB, $xoopsUser;
     
     $sql = 'SELECT lid, cid, title, submitter, published, description FROM ' . $xoopsDB-> prefix('xtorrent_downloads') . ' WHERE status >0 AND published > 0';
-    if ($userid != 0) {
+    if (0 != $userid) {
         $sql .= ' AND submitter=' . $userid . ' ';
     }
     // because count() returns 1 even if a supplied variable

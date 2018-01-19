@@ -50,7 +50,7 @@ class Xtorrent_XoopsAuth extends XoopsAuth
     {
         $member_handler = xoops_gethandler('member');
         $user       = $member_handler->getUser($this->uid_from_userkey($userkey, $passkey));
-        if ($user == false) {
+        if (false == $user) {
             $this->setErrors(1, _US_INCORRECTLOGIN);
         }
         return $user;

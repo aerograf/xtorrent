@@ -46,15 +46,15 @@ switch ($op) {
             }
             $lang_def = constant('_AM_XTORRENT_MOD_' . strtoupper($key));
 
-            if ($key == 'platform' || $key == 'license' || $key == 'limitations') {
+            if ('platform' == $key || 'license' == $key || 'limitations' == $key) {
                 $content = $xoopsModuleConfig[$key][$orig_array[$key]];
             }
-            if ($key == 'cid') {
+            if ('cid' == $key) {
                 $sql     = 'SELECT title FROM ' . $xoopsDB->prefix('xtorrent_cat') . ' WHERE cid=' . $content . '';
                 $row     = $xoopsDB->fetchArray($xoopsDB->query($sql));
                 $content = $row['title'];
             }
-            if ($key == 'forumid') {
+            if ('forumid' == $key) {
                 $content          = '';
                 $modhandler       = xoops_gethandler('module');
                 $xoopsforumModule = $modhandler->getByDirname('newbb');
@@ -65,21 +65,21 @@ switch ($op) {
                     $content = '';
                 }
             }
-            if ($key == 'screenshot') {
+            if ('screenshot' == $key) {
                 $content = '';
                 if ($content > 0) {
                     $content = "<img src='" . XOOPS_URL . '/' . $xoopsModuleConfig['screenshots'] . '/' . $logourl . "' width='" . $xoopsModuleConfig['shotwidth'] . "' alt='' >";
                 }
             }
-            if ($key == 'features' || $key == 'requirements') {
-                if ($content != '') {
+            if ('features' == $key || 'requirements' == $key) {
+                if ('' != $content) {
                     $downrequirements = explode('|', trim($content));
                     foreach ($downrequirements as $bi) {
                         $content = '<li>' . $bi;
                     }
                 }
             }
-            if ($key == 'dhistory') {
+            if ('dhistory' == $key) {
                 $content = $myts->displayTarea($content, 1, 0, 0, 0, 1);
                 ;
             }
@@ -99,15 +99,15 @@ switch ($op) {
             }
             $lang_def = constant('_AM_XTORRENT_MOD_' . strtoupper($key));
 
-            if ($key == 'platform' || $key == 'license' || $key == 'limitations') {
+            if ('platform' == $key || 'license' == $key || 'limitations' == $key) {
                 $content = $xoopsModuleConfig[$key][$orig_array[$key]];
             }
-            if ($key == 'cid') {
+            if ('cid' == $key) {
                 $sql     = 'SELECT title FROM ' . $xoopsDB->prefix('xtorrent_cat') . ' WHERE cid=' . $content . '';
                 $row     = $xoopsDB->fetchArray($xoopsDB->query($sql));
                 $content = $row['title'];
             }
-            if ($key == 'forumid') {
+            if ('forumid' == $key) {
                 $content          = '';
                 $modhandler       = xoops_gethandler('module');
                 $xoopsforumModule = $modhandler->getByDirname('newbb');
@@ -117,21 +117,21 @@ switch ($op) {
                     $content = "<a href='" . XOOPS_URL . '/modules/newbb/viewforum.php?forum=' . $content . "'>Forumid</a>";
                 }
             }
-            if ($key == 'screenshot') {
+            if ('screenshot' == $key) {
                 $content = '';
                 if ($content > 0) {
                     $content = "<img src='" . XOOPS_URL . '/' . $xoopsModuleConfig['screenshots'] . '/' . $logourl . "' width='" . $xoopsModuleConfig['shotwidth'] . "' alt='' >";
                 }
             }
-            if ($key == 'features' || $key == 'requirements') {
-                if ($content != '') {
+            if ('features' == $key || 'requirements' == $key) {
+                if ('' != $content) {
                     $downrequirements = explode('|', trim($content));
                     foreach ($downrequirements as $bi) {
                         $content = '<li>' . $bi;
                     }
                 }
             }
-            if ($key == 'dhistory') {
+            if ('dhistory' == $key) {
                 $content = $myts->displayTarea($content, 1, 0, 0, 0, 1);
                 ;
             }

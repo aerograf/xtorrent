@@ -149,7 +149,7 @@ $maxusers              = 75000;
 $announce_urls   = [];
 $announce_urls[] = str_replace('{XOOPS_URL}', XOOPS_URL, $xoopsModuleConfig['announce_url']);
 
-if ($HTTP_SERVER_VARS['HTTP_HOST'] == '') {
+if ('' == $HTTP_SERVER_VARS['HTTP_HOST']) {
     $HTTP_SERVER_VARS['HTTP_HOST'] = $HTTP_SERVER_VARS['SERVER_NAME'];
 }
 
@@ -282,7 +282,7 @@ function userlogin()
         return;
     }
     $id = 0 + $_COOKIE['uid'];
-    if (!$id || strlen($_COOKIE['pass']) != 32) {
+    if (!$id || 32 != strlen($_COOKIE['pass'])) {
         return;
     }
     $res = mysqli_query("SELECT * FROM users WHERE id = $id AND enabled='yes' AND status = 'confirmed'");// or die(mysql_error());
@@ -471,7 +471,7 @@ function stdhead($title = '', $msgalert = true)
 
     header('Content-Type: text/html; charset=iso-8859-1');
     //header("Pragma: No-cache");
-    if ($title == '') {
+    if ('' == $title) {
         $title = $SITENAME;
     } else {
         $title = "$SITENAME :: " . htmlspecialchars($title);
@@ -762,7 +762,7 @@ function downloaderdata($res)
         $allids = implode(',', $ids);
         $res = mysqli_query("SELECT COUNT(*) AS c, torrent, seeder FROM peers WHERE torrent IN ($allids) GROUP BY torrent, seeder");
         while ($row = mysqli_fetch_assoc($res)) {
-            if ($row['seeder'] == 'yes') {
+            if ('yes' == $row['seeder']) {
                 $key = 'seeders';
             } else {
                 $key = 'downloaders';
@@ -788,13 +788,13 @@ function commenttable($rows)
         print('<p class=sub>#' . $row['id'] . ' by ');
         if (isset($row['username'])) {
             $title = $row['title'];
-            if ($title == '') {
+            if ('' == $title) {
                 $title = get_user_class_name($row['class']);
             } else {
                 $title = htmlspecialchars($title);
             }
             print('<a name=comm' . $row['id'] . ' href=userdetails.php?id=' . $row['user'] . '><b>' .
-                  htmlspecialchars($row['username']) . '</b></a>' . ($row['donor'] == 'yes' ? "<img src=pic/star.gif alt='Donor'>" : '') . ($row['warned'] == 'yes' ? '<img src=' . 'pic/warned.gif alt="Warned">' : '') . " ($title)");
+                  htmlspecialchars($row['username']) . '</b></a>' . ('yes' == $row['donor'] ? "<img src=pic/star.gif alt='Donor'>" : '') . ('yes' == $row['warned'] ? '<img src=' . 'pic/warned.gif alt="Warned">' : '') . " ($title)");
         } else {
             print('<a name="comm' . $row['id'] . '"><i>(orphaned)</i></a>');
         }
@@ -803,7 +803,7 @@ function commenttable($rows)
               ($row['user'] == $CURUSER['id'] || get_user_class() >= UC_MODERATOR ? "- [<a href=comment.php?action=edit&amp;cid=$row[id]>Edit</a>]" : '') .
               (get_user_class() >= UC_MODERATOR ? "- [<a href=comment.php?action=delete&amp;cid=$row[id]>Delete</a>]" : '') .
               ($row['editedby'] && get_user_class() >= UC_MODERATOR ? "- [<a href=comment.php?action=vieworiginal&amp;cid=$row[id]>View original</a>]" : '') . '</p>');
-        $avatar = ($CURUSER['avatars'] == 'yes' ? htmlspecialchars($row['avatar']) : '');
+        $avatar = ('yes' == $CURUSER['avatars'] ? htmlspecialchars($row['avatar']) : '');
         if (!$avatar) {
             $avatar = 'pic/default_avatar.gif';
         }
@@ -887,7 +887,7 @@ function torrenttable($res, $variant = 'index')
         print("<td class=\"colhead\" align=\"center\">Wait</td>\n");
     }
 
-    if ($variant == 'mytorrents') {
+    if ('mytorrents' == $variant) {
         print("<td class=\"colhead\" align=\"center\">Edit</td>\n");
         print("<td class=\"colhead\" align=\"center\">Visible</td>\n");
     } ?>
@@ -906,7 +906,7 @@ function torrenttable($res, $variant = 'index')
 <td class="colhead" align=right>Leechers</td>
 <?php
 
-    if ($variant == 'index') {
+    if ('index' == $variant) {
         print('<td class="colhead" align=center>Upped&nbsp;by</td>');
     }
 
@@ -919,7 +919,7 @@ function torrenttable($res, $variant = 'index')
         print("<td align=center style='padding: 0px'>");
         if (isset($row['cat_name'])) {
             print('<a href="browse.php?cat=' . $row['category'] . '">');
-            if (isset($row['cat_pic']) && $row['cat_pic'] != '') {
+            if (isset($row['cat_pic']) && '' != $row['cat_pic']) {
                 print("<img border=\"0\" src=\"$pic_base_url" . $row['cat_pic'] . '" alt="' . $row['cat_name'] . '" >');
             } else {
                 print($row['cat_name']);
@@ -932,11 +932,11 @@ function torrenttable($res, $variant = 'index')
 
         $dispname = htmlspecialchars($row['name']);
         print('<td align=left><a href="details.php?');
-        if ($variant == 'mytorrents') {
+        if ('mytorrents' == $variant) {
             print('returnto=' . urlencode($_SERVER['REQUEST_URI']) . '&amp;');
         }
         print("id=$id");
-        if ($variant == 'index') {
+        if ('index' == $variant) {
             print('&amp;hit=1');
         }
         print("\"><b>$dispname</b></a>");
@@ -957,13 +957,13 @@ function torrenttable($res, $variant = 'index')
                 if ($variant == "index")
                     print("<a href=\"download.php/$id/" . rawurlencode($row["filename"]) . "\"><img src=pic/download.gif border=0 alt=Download></a>\n");
         
-                else */ if ($variant == 'mytorrents') {
+                else */ if ('mytorrents' == $variant) {
             print('<td align="center"><a href="edit.php?returnto=' . urlencode($_SERVER['REQUEST_URI']) . '&amp;id=' . $row['id'] . '">edit</a>');
         }
         print("</td>\n");
-        if ($variant == 'mytorrents') {
+        if ('mytorrents' == $variant) {
             print('<td align="right">');
-            if ($row['visible'] == 'no') {
+            if ('no' == $row['visible']) {
                 print('<b>no</b>');
             } else {
                 print('yes');
@@ -971,10 +971,10 @@ function torrenttable($res, $variant = 'index')
             print('</td>');
         }
 
-        if ($row['type'] == 'single') {
+        if ('single' == $row['type']) {
             print('<td align="right">' . $row['numfiles'] . '</td>');
         } else {
-            if ($variant == 'index') {
+            if ('index' == $variant) {
                 print("<td align=\"right\"><b><a href=\"details.php?id=$id&amp;hit=1&amp;filelist=1\">" . $row['numfiles'] . '</a></b></td>');
             } else {
                 print("<td align=\"right\"><b><a href=\"details.php?id=$id&amp;filelist=1#filelist\">" . $row['numfiles'] . '</a></b></td>');
@@ -984,7 +984,7 @@ function torrenttable($res, $variant = 'index')
         if (!$row['comments']) {
             print('<td align="right">' . $row['comments'] . '</td>');
         } else {
-            if ($variant == 'index') {
+            if ('index' == $variant) {
                 print("<td align=\"right\"><b><a href=\"details.php?id=$id&amp;hit=1&amp;tocomm=1\">" . $row['comments'] . '</a></b></td>');
             } else {
                 print("<td align=\"right\"><b><a href=\"details.php?id=$id&amp;page=0#startcomments\">" . $row['comments'] . '</a></b></td>');
@@ -1007,7 +1007,7 @@ function torrenttable($res, $variant = 'index')
         */
         print('<td align=center><nobr>' . str_replace(' ', '<br />', $row['added']) . '</nobr></td>');
         $ttl = (28*24) - floor((gmtime() - sql_timestamp_to_unix_timestamp($row['added'])) / 3600);
-        if ($ttl == 1) {
+        if (1 == $ttl) {
             $ttl .= '<br>hour';
         } else {
             $ttl .= '<br>hours';
@@ -1017,13 +1017,13 @@ function torrenttable($res, $variant = 'index')
 //        print("<td align=\"right\">" . $row["views"] . "</td>\n");
 //        print("<td align=\"right\">" . $row["hits"] . "</td>\n");
         $_s = '';
-        if ($row['times_completed'] != 1) {
+        if (1 != $row['times_completed']) {
             $_s = 's';
         }
         print('<td align=center>' . number_format($row['times_completed']) . "<br>time$_s</td>");
 
         if ($row['seeders']) {
-            if ($variant == 'index') {
+            if ('index' == $variant) {
                 if ($row['leechers']) {
                     $ratio = $row['seeders'] / $row['leechers'];
                 } else {
@@ -1040,7 +1040,7 @@ function torrenttable($res, $variant = 'index')
         }
 
         if ($row['leechers']) {
-            if ($variant == 'index') {
+            if ('index' == $variant) {
                 print("<td align=right><b><a href=details.php?id=$id&amp;hit=1&amp;todlers=1>" .
                    number_format($row['leechers']) . (isset($peerlink) ? '</a>' : '') . '</b></td>');
             } else {
@@ -1051,7 +1051,7 @@ function torrenttable($res, $variant = 'index')
             print('<td align="right">0</td>');
         }
 
-        if ($variant == 'index') {
+        if ('index' == $variant) {
             print('<td align=center>' . (isset($row['username']) ? ('<a href=userdetails.php?id=' . $row['owner'] . '><b>' . htmlspecialchars($row['username']) . '</b></a>') : '<i>(unknown)</i>') . '</td>');
         }
 
@@ -1132,9 +1132,9 @@ function get_user_icons($arr, $big = false)
         $disabledpic = 'disabled.gif';
         $style       = 'style="margin-left: 2pt"';
     }
-    $pics = $arr['donor'] == 'yes' ? "<img src=pic/$donorpic alt='Donor' border=0 $style>" : '';
-    if ($arr['enabled'] == 'yes') {
-        $pics .= $arr['warned'] == 'yes' ? "<img src=pic/$warnedpic alt=\"Warned\" border=0 $style>" : '';
+    $pics = 'yes' == $arr['donor'] ? "<img src=pic/$donorpic alt='Donor' border=0 $style>" : '';
+    if ('yes' == $arr['enabled']) {
+        $pics .= 'yes' == $arr['warned'] ? "<img src=pic/$warnedpic alt=\"Warned\" border=0 $style>" : '';
     } else {
         $pics .= "<img src=pic/$disabledpic alt=\"Disabled\" border=0 $style>";
     }

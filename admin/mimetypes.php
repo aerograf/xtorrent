@@ -40,11 +40,11 @@ function edit_mimetype($mime_id = 0)
     $mime_arr['mime_admin'] = 1;
     $mime_arr['mime_user']  = 0;
 
-    if ($mime_id != 0) {
+    if (0 != $mime_id) {
         $query    = 'select * from ' . $xoopsDB-> prefix('xtorrent_mimetypes') . " WHERE mime_id = $mime_id";
         $mime_arr = $xoopsDB -> fetchArray($xoopsDB -> query($query));
     }
-    $forminfo = ($mime_id == 0) ? _AM_XTORRENT_MIME_CREATEF : _AM_XTORRENT_MIME_MODIFYF;
+    $forminfo = (0 == $mime_id) ? _AM_XTORRENT_MIME_CREATEF : _AM_XTORRENT_MIME_MODIFYF;
     $sform    = new XoopsThemeForm($forminfo, 'op', xoops_getenv('PHP_SELF'));
     $sform -> addElement(new XoopsFormText(_AM_XTORRENT_MIME_EXTF, 'mime_ext', 5, 60, $mime_arr['mime_ext']), true);
     $sform -> addElement(new XoopsFormText(_AM_XTORRENT_MIME_NAMEF, 'mime_name', 50, 255, $mime_arr['mime_name']), true);
@@ -111,11 +111,11 @@ switch ($op) {
         $query    = 'select * from ' . $xoopsDB-> prefix('xtorrent_mimetypes') . " WHERE mime_id = $mime_id";
         $mime_arr = $xoopsDB -> fetchArray($xoopsDB -> query($query));
 
-        if (isset($_GET['admin']) && $_GET['admin'] == 1) {
-            $mime_arr['mime_admin'] = ($mime_arr['mime_admin'] == 1) ? 0 : 1;
+        if (isset($_GET['admin']) && 1 == $_GET['admin']) {
+            $mime_arr['mime_admin'] = (1 == $mime_arr['mime_admin']) ? 0 : 1;
         }
-        if (isset($_GET['user']) && $_GET['user'] == 1) {
-            $mime_arr['mime_user'] = ($mime_arr['mime_user'] == 1) ? 0 : 1;
+        if (isset($_GET['user']) && 1 == $_GET['user']) {
+            $mime_arr['mime_user'] = (1 == $mime_arr['mime_user']) ? 0 : 1;
         }
         $query = 'UPDATE ' . $xoopsDB-> prefix('xtorrent_mimetypes') . " SET 
 				mime_ext = '" . $mime_arr['mime_ext'] . "', mime_types = '" . $mime_arr['mime_types'] . "', mime_name = '" . $mime_arr['mime_name'] . "', 
@@ -138,7 +138,7 @@ switch ($op) {
         $mime_admin = intval($_POST['mime_admin']);
         $mime_user  = intval($_POST['mime_user']);
 
-        if ($mime_id == 0) {
+        if (0 == $mime_id) {
             $query = 'INSERT INTO ' . $xoopsDB-> prefix('xtorrent_mimetypes') . " 
 				(mime_id, mime_ext, mime_types, mime_name, mime_admin, mime_user ) VALUES 
 				('', '$mime_ext', '$mime_types', '$mime_name', $mime_admin, $mime_user)";
@@ -153,17 +153,17 @@ switch ($op) {
         if (!$result) {
             trigger_error($error, E_USER_ERROR);
         }
-        $dbupted = ($mime_id == 0) ? _AM_XTORRENT_MIME_CREATED : _AM_XTORRENT_MIME_MODIFIED;
+        $dbupted = (0 == $mime_id) ? _AM_XTORRENT_MIME_CREATED : _AM_XTORRENT_MIME_MODIFIED;
         redirect_header('mimetypes.php', 1, $dbupted);
         break;
 
     case 'saveall':
 
-            $mime_admin = (isset($_GET['admin']) && $_GET['admin'] == 1) ? $_GET['admin'] : 0;
-        $mime_user  = (isset($_GET['user']) && $_GET['user'] == 1) ? $_GET['user'] : 0;
+            $mime_admin = (isset($_GET['admin']) && 1 == $_GET['admin']) ? $_GET['admin'] : 0;
+        $mime_user  = (isset($_GET['user']) && 1 == $_GET['user']) ? $_GET['user'] : 0;
             $type_all   = intval($_GET['type_all']);
             $query      = 'UPDATE ' . $xoopsDB-> prefix('xtorrent_mimetypes') . ' SET ';
-        if ($mime_admin == 1) {
+        if (1 == $mime_admin) {
             $query .= " mime_admin = $type_all";
         } else {
             $query .= "mime_user = $type_all";
@@ -267,7 +267,7 @@ switch ($op) {
         
         $headingarray = [_AM_XTORRENT_MIME_ID, _AM_XTORRENT_MIME_NAME, _AM_XTORRENT_MIME_EXT, _AM_XTORRENT_MIME_ADMIN, _AM_XTORRENT_MIME_USER, _AM_XTORRENT_MINDEX_ACTION];
         for ($i = 0; $i <= count($headingarray)-1; $i++) {
-            $align = ($i == 1) ? 'left' : 'center';
+            $align = (1 == $i) ? 'left' : 'center';
             echo "<th style='text-align:" . $align . ";'><b>" . $headingarray[$i] . '</th>';
         }
         echo '</tr>';

@@ -47,11 +47,11 @@ function list_blocks()
     // blocks displaying loop
     $class = 'even';
     foreach (array_keys($block_arr) as $i) {
-        $visible   = ($block_arr[$i]->getVar('visible') == 1) ? _YES : _NO;
+        $visible   = (1 == $block_arr[$i]->getVar('visible')) ? _YES : _NO;
         $weight    = $block_arr[$i]->getVar('weight');
         $side_desc = $side_descs[$block_arr[$i]->getVar('side')];
         $title     = $block_arr[$i]->getVar('title');
-        if ($title == '') {
+        if ('' == $title) {
             $title = '&nbsp;';
         }
         $name      = $block_arr[$i]->getVar('name');
@@ -66,7 +66,7 @@ function list_blocks()
               <td class='" . $class . "' style='text-align:center;'>
               <a href='" . $xoops_system_url . '/admin.php?fct=blocksadmin&amp;op=edit&amp;bid=' . $bid . "' target='_blank'>" . $imagearray['editimg'] . '</a></td>
               </tr>';
-        $class = ($class == 'even') ? 'odd' : 'even';
+        $class = ('even' == $class) ? 'odd' : 'even';
     }
     echo "<tr><th colspan='7'></th></tr></table>";
 }

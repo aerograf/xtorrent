@@ -131,12 +131,12 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
 
         $scrape_address = $this->xtorrent_get_scrape_address($tracker);
 
-        if ($scrape_address === false) {
+        if (false === $scrape_address) {
             trigger_error("Failed to scrape tracker {$tracker}", E_USER_WARNING);
             return false;
         }
 
-        if (strpos($scrape_address, '?') !== false) {
+        if (false !== strpos($scrape_address, '?')) {
             $scrape_address .= '&info_hash=' . urlencode($torrent->infoHash);
         } else {
             $scrape_address .= '?info_hash=' . urlencode($torrent->infoHash);
@@ -149,7 +149,7 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
         $data = @file_get_contents($scrape_address);
         ini_set('default_socket_timeout', $old_timeout);
 
-        if ($data === false) {
+        if (false === $data) {
             trigger_error('Scrape error: Failed to scrape torrent details from the tracker', E_USER_WARNING);
             return false;
         }
@@ -160,7 +160,7 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
         $benc_tracker = $xthdlr_benc->decompile($benc_tracker);
         $trackerInfo  = $benc_tracker->getVar('object');
 
-        if ($trackerInfo === false) {
+        if (false === $trackerInfo) {
             trigger_error('Scrape error: Tracker returned invalid response to scrape request', E_USER_WARNING);
             return false;
         }
@@ -183,13 +183,13 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
     {
         $last_slash = strrpos($announce, '/');
 
-        if ($last_slash === false) {
+        if (false === $last_slash) {
             trigger_error("Tracker address ({$announce}) is invalid", E_USER_WARNING);
             return false;
         }
 
         $last_part = substr($announce, $last_slash);
-        if (strpos($last_part, 'announce') === false) {
+        if (false === strpos($last_part, 'announce')) {
             trigger_error("Tracker ({$announce}) does not appear to support scrape", E_USER_WARNING);
             return false;
         }
@@ -214,7 +214,7 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
             return false;
         }
         $numrows = $this->db->getRowsNum($result);
-        if ($numrows == 1) {
+        if (1 == $numrows) {
             $tracker = new $this->obj_class();
             $tracker->assignVars($this->db->fetchArray($result));
             return $tracker;
@@ -304,7 +304,7 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
         $sql   = 'SELECT '.$fields.' FROM '.$this->db_table;
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
             $sql .= ' '.$criteria->renderWhere();
-            if ($criteria->getSort() != '') {
+            if ('' != $criteria->getSort()) {
                 $sql .= ' ORDER BY '.$criteria->getSort().' '.$criteria->getOrder();
             }
             $limit = $criteria->getLimit();

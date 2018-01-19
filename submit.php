@@ -25,8 +25,8 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
     $lid = !empty($_POST['lid']) ? intval($_POST['lid']) : 0 ;
     $cid = !empty($_POST['cid']) ? intval($_POST['cid']) : 0 ;
 
-    if (empty($_FILES['userfile']['name']) && $_POST['url'] && $_POST['url'] != '' && $_POST['url'] != 'https://') {
-        $url   = ($_POST['url'] != 'https://') ? $myts->addslashes($_POST['url']) : '';
+    if (empty($_FILES['userfile']['name']) && $_POST['url'] && '' != $_POST['url'] && 'https://' != $_POST['url']) {
+        $url   = ('https://' != $_POST['url']) ? $myts->addslashes($_POST['url']) : '';
         $size  = empty($size) || !is_numeric($size) ? $myts->addslashes($_POST['size']) : 0;
         $title = $myts->addslashes(trim($_POST['title']));
     } else {
@@ -37,12 +37,12 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
         $size  = $down['size'];
         $title = $_FILES['userfile']['name'];
         $title = rtrim(xtorrent_strrrchr($title, '.'), '.');
-        $title = (isset($_POST['title_checkbox']) && $_POST['title_checkbox'] == 1) ? $title : $myts->addslashes(trim($_POST['title']));
+        $title = (isset($_POST['title_checkbox']) && 1 == $_POST['title_checkbox']) ? $title : $myts->addslashes(trim($_POST['title']));
     }
 
     $homepage      = '';
     $homepagetitle = '';
-    if (!empty($_POST['homepage']) || $_POST['homepage'] != 'http://') {
+    if (!empty($_POST['homepage']) || 'http://' != $_POST['homepage']) {
         $homepage      = $myts->addslashes(formatURL(trim($_POST['homepage'])));
         $homepagetitle = $myts->addslashes(trim($_POST['homepagetitle']));
     }
@@ -68,10 +68,10 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
         $dhistory .= '<b>' . formatTimestamp($time, $xoopsModuleConfig['dateformat']) . '</b>';
         $dhistory .= $dhistoryhistory;
     }
-    $offline = (isset($_POST['offline']) && $_POST['offline'] == 1) ? 1 : 0;
+    $offline = (isset($_POST['offline']) && 1 == $_POST['offline']) ? 1 : 0;
     $date = time();
     $publishdate = 0;
-    $notifypub = (isset($_POST['notifypub']) && $_POST['notifypub'] == 1) ? 1 : 0;
+    $notifypub = (isset($_POST['notifypub']) && 1 == $_POST['notifypub']) ? 1 : 0;
     
     $screenshot = '';
     if (isset($_FILES['screenshot']['name']) && !empty($_FILES['screenshot']['name'])) {
@@ -98,12 +98,12 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
     }
 
     $ipaddress = $_SERVER['REMOTE_ADDR'];
-    if ($lid == 0) {
-        if ($xoopsModuleConfig['autoapprove'] == 1) {
+    if (0 == $lid) {
+        if (1 == $xoopsModuleConfig['autoapprove']) {
             $publishdate = time();
             $status = 1;
         }
-        $status = ($xoopsModuleConfig['autoapprove'] == 1) ? 1 : 0 ;
+        $status = (1 == $xoopsModuleConfig['autoapprove']) ? 1 : 0 ;
         $query = 'INSERT INTO ' . $xoopsDB->prefix('xtorrent_downloads') . ' 
             			(lid, cid, title, url, homepage, version, size, platform, screenshot, submitter, publisher, status, 
             			date, hits, rating, votes, comments, price, mirror, license, paypalemail, features, requirements, 
@@ -126,11 +126,11 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
         error_reporting(E_ALL);
         include 'include/pollall.php';
         
-        if ($xoopsModuleConfig['poll_torrent']==1) {
+        if (1 == $xoopsModuleConfig['poll_torrent']) {
             $rt = poll_torrent($newid);
         }
         
-        if ($xoopsModuleConfig['poll_tracker']==1) {
+        if (1 == $xoopsModuleConfig['poll_tracker']) {
             $rt = poll_tracker($rt, $newid, $xoopsModuleConfig['poll_tracker_timeout']);
         }
 
@@ -146,7 +146,7 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
         $row                   = $xoopsDB->fetchArray($result);
         $tags['CATEGORY_NAME'] = $row['title'];
         $tags['CATEGORY_URL']  = XOOPS_URL . '/modules/xtorrent/viewcat.php?cid=' . $cid;
-        if ($xoopsModuleConfig['autoapprove'] == 1) {
+        if (1 == $xoopsModuleConfig['autoapprove']) {
             $notification_handler->triggerEvent('global', 0, 'new_file', $tags);
             $notification_handler->triggerEvent('category', $cid, 'new_file', $tags);
             redirect_header('index.php', 2, _MD_XTORRENT_ISAPPROVED . '');
@@ -162,9 +162,9 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
         }
         exit();
     } else {
-        $updated = (isset($_POST['up_dated']) && $_POST['up_dated'] == 0) ? 0 : time();
+        $updated = (isset($_POST['up_dated']) && 0 == $_POST['up_dated']) ? 0 : time();
         
-        if ($xoopsModuleConfig['autoapprove'] == 1) {
+        if (1 == $xoopsModuleConfig['autoapprove']) {
             $updated               = time();
             $xoopsDB->query('UPDATE '
                             . $xoopsDB->prefix('xtorrent_downloads') . " SET cid = $cid, title = '$title', url = '$url', mirror = '$mirror', license = '$license', features = '$features', homepage = '$homepage', version = '$version', size = $size, platform = '$platform', screenshot = '$screenshot', publisher = '$publisher', price = '$price', requirements = '$requirements', homepagetitle = '$homepagetitle', limitations = '$limitations', dhistory = '$dhistory', updated = '$updated', offline = '$offline', description = '$description', ipaddress = '$ipaddress', notifypub = '$notifypub', paypalemail = '$paypalemail', currency = '$currency' WHERE lid = $lid");
@@ -197,7 +197,7 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
             $notification_handler->triggerEvent('global', 0, 'file_modify', $tags);
         }
 
-        if ($xoopsModuleConfig['autoapprove'] == 1) {
+        if (1 == $xoopsModuleConfig['autoapprove']) {
             $notification_handler->triggerEvent('global', 0, 'new_file', $tags);
             $notification_handler->triggerEvent('category', $cid, 'new_file', $tags);
             redirect_header('index.php', 2, _MD_XTORRENT_ISAPPROVED . '');

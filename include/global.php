@@ -35,7 +35,7 @@ function get_user_timezone($id)
 {
     $sql   = "SELECT * FROM users WHERE id=$id LIMIT 1";
     $query = mysqli_query($sql);
-    if (mysqli_num_rows($query) != '0') {
+    if ('0' != mysqli_num_rows($query)) {
         $kasutaja = mysqli_fetch_array($query);
         $timezone = $kasutaja['tzoffset'];
         return "$timezone";
@@ -289,7 +289,7 @@ function stderr($heading, $text)
 
 function sqlerr($file = '', $line = '')
 {
-    print("<table border=0 bgcolor=blue align=left cellspacing=0 cellpadding=10 style='background: blue'>" . '<tr><td class=embedded><font color=white><h1>SQL Error</h1>' . '<b>' . mysqli_error() . ($file != '' && $line != '' ? "<p>in $file, line $line</p>" : '') . '</b></font></td></tr></table>');
+    print("<table border=0 bgcolor=blue align=left cellspacing=0 cellpadding=10 style='background: blue'>" . '<tr><td class=embedded><font color=white><h1>SQL Error</h1>' . '<b>' . mysqli_error() . ('' != $file && '' != $line ? "<p>in $file, line $line</p>" : '') . '</b></font></td></tr></table>');
     die;
 }
 
@@ -348,7 +348,7 @@ function _strlastpos($haystack, $needle, $offset = 0)
     $addLen = strlen($needle);
     $endPos = $offset - $addLen;
     while (true) {
-        if (($newPos = strpos($haystack, $needle, $endPos + $addLen)) === false) {
+        if (false === ($newPos = strpos($haystack, $needle, $endPos + $addLen))) {
             break;
         }
         $endPos = $newPos;
@@ -363,14 +363,14 @@ function format_quotes($s)
 
         //find first occurrence of [/quote]
         $close = strpos($s, '[/quote]');
-        if ($close === false) {
+        if (false === $close) {
             return $s;
         }
 
         //find last [quote] before first [/quote]
         //note that there is no check for correct syntax
         $open = _strlastpos(substr($s, 0, $close), '[quote');
-        if ($open === false) {
+        if (false === $open) {
             return $s;
         }
 

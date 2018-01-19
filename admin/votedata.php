@@ -75,7 +75,7 @@ switch ($op) {
             echo "<th style='text-align:" . $align . ";'><b>" . $headingarray[$i] . '</th>';
         }
         echo '</tr>';
-        if ($votes == 0) {
+        if (0 == $votes) {
             echo "<tr><td colspan='7' class='head' style='text-align:center;'>" . _AM_XTORRENT_VOTE_NOVOTES . '</td></tr>';
         }
         while (list($ratingid, $lid, $ratinguser, $rating, $ratinghostname, $ratingtimestamp) = $xoopsDB->fetchRow($results)) {

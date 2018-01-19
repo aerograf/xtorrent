@@ -183,10 +183,10 @@ function bdec($s)
     if (preg_match('/^i(\d+)e/', $s, $m)) {
         $v = $m[1];
         $ss = 'i' . $v . 'e';
-        if ($v === '-0') {
+        if ('-0' === $v) {
             return;
         }
-        if ($v[0] == '0' && strlen($v) != 1) {
+        if ('0' == $v[0] && 1 != strlen($v)) {
             return;
         }
         return ['type' => 'integer', 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss];
@@ -203,7 +203,7 @@ return;
 
 function bdec_list($s)
 {
-    if ($s[0] != 'l') {
+    if ('l' != $s[0]) {
         return;
     }
     $sl = strlen($s);
@@ -214,7 +214,7 @@ function bdec_list($s)
         if ($i >= $sl) {
             return;
         }
-        if ($s[$i] == 'e') {
+        if ('e' == $s[$i]) {
             break;
         }
         $ret = bdec(substr($s, $i));
@@ -231,7 +231,7 @@ function bdec_list($s)
 //
 function bdec_dict($s)
 {
-    if ($s[0] != 'd') {
+    if ('d' != $s[0]) {
         return;
     }
     $sl = strlen($s);
@@ -242,11 +242,11 @@ function bdec_dict($s)
         if ($i >= $sl) {
             return;
         }
-        if ($s[$i] == 'e') {
+        if ('e' == $s[$i]) {
             break;
         }
         $ret = bdec(substr($s, $i));
-        if (!isset($ret) || !is_array($ret) || $ret['type'] != 'string') {
+        if (!isset($ret) || !is_array($ret) || 'string' != $ret['type']) {
             return;
         }
         $k = $ret['value'];

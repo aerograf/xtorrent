@@ -94,16 +94,16 @@ if ($txn_id) {
 
 while (!$dbg && !$ERR && !feof($fp)) {
     $res = fgets($fp, 1024);
-    if (strcmp($res, 'VERIFIED') == 0) {
+    if (0 == strcmp($res, 'VERIFIED')) {
         dprt(_XT_VERIFIED, _INF);
         // Ok, PayPal has told us we have a valid IPN here
 
         // Check for a reversal for a refund
-        if (strcmp($payment_status, 'Refunded') == 0) {
+        if (0 == strcmp($payment_status, 'Refunded')) {
             // Verify the reversal
             dprt(_XT_REFUND, _INF);
-            if (($NumDups == 0) || strcmp($row_Recordset1['payment_status'], 'Completed') ||
-                (strcmp($row_Recordset1['txn_type'], 'web_accept') != 0 && strcmp($row_Recordset1['txn_type'], 'send_money') != 0)) {
+            if ((0 == $NumDups) || strcmp($row_Recordset1['payment_status'], 'Completed') ||
+                (0 != strcmp($row_Recordset1['txn_type'], 'web_accept') && 0 != strcmp($row_Recordset1['txn_type'], 'send_money'))) {
                 // This is an error.  A reversal implies a pre-existing completed transaction
                 dprt(_XT_TRANSMISSING, _ERR);
                 foreach ($_REQUEST as $key => $val) {
@@ -111,7 +111,7 @@ while (!$dbg && !$ERR && !feof($fp)) {
                 }
                 break;
             }
-            if ($NumDups != 1) {
+            if (1 != $NumDups) {
                 dprt(_XT_MULTITXNS, _ERR);
                 foreach ($_REQUEST as $key => $val) {
                     dprt("$key => $val", _ERR);
@@ -135,14 +135,14 @@ while (!$dbg && !$ERR && !feof($fp)) {
                         
             break;
         } elseif // Look for anormal payment
-                ((strcmp($payment_status, 'Completed') == 0) && ((strcmp($txn_type, 'web_accept') == 0) || (strcmp($txn_type, 'send_money') == 0))) {
+                ((0 == strcmp($payment_status, 'Completed')) && ((0 == strcmp($txn_type, 'web_accept')) || (0 == strcmp($txn_type, 'send_money')))) {
             dprt('Normal transaction', _INF);
             if ($lp) {
                 fputs($lp, $payer_email . ' ' . $payment_status . ' ' . $_REQUEST['payment_date'] . "\n");
             }
 
             // Check for a duplicate txn_id
-            if ($NumDups != 0) {
+            if (0 != $NumDups) {
                 dprt(_XT_DUPLICATETXN, _ERR);
                 foreach ($_REQUEST as $key => $val) {
                     dprt("$key => $val", _ERR);
@@ -169,7 +169,7 @@ while (!$dbg && !$ERR && !feof($fp)) {
             }
             break;
         }
-    } elseif (strcmp($res, 'INVALID') == 0) {
+    } elseif (0 == strcmp($res, 'INVALID')) {
         // log for manual investigation
         dprt(_XT_INVALIDIPN, _ERR);
         foreach ($_REQUEST as $key => $val) {

@@ -68,7 +68,7 @@ function xtorrent_toolbar()
         $submissions = $xoopsModuleConfig['anonpost'] ? 1 : 0;
     }
     $toolbar = '[ ';
-    if ($submissions == 1) {
+    if (1 == $submissions) {
         $toolbar .= "<a href='submit.php'>" . _MD_XTORRENT_SUBMITDOWNLOAD . '</a> | ';
     }
     $toolbar .= "<a href='newlist.php'>" . _MD_XTORRENT_LATESTLIST . "</a> | <a href='topten.php?list=hit'>" . _MD_XTORRENT_POPULARITY . "</a> | <a href='topten.php?list=rate'>" . _MD_XTORRENT_TOPRATED . '</a> ]';
@@ -129,30 +129,30 @@ function xtorrent_displayicons($time, $status = 0, $counter = 0)
     $newdate = (time() - (86400 * intval($xoopsModuleConfig['daysnew'])));
     $popdate = (time() - (86400 * intval($xoopsModuleConfig['daysupdated']))) ;
 
-    if ($xoopsModuleConfig['displayicons'] != 3) {
+    if (3 != $xoopsModuleConfig['displayicons']) {
         if ($newdate < $time) {
             if (intval($status) > 1) {
-                if ($xoopsModuleConfig['displayicons'] == 1) {
+                if (1 == $xoopsModuleConfig['displayicons']) {
                     $new = '&nbsp;<img src=' . XOOPS_URL . "/modules/xtorrent/images/icon/update.gif alt='' align ='absmiddle'>";
                 }
-                if ($xoopsModuleConfig['displayicons'] == 2) {
+                if (2 == $xoopsModuleConfig['displayicons']) {
                     $new = '<i>Updated!</i>';
                 }
             } else {
-                if ($xoopsModuleConfig['displayicons'] == 1) {
+                if (1 == $xoopsModuleConfig['displayicons']) {
                     $new = '&nbsp;<img src=' . XOOPS_URL . "/modules/xtorrent/images/icon/newred.gif alt='' align ='absmiddle'>";
                 }
-                if ($xoopsModuleConfig['displayicons'] == 2) {
+                if (2 == $xoopsModuleConfig['displayicons']) {
                     $new = '<i>New!</i>';
                 }
             }
         }
         if ($popdate < $time) {
             if ($counter >= $xoopsModuleConfig['popular']) {
-                if ($xoopsModuleConfig['displayicons'] == 1) {
+                if (1 == $xoopsModuleConfig['displayicons']) {
                     $pop = '&nbsp;<img src =' . XOOPS_URL . "/modules/xtorrent/images/icon/pop.gif alt='' align ='absmiddle'>";
                 }
-                if ($xoopsModuleConfig['displayicons'] == 2) {
+                if (2 == $xoopsModuleConfig['displayicons']) {
                     $pop = '<i>Popular</i>';
                 }
             }
@@ -205,28 +205,28 @@ if (!function_exists('convertorderbyin')) {
 if (!function_exists('convertorderbytrans')) {
     function convertorderbytrans($orderby)
     {
-        if ($orderby == 'hits ASC') {
+        if ('hits ASC' == $orderby) {
             $orderbyTrans = _MD_XTORRENT_POPULARITYLTOM;
         }
-        if ($orderby == 'hits DESC') {
+        if ('hits DESC' == $orderby) {
             $orderbyTrans = _MD_XTORRENT_POPULARITYMTOL;
         }
-        if ($orderby == 'title ASC') {
+        if ('title ASC' == $orderby) {
             $orderbyTrans = _MD_XTORRENT_TITLEATOZ;
         }
-        if ($orderby == 'title DESC') {
+        if ('title DESC' == $orderby) {
             $orderbyTrans = _MD_XTORRENT_TITLEZTOA;
         }
-        if ($orderby == 'published ASC') {
+        if ('published ASC' == $orderby) {
             $orderbyTrans = _MD_XTORRENT_DATEOLD;
         }
-        if ($orderby == 'published DESC') {
+        if ('published DESC' == $orderby) {
             $orderbyTrans = _MD_XTORRENT_DATENEW;
         }
-        if ($orderby == 'rating ASC') {
+        if ('rating ASC' == $orderby) {
             $orderbyTrans = _MD_XTORRENT_RATINGLTOH;
         }
-        if ($orderby == 'rating DESC') {
+        if ('rating DESC' == $orderby) {
             $orderbyTrans = _MD_XTORRENT_RATINGHTOL;
         }
         return $orderbyTrans;
@@ -235,28 +235,28 @@ if (!function_exists('convertorderbytrans')) {
 if (!function_exists('convertorderbyout')) {
     function convertorderbyout($orderby)
     {
-        if ($orderby == 'title ASC') {
+        if ('title ASC' == $orderby) {
             $orderby = 'titleA';
         }
-        if ($orderby == 'published ASC') {
+        if ('published ASC' == $orderby) {
             $orderby = 'dateA';
         }
-        if ($orderby == 'hits ASC') {
+        if ('hits ASC' == $orderby) {
             $orderby = 'hitsA';
         }
-        if ($orderby == 'rating ASC') {
+        if ('rating ASC' == $orderby) {
             $orderby = 'ratingA';
         }
-        if ($orderby == 'title DESC') {
+        if ('title DESC' == $orderby) {
             $orderby = 'titleD';
         }
-        if ($orderby == 'published DESC') {
+        if ('published DESC' == $orderby) {
             $orderby = 'dateD';
         }
-        if ($orderby == 'hits DESC') {
+        if ('hits DESC' == $orderby) {
             $orderby = 'hitsD';
         }
-        if ($orderby == 'rating DESC') {
+        if ('rating DESC' == $orderby) {
             $orderby = 'ratingD';
         }
         return $orderby;
@@ -451,7 +451,7 @@ function down_createthumb($img_name, $img_path, $img_savepath, $img_w = 100, $im
     $savefile = $img_path . '/' . $img_savepath . '/' . $img_w . 'x' . $img_h . '_' . $img_name;
     $savepath = XOOPS_ROOT_PATH . '/' . $savefile;
     // Return the image if no update and image exists
-    if ($update == 0 && file_exists($savepath)) {
+    if (0 == $update && file_exists($savepath)) {
         return XOOPS_URL . '/' . $savefile;
     }
 
@@ -487,7 +487,7 @@ function down_createthumb($img_name, $img_path, $img_savepath, $img_w = 100, $im
         /**
          * If the image is larger than the max shrink it
          */
-        if ($scale < 1 && $aspect == 1) {
+        if ($scale < 1 && 1 == $aspect) {
             $img_w = floor($scale * $width);
             $img_h = floor($scale * $height);
         }
@@ -613,7 +613,7 @@ function xtorrent_GetDownloadTime($size = 0, $gmodem = 1, $gisdn = 1, $gdsl = 1,
                     if ($amtime[$i] < 1) {
                         $asout[$i] = sprintf(' : %2.0fs', round($amtime[$i] * 60));
                     } else {
-                        if ($ahtime[$i] == 0) {
+                        if (0 == $ahtime[$i]) {
                             $asout[$i] = sprintf(' : %5.1fmin', $amtime[$i]);
                         } else {
                             $asout[$i] = sprintf(' : %2.0fh%2.0fmin', $ahtime[$i], $artime[$i]);
@@ -645,7 +645,7 @@ function xtorrent_retmime($filename, $usertype = 1)
 
     $ext = ltrim(strrchr($filename, '.'), '.');
     $sql = 'SELECT mime_types, mime_ext FROM ' . $xoopsDB-> prefix('xtorrent_mimetypes') . " WHERE mime_ext = '" . strtolower($ext) . "'";
-    if ($usertype == 1) {
+    if (1 == $usertype) {
         $sql .= ' AND mime_admin = 1';
     } else {
         $sql .= ' AND mime_user = 1';
@@ -745,14 +745,14 @@ function xtorrent_adminmenu($header = '', $menu = '', $extra = '', $scount = 4)
         for ($i = 1; $i < $menurow; $i++) {
             $classcounts++;
             if ($classcounts >= $scount) {
-                if ($classcol[$i-1] == 'odd') {
-                    $classcol[$i] = ($classcol[$i-1] == 'odd' && in_array($classcounts, $oddnum)) ? 'even' : 'odd';
+                if ('odd' == $classcol[$i - 1]) {
+                    $classcol[$i] = ('odd' == $classcol[$i - 1] && in_array($classcounts, $oddnum)) ? 'even' : 'odd';
                 } else {
-                    $classcol[$i] = ($classcol[$i-1] == 'even' && in_array($classcounts, $oddnum)) ? 'odd' : 'even';
+                    $classcol[$i] = ('even' == $classcol[$i - 1] && in_array($classcounts, $oddnum)) ? 'odd' : 'even';
                 }
                 $classcounts = 0;
             } else {
-                $classcol[$i] = ($classcol[$i-1] == 'even') ? 'odd' : 'even';
+                $classcol[$i] = ('even' == $classcol[$i - 1]) ? 'odd' : 'even';
             }
         }
         unset($classcounts);
@@ -912,7 +912,7 @@ function xtorrent_downlistbody($published)
     $submitter = xoops_getLinkedUnameFromId(intval($published['submitter']));
     $publish   = formatTimestamp($published['published'], 's');
     $status    = ($published['published'] > 0) ? $imagearray['online'] : "<a href='newdownloads.php'>" . $imagearray['offline'] . '</a>';
-    $offline   = ($published['offline'] == 0) ? $imagearray['online'] : $imagearray['offline'];
+    $offline   = (0 == $published['offline']) ? $imagearray['online'] : $imagearray['offline'];
     $modify    = "<a href='index.php?op=Download&amp;lid=" . $lid . "'>" . $imagearray['editimg'] . '</a>';
     $delete    = "<a href='index.php?op=delDownload&amp;lid=" . $lid . "'>" . $imagearray['deleteimg'] . '</a>';
 
@@ -958,7 +958,7 @@ function xtorrent_getcookie($name, $isArray = false)
         if (count($_value)>0) {
             foreach ($_value as $string) {
                 $sep = strpos($string, '|');
-                if ($sep===false) {
+                if (false === $sep) {
                     $value[]=$string;
                 } else {
                     $key = substr($string, 0, $sep);
@@ -1003,7 +1003,7 @@ function xtorrent_get_base_domain($url)
     $domain = array_reverse($domain);
     
     // first check for ip address
-    if (count($domain) == 4 && is_numeric($domain[0]) && is_numeric($domain[3])) {
+    if (4 == count($domain) && is_numeric($domain[0]) && is_numeric($domain[3])) {
         return implode('.', $domain);
     }
     
@@ -1041,7 +1041,7 @@ function xtorrent_get_base_domain($url)
                   'bu','cs','dd','zr'
               ];
     
-    if (in_array($domain[0], $OE_TLD) && in_array($domain[1], $OEG_TLD) && $domain[2] != 'www') {
+    if (in_array($domain[0], $OE_TLD) && in_array($domain[1], $OEG_TLD) && 'www' != $domain[2]) {
         $sdomain = strtolower($domain[2] . '.' . $domain[1] . '.' . $domain[0]);
         return $sdomain;
     } elseif (in_array($domain[0], $OE_TLD) && in_array($domain[1], $OEG_TLD)) {
@@ -1146,7 +1146,7 @@ function xtorrent_get_base_domain($url)
                 $second++;
             }
                 
-            if (in_array($domain[0], $A_TLD) && in_array($domain[1], $C_TLD) && $domain[2] != 'www') {
+            if (in_array($domain[0], $A_TLD) && in_array($domain[1], $C_TLD) && 'www' != $domain[2]) {
                 $sdomain = strtolower($domain[2] . '.' . $domain[1] . '.' . $domain[0]);
                 return $sdomain;
             } elseif (in_array($domain[0], $A_TLD) && in_array($domain[1], $C_TLD)) {

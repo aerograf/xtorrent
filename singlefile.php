@@ -9,8 +9,8 @@ $title = xoops_sef($HTTP_GET_VARS['title'], '_');
 $cat   = xoops_sef($HTTP_GET_VARS['cat'], '_');
 global $xoopsModuleConfig;
 
-if ($xoopsModuleConfig['htaccess']!=0) {
-    if ($title!=''&&$cat!='') {
+if (0 != $xoopsModuleConfig['htaccess']) {
+    if ('' != $title && '' != $cat) {
         $ret = $xoopsDB->query('SELECT a.lid, a.cid FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' a INNER JOIN ' . $xoopsDB->prefix('xtorrent_cat') . " b ON a.cid = b.cid WHERE a.title LIKE '$title' AND b.title LIKE '$cat'");
         list($lid, $cid) = $xoopsDB->fetchRow($ret);
     } else {
@@ -55,7 +55,7 @@ $down['path'] = $pathstring;
 include_once XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->dirname() . '/include/downloadinfo.php';
 
 $xoopsTpl->assign('show_screenshot', false);
-if (isset($xoopsModuleConfig['screenshot']) && $xoopsModuleConfig['screenshot'] == 1) {
+if (isset($xoopsModuleConfig['screenshot']) && 1 == $xoopsModuleConfig['screenshot']) {
     $xoopsTpl->assign('shots_dir', $xoopsModuleConfig['screenshots']);
     $xoopsTpl->assign('shotwidth', $xoopsModuleConfig['shotwidth']);
     $xoopsTpl->assign('shotheight', $xoopsModuleConfig['shotheight']);
@@ -101,7 +101,7 @@ if ($review_amount > 0) {
 $xoopsTpl->assign('lang_user_reviews', $xoopsConfig['sitename'] . ' ' . _MD_XTORRENT_USERREVIEWSTITLE);
 $xoopsTpl->assign('lang_UserReviews', sprintf($user_reviews, $down_arr['title']));
 
-if (isset($xoopsModuleConfig['copyright']) && $xoopsModuleConfig['copyright'] == 1) {
+if (isset($xoopsModuleConfig['copyright']) && 1 == $xoopsModuleConfig['copyright']) {
     $xoopsTpl->assign('lang_copyright', '' . $down['title'] . ' � ' . _MD_XTORRENT_COPYRIGHT . ' ' . date('Y') . ' ' . XOOPS_URL);
 }
 
@@ -157,10 +157,10 @@ include 'include/pollall.php';
 
 //echo $poll['torrent']+($xoopsModuleConfig['poll_torrent_time']*60). "< time = ".time();
 
-if ((time()>$poll['torrent']+($xoopsModuleConfig['poll_torrent_time']*60))&&$xoopsModuleConfig['poll_torrent']==1) {
+if ((time()>$poll['torrent']+($xoopsModuleConfig['poll_torrent_time']*60)) && 1 == $xoopsModuleConfig['poll_torrent']) {
     $rt = poll_torrent($down['id']);
 }
 
-if ((time()>$poll['tracker']+($xoopsModuleConfig['poll_tracker_time']*60))&&$xoopsModuleConfig['poll_tracker']==1) {
+if ((time()>$poll['tracker']+($xoopsModuleConfig['poll_tracker_time']*60)) && 1 == $xoopsModuleConfig['poll_tracker']) {
     $rt = poll_tracker($rt, $down['id'], $xoopsModuleConfig['poll_tracker_timeout']);
 }

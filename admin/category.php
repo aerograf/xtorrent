@@ -227,11 +227,11 @@ switch ($op) {
         $pid          = isset($_POST['pid']) ? $_POST['pid'] : 0;
         $weight       = (isset($_POST['weight']) && $_POST['weight'] > 0) ? $_POST['weight'] : 0;
         $spotlighthis = isset($_POST['lid']) ? $_POST['lid'] : 0;
-        $spotlighttop = ($_POST['spotlighttop'] == 1) ? 1 : 0;
+        $spotlighttop = (1 == $_POST['spotlighttop']) ? 1 : 0;
         $title        = $myts -> addslashes($_POST['title']);
         $description  = $myts -> addslashes($_POST['description']);
         $summary      = $myts -> addslashes($_POST['summary']);
-        $imgurl       = ($_POST['imgurl'] && $_POST['imgurl'] != 'blank.png') ? $myts-> addslashes($_POST['imgurl']) : '';
+        $imgurl       = ($_POST['imgurl'] && 'blank.png' != $_POST['imgurl']) ? $myts-> addslashes($_POST['imgurl']) : '';
         $nohtml       = isset($_POST['nohtml']);
         $nosmiley     = isset($_POST['nosmiley']);
         $noxcodes     = isset($_POST['noxcodes']);
@@ -247,7 +247,7 @@ switch ($op) {
             $result = $xoopsDB -> query($sql);
             $error = _AM_XTORRENT_DBERROR . ':<br><br>' . $sql;
 
-            if ($cid == 0) {
+            if (0 == $cid) {
                 $newid = $xoopsDB -> getInsertId();
             }
             xtorrent_save_Permissions($groups, $newid, 'xtorrentownCatPerm');
@@ -282,10 +282,10 @@ switch ($op) {
         global $xoopsDB, $xoopsModule;
 
         $cid    = (isset($_POST['cid']) && is_numeric($_POST['cid'])) ? intval($_POST['cid']) : intval($_GET['cid']);
-        $ok     = (isset($_POST['ok']) && $_POST['ok'] == 1) ? intval($_POST['ok']) : 0;
+        $ok     = (isset($_POST['ok']) && 1 == $_POST['ok']) ? intval($_POST['ok']) : 0;
         $mytree = new XoopsTree($xoopsDB -> prefix('xtorrent_cat'), 'cid', 'pid');
 
-        if ($ok == 1) {
+        if (1 == $ok) {
             // get all subcategories under the specified category
             $arr    = $mytree -> getAllChildId($cid);
             $lcount = count($arr);

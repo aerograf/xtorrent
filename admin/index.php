@@ -244,7 +244,7 @@ function Download()
         $filestatus_radio = new XoopsFormRadioYN(_AM_XTORRENT_FILE_FILESSTATUS, 'offline', $offline, ' ' . _YES . '', ' ' . _NO . '');
         $sform -> addElement($filestatus_radio);
 
-        $up_dated = ($updated == 0) ? 0 : 1;
+        $up_dated = (0 == $updated) ? 0 : 1;
         $file_updated_radio = new XoopsFormRadioYN(_AM_XTORRENT_FILE_SETASUPDATED, 'up_dated', $up_dated, ' ' . _YES . '', ' ' . _NO . '');
         $sform -> addElement($file_updated_radio);
 
@@ -261,8 +261,8 @@ function Download()
         ob_end_clean();
         $sform -> addElement(new XoopsFormText(_AM_XTORRENT_FILE_NEWSTITLE, 'newsTitle', 50, 255, ''), false);
 
-        if ($lid && $published == 0) {
-            $approved = ($published == 0) ? 0 : 1;
+        if ($lid && 0 == $published) {
+            $approved = (0 == $published) ? 0 : 1;
             $approve_checkbox = new XoopsFormCheckBox(_AM_XTORRENT_FILE_EDITAPPROVE, 'approved', 1);
             $approve_checkbox -> addOption(1, ' ');
             $sform -> addElement($approve_checkbox);
@@ -338,7 +338,7 @@ function Download()
     		</tr>
     		';
 
-        if ($votesreg == 0) {
+        if (0 == $votesreg) {
             echo "<tr><td colspan='7' class='even' style='text-align:center;'><b>" . _AM_XTORRENT_VOTE_NOREGVOTES . '</b></td></tr>';
         }
         while (list($ratingid, $ratinguser, $rating, $ratinghostname, $ratingtimestamp) = $xoopsDB -> fetchRow($result02)) {
@@ -380,7 +380,7 @@ function Download()
     		<th style='text-align:center;'>" . _AM_XTORRENT_MINDEX_ACTION . '</th>
     		</tr>
     		';
-        if ($votesanon == 0) {
+        if (0 == $votesanon) {
             echo "<tr><td colspan='7' class='even' style='text-align:center;'><b>" . _AM_XTORRENT_VOTE_NOUNREGVOTES . '</b></td></tr>';
         }
         while (list($ratingid, $ratinguser, $rating, $ratinghostname, $ratingtimestamp) = $xoopsDB -> fetchRow($result03)) {
@@ -432,8 +432,8 @@ function addDownload()
     /**
      * Define URL
      */
-    if (empty($_FILES['userfile']['name']) && $_POST['url'] && $_POST['url'] != '' && $_POST['url'] != 'http://') {
-        $url   = ($_POST['url'] != 'http://') ? $myts-> addslashes($_POST['url']) : '';
+    if (empty($_FILES['userfile']['name']) && $_POST['url'] && '' != $_POST['url'] && 'http://' != $_POST['url']) {
+        $url   = ('http://' != $_POST['url']) ? $myts-> addslashes($_POST['url']) : '';
         $size  = empty($size) || !is_numeric($size) ? $myts-> addslashes($_POST['size']) : 0;
         $title = $myts -> addslashes(trim($_POST['title']));
     } else {
@@ -444,16 +444,16 @@ function addDownload()
         $title = $_FILES['userfile']['name'];
         $ext   = rtrim(strrchr($title, '.'), '.');
         $title = str_replace($ext, '', $title);
-        $title = (isset($_POST['title_checkbox']) && $_POST['title_checkbox'] == 1) ? $title : $myts-> addslashes(trim($_POST['title']));
+        $title = (isset($_POST['title_checkbox']) && 1 == $_POST['title_checkbox']) ? $title : $myts-> addslashes(trim($_POST['title']));
     }
     /**
      * Get data from form
      */
-    $screenshot    = ($_POST['screenshot'] != 'blank.png') ? $myts-> addslashes($_POST['screenshot']) : '';
+    $screenshot    = ('blank.png' != $_POST['screenshot']) ? $myts-> addslashes($_POST['screenshot']) : '';
     $homepage      = '';
     $homepagetitle = '';
 
-    if (!empty($_POST['homepage']) || $_POST['homepage'] != 'http://') {
+    if (!empty($_POST['homepage']) || 'http://' != $_POST['homepage']) {
         $homepage      = $myts -> addslashes(trim($_POST['homepage']));
         $homepagetitle = $myts -> addslashes(trim($_POST['homepagetitle']));
     }
@@ -482,16 +482,16 @@ function addDownload()
         $dhistory .= _AM_XTORRENT_FILE_HISTORYVERS . $version . _AM_XTORRENT_FILE_HISTORDATE . formatTimestamp($time, $xoopsModuleConfig['dateformat']) . "\n\n";
         $dhistory .= $dhistoryhistory;
     }
-    $updated = (isset($_POST['was_published']) && $_POST['was_published'] == 0) ? 0 : time();
+    $updated = (isset($_POST['was_published']) && 0 == $_POST['was_published']) ? 0 : time();
     
-    if ($_POST['up_dated'] == 0) {
+    if (0 == $_POST['up_dated']) {
         $updated = 0;
         $status  = 1;
     }
     
-    $offline   = ($_POST['offline'] == 1) ? 1 : 0;
-    $approved  = (isset($_POST['approved']) && $_POST['approved'] == 1) ? 1 : 0;
-    $notifypub = (isset($_POST['notifypub']) && $_POST['notifypub'] == 1);
+    $offline   = (1 == $_POST['offline']) ? 1 : 0;
+    $approved  = (isset($_POST['approved']) && 1 == $_POST['approved']) ? 1 : 0;
+    $notifypub = (isset($_POST['notifypub']) && 1 == $_POST['notifypub']);
 
     if (!$lid) {
         $date        = time();
@@ -501,7 +501,7 @@ function addDownload()
         $expiredate = $_POST['was_expired'];
     }
 
-    if ($approved == 1 && empty($publishdate)) {
+    if (1 == $approved && empty($publishdate)) {
         $publishdate = time();
     }
 
@@ -554,7 +554,7 @@ function addDownload()
         
         $rt = poll_torrent($newid);
                 
-        if ($xoopsModuleConfig['poll_tracker']==1) {
+        if (1 == $xoopsModuleConfig['poll_tracker']) {
             $rt = poll_tracker($rt, $newid, $xoopsModuleConfig['poll_tracker_timeout']);
         }
     } else {
@@ -601,7 +601,7 @@ function addDownload()
     }
     $message = (!$lid) ? _AM_XTORRENT_FILE_NEXTILEUPLOAD : _AM_XTORRENT_FILE_FILEMODIFIEDUPDATE ;
     $message = ($lid && !$_POST['was_published'] && $approved) ? _AM_XTORRENT_FILE_FILEAPPROVED : $message;
-    if ($_POST['submitNews'] == 1) {
+    if (1 == $_POST['submitNews']) {
         $title = !empty($_POST['newsTitle']) ? $_POST['newsTitle'] : $title;
         include_once 'newstory.php';
     }
@@ -733,7 +733,7 @@ switch ($op) {
             $sform -> addElement($rating_select);
             $sform -> addElement(new XoopsFormDhtmlTextArea(_AM_XTORRENT_REV_FDESCRIPTION, 'review', $arr['review'], 15, 60), true);
             
-            $approved = ($arr['submit'] == 0) ? 0 : 1;
+            $approved = (0 == $arr['submit']) ? 0 : 1;
             $approve_checkbox = new XoopsFormCheckBox(_AM_XTORRENT_REV_FAPPROVE, 'approve', 1);
             $approve_checkbox -> addOption(1, ' ');
             $sform -> addElement($approve_checkbox);
@@ -1015,7 +1015,7 @@ function ipnrec()
     <center><font class='title'><b>" . _AM_XTORRENT_PAYPAL_IPN_UP . '</b></font></center>
     <br><br>
     ';
-    if ($row_recset1['numrecs'] == 0) {
+    if (0 == $row_recset1['numrecs']) {
         echo _AM_XTORRENT_PAYPAL_IPN_RECORD;
     } else {
         $insert_set = 'INSERT INTO `' . $xoopsDB->prefix('xtorrent_financial') . "` (`date`,`num`,`name`,`descr`,`amount`) VALUES ('" . $curdate . "','','PayPal IPN','Auto-Reconcile','" . $row_recset1['ipn_total'] . "')";
@@ -1140,7 +1140,7 @@ function payments()
         $row += 1;
         echo '<tr>'
              . '<td align="left">';
-        if ($numRec!=0) {
+        if (0 != $numRec) {
             echo '<a href="javascript: void 0" onclick="'
                  . "document.recedit.id.value = '" . $row_recset1['id'] . "'; "
                  . "document.recedit.StartMonth.value = '" . $row_recset1['mon'] . "'; "

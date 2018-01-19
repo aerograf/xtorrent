@@ -33,7 +33,7 @@ class Torrent
         $torrentInfo = $reader->readNext();
         
         // In the case of an invalid torrent file the result of the readNext call will be "false".
-        if ($torrentInfo === false) {
+        if (false === $torrentInfo) {
             $this->error = true;
             trigger_error('The torrent file is invalid', E_USER_WARNING);
         }
@@ -47,7 +47,7 @@ class Torrent
         $this->modifiedBy   = $torrentInfo['modified-by'];
         $this->pieceLength  = $torrentInfo['info']['piece length'];
         $this->pieces       = $torrentInfo['info']['pieces'];
-        $this->private      = ($torrentInfo['info']['private'] == 1);
+        $this->private      = (1 == $torrentInfo['info']['private']);
         $this->name         = $torrentInfo['info']['name'];
         $this->encoding     = $torrentInfo['encoding'];
         $this->infoHash     = $torrentInfo['info']['hash'];

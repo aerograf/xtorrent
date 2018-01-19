@@ -105,7 +105,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 			return false;
 		}
 		$numrows = $this->db->getRowsNum($result);
-		if( $numrows == 1 ){
+		if(1 == $numrows){
 			$transactions = new $this->obj_class();
 			$transactions->assignVars($this->db->fetchArray($result));
 			return $transactions;
@@ -220,7 +220,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		$sql   = 'SELECT '.$fields.' FROM '.$this->db_table;
 		if( isset($criteria) && is_subclass_of($criteria, 'criteriaelement') ){
 			$sql .= ' '.$criteria->renderWhere();
-			if( $criteria->getSort() != '' ){
+			if('' != $criteria->getSort()){
 				$sql .= ' ORDER BY '.$criteria->getSort().' '.$criteria->getOrder();
 			}
 			$limit = $criteria->getLimit();

@@ -39,7 +39,7 @@ function passkey_paypal($lid, $made)
 		}
 		$rt = $xoopsDB->queryF($sql);				
 		if ($xoopsDB->getRowsNum($rt)){
-			if ($made == 'yes')
+			if ('yes' == $made)
 			{
 				list($id, $passkey) = $xoopsDB->fetchRow($rt);
 				$sql = 'UDPATE ' . $xoopsDB->prefix('xtorrent_users') . " SET enabled = 'yes', last_access = '" . date('Y-m-d H:i:s') . "' WHERE id = '" . $id . "'";
@@ -115,7 +115,7 @@ function passkey_paypal($lid, $made)
 		$payment_made = true;
 	}
 
-	if ($payment_made==false)
+	if (false == $payment_made)
 	{
 		include XOOPS_ROOT_PATH . '/header.php';
 ?>
@@ -166,7 +166,7 @@ function reportBroken($lid)
 		</div>';
 } 
 
-if ($agreed == 0)
+if (0 == $agreed)
 {
     if ($xoopsModuleConfig['check_host'])
     {
@@ -189,7 +189,7 @@ if ($agreed == 0)
     } 
 } 
 
-if ($xoopsModuleConfig['showDowndisclaimer'] && $agreed == 0)
+if ($xoopsModuleConfig['showDowndisclaimer'] && 0 == $agreed)
 {
     include XOOPS_ROOT_PATH . '/header.php';
     echo "<div align='center'>" . xtorrent_imageheader() . '</div>
@@ -209,7 +209,7 @@ if ($xoopsModuleConfig['showDowndisclaimer'] && $agreed == 0)
 else
 {
     $isadmin = (!empty($xoopsUser) && $xoopsUser -> isAdmin($xoopsModule -> mid())) ? true : false;
-    if ($isadmin == false)
+    if (false == $isadmin)
     {
         $sql = sprintf('UPDATE ' . $xoopsDB-> prefix('xtorrent_downloads') . " SET hits = hits+1 WHERE lid =$lid");
         $xoopsDB -> queryF($sql);
@@ -235,7 +235,7 @@ else
 				
 				$passkey = passkey_paypal($lid, $_REQUEST['made']);
 
-				if ($passkey!='stop')
+				if ('stop' != $passkey)
 				{
 					// Begin Download
 

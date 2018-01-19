@@ -64,12 +64,12 @@ function tracker_scrape($torrent, $tracker = null, $timeout = 5)
     
     $scrape_address = tracker_get_scrape_address($tracker);
     
-    if ($scrape_address === false) {
+    if (false === $scrape_address) {
         trigger_error("Failed to scrape tracker {$tracker}", E_USER_WARNING);
         return false;
     }
     
-    if (strpos($scrape_address, '?') !== false) {
+    if (false !== strpos($scrape_address, '?')) {
         $scrape_address .= '&info_hash=' . urlencode($torrent->infoHash);
     } else {
         $scrape_address .= '?info_hash=' . urlencode($torrent->infoHash);
@@ -83,7 +83,7 @@ function tracker_scrape($torrent, $tracker = null, $timeout = 5)
     
     // Something is wrong with the address or the HTTP response of the tracker, or the request timed out. It's hard to
     // say but something has clearly gone critically wrong.
-    if ($data === false) {
+    if (false === $data) {
         trigger_error('tracker_scrape error: Failed to scrape torrent details from the tracker', E_USER_WARNING);
         return false;
     }
@@ -94,7 +94,7 @@ function tracker_scrape($torrent, $tracker = null, $timeout = 5)
     
     // A bad tracker response might be bad software, something the library doesn't understand or any number
     // of other weird issues. Regardless, we couldn't read it so we can't proceed.
-    if ($trackerInfo === false) {
+    if (false === $trackerInfo) {
         trigger_error('tracker_scrape error: Tracker returned invalid response to scrape request', E_USER_WARNING);
         return false;
     }
@@ -120,13 +120,13 @@ function tracker_get_scrape_address($announce)
 {
     $last_slash = strrpos($announce, '/');
     
-    if ($last_slash === false) {
+    if (false === $last_slash) {
         trigger_error("Tracker address ({$announce}) is invalid", E_USER_WARNING);
         return false;
     }
     
     $last_part = substr($announce, $last_slash);
-    if (strpos($last_part, 'announce') === false) {
+    if (false === strpos($last_part, 'announce')) {
         trigger_error("Tracker ({$announce}) does not appear to support scrape", E_USER_WARNING);
         return false;
     }

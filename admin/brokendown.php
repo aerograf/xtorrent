@@ -16,12 +16,12 @@ switch ($op) {
     case 'updateNotice':
         global $xoopsDB;
         if (isset($_GET['ack'])) {
-            $acknowledged = (isset($_GET['ack']) && $_GET['ack'] == 0) ? 1 : 0;
+            $acknowledged = (isset($_GET['ack']) && 0 == $_GET['ack']) ? 1 : 0;
             $xoopsDB->queryF('UPDATE ' . $xoopsDB->prefix('xtorrent_broken') . ' SET acknowledged = ' . $acknowledged . ' WHERE lid= ' . $lid);
             $update_mess = _AM_XTORRENT_BROKEN_NOWACK;
         }
         if (isset($_GET['con'])) {
-            $confirmed = (isset($_GET['con']) && $_GET['con'] == 0) ? 1 : 0;
+            $confirmed = (isset($_GET['con']) && 0 == $_GET['con']) ? 1 : 0;
             $xoopsDB->queryF('UPDATE ' . $xoopsDB->prefix('xtorrent_broken') . ' SET confirmed = ' . $confirmed . ' WHERE lid = ' . $lid);
             $update_mess = _AM_XTORRENT_BROKEN_NOWCON;
         }
@@ -72,14 +72,14 @@ switch ($op) {
           		<th>' . _AM_XTORRENT_BROKEN_DATESUBMITTED . "</th>
           		<th style='text-align:center;'>" . _AM_XTORRENT_BROKEN_ACTION . '</th></tr>';
 
-        if ($totalbrokendownloads == 0) {
+        if (0 == $totalbrokendownloads) {
             echo "<tr style='text-align:center;'><td class='head' colspan = '6' style='text-align:center;'>" . _AM_XTORRENT_BROKEN_NOFILEMATCH . '</td></tr>';
         } else {
             while (list($reportid, $lid, $sender, $ip, $date, $confirmed, $acknowledged) = $xoopsDB->fetchRow($result)) {
                 $result2 = $xoopsDB->query('SELECT cid, title, url, submitter FROM ' . $xoopsDB->prefix('xtorrent_downloads') . " WHERE lid=$lid");
                 list($cid, $fileshowname, $url, $submitter) = $xoopsDB->fetchRow($result2);
 
-                if ($sender != 0) {
+                if (0 != $sender) {
                     $result3 = $xoopsDB->query('SELECT uname, email FROM ' . $xoopsDB->prefix('users') . ' WHERE uid=' . $sender . '');
                     list($sendername, $email) = $xoopsDB->fetchRow($result3);
                 }
@@ -92,12 +92,12 @@ switch ($op) {
                   		<td class='even' style='text-align:left;'>
                       <a href='" . XOOPS_URL . '/modules/xtorrent/singlefile.php?cid=' . $cid . '&amp;lid=' . $lid . "' target='_blank'>" . $fileshowname . '</a></td>';
 
-                if ($email == '') {
+                if ('' == $email) {
                     echo "<td class='even'>" . $sendername . ' (' . $ip . ')';
                 } else {
                     echo "<td class='even'><a href='mailto:" . $email . "'>" . $sendername . '</a> (' . $ip . ')';
                 }
-                if ($owneremail == '') {
+                if ('' == $owneremail) {
                     echo "<td class='even'>" . $ownername;
                 } else {
                     echo "<td class='even'><a href='mailto:" . $owneremail . "'>" . $ownername . '</a>';

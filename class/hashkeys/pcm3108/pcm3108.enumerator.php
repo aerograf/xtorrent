@@ -52,20 +52,20 @@ if (!class_exists('pcm3108_enumerator')) {
             @$this->elekey = [];
 
             foreach ($base->base as $key => $data) {
-                if (strlen((string)$data)==1) {
-                    if (strlen(bindec(ord($data)))==5) {
+                if (1 == strlen((string)$data)) {
+                    if (5 == strlen(bindec(ord($data)))) {
                         $offset = [
                             'ice' => (int)substr(decbin(ord($data)), 4, 1),
                             'icd' => (int)substr(decbin(ord($data)), 2, 1),
                             'icc' => (int)substr(decbin(ord($data)), 1, 1),
                             'icb' => (int)substr(decbin(ord($data)), 5, 1),
                             'ica' => (int)substr(decbin(ord($data)), 3, 1)];
-                        if (substr(decbin(ord($data)), 5, 1)==1) {
+                        if (1 == substr(decbin(ord($data)), 5, 1)) {
                             $offset['icf'] = 0;
                         } else {
                             $offset['icf'] = 1;
                         }
-                    } elseif (strlen(decbin(ord($data)))==6) {
+                    } elseif (6 == strlen(decbin(ord($data)))) {
                         $offset = [
                             'icf' => (int)substr(decbin(ord($data)), 3, 1),
                             'ice' => (int)substr(decbin(ord($data)), 2, 1),
@@ -73,7 +73,7 @@ if (!class_exists('pcm3108_enumerator')) {
                             'icc' => (int)substr(decbin(ord($data)), 4, 1),
                             'icb' => (int)substr(decbin(ord($data)), 1, 1),
                             'ica' => (int)substr(decbin(ord($data)), 6, 1)];
-                    } elseif (strlen(decbin(ord($data)))==7) {
+                    } elseif (7 == strlen(decbin(ord($data)))) {
                         $offset = [
                             'ica' => (int)substr(decbin(ord($data)), 5, 1),
                             'icb' => (int)substr(decbin(ord($data)), 6, 1),
@@ -92,14 +92,14 @@ if (!class_exists('pcm3108_enumerator')) {
                         'icf' => (int)substr(decbin(ord(substr($key, strlen($key) - 1, 1))), 2, 1)];
                 }
                 
-                if (strlen(decbin(ord($data)))==7) {
-                    if (strlen($data)==1) {
+                if (7 == strlen(decbin(ord($data)))) {
+                    if (1 == strlen($data)) {
                         $cycle = ['icf', 'ice', 'icd', 'icc', 'icb', 'ica'];
                         foreach ($cycle as $element) {
-                            if ($done==false) {
-                                if ($offset[$element]=='0') {
-                                    if ($prev_ele!='') {
-                                        if ($offset[$prev_ele] == '1') {
+                            if (false == $done) {
+                                if ('0' == $offset[$element]) {
+                                    if ('' != $prev_ele) {
+                                        if ('1' == $offset[$prev_ele]) {
                                             $offset[$prev_ele] = '0';
                                         } else {
                                             $offset[$prev_ele] = '1';
@@ -113,10 +113,10 @@ if (!class_exists('pcm3108_enumerator')) {
                     } else {
                         $cycle = ['ica', 'icb', 'icc', 'icd', 'ice', 'icf'];
                         foreach ($cycle as $element) {
-                            if ($done==false) {
-                                if ($offset[$element]=='0') {
-                                    if ($prev_ele!='') {
-                                        if ($offset[$prev_ele] == '1') {
+                            if (false == $done) {
+                                if ('0' == $offset[$element]) {
+                                    if ('' != $prev_ele) {
+                                        if ('1' == $offset[$prev_ele]) {
                                             $offset[$prev_ele] = '0';
                                         } else {
                                             $offset[$prev_ele] = '1';
@@ -130,7 +130,7 @@ if (!class_exists('pcm3108_enumerator')) {
                     }
                 }
                 $done=false;
-                if (strlen($data)==1) {
+                if (1 == strlen($data)) {
                     @$this->elekey[$key] = [
                         'key'    => $data,
                         'bin'    => decbin(ord($data)),
@@ -177,7 +177,7 @@ if (!class_exists('pcm3108_enumerator')) {
                 }
             }
             
-            if ($this->elekey[$this->getBytePos($char)]['flip']==0) {
+            if (0 == $this->elekey[$this->getBytePos($char)]['flip']) {
                 $ica = $this->elekey[$this->getBytePos($char)]['offset']['ica'];
                 $icb = $this->elekey[$this->getBytePos($char)]['offset']['icb'];
                 $icc = $this->elekey[$this->getBytePos($char)]['offset']['icc'];
@@ -185,14 +185,14 @@ if (!class_exists('pcm3108_enumerator')) {
                 $ice = $this->elekey[$this->getBytePos($char)]['offset']['ice'];
                 $icf = $this->elekey[$this->getBytePos($char)]['offset']['icf'];
             } else {
-                if ($charnum==1) {
+                if (1 == $charnum) {
                     $icf = $this->elekey[$this->getBytePos($char)]['offset']['ica'];
                     $ice = $this->elekey[$this->getBytePos($char)]['offset']['icb'];
                     $icd = $this->elekey[$this->getBytePos($char)]['offset']['icc'];
                     $icc = $this->elekey[$this->getBytePos($char)]['offset']['icd'];
                     $icb = $this->elekey[$this->getBytePos($char)]['offset']['ice'];
                     $ica = $this->elekey[$this->getBytePos($char)]['offset']['icf'];
-                } elseif ($charnum==2) {
+                } elseif (2 == $charnum) {
                     $icf = $this->elekey[$this->getBytePos($char)]['offset']['ica'];
                     $ice = $this->elekey[$this->getBytePos($char)]['offset']['icb'];
                     $icd = $this->elekey[$this->getBytePos($char)]['offset']['icc'];
@@ -260,38 +260,38 @@ if (!class_exists('pcm3108_enumerator')) {
             $official = $official + $ice;
             $outsidecause = $outsidecause + $icf;
             
-            if ($ica == '0') {
+            if ('0' == $ica) {
                 $yang = $yang + 1;
             } else {
                 $yin = $yin + 1;
             }
-            if ($icb == '0') {
+            if ('0' == $icb) {
                 $yang = yang + 1;
             } else {
                 $yin = $yin + 1;
             }
-            if ($icc == '0') {
+            if ('0' == $icc) {
                 $yang = $yang+ 1;
             } else {
                 $yin = $yin + 1;
             }
-            if ($icd == '0') {
+            if ('0' == $icd) {
                 $yang = $yang + 1;
             } else {
                 $yin = $yin + 1;
             }
-            if ($ice == '0') {
+            if ('0' == $ice) {
                 $yang = yang + 1;
             } else {
                 $yin = $yin + 1;
             }
-            if ($icf == '0') {
+            if ('0' == $icf) {
                 $yang = $yang+ 1;
             } else {
                 $yin = $yin + 1;
             }
             
-            if ($debug==true) {
+            if (true == $debug) {
                 $data[sizeof($data)+1] = [
                     'pos'      => $this->getBytePos($char),
                     'elements' => $this->elekey];

@@ -27,9 +27,9 @@ function b_XTORRENT_top_show($options)
             $download['id']    = $myrow['lid'];
             $download['cid']   = $myrow['cid'];
             $download['title'] = $title;
-            if ($options[0] == 'date') {
+            if ('date' == $options[0]) {
                 $download['date'] = formatTimestamp($myrow['date'], $xoopsModuleConfig['dateformat']);
-            } elseif ($options[0] == 'hits') {
+            } elseif ('hits' == $options[0]) {
                 $download['hits'] = $myrow['hits'];
             }
             $download['dirname'] = $xoopsModule->dirname();
@@ -43,7 +43,7 @@ function b_XTORRENT_top_edit($options)
 {
     $form = '' . _MB_XTORRENT_DISP . '&nbsp;';
     $form .= "<input type='hidden' name='options[]' value='";
-    if ($options[0] == 'date') {
+    if ('date' == $options[0]) {
         $form .= "date'";
     } else {
         $form .= "hits'";

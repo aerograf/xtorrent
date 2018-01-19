@@ -132,7 +132,7 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
         $torrentInfo = $benc_torrent->getVar('object');
     
 
-        if ($torrentInfo === false) {
+        if (false === $torrentInfo) {
             $this->error = true;
             trigger_error('The torrent file is invalid', E_USER_WARNING);
         }
@@ -187,7 +187,7 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
             return false;
         }
         $numrows = $this->db->getRowsNum($result);
-        if ($numrows == 1) {
+        if (1 == $numrows) {
             $torrent = new $this->obj_class();
             $torrent->assignVars($this->db->fetchArray($result));
             return $torrent;
@@ -295,7 +295,7 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
         $sql = 'SELECT '.$fields.' FROM '.$this->db_table;
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
             $sql .= ' '.$criteria->renderWhere();
-            if ($criteria->getSort() != '') {
+            if ('' != $criteria->getSort()) {
                 $sql .= ' ORDER BY '.$criteria->getSort().' '.$criteria->getOrder();
             }
             $limit = $criteria->getLimit();

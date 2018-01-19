@@ -9,8 +9,8 @@ loggedinorreturn();
 if (get_user_class() < UC_ADMINISTRATOR) {
     stderr('Error', 'Access denied.');
 }
-if ($HTTP_SERVER_VARS['REQUEST_METHOD'] == 'POST') {
-    if ($HTTP_POST_VARS['username'] == '' || $HTTP_POST_VARS['password'] == '' || $HTTP_POST_VARS['email'] == '') {
+if ('POST' == $HTTP_SERVER_VARS['REQUEST_METHOD']) {
+    if ('' == $HTTP_POST_VARS['username'] || '' == $HTTP_POST_VARS['password'] || '' == $HTTP_POST_VARS['email']) {
         stderr('Error', 'Missing form data.');
     }
     if ($HTTP_POST_VARS['password'] != $HTTP_POST_VARS['password2']) {
