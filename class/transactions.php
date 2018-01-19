@@ -1,7 +1,7 @@
 <?php
 
 class transactionsResource extends XoopsObject {
-	function __construct(){
+	public function __construct(){
 		$this->XoopsObject();
 		$this->initVar("xtid", XOBJ_DTYPE_INT);
 		$this->initVar("lid", XOBJ_DTYPE_INT);
@@ -16,12 +16,12 @@ class transactionsResource extends XoopsObject {
 }
 
 class XtorrentTransactionsHandler extends XoopsObjectHandler {
-	var $db;
-	var $db_table;
-	var $perm_name = 'xtorrent_transactions_';
-	var $obj_class = 'transactionsResource';
+	public $db;
+	public $db_table;
+	public $perm_name = 'xtorrent_transactions_';
+	public $obj_class = 'transactionsResource';
 
-	function __construct($db){
+	public function __construct($db){
 		if (!isset($db)&&!empty($db))
 		{
 			$this->db = $db;
@@ -33,7 +33,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		$this->perm_handler = xoops_gethandler('groupperm');
 	}
 
-	function getInstance($db){
+	public function getInstance($db){
 		static $instance;
 		if( !isset($instance) ){
 			$instance = new xtorrenttransactionsHandler($db);
@@ -41,7 +41,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		return $instance;
 	}
 
-	function history2xml($array)
+	public function history2xml($array)
 	{
 		return $this->array2xml($array);
 	}
@@ -90,11 +90,11 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		return $xml;
 	}
 	
-	function create(){
+	public function create(){
 		return new $this->obj_class();
 	}
 
-	function get($xtid, $fields='*'){
+	public function get($xtid, $fields='*'){
 		$xtid = intval($xtid);
 		if( $xtid > 0 ){
 			$sql = 'SELECT '.$fields.' FROM '.$this->db_table.' WHERE id='.$xtid;
@@ -113,7 +113,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		return false;
 	}
 
-	function insert($transactions, $force = false){
+	public function insert($transactions, $force = false){
         if( strtolower(get_class($transactions)) != strtolower($this->obj_class)){
             return false;
         }
@@ -186,7 +186,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		return $xtid;
 	}
 	
-	function delete($criteria = null, $force = false){
+	public function delete($criteria = null, $force = false){
 		if( strtolower(get_class($transactions)) != strtolower($this->obj_class) ){
 			return false;
 		}
@@ -201,7 +201,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		return true;
 	}
 
-	function delete_scalar($limit = 20, $sort = "id DESC")
+	public function delete_scalar($limit = 20, $sort = "id DESC")
 	{
 		if ($this->getCount>$limit)
 		{
@@ -214,7 +214,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 			}
 		}
 	}
-	function getObjects($criteria = null, $fields='*', $xtid_as_key = false){
+	public function getObjects($criteria = null, $fields='*', $xtid_as_key = false){
 		$ret   = [];
 		$limit = $start = 0;
 		$sql   = 'SELECT '.$fields.' FROM '.$this->db_table;
@@ -242,7 +242,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		return count($ret) > 0 ? $ret : false;
 	}
 
-    function getCount($criteria = null){
+    public function getCount($criteria = null){
 		$sql = 'SELECT COUNT(*) FROM '.$this->db_table;
 		if( isset($criteria) && is_subclass_of($criteria, 'criteriaelement') ){
 			$sql .= ' '.$criteria->renderWhere();
@@ -255,7 +255,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		return $count;
 	}
     
-    function deleteAll($criteria = null){
+    public function deleteAll($criteria = null){
 		$sql = 'DELETE FROM '.$this->db_table;
 		if( isset($criteria) && is_subclass_of($criteria, 'criteriaelement') ){
 			$sql .= ' '.$criteria->renderWhere();
@@ -266,7 +266,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		return true;
 	}
 
-	function deleteTorrentPermissions($xtid, $mode = "view"){
+	public function deleteTorrentPermissions($xtid, $mode = "view"){
 		global $xoopsModule;
 		$criteria = new CriteriaCompo();
 		$criteria->add(new Criteria('gperm_itemid', $xtid)); 
@@ -280,7 +280,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		return true;
 	}
 	
-	function insertTorrentPermissions($xtid, $group_ids, $mode = "view"){
+	public function insertTorrentPermissions($xtid, $group_ids, $mode = "view"){
 		global $xoopsModule;
 		foreach( $group_ids as $xtid ){
 			$perm = $this->perm_handler->create();
@@ -294,7 +294,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record xtid ".$xtid;
 	}
 
-	function getPermittedTorrents($transactions, $mode = "view"){
+	public function getPermittedTorrents($transactions, $mode = "view"){
 		global $xoopsUser, $xoopsModule;
 		$ret=false;
 		if (isset($transactions))
@@ -334,7 +334,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		return ret;
 	}
 
-	function getSingleTorrentPermission($xtid, $mode = "view"){
+	public function getSingleTorrentPermission($xtid, $mode = "view"){
 		global $xoopsUser, $xoopsModule;
 		$groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;
 		if( false != $this->perm_handler->checkRight($this->perm_name.$mode, $xtid, $groups, $xoopsModule->getVar('mid')) ){
