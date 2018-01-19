@@ -63,7 +63,7 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 
     $client = new soapclient($servers[$server]['uri']);
     // Call the SOAP method
-    $rnd    = rand(-100000, 100000000);
+    $rnd    = mt_rand(-100000, 100000000);
     $result = $client->call('xtorrent_key', [
         'username' => $servers[$server]['username'],
         'password' => $servers[$server]['password'],
