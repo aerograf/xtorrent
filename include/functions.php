@@ -463,16 +463,16 @@ function down_createthumb($img_name, $img_path, $img_savepath, $img_w = 100, $im
             if (function_exists('imagecreatefromgif')) {
                 $img = @imagecreatefromgif($image_path);
             } else {
-                $img = @imageCreateFromPNG($image_path);
+                $img = @imagecreatefrompng($image_path);
             }
             break;
         case 2:
             # JPEG image
-            $img = @imageCreateFromJPEG($image_path);
+            $img = @imagecreatefromjpeg($image_path);
             break;
         case 3:
             # PNG image
-            $img = @imageCreateFromPNG($image_path);
+            $img = @imagecreatefrompng($image_path);
             break;
         default:
             return $image_path;
@@ -502,7 +502,7 @@ function down_createthumb($img_name, $img_path, $img_savepath, $img_w = 100, $im
         /**
          * Copy and resize old image into new image
          */
-        ImageCopyResampled($tmp_img, $img, 0, 0, 0, 0, $img_w, $img_h, $width, $height);
+        imagecopyresampled($tmp_img, $img, 0, 0, 0, 0, $img_w, $img_h, $width, $height);
         imagedestroy($img);
         flush();
         $img = $tmp_img;
@@ -515,16 +515,16 @@ function down_createthumb($img_name, $img_path, $img_savepath, $img_w = 100, $im
             if (function_exists('imagegif')) {
                 imagegif($img, $savepath);
             } else {
-                imagePNG($img, $savepath);
+                imagepng($img, $savepath);
             }
             break;
         case 2:
             # JPEG image
-            imageJPEG($img, $savepath, $quality);
+            imagejpeg($img, $savepath, $quality);
             break;
         case 3:
             # PNG image
-            imagePNG($img, $savepath);
+            imagepng($img, $savepath);
             break;
     }
     imagedestroy($img);
