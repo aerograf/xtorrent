@@ -83,7 +83,7 @@ if (!class_exists('qcp71_base')) {
             case 1:
                 $ii = 0;
                 $num = 0;
-                $letter = "a";
+                $letter = 'a';
                 for ($qcb=1;$qcb<32;$qcb++) {
                     $ii++;
                     $done = false;
@@ -113,7 +113,7 @@ if (!class_exists('qcp71_base')) {
                         }
                         $letter++;
                         if (strlen($letter++)>1) {
-                            $letter="a";
+                            $letter= 'a';
                         }
                     }
                 }
@@ -147,7 +147,7 @@ if (!class_exists('qcp71_base')) {
                         }
                         $letter++;
                         if (strlen($letter++)>1) {
-                            $letter="a";
+                            $letter= 'a';
                         }
                     }
                 }
@@ -155,7 +155,7 @@ if (!class_exists('qcp71_base')) {
             case 2:
                 $ii = 0;
                 $num = 0;
-                $letter = "a";
+                $letter = 'a';
                 for ($qcb=32;$qcb>0;$qcb--) {
                     $ii++;
                     $done = false;
@@ -185,7 +185,7 @@ if (!class_exists('qcp71_base')) {
                         }
                         $letter++;
                         if (strlen($letter++)>1) {
-                            $letter="a";
+                            $letter= 'a';
                         }
                     }
                 }
@@ -219,7 +219,7 @@ if (!class_exists('qcp71_base')) {
                         }
                         $letter++;
                         if (strlen($letter++)>1) {
-                            $letter="a";
+                            $letter= 'a';
                         }
                     }
                 }
@@ -227,7 +227,7 @@ if (!class_exists('qcp71_base')) {
             case 3:
                 $ii = 0;
                 $num = 0;
-                $letter = "a";
+                $letter = 'a';
                 for ($qcb=1;$qcb<17;$qcb++) {
                     $ii++;
                     $done = false;
@@ -257,7 +257,7 @@ if (!class_exists('qcp71_base')) {
                         }
                         $letter++;
                         if (strlen($letter++)>1) {
-                            $letter="a";
+                            $letter= 'a';
                         }
                     }
                 }
@@ -291,7 +291,7 @@ if (!class_exists('qcp71_base')) {
                         }
                         $letter++;
                         if (strlen($letter++)>1) {
-                            $letter="a";
+                            $letter= 'a';
                         }
                     }
                 }
@@ -325,7 +325,7 @@ if (!class_exists('qcp71_base')) {
                         }
                         $letter++;
                         if (strlen($letter++)>1) {
-                            $letter="a";
+                            $letter= 'a';
                         }
                     }
                 }
@@ -360,7 +360,7 @@ if (!class_exists('qcp71_base')) {
                         }
                         $letter++;
                         if (strlen($letter++)>1) {
-                            $letter="a";
+                            $letter= 'a';
                         }
                     }
                 }
@@ -368,7 +368,7 @@ if (!class_exists('qcp71_base')) {
             case 4:
                 $ii = 0;
                 $num = 0;
-                $letter = "a";
+                $letter = 'a';
 
                 for ($qcb=17;$qcb>0;$qcb--) {
                     $ii++;
@@ -399,7 +399,7 @@ if (!class_exists('qcp71_base')) {
                         }
                         $letter++;
                         if (strlen($letter++)>1) {
-                            $letter="a";
+                            $letter= 'a';
                         }
                     }
                 }
@@ -433,7 +433,7 @@ if (!class_exists('qcp71_base')) {
                         }
                         $letter++;
                         if (strlen($letter++)>1) {
-                            $letter="a";
+                            $letter= 'a';
                         }
                     }
                 }
@@ -467,7 +467,7 @@ if (!class_exists('qcp71_base')) {
                         }
                         $letter++;
                         if (strlen($letter++)>1) {
-                            $letter="a";
+                            $letter= 'a';
                         }
                     }
                 }
@@ -484,15 +484,17 @@ if (!class_exists('qcp71_base')) {
         {
             $base = [];
             foreach ($this->base as $key => $data) {
-                $base[$key] = ["char" => $data,
-                                    "ord" => ord($data),
-                                    "bin"  => decbin(ord($data))];
+                $base[$key] = [
+                    'char' => $data,
+                    'ord'  => ord($data),
+                    'bin'  => decbin(ord($data))];
             }
             
-            return ["mode" => $this->mode, "roll" => $this->roll,
-                         "seed" => $this->seed, "mode" => $this->mode,
-                         "num_evr" => $this->num_evr, "base" => $this->base,
-                         "debug" => $base];
+            return [
+                'mode'    => $this->mode, 'roll' => $this->roll,
+                'seed'    => $this->seed, 'mode' => $this->mode,
+                'num_evr' => $this->num_evr, 'base' => $this->base,
+                'debug'   => $base];
         }
     }
 }

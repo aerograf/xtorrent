@@ -9,14 +9,14 @@
     Written by Greg Poole | m4dm4n@gmail.com | http://m4dm4n.homelinux.net:8086
 */
 
-require_once "bencode.reader.php";
+require_once 'bencode.reader.php';
 
 // Summarise the results of the tracker_scrape_all function, by adding up all of the scrape results
 // into a single array of seeds, leeches and successful downloads.
 function tracker_scrape_summarise($scrape_results)
 {
     if (!is_array($scrape_results)) {
-        trigger_error("tracker_scrape_summarise error: Expected array as first parameter.");
+        trigger_error('tracker_scrape_summarise error: Expected array as first parameter.');
         return false;
     }
     
@@ -69,10 +69,10 @@ function tracker_scrape($torrent, $tracker = null, $timeout = 5)
         return false;
     }
     
-    if (strpos($scrape_address, "?") !== false) {
-        $scrape_address .= "&info_hash=" . urlencode($torrent->infoHash);
+    if (strpos($scrape_address, '?') !== false) {
+        $scrape_address .= '&info_hash=' . urlencode($torrent->infoHash);
     } else {
-        $scrape_address .= "?info_hash=" . urlencode($torrent->infoHash);
+        $scrape_address .= '?info_hash=' . urlencode($torrent->infoHash);
     }
     
     // Set the timeout before proceeding and reset it when done
@@ -84,7 +84,7 @@ function tracker_scrape($torrent, $tracker = null, $timeout = 5)
     // Something is wrong with the address or the HTTP response of the tracker, or the request timed out. It's hard to
     // say but something has clearly gone critically wrong.
     if ($data === false) {
-        trigger_error("tracker_scrape error: Failed to scrape torrent details from the tracker", E_USER_WARNING);
+        trigger_error('tracker_scrape error: Failed to scrape torrent details from the tracker', E_USER_WARNING);
         return false;
     }
     
@@ -95,7 +95,7 @@ function tracker_scrape($torrent, $tracker = null, $timeout = 5)
     // A bad tracker response might be bad software, something the library doesn't understand or any number
     // of other weird issues. Regardless, we couldn't read it so we can't proceed.
     if ($trackerInfo === false) {
-        trigger_error("tracker_scrape error: Tracker returned invalid response to scrape request", E_USER_WARNING);
+        trigger_error('tracker_scrape error: Tracker returned invalid response to scrape request', E_USER_WARNING);
         return false;
     }
     
@@ -118,7 +118,7 @@ function tracker_scrape($torrent, $tracker = null, $timeout = 5)
 // on the announce address provided.
 function tracker_get_scrape_address($announce)
 {
-    $last_slash = strrpos($announce, "/");
+    $last_slash = strrpos($announce, '/');
     
     if ($last_slash === false) {
         trigger_error("Tracker address ({$announce}) is invalid", E_USER_WARNING);
@@ -126,10 +126,10 @@ function tracker_get_scrape_address($announce)
     }
     
     $last_part = substr($announce, $last_slash);
-    if (strpos($last_part, "announce") === false) {
+    if (strpos($last_part, 'announce') === false) {
         trigger_error("Tracker ({$announce}) does not appear to support scrape", E_USER_WARNING);
         return false;
     }
     
-    return substr($announce, 0, $last_slash) . "/" . str_replace($last_part, "announce", "scrape");
+    return substr($announce, 0, $last_slash) . '/' . str_replace($last_part, 'announce', 'scrape');
 }

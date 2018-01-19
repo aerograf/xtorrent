@@ -16,26 +16,26 @@ if ($xoopsModuleConfig['htaccess']!=0) {
     if ($cid!=0) {
         global $xoopsDB;
         if ($cat!=''&&$cid==0) {
-            $sql = "SELECT b.title, b.cid FROM ".$xoopsDB->prefix('xtorrent_cat')." b WHERE b.title LIKE '$cat'";
+            $sql = 'SELECT b.title, b.cid FROM ' . $xoopsDB->prefix('xtorrent_cat') . " b WHERE b.title LIKE '$cat'";
             $ret = $xoopsDB->query($sql);
             $rt = $xoopsDB->fetchArray($ret);
             $selectdate =str_replace(' ', '', $selectdate);
-            header("HTTP/1.1 301 Moved Permanently");
-            header("Location: ".XOOPS_URL."/torrents/".xoops_sef($rt['title'])."/".$rt['cid'].",$start,$selectdate,$list,$orderby");
+            header('HTTP/1.1 301 Moved Permanently');
+            header('Location: ' . XOOPS_URL . '/torrents/' . xoops_sef($rt['title']) . '/' . $rt['cid'] . ",$start,$selectdate,$list,$orderby");
             exit;
         }
         if ($cat==''||strpos($_SERVER['REQUEST_URI'], 'iewcat.php')>0) {
-            $sql = "SELECT b.title, b.cid FROM ".$xoopsDB->prefix('xtorrent_cat')." b WHERE b.cid=$cid";
+            $sql = 'SELECT b.title, b.cid FROM ' . $xoopsDB->prefix('xtorrent_cat') . " b WHERE b.cid=$cid";
             $ret = $xoopsDB->query($sql);
             $rt = $xoopsDB->fetchArray($ret);
-            header("HTTP/1.1 301 Moved Permanently");
-            header("Location: ".XOOPS_URL."/torrents/".xoops_sef($rt['title'])."/".$cid.",$start,$selectdate,$list,$orderby");
+            header('HTTP/1.1 301 Moved Permanently');
+            header('Location: ' . XOOPS_URL . '/torrents/' . xoops_sef($rt['title']) . '/' . $cid . ",$start,$selectdate,$list,$orderby");
             exit;
         }
     } else {
         if (strpos($_SERVER['REQUEST_URI'], 'iewcat.php')>0) {
-            header("HTTP/1.1 301 Moved Permanently");
-            header("Location: ".XOOPS_URL."/torrents/search/$list,$orderby");
+            header('HTTP/1.1 301 Moved Permanently');
+            header('Location: ' . XOOPS_URL . "/torrents/search/$list,$orderby");
             exit;
         }
     }
@@ -60,15 +60,15 @@ $xoopsTpl->assign('catarray', $catarray);
 /**
  * Breadcrumb
  */
-$mytree      = new XoopsTree($xoopsDB->prefix('xtorrent_cat'), "cid", "pid");
-$pathstring  = "<a href='index.php'>" . _MD_XTORRENT_MAIN . "</a>&nbsp;:&nbsp;";
-$pathstring .= $mytree->getNicePathFromId($cid, "title", "viewcat.php?op=");
-$child_array = $mytree->getFirstChild($myrow['cid'], "title");
-$xoopsTpl->assign('xoops_pagetitle', str_replace(['HOME | '], "", str_replace(["&nbsp;:&nbsp;", ":"], " | ", strip_tags($pathstring))) . " | Torrents ");
+$mytree      = new XoopsTree($xoopsDB->prefix('xtorrent_cat'), 'cid', 'pid');
+$pathstring  = "<a href='index.php'>" . _MD_XTORRENT_MAIN . '</a>&nbsp;:&nbsp;';
+$pathstring .= $mytree->getNicePathFromId($cid, 'title', 'viewcat.php?op=');
+$child_array = $mytree->getFirstChild($myrow['cid'], 'title');
+$xoopsTpl->assign('xoops_pagetitle', str_replace(['HOME | '], '', str_replace(['&nbsp;:&nbsp;', ':'], ' | ', strip_tags($pathstring))) . ' | Torrents ');
 $xoopsTpl->assign('category_path', $pathstring);
 $xoopsTpl->assign('category_id', $cid);
 $xoopsTpl->assign('navitem', 1);
-$arr = $mytree->getFirstChild($cid, "weight");
+$arr = $mytree->getFirstChild($cid, 'weight');
 
 /**
  * Display Sub-categories for selected Category
@@ -81,10 +81,10 @@ if (is_array($arr) > 0 && !empty($list) && !empty($selectdate)) {
         }
 
         $sub_arr         = [];
-        $sub_arr         = $mytree->getFirstChild($ele['cid'], "weight");
+        $sub_arr         = $mytree->getFirstChild($ele['cid'], 'weight');
         $space           = 0;
         $chcount         = 0;
-        $infercategories = "";
+        $infercategories = '';
 
         foreach ($sub_arr as $sub_ele) {
             /**
@@ -99,13 +99,13 @@ if (is_array($arr) > 0 && !empty($list) && !empty($selectdate)) {
                  * If subcategory count > 5 then finish adding subcats to $infercategories and end
                  */
                 if ($chcount > 5) {
-                    $infercategories .= "...";
+                    $infercategories .= '...';
                     break;
                 }
                 if ($space > 0) {
-                    $infercategories .= ", ";
+                    $infercategories .= ', ';
                 }
-                $infercategories .= "<a href='" . XOOPS_URL . "/modules/xtorrent/viewcat.php?cid=" . $sub_ele['cid'] . "'>" . $myts->htmlSpecialChars($sub_ele['title']) . "</a> (" . $hassubitems['count'] . ")";
+                $infercategories .= "<a href='" . XOOPS_URL . '/modules/xtorrent/viewcat.php?cid=' . $sub_ele['cid'] . "'>" . $myts->htmlSpecialChars($sub_ele['title']) . '</a> (' . $hassubitems['count'] . ')';
                 $space++;
                 $chcount++;
             }
@@ -123,7 +123,7 @@ if (is_array($arr) > 0 && !empty($list) && !empty($selectdate)) {
 /**
      * Show Description for Category listing
      */
-    $sql         = "SELECT description, nohtml, nosmiley, noxcodes, noimages, nobreak FROM " . $xoopsDB->prefix('xtorrent_cat') . " WHERE cid = $cid";
+    $sql         = 'SELECT description, nohtml, nosmiley, noxcodes, noimages, nobreak FROM ' . $xoopsDB->prefix('xtorrent_cat') . " WHERE cid = $cid";
     $head_arr    = $xoopsDB->fetchArray($xoopsDB->query($sql));
     $html        = ($head_arr['nohtml']) ? 0 : 1;
     $smiley      = ($head_arr['nosmiley']) ? 0 : 1;
@@ -138,25 +138,25 @@ if (is_array($arr) > 0 && !empty($list) && !empty($selectdate)) {
  * Extract Download information from database
  */
 $xoopsTpl->assign('show_categort_title', true);
-$sql = "SELECT * FROM " . $xoopsDB->prefix('xtorrent_downloads') . " ";
+$sql = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' ';
 if (!empty($selectdate)) {
-    $sql .= "WHERE TO_DAYS(FROM_UNIXTIME(published)) = TO_DAYS(FROM_UNIXTIME(" . $selectdate . ")) 
-      			AND published > 0 AND published <= " . time() . " AND (expired = 0 OR expired > " . time() . ") 
-      			AND offline = 0 ORDER BY published DESC";
+    $sql .= 'WHERE TO_DAYS(FROM_UNIXTIME(published)) = TO_DAYS(FROM_UNIXTIME(' . $selectdate . ')) 
+      			AND published > 0 AND published <= ' . time() . ' AND (expired = 0 OR expired > ' . time() . ') 
+      			AND offline = 0 ORDER BY published DESC';
     $result = $xoopsDB->query($sql, $xoopsModuleConfig['perpage'], $start);
     $total_numrows['count'] = $xoopsDB->getRowsNum($xoopsDB->query($sql));
 } elseif (!empty($list)) {
     $sql .= "WHERE title LIKE '" . strtoupper($list) . "%' OR title LIKE '" . strtolower($list) . "%' AND published > 0 AND 
-      			published <= " . time() . " AND (expired = 0 OR expired > " . time() . ") AND offline = 0 
-      			ORDER BY " . $orderby;
+      			published <= " . time() . ' AND (expired = 0 OR expired > ' . time() . ') AND offline = 0 
+      			ORDER BY ' . $orderby;
     $result = $xoopsDB->query($sql, $xoopsModuleConfig['perpage'], $start);
-    $xoopsTpl->assign('xoops_pagetitle', "Search By ".$list);
+    $xoopsTpl->assign('xoops_pagetitle', 'Search By ' . $list);
     $total_numrows['count'] = $xoopsDB->getRowsNum($xoopsDB->query($sql));
     echo $sql;
 } else {
-    $sql .= "WHERE cid=" . $cid . " AND published > 0 AND published <= " . time() . " 
-      			AND (expired = 0 OR expired > " . time() . ") AND offline = 0 
-      			ORDER BY " . $orderby;
+    $sql .= 'WHERE cid=' . $cid . ' AND published > 0 AND published <= ' . time() . ' 
+      			AND (expired = 0 OR expired > ' . time() . ') AND offline = 0 
+      			ORDER BY ' . $orderby;
 
     $result = $xoopsDB->query($sql, $xoopsModuleConfig['perpage'], $start);
     $xoopsTpl->assign('show_categort_title', false);

@@ -134,14 +134,14 @@ $i = 0;
 if ($submissions) {
     $i++;
     $modversion['sub'][$i]['name'] = _MI_TORRENT_SMNAME1;
-    $modversion['sub'][$i]['url'] = "submit.php";
+    $modversion['sub'][$i]['url'] = 'submit.php';
 }
 $i++;
 $modversion['sub'][$i]['name'] = _MI_TORRENT_SMNAME2;
-$modversion['sub'][$i]['url'] = "topten.php?list=hit";
+$modversion['sub'][$i]['url'] = 'topten.php?list=hit';
 $i++;
 $modversion['sub'][$i]['name'] = _MI_TORRENT_SMNAME3;
-$modversion['sub'][$i]['url'] = "topten.php?list=rate";
+$modversion['sub'][$i]['url'] = 'topten.php?list=rate';
 unset($i);
 // Comments
 $modversion['hasComments'] = 1;
@@ -906,33 +906,33 @@ $modversion['notification']['event'][8]['mail_subject'] = _MI_TORRENT_FILE_APPRO
 $modversion['notification']['event'][9]['name'] = 'completed';
 $modversion['notification']['event'][9]['category'] = 'global';
 $modversion['notification']['event'][9]['admin_only'] = 1;
-$modversion['notification']['event'][9]['title'] = "_MI_TORRENT_COMPLETE_NOTIFY";
-$modversion['notification']['event'][9]['caption'] = "_MI_TORRENT_COMPLETE_NOTIFYCAP";
-$modversion['notification']['event'][9]['description'] = "_MI_TORRENT_COMPLETE_NOTIFYDSC";
+$modversion['notification']['event'][9]['title'] = '_MI_TORRENT_COMPLETE_NOTIFY';
+$modversion['notification']['event'][9]['caption'] = '_MI_TORRENT_COMPLETE_NOTIFYCAP';
+$modversion['notification']['event'][9]['description'] = '_MI_TORRENT_COMPLETE_NOTIFYDSC';
 $modversion['notification']['event'][9]['mail_template'] = 'completed_download_notify';
-$modversion['notification']['event'][9]['mail_subject'] = "_MI_TORRENT_COMPLETE_NOTIFYSBJ";
+$modversion['notification']['event'][9]['mail_subject'] = '_MI_TORRENT_COMPLETE_NOTIFYSBJ';
 
 $modversion['notification']['event'][10]['name'] = 'completed';
 $modversion['notification']['event'][10]['category'] = 'announce';
-$modversion['notification']['event'][10]['title'] = "_MI_TORRENT_COMPLETE_NOTIFY";
-$modversion['notification']['event'][10]['caption'] = "_MI_TORRENT_COMPLETE_NOTIFYCAP";
-$modversion['notification']['event'][10]['description'] = "_MI_TORRENT_COMPLETE_NOTIFYDSC";
+$modversion['notification']['event'][10]['title'] = '_MI_TORRENT_COMPLETE_NOTIFY';
+$modversion['notification']['event'][10]['caption'] = '_MI_TORRENT_COMPLETE_NOTIFYCAP';
+$modversion['notification']['event'][10]['description'] = '_MI_TORRENT_COMPLETE_NOTIFYDSC';
 $modversion['notification']['event'][10]['mail_template'] = 'completed_download_notify';
-$modversion['notification']['event'][10]['mail_subject'] = "_MI_TORRENT_COMPLETE_NOTIFYSBJ";
+$modversion['notification']['event'][10]['mail_subject'] = '_MI_TORRENT_COMPLETE_NOTIFYSBJ';
 
 $modversion['notification']['event'][11]['name'] = 'stopped';
 $modversion['notification']['event'][11]['category'] = 'global';
 $modversion['notification']['event'][11]['admin_only'] = 1;
-$modversion['notification']['event'][11]['title'] = "_MI_TORRENT_STOPPED_NOTIFY";
-$modversion['notification']['event'][11]['caption'] = "_MI_TORRENT_STOPPED_NOTIFYCAP";
-$modversion['notification']['event'][11]['description'] = "_MI_TORRENT_STOPPED_NOTIFYDSC";
+$modversion['notification']['event'][11]['title'] = '_MI_TORRENT_STOPPED_NOTIFY';
+$modversion['notification']['event'][11]['caption'] = '_MI_TORRENT_STOPPED_NOTIFYCAP';
+$modversion['notification']['event'][11]['description'] = '_MI_TORRENT_STOPPED_NOTIFYDSC';
 $modversion['notification']['event'][11]['mail_template'] = 'stopped_download_notify';
-$modversion['notification']['event'][11]['mail_subject'] = "_MI_TORRENT_STOPPED_NOTIFYSBJ";
+$modversion['notification']['event'][11]['mail_subject'] = '_MI_TORRENT_STOPPED_NOTIFYSBJ';
 
 $modversion['notification']['event'][12]['name'] = 'stopped';
 $modversion['notification']['event'][12]['category'] = 'announce';
-$modversion['notification']['event'][12]['title'] = "_MI_TORRENT_STOPPED_NOTIFY";
-$modversion['notification']['event'][12]['caption'] = "_MI_TORRENT_STOPPED_NOTIFYCAP";
-$modversion['notification']['event'][12]['description'] = "_MI_TORRENT_STOPPED_NOTIFYDSC";
+$modversion['notification']['event'][12]['title'] = '_MI_TORRENT_STOPPED_NOTIFY';
+$modversion['notification']['event'][12]['caption'] = '_MI_TORRENT_STOPPED_NOTIFYCAP';
+$modversion['notification']['event'][12]['description'] = '_MI_TORRENT_STOPPED_NOTIFYDSC';
 $modversion['notification']['event'][12]['mail_template'] = 'stopped_download_notify';
-$modversion['notification']['event'][12]['mail_subject'] = "_MI_TORRENT_STOPPED_NOTIFYSBJ";
+$modversion['notification']['event'][12]['mail_subject'] = '_MI_TORRENT_STOPPED_NOTIFYSBJ';

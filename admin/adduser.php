@@ -7,32 +7,32 @@ require_once __DIR__ . '/../include/bittorrent.php';
 loggedinorreturn();
 
 if (get_user_class() < UC_ADMINISTRATOR) {
-    stderr("Error", "Access denied.");
+    stderr('Error', 'Access denied.');
 }
-if ($HTTP_SERVER_VARS["REQUEST_METHOD"] == "POST") {
-    if ($HTTP_POST_VARS["username"] == "" || $HTTP_POST_VARS["password"] == "" || $HTTP_POST_VARS["email"] == "") {
-        stderr("Error", "Missing form data.");
+if ($HTTP_SERVER_VARS['REQUEST_METHOD'] == 'POST') {
+    if ($HTTP_POST_VARS['username'] == '' || $HTTP_POST_VARS['password'] == '' || $HTTP_POST_VARS['email'] == '') {
+        stderr('Error', 'Missing form data.');
     }
-    if ($HTTP_POST_VARS["password"] != $HTTP_POST_VARS["password2"]) {
-        stderr("Error", "Passwords mismatch.");
+    if ($HTTP_POST_VARS['password'] != $HTTP_POST_VARS['password2']) {
+        stderr('Error', 'Passwords mismatch.');
     }
-    $username = sqlesc($HTTP_POST_VARS["username"]);
-    $password = $HTTP_POST_VARS["password"];
-    $email    = sqlesc($HTTP_POST_VARS["email"]);
+    $username = sqlesc($HTTP_POST_VARS['username']);
+    $password = $HTTP_POST_VARS['password'];
+    $email    = sqlesc($HTTP_POST_VARS['email']);
     $secret   = mksecret();
     $passhash = sqlesc(md5($secret . $password . $secret));
     $secret   = sqlesc($secret);
 
     mysql_query("INSERT INTO users (added, last_access, secret, username, passhash, status, email) VALUES(NOW(), NOW(), $secret, $username, $passhash, 'confirmed', $email)") or sqlerr(__FILE__, __LINE__);
-    $res = mysql_query("SELECT id FROM users WHERE username=" . $username);
+    $res = mysql_query('SELECT id FROM users WHERE username=' . $username);
     $arr = mysql_fetch_row($res);
     if (!$arr) {
-        stderr("Error", "Unable to create the account. The user name is possibly already taken.");
+        stderr('Error', 'Unable to create the account. The user name is possibly already taken.');
     }
-    header("Location: " . $DEFAULTBASEURL . "/userdetails.php?id=" . $arr[0]);
+    header('Location: ' . $DEFAULTBASEURL . '/userdetails.php?id=' . $arr[0]);
     die;
 }
-stdhead("Add user");
+stdhead('Add user');
 ?>
 <h1>Add user</h1>
 <form method="post" action="adduser.php">

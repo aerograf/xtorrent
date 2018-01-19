@@ -5,14 +5,14 @@ class reviewResource extends XoopsObject
     public function __construct()
     {
         $this->XoopsObject();
-        $this->initVar("reviewid", XOBJ_DTYPE_INT);
-        $this->initVar("lid", XOBJ_DTYPE_INT);
-        $this->initVar("title", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("review", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("submit", XOBJ_DTYPE_INT);
-        $this->initVar("date", XOBJ_DTYPE_INT);
-        $this->initVar("uid", XOBJ_DTYPE_INT);
-        $this->initVar("rated", XOBJ_DTYPE_INT);
+        $this->initVar('reviewid', XOBJ_DTYPE_INT);
+        $this->initVar('lid', XOBJ_DTYPE_INT);
+        $this->initVar('title', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('review', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('submit', XOBJ_DTYPE_INT);
+        $this->initVar('date', XOBJ_DTYPE_INT);
+        $this->initVar('uid', XOBJ_DTYPE_INT);
+        $this->initVar('rated', XOBJ_DTYPE_INT);
     }
 }
 
@@ -85,13 +85,13 @@ class XtorrentReviewHandler extends XoopsObjectHandler
         }
         $myts = MyTextSanitizer::getInstance();
         if ($review->isNew() || empty($reviewid)) {
-            $reviewid = $this->db->genId($this->db_table."_xt_review_id_seq");
+            $reviewid = $this->db->genId($this->db_table . '_xt_review_id_seq');
             $sql = sprintf(
-                "INSERT INTO %s (
+                'INSERT INTO %s (
 				`reviewid`, `lid`, `title`, `review`, `submit`, `date`, `uid`, `rated`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s
-				)",
+				)',
                 $this->db_table,
                 $this->db->quoteString($reviewid),
                 $this->db->quoteString($lid),
@@ -104,14 +104,14 @@ class XtorrentReviewHandler extends XoopsObjectHandler
             );
         } else {
             $sql = sprintf(
-                "UPDATE %s SET
+                'UPDATE %s SET
 				`lid` = %s,
 				`title` = %s,
 				`review` = %s,
 				`submit` = %s,
 				`date` = %s,
 				`uid` = %s,
-				`rated` = %s WHERE `reviewid` = %s",
+				`rated` = %s WHERE `reviewid` = %s',
                 $this->db_table,
                 $this->db->quoteString($lid),
                 $this->db->quoteString($myts->addslashes($title)),
@@ -130,7 +130,7 @@ class XtorrentReviewHandler extends XoopsObjectHandler
             $result = $this->db->query($sql);
         }
         if (!$result) {
-            $review->setErrors("Could not store data in the database.<br />".$this->db->error().' ('.$this->db->errno().')<br />'.$sql);
+            $review->setErrors('Could not store data in the database.<br />' . $this->db->error() . ' (' . $this->db->errno() . ')<br />' . $sql);
             return false;
         }
         if (empty($reviewid)) {
@@ -146,7 +146,7 @@ class XtorrentReviewHandler extends XoopsObjectHandler
             return false;
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql = "DELETE FROM ".$this->db_table." ".$criteria->renderWhere()."";
+            $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
         if (false != $force) {
             $result = $this->db->queryF($sql);
@@ -212,7 +212,7 @@ class XtorrentReviewHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function deleteTorrentPermissions($reviewid, $mode = "view")
+    public function deleteTorrentPermissions($reviewid, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
@@ -227,7 +227,7 @@ class XtorrentReviewHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function insertTorrentPermissions($reviewid, $group_ids, $mode = "view")
+    public function insertTorrentPermissions($reviewid, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $reviewid) {
@@ -239,10 +239,10 @@ class XtorrentReviewHandler extends XoopsObjectHandler
             $this->perm_handler->insert($perm);
             $ii++;
         }
-        return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record ID ".$reviewid;
+        return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $reviewid;
     }
     
-    public function getPermittedTorrents($review, $mode = "view")
+    public function getPermittedTorrents($review, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $ret=false;
@@ -280,7 +280,7 @@ class XtorrentReviewHandler extends XoopsObjectHandler
         return ret;
     }
     
-    public function getSingleTorrentPermission($reviewid, $mode = "view")
+    public function getSingleTorrentPermission($reviewid, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;

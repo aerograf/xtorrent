@@ -5,8 +5,8 @@ class filesResource extends XoopsObject
     public function __construct()
     {
         $this->XoopsObject();
-        $this->initVar("id", XOBJ_DTYPE_INT);
-        $this->initVar("file", XOBJ_DTYPE_TXTBOX);
+        $this->initVar('id', XOBJ_DTYPE_INT);
+        $this->initVar('file', XOBJ_DTYPE_TXTBOX);
     }
 }
 
@@ -78,21 +78,21 @@ class XtorrentFilesHandler extends XoopsObjectHandler
         }
         $myts = MyTextSanitizer::getInstance();
         if ($files->isNew() || empty($id)) {
-            $id = $this->db->genId($this->db_table."_xt_files_id_seq");
+            $id = $this->db->genId($this->db_table . '_xt_files_id_seq');
             $sql = sprintf(
-                "INSERT INTO %s (
+                'INSERT INTO %s (
 				`id`, `file`
 				) VALUES (
 				%u, %s
-				)",
+				)',
                 $this->db_table,
                 $this->db->quoteString($id),
                 $this->db->quoteString($file)
             );
         } else {
             $sql = sprintf(
-                "UPDATE %s SET
-				`file` = %s WHERE `id` = %s",
+                'UPDATE %s SET
+				`file` = %s WHERE `id` = %s',
                 $this->db_table,
                 $this->db->quoteString($file),
                 $this->db->quoteString($id)
@@ -105,7 +105,7 @@ class XtorrentFilesHandler extends XoopsObjectHandler
             $result = $this->db->query($sql);
         }
         if (!$result) {
-            $files->setErrors("Could not store data in the database.<br />".$this->db->error().' ('.$this->db->errno().')<br />'.$sql);
+            $files->setErrors('Could not store data in the database.<br />' . $this->db->error() . ' (' . $this->db->errno() . ')<br />' . $sql);
             return false;
         }
         if (empty($id)) {
@@ -121,7 +121,7 @@ class XtorrentFilesHandler extends XoopsObjectHandler
             return false;
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql = "DELETE FROM ".$this->db_table." ".$criteria->renderWhere()."";
+            $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
         if (false != $force) {
             $result = $this->db->queryF($sql);
@@ -187,7 +187,7 @@ class XtorrentFilesHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function deleteTorrentPermissions($id, $mode = "view")
+    public function deleteTorrentPermissions($id, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
@@ -202,7 +202,7 @@ class XtorrentFilesHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function insertTorrentPermissions($id, $group_ids, $mode = "view")
+    public function insertTorrentPermissions($id, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $id) {
@@ -214,10 +214,10 @@ class XtorrentFilesHandler extends XoopsObjectHandler
             $this->perm_handler->insert($perm);
             $ii++;
         }
-        return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record ID ".$id;
+        return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $id;
     }
     
-    public function getPermittedTorrents($files, $mode = "view")
+    public function getPermittedTorrents($files, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $ret=false;
@@ -255,7 +255,7 @@ class XtorrentFilesHandler extends XoopsObjectHandler
         return ret;
     }
     
-    public function getSingleTorrentPermission($id, $mode = "view")
+    public function getSingleTorrentPermission($id, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;

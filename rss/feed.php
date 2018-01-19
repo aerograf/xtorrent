@@ -1,6 +1,6 @@
 <?php
 
-include("../../../mainfile.php");
+include('../../../mainfile.php');
 
 $source   = $_GET['source'];
 $numitems = isset($_GET['numitems'])?$_GET['numitems']:15;
@@ -16,7 +16,7 @@ function rss_data($cid, $numitems)
     $myts  = MyTextSanitizer::getInstance();
 
     $modhandler        = xoops_gethandler('module');
-    $xoopsModule       = $modhandler->getByDirname("xtorrent");
+    $xoopsModule       = $modhandler->getByDirname('xtorrent');
     $config_handler    = xoops_gethandler('config');
     $xoopsModuleConfig = $config_handler->getConfigsByCat(0, $xoopsModule->getVar('mid'));
 
@@ -27,13 +27,13 @@ function rss_data($cid, $numitems)
         $pif = " WHERE b.cid = $cid";
     }
     $rss      = [];
-    $result   = $xoopsDB->query("SELECT a.lid, a.cid, a.title, a.date, a.description, a.hits, b.title as category FROM " . $xoopsDB->prefix('xtorrent_downloads'). " a INNER JOIN " . $xoopsDB->prefix('xtorrent_cat') . " b ON a.cid = b.cid $pif ORDER BY published DESC ", $numitems, 0);
-    $rep      = ["<br>","<br/>","<br />"];
+    $result   = $xoopsDB->query('SELECT a.lid, a.cid, a.title, a.date, a.description, a.hits, b.title as category FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' a INNER JOIN ' . $xoopsDB->prefix('xtorrent_cat') . " b ON a.cid = b.cid $pif ORDER BY published DESC ", $numitems, 0);
+    $rep      = ['<br>', '<br/>', '<br />'];
     $category = [];
     while ($myrow = $xoopsDB->fetchArray($result)) {
         $download                = [];
-        $download['title']       = strip_tags($myts->displayTarea($myrow["title"], 0, 0, 1));
-        $download['description'] = htmlspecialchars(htmlspecialchars_decode($myts->displayTarea($myrow["description"], 1, 1, 1)));
+        $download['title']       = strip_tags($myts->displayTarea($myrow['title'], 0, 0, 1));
+        $download['description'] = htmlspecialchars(htmlspecialchars_decode($myts->displayTarea($myrow['description'], 1, 1, 1)));
         $download['url']         = XOOPS_URL . '/modules/' . $xoopsModule->dirname() . '/visit.php?agree=1&lid=' . $myrow['lid'] . '&cid=' . $myrow['cid'];
         $download['dossier_url'] = XOOPS_URL . '/modules/' . $xoopsModule->dirname() . '/singlefile.php?lid=' . $myrow['lid'] . '&cid=' . $myrow['cid'];
         $download['date']        = formatTimestamp($myrow['date'], 'D, d-m-y H:i:s e');
@@ -52,8 +52,45 @@ if (!function_exists('xoops_sef')) {
     function xoops_sef($datab, $char ='-')
     {
         $replacement_chars = [];
-        $accepted = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","m","o","p","q",
-                         "r","s","t","u","v","w","x","y","z","0","9","8","7","6","5","4","3","2","1"];
+        $accepted = [
+            'a',
+            'b',
+            'c',
+            'd',
+            'e',
+            'f',
+            'g',
+            'h',
+            'i',
+            'j',
+            'k',
+            'l',
+            'm',
+            'n',
+            'm',
+            'o',
+            'p',
+            'q',
+            'r',
+            's',
+            't',
+            'u',
+            'v',
+            'w',
+            'x',
+            'y',
+            'z',
+            '0',
+            '9',
+            '8',
+            '7',
+            '6',
+            '5',
+            '4',
+            '3',
+            '2',
+            '1'
+        ];
         for ($i=0;$i<256;$i++) {
             if (!in_array(strtolower(chr($i)), $accepted)) {
                 $replacement_chars[] = chr($i);
@@ -67,22 +104,22 @@ if (!function_exists('xoops_sef')) {
 
 global $xoopsDB;
 
-    $sql = "SELECT cid, title FROM ".$xoopsDB->prefix('xtorrent_cat')." FROM cid = '".$_GET['source']."'";
+    $sql = 'SELECT cid, title FROM ' . $xoopsDB->prefix('xtorrent_cat') . " FROM cid = '" . $_GET['source'] . "'";
     list($cid, $cat) = $xoopsDB->fetchRow($xoopsDB->query($sql));
 
     if (empty($cid) && empty($cat)) {
-        $sql = "SELECT cid, title FROM ".$xoopsDB->prefix('xtorrent_cat')." FROM title LIKE '".xoops_sef($_GET['source'], "_")."'";
+        $sql = 'SELECT cid, title FROM ' . $xoopsDB->prefix('xtorrent_cat') . " FROM title LIKE '" . xoops_sef($_GET['source'], '_') . "'";
         list($cid, $cat) = $xoopsDB->fetchRow($xoopsDB->query($sql));
     }
 
 
-if ($cat=="") {
-    $cat = "Latest Torrents";
+if ($cat == '') {
+    $cat = 'Latest Torrents';
 }
 
 $rssfeed_data = rss_data($source, $numitems);
 
-header("Content-type: text/xml; charset=UTF-8");
+header('Content-type: text/xml; charset=UTF-8');
 ?><?php echo '<?xml version="1.0" encoding="iso-8859-1"?>'.chr(10).chr(13); ?>
 <rss version="2.0"> 
 

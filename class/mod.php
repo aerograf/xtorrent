@@ -5,42 +5,42 @@ class modResource extends XoopsObject
     public function __construct()
     {
         $this->XoopsObject();
-        $this->initVar("requestid", XOBJ_DTYPE_INT);
-        $this->initVar("lid", XOBJ_DTYPE_INT);
-        $this->initVar("cid", XOBJ_DTYPE_INT);
-        $this->initVar("title", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("url", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("homepage", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("version", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("size", XOBJ_DTYPE_INT);
-        $this->initVar("platform", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("screenshot", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("submitter", XOBJ_DTYPE_INT);
-        $this->initVar("publisher", XOBJ_DTYPE_INT);
-        $this->initVar("status", XOBJ_DTYPE_INT);
-        $this->initVar("date", XOBJ_DTYPE_INT);
-        $this->initVar("hits", XOBJ_DTYPE_INT);
-        $this->initVar("rating", XOBJ_DTYPE_FLOAT);
-        $this->initVar("votes", XOBJ_DTYPE_INT);
-        $this->initVar("comments", XOBJ_DTYPE_INT);
-        $this->initVar("license", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("mirror", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("price", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("paypalemail", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("features", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("requirements", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("homepagetitle", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("forumid", XOBJ_DTYPE_INT);
-        $this->initVar("limitations", XOBJ_DTYPE_INT);
-        $this->initVar("dhistory", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("published", XOBJ_DTYPE_INT);
-        $this->initVar("expired", XOBJ_DTYPE_INT);
-        $this->initVar("updated", XOBJ_DTYPE_INT);
-        $this->initVar("offline", XOBJ_DTYPE_INT);
-        $this->initVar("description", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("modifysubmitter", XOBJ_DTYPE_INT);
-        $this->initVar("requestdate", XOBJ_DTYPE_INT);
-        $this->initVar("currency", XOBJ_DTYPE_TXTBOX);
+        $this->initVar('requestid', XOBJ_DTYPE_INT);
+        $this->initVar('lid', XOBJ_DTYPE_INT);
+        $this->initVar('cid', XOBJ_DTYPE_INT);
+        $this->initVar('title', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('url', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('homepage', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('version', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('size', XOBJ_DTYPE_INT);
+        $this->initVar('platform', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('screenshot', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('submitter', XOBJ_DTYPE_INT);
+        $this->initVar('publisher', XOBJ_DTYPE_INT);
+        $this->initVar('status', XOBJ_DTYPE_INT);
+        $this->initVar('date', XOBJ_DTYPE_INT);
+        $this->initVar('hits', XOBJ_DTYPE_INT);
+        $this->initVar('rating', XOBJ_DTYPE_FLOAT);
+        $this->initVar('votes', XOBJ_DTYPE_INT);
+        $this->initVar('comments', XOBJ_DTYPE_INT);
+        $this->initVar('license', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('mirror', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('price', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('paypalemail', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('features', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('requirements', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('homepagetitle', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('forumid', XOBJ_DTYPE_INT);
+        $this->initVar('limitations', XOBJ_DTYPE_INT);
+        $this->initVar('dhistory', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('published', XOBJ_DTYPE_INT);
+        $this->initVar('expired', XOBJ_DTYPE_INT);
+        $this->initVar('updated', XOBJ_DTYPE_INT);
+        $this->initVar('offline', XOBJ_DTYPE_INT);
+        $this->initVar('description', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('modifysubmitter', XOBJ_DTYPE_INT);
+        $this->initVar('requestdate', XOBJ_DTYPE_INT);
+        $this->initVar('currency', XOBJ_DTYPE_TXTBOX);
     }
 }
 
@@ -112,14 +112,14 @@ class XtorrentModHandler extends XoopsObjectHandler
         }
         $myts = MyTextSanitizer::getInstance();
         if ($mod->isNew() || empty($requestid)) {
-            $requestid = $this->db->genId($this->db_table."_xt_mod_id_seq");
+            $requestid = $this->db->genId($this->db_table . '_xt_mod_id_seq');
             $sql       = sprintf(
-                "INSERT INTO %s (
+                'INSERT INTO %s (
 				`requestid`, `lid`, `cid`, `title`, `url`, `homepage`,`version`,`size`,`platform`,`screenshot`,`submitter`,`publisher`,`status`,`date`,`hits`,`rating`,`votes`,`comments`,`license`,`mirror`,`price, `paypalemail`,`features`,`requirements`,`homepagetitle`,`forumid`,`limitations`,`dhistory`,`published`,`expired`,`updated`,`offline`,`description`,`modifysubmitter`,`requestdate` ,`currency`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
 				%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
-				)",
+				)',
                 $this->db_table,
                 $this->db->quoteString($requestid),
                 $this->db->quoteString($lid),
@@ -160,8 +160,8 @@ class XtorrentModHandler extends XoopsObjectHandler
             );
         } else {
             $sql = sprintf(
-                "UPDATE %s SET
-				`lid` = %s, `cid` = %s, `title` = %s, `url` = %s, `homepage` = %s, `version` = %s, `size` = %s, `platform` = %s, `screenshot` = %s, `submitter` = %s, `publisher` = %s, `status` = %s, `date` = %s, `hits` = %s, `rating` = %s, `votes` = %s, `comments` = %s, `license` = %s, `mirror` = %s, `price` = %s, `paypalemail` = %s, `features` = %s, `requirements` = %s, `homepagetitle` = %s, `forumid` = %s, `limitations` = %s, `dhistory` = %s, `published` = %s, `expired` = %s, `updated` = %s, `offline` = %s, `description` = %s, `modifysubmitter` = %s, `requestdate` = %s, `currency` = %s WHERE `requestid` = %s",
+                'UPDATE %s SET
+				`lid` = %s, `cid` = %s, `title` = %s, `url` = %s, `homepage` = %s, `version` = %s, `size` = %s, `platform` = %s, `screenshot` = %s, `submitter` = %s, `publisher` = %s, `status` = %s, `date` = %s, `hits` = %s, `rating` = %s, `votes` = %s, `comments` = %s, `license` = %s, `mirror` = %s, `price` = %s, `paypalemail` = %s, `features` = %s, `requirements` = %s, `homepagetitle` = %s, `forumid` = %s, `limitations` = %s, `dhistory` = %s, `published` = %s, `expired` = %s, `updated` = %s, `offline` = %s, `description` = %s, `modifysubmitter` = %s, `requestdate` = %s, `currency` = %s WHERE `requestid` = %s',
                 $this->db_table,
                 $this->db->quoteString($lid),
                 $this->db->quoteString($cid),
@@ -208,7 +208,7 @@ class XtorrentModHandler extends XoopsObjectHandler
             $result = $this->db->query($sql);
         }
         if (!$result) {
-            $mod->setErrors("Could not store data in the database.<br>".$this->db->error().' ('.$this->db->errno().')<br>'.$sql);
+            $mod->setErrors('Could not store data in the database.<br>' . $this->db->error() . ' (' . $this->db->errno() . ')<br>' . $sql);
             return false;
         }
         if (empty($requestid)) {
@@ -224,7 +224,7 @@ class XtorrentModHandler extends XoopsObjectHandler
             return false;
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql = "DELETE FROM ".$this->db_table." ".$criteria->renderWhere()."";
+            $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
         if (false != $force) {
             $result = $this->db->queryF($sql);
@@ -290,7 +290,7 @@ class XtorrentModHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function deleteTorrentPermissions($requestid, $mode = "view")
+    public function deleteTorrentPermissions($requestid, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
@@ -305,7 +305,7 @@ class XtorrentModHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function insertTorrentPermissions($requestid, $group_ids, $mode = "view")
+    public function insertTorrentPermissions($requestid, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $requestid) {
@@ -317,10 +317,10 @@ class XtorrentModHandler extends XoopsObjectHandler
             $this->perm_handler->insert($perm);
             $ii++;
         }
-        return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record ID ".$requestid;
+        return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $requestid;
     }
     
-    public function getPermittedTorrents($mod, $mode = "view")
+    public function getPermittedTorrents($mod, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $ret=false;
@@ -358,7 +358,7 @@ class XtorrentModHandler extends XoopsObjectHandler
         return ret;
     }
     
-    public function getSingleTorrentPermission($requestid, $mode = "view")
+    public function getSingleTorrentPermission($requestid, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;

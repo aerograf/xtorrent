@@ -5,12 +5,12 @@ class votedataResource extends XoopsObject
     public function __construct()
     {
         $this->XoopsObject();
-        $this->initVar("ratingid", XOBJ_DTYPE_INT);
-        $this->initVar("lid", XOBJ_DTYPE_INT);
-        $this->initVar("ratinguser", XOBJ_DTYPE_INT);
-        $this->initVar("rating", XOBJ_DTYPE_INT);
-        $this->initVar("ratinghostname", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("ratingtimestamp", XOBJ_DTYPE_INT);
+        $this->initVar('ratingid', XOBJ_DTYPE_INT);
+        $this->initVar('lid', XOBJ_DTYPE_INT);
+        $this->initVar('ratinguser', XOBJ_DTYPE_INT);
+        $this->initVar('rating', XOBJ_DTYPE_INT);
+        $this->initVar('ratinghostname', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('ratingtimestamp', XOBJ_DTYPE_INT);
     }
 }
 
@@ -82,13 +82,13 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
         }
         $myts = MyTextSanitizer::getInstance();
         if ($votedata->isNew() || empty($ratingid)) {
-            $ratingid = $this->db->genId($this->db_table."_xt_votedata_id_seq");
+            $ratingid = $this->db->genId($this->db_table . '_xt_votedata_id_seq');
             $sql = sprintf(
-                "INSERT INTO %s (
+                'INSERT INTO %s (
 				`ratingid`, `lid`, `ratinguser`, `rating`, `ratinghostname`, `ratingtimestamp`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s
-				)",
+				)',
                 $this->db_table,
                 $this->db->quoteString($ratingid),
                 $this->db->quoteString($lid),
@@ -99,12 +99,12 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
             );
         } else {
             $sql = sprintf(
-                "UPDATE %s SET
+                'UPDATE %s SET
 				`lid` = %s,
 				`ratinguser` = %s,
 				`rating` = %s,
 				`ratinghostname` = %s,
-				`ratingtimestamp` = %s WHERE `ratingid` = %s",
+				`ratingtimestamp` = %s WHERE `ratingid` = %s',
                 $this->db_table,
                 $this->db->quoteString($lid),
                 $this->db->quoteString($ratinguser),
@@ -121,7 +121,7 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
             $result = $this->db->query($sql);
         }
         if (!$result) {
-            $votedata->setErrors("Could not store data in the database.<br />".$this->db->error().' ('.$this->db->errno().')<br />'.$sql);
+            $votedata->setErrors('Could not store data in the database.<br />' . $this->db->error() . ' (' . $this->db->errno() . ')<br />' . $sql);
             return false;
         }
         if (empty($ratingid)) {
@@ -137,7 +137,7 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
             return false;
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql = "DELETE FROM ".$this->db_table." ".$criteria->renderWhere()."";
+            $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
         if (false != $force) {
             $result = $this->db->queryF($sql);
@@ -203,7 +203,7 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function deleteTorrentPermissions($ratingid, $mode = "view")
+    public function deleteTorrentPermissions($ratingid, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
@@ -218,7 +218,7 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function insertTorrentPermissions($ratingid, $group_ids, $mode = "view")
+    public function insertTorrentPermissions($ratingid, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $ratingid) {
@@ -230,10 +230,10 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
             $this->perm_handler->insert($perm);
             $ii++;
         }
-        return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record ID ".$ratingid;
+        return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $ratingid;
     }
     
-    public function &getPermittedTorrents($votedata, $mode = "view")
+    public function &getPermittedTorrents($votedata, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $ret = false;
@@ -271,7 +271,7 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
         return ret;
     }
     
-    public function getSingleTorrentPermission($ratingid, $mode = "view")
+    public function getSingleTorrentPermission($ratingid, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;

@@ -1,6 +1,6 @@
 <?php
 
-require_once "bencode.reader.php";
+require_once 'bencode.reader.php';
 
 class Torrent
 {
@@ -35,7 +35,7 @@ class Torrent
         // In the case of an invalid torrent file the result of the readNext call will be "false".
         if ($torrentInfo === false) {
             $this->error = true;
-            trigger_error("The torrent file is invalid", E_USER_WARNING);
+            trigger_error('The torrent file is invalid', E_USER_WARNING);
         }
         
         // Based on the information we've read in, we can now set up the contents of this class
@@ -65,7 +65,7 @@ class Torrent
                 $torrentFile = new TorrentFile();
                 $torrentFile->md5sum = $fileInfo['md5sum'];
                 $torrentFile->length = $fileInfo['length'];
-                $torrentFile->name = implode("/", $fileInfo['path']);
+                $torrentFile->name = implode('/', $fileInfo['path']);
                 $this->files[$key] = $torrentFile;
                 $this->totalSize += $torrentFile->length;
             }

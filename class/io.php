@@ -3,8 +3,8 @@
 class ioResource extends XoopsObject {
 	public function __construct(){
 		$this->XoopsObject();
-		$this->initVar("session", XOBJ_DTYPE_INT);
-		$this->initVar("xoopsUser");
+		$this->initVar('session', XOBJ_DTYPE_INT);
+		$this->initVar('xoopsUser');
 	}
 }
 
@@ -36,7 +36,7 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 	
 	public function err($msg)
 	{
-		benc_resp(["failure reason" => [type => "string", value => $msg]]);
+		benc_resp(['failure reason' => [type => 'string', value => $msg]]);
 		hit_end();
 		exit();
 	}
@@ -45,15 +45,15 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 	{
 		$xthdlr_benc  = xoops_load('benc', 'xtorrent');
 		$benc_torrent = $xthdlr_benc->create();				
-		$benc_torrent->setVar('object', [type => "dictionary", value => $d]);
+		$benc_torrent->setVar('object', [type => 'dictionary', value => $d]);
 		$benc_torrent = $xthdlr_benc->compile($benc_torrent);
 		benc_resp_raw($benc_torrent->getVar('benc'));
 	}
 	
 	public function benc_resp_raw($x)
 	{
-		header("Content-Type: text/plain");
-		header("Pragma: no-cache");
+		header('Content-Type: text/plain');
+		header('Pragma: no-cache');
 		print($x);
 	}
 
@@ -77,7 +77,7 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 		if( $lp ) 
 				fputs($lp, $str . "\n");
 		if( $dbg ) 
-				echo $str . "<br>";
+				echo $str . '<br>';
 		if( $clvl <= $loglvl )
 				$log .= $str . "\n";
 	}
@@ -100,7 +100,7 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 	}
 	
 	public function shhash($hash) {
-		return preg_replace('/ *$/s', "", $hash);
+		return preg_replace('/ *$/s', '', $hash);
 	}
 	
 	public function getip() {
@@ -133,13 +133,13 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 	public function portblacklisted($port)
 	{
 		global $xoopsModuleConfig;
-		$ports = explode(',', str_replace(" ", "", $xoopsModuleConfig['ports_checked']));
+		$ports = explode(',', str_replace(' ', '', $xoopsModuleConfig['ports_checked']));
 		
 		foreach ($ports as $k => $v)
 		{
-			if (strpos($v,"-"))
+			if (strpos($v, '-'))
 			{
-				$range = explode("-",$v);
+				$range = explode('-', $v);
 				if ((int)$port >= (int)$range[0] && (int)$port <= (int)$range[1]) return true;				
 			} else {
 				if ((int)$port == (int)$v) return true;		
@@ -155,34 +155,34 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 	}
 	
 	public function benc_int($i) {
-		return "i" . $i . "e";
+		return 'i' . $i . 'e';
 	}
 	
 	public function mksize($bytes)
 	{
 		if ($bytes < 1000 * 1024)
-			return number_format($bytes / 1024, 2) . " kB";
+			return number_format($bytes / 1024, 2) . ' kB';
 		elseif ($bytes < 1000 * 1048576)
-			return number_format($bytes / 1048576, 2) . " MB";
+			return number_format($bytes / 1048576, 2) . ' MB';
 		elseif ($bytes < 1000 * 1073741824)
-			return number_format($bytes / 1073741824, 2) . " GB";
+			return number_format($bytes / 1073741824, 2) . ' GB';
 		else
-			return number_format($bytes / 1099511627776, 2) . " TB";
+			return number_format($bytes / 1099511627776, 2) . ' TB';
 	}
 	
 	public function mksizeint($bytes)
 	{
 		$bytes = max(0, $bytes);
 		if ($bytes < 1000)
-			return floor($bytes) . " B";
+			return floor($bytes) . ' B';
 		elseif ($bytes < 1000 * 1024)
-			return floor($bytes / 1024) . " kB";
+			return floor($bytes / 1024) . ' kB';
 		elseif ($bytes < 1000 * 1048576)
-			return floor($bytes / 1048576) . " MB";
+			return floor($bytes / 1048576) . ' MB';
 		elseif ($bytes < 1000 * 1073741824)
-			return floor($bytes / 1073741824) . " GB";
+			return floor($bytes / 1073741824) . ' GB';
 		else
-			return floor($bytes / 1099511627776) . " TB";
+			return floor($bytes / 1099511627776) . ' TB';
 	}
 	
 	public function deadtime() {
@@ -193,8 +193,8 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 		if ($s < 0)
 		$s = 0;
 		$t = [];
-		foreach (["60:sec","60:min","24:hour","0:day"] as $x) {
-			$y = explode(":", $x);
+		foreach (['60:sec', '60:min', '24:hour', '0:day'] as $x) {
+			$y = explode(':', $x);
 			if ($y[0] > 1) {
 				$v = $s % $y[0];
 				$s = floor($s / $y[0]);
@@ -204,13 +204,13 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 			$t[$y[1]] = $v;
 		}
 	
-		if ($t["day"])
-			return $t["day"] . "d " . sprintf("%02d:%02d:%02d", $t["hour"], $t["min"], $t["sec"]);
-		if ($t["hour"])
-			return sprintf("%d:%02d:%02d", $t["hour"], $t["min"], $t["sec"]);
-	    if ($t["min"])
-			return sprintf("%d:%02d", $t["min"], $t["sec"]);
-	    return $t["sec"] . " secs";
+		if ($t['day'])
+			return $t['day'] . 'd ' . sprintf('%02d:%02d:%02d', $t['hour'], $t['min'], $t['sec']);
+		if ($t['hour'])
+			return sprintf('%d:%02d:%02d', $t['hour'], $t['min'], $t['sec']);
+	    if ($t['min'])
+			return sprintf('%d:%02d', $t['min'], $t['sec']);
+	    return $t['sec'] . ' secs';
 	}
 
 	
@@ -364,7 +364,7 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 	public function local_user()
 	{
 		global $HTTP_SERVER_VARS;
-		return $HTTP_SERVER_VARS["SERVER_ADDR"] == $HTTP_SERVER_VARS["REMOTE_ADDR"];
+		return $HTTP_SERVER_VARS['SERVER_ADDR'] == $HTTP_SERVER_VARS['REMOTE_ADDR'];
 	}
 	
 	public function create(){

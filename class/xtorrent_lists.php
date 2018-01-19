@@ -24,7 +24,7 @@ class XtsLists
      * 		dir
      */
 
-    public function __construct($path = "uploads", $value = null, $selected = '', $size = 1, $emptyselect = 0, $type = 0, $prefix = '', $suffix = '')
+    public function __construct($path = 'uploads', $value = null, $selected = '', $size = 1, $emptyselect = 0, $type = 0, $prefix = '', $suffix = '')
     {
         $this->value = $value;
         $this->selection = $selected;
@@ -41,14 +41,14 @@ class XtsLists
             $ret .= "<option value='" . $this->value() . "'>----------------------</option>";
         }
         foreach ($this_array as $content) {
-            $opt_selected = "";
+            $opt_selected = '';
 
             if ($content[0] == $this->selected()) {
                 $opt_selected = "selected='selected'";
             }
-            $ret .= "<option value='" . $content . "' $opt_selected>" . $content . "</option>";
+            $ret .= "<option value='" . $content . "' $opt_selected>" . $content . '</option>';
         }
-        $ret .= "</select>";
+        $ret .= '</select>';
         return $ret;
     }
 
@@ -60,7 +60,7 @@ class XtsLists
         $dirlist = [];
         if (is_dir($dirname) && $handle = opendir($dirname)) {
             while (false !== ($file = readdir($handle))) {
-                if (!preg_match("/^[.]{1,2}$/", $file)) {
+                if (!preg_match('/^[.]{1,2}$/', $file)) {
                     if (strtolower($file) != 'cvs' && is_dir($dirname . $file)) {
                         $dirlist[$file] = $file;
                     }
@@ -73,26 +73,26 @@ class XtsLists
         return $dirlist;
     }
 
-    public static function getListTypeAsArray($dirname, $type = '', $prefix = "", $noselection = 1)
+    public static function getListTypeAsArray($dirname, $type = '', $prefix = '', $noselection = 1)
     {
         $filelist = [];
         switch (trim($type)) {
-            case "images":
-                $types = "[.gif|.jpg|.png]";
+            case 'images':
+                $types = '[.gif|.jpg|.png]';
                 if ($noselection) {
-                    $filelist[""] = "Show No Image";
+                    $filelist[''] = 'Show No Image';
                 }
                 break;
-            case "html":
-                $types = "[.htm|.html|.xhtml|.php|.php3|.phtml|.txt]";
+            case 'html':
+                $types = '[.htm|.html|.xhtml|.php|.php3|.phtml|.txt]';
                 if ($noselection) {
-                    $filelist[""] = "No Selection";
+                    $filelist[''] = 'No Selection';
                 }
                 break;
             default:
-                $types = "";
+                $types = '';
                 if ($noselection) {
-                    $filelist[""] = "No Selected File";
+                    $filelist[''] = 'No Selected File';
                 }
                 break;
         }
@@ -103,8 +103,8 @@ class XtsLists
 
         if (is_dir($dirname) && $handle = opendir($dirname)) {
             while (false !== ($file = readdir($handle))) {
-                if (!preg_match("/^[.]{1,2}$/", $file) && preg_match("/$types$/i", $file) && is_file($dirname . '/' . $file)) {
-                    if (strtolower($file) == "blank.png") {
+                if (!preg_match('/^[.]{1,2}$/', $file) && preg_match("/$types$/i", $file) && is_file($dirname . '/' . $file)) {
+                    if (strtolower($file) == 'blank.png') {
                         continue;
                     }
                     $file = $prefix . $file;

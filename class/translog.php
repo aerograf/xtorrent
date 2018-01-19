@@ -5,10 +5,10 @@ class translogResource extends XoopsObject
     public function __construct()
     {
         $this->XoopsObject();
-        $this->initVar("id", XOBJ_DTYPE_INT);
-        $this->initVar("log_date", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("payment_date", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("logentry", XOBJ_DTYPE_TXTBOX);
+        $this->initVar('id', XOBJ_DTYPE_INT);
+        $this->initVar('log_date', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('payment_date', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('logentry', XOBJ_DTYPE_TXTBOX);
     }
 }
 
@@ -80,13 +80,13 @@ class XtorrentTranslogHandler extends XoopsObjectHandler
         }
         $myts = MyTextSanitizer::getInstance();
         if ($translog->isNew() || empty($id)) {
-            $id = $this->db->genId($this->db_table."_xt_translog_id_seq");
+            $id = $this->db->genId($this->db_table . '_xt_translog_id_seq');
             $sql = sprintf(
-                "INSERT INTO %s (
+                'INSERT INTO %s (
 				`id`, `log_date`, `payment_date`, `logentry`,
 				) VALUES (
 				%u, %s, %s, %s
-				)",
+				)',
                 $this->db_table,
                 $this->db->quoteString($id),
                 $this->db->quoteString($log_date),
@@ -95,10 +95,10 @@ class XtorrentTranslogHandler extends XoopsObjectHandler
             );
         } else {
             $sql = sprintf(
-                "UPDATE %s SET
+                'UPDATE %s SET
 				`log_date` = %s,
 				`payment_date` = %s,
-				`logentry` = %s WHERE id = %s",
+				`logentry` = %s WHERE id = %s',
                 $this->db_table,
                 $this->db->quoteString($log_date),
                 $this->db->quoteString($payment_date),
@@ -113,7 +113,7 @@ class XtorrentTranslogHandler extends XoopsObjectHandler
             $result = $this->db->query($sql);
         }
         if (!$result) {
-            $translog->setErrors("Could not store data in the database.<br />".$this->db->error().' ('.$this->db->errno().')<br />'.$sql);
+            $translog->setErrors('Could not store data in the database.<br />' . $this->db->error() . ' (' . $this->db->errno() . ')<br />' . $sql);
             return false;
         }
         if (empty($id)) {
@@ -129,7 +129,7 @@ class XtorrentTranslogHandler extends XoopsObjectHandler
             return false;
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql = "DELETE FROM ".$this->db_table." ".$criteria->renderWhere()."";
+            $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
         if (false != $force) {
             $result = $this->db->queryF($sql);
@@ -139,13 +139,13 @@ class XtorrentTranslogHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function delete_scalar($limit = 20, $sort = "id DESC")
+    public function delete_scalar($limit = 20, $sort = 'id DESC')
     {
         if ($this->getCount>$limit) {
-            $sql = "SELECT id as lowid FROM ".$this->db->prefix("xtorrent_translog")." ORDER BY $sort LIMIT $limit";
+            $sql = 'SELECT id as lowid FROM ' . $this->db->prefix('xtorrent_translog') . " ORDER BY $sort LIMIT $limit";
             $result = $this->db->queryF($sql);
             while (list($lowid) = $this->db->fetchRow($result)) {
-                $sql =  "DELETE FROM ".$this->db->prefix("xtorrent_translog")." WHERE id < '" . $lowid . "'";
+                $sql = 'DELETE FROM ' . $this->db->prefix('xtorrent_translog') . " WHERE id < '" . $lowid . "'";
                 $result = $this->db->queryF($sql);
             }
         }
@@ -207,7 +207,7 @@ class XtorrentTranslogHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function deleteTorrentPermissions($id, $mode = "view")
+    public function deleteTorrentPermissions($id, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
@@ -222,7 +222,7 @@ class XtorrentTranslogHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function insertTorrentPermissions($id, $group_ids, $mode = "view")
+    public function insertTorrentPermissions($id, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $id) {
@@ -234,10 +234,10 @@ class XtorrentTranslogHandler extends XoopsObjectHandler
             $this->perm_handler->insert($perm);
             $ii++;
         }
-        return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record ID ".$id;
+        return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $id;
     }
     
-    public function getPermittedTorrents($translog, $mode = "view")
+    public function getPermittedTorrents($translog, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $ret=false;
@@ -275,7 +275,7 @@ class XtorrentTranslogHandler extends XoopsObjectHandler
         return ret;
     }
     
-    public function getSingleTorrentPermission($id, $mode = "view")
+    public function getSingleTorrentPermission($id, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;

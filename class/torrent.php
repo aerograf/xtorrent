@@ -5,30 +5,30 @@ class torrentResource extends XoopsObject
     public function __construct()
     {
         $this->XoopsObject();
-        $this->initVar("lid", XOBJ_DTYPE_INT);
-        $this->initVar("seeds", XOBJ_DTYPE_INT);
-        $this->initVar("leechers", XOBJ_DTYPE_INT);
-        $this->initVar("totalsize", XOBJ_DTYPE_FLOAT);
-        $this->initVar("modifiedby", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("tname", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("infoHash", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("announce", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("md5sum", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("added", XOBJ_DTYPE_INT);
-        $this->initVar("announce");
-        $this->initVar("announceList");
-        $this->initVar("createdBy");
-        $this->initVar("creationDate");
-        $this->initVar("encoding");
-        $this->initVar("name");
-        $this->initVar("length");
-        $this->initVar("files");
-        $this->initVar("pieceLength");
-        $this->initVar("pieces");
-        $this->initVar("comment");
-        $this->initVar("private");
-        $this->initVar("filename");
-        $this->initVar("benc");
+        $this->initVar('lid', XOBJ_DTYPE_INT);
+        $this->initVar('seeds', XOBJ_DTYPE_INT);
+        $this->initVar('leechers', XOBJ_DTYPE_INT);
+        $this->initVar('totalsize', XOBJ_DTYPE_FLOAT);
+        $this->initVar('modifiedby', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('tname', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('infoHash', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('announce', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('md5sum', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('added', XOBJ_DTYPE_INT);
+        $this->initVar('announce');
+        $this->initVar('announceList');
+        $this->initVar('createdBy');
+        $this->initVar('creationDate');
+        $this->initVar('encoding');
+        $this->initVar('name');
+        $this->initVar('length');
+        $this->initVar('files');
+        $this->initVar('pieceLength');
+        $this->initVar('pieces');
+        $this->initVar('comment');
+        $this->initVar('private');
+        $this->initVar('filename');
+        $this->initVar('benc');
     }
     
     public function getArray()
@@ -134,7 +134,7 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
 
         if ($torrentInfo === false) {
             $this->error = true;
-            trigger_error("The torrent file is invalid", E_USER_WARNING);
+            trigger_error('The torrent file is invalid', E_USER_WARNING);
         }
     
         $torrent->setVar('benc', $benc_torrent);
@@ -162,7 +162,7 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
                 $torrentFile = new TorrentFile();
                 $torrentFile->md5sum = $fileInfo['md5sum'];
                 $torrentFile->length = $fileInfo['length'];
-                $torrentFile->name = implode("/", $fileInfo['path']);
+                $torrentFile->name = implode('/', $fileInfo['path']);
                 $md5key = md5($fileInfo['md5sum'].$md5key);
                 $files[$key] = $torrentFile;
                 $totalSize += $torrentFile->length;
@@ -211,13 +211,13 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
         }
         $myts = MyTextSanitizer::getInstance();
         if ($torrent->isNew() || empty($id)) {
-            $id  = $this->db->genId($this->db_table."_xt_torrent_id_seq");
+            $id  = $this->db->genId($this->db_table . '_xt_torrent_id_seq');
             $sql = sprintf(
-                "INSERT INTO %s (
+                'INSERT INTO %s (
 				`lid`, `seeds`, `leeches`, `totalsize`, `modifiedby`, `tname`, `infoHash`, `announce`, `md5sum`, `added`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s, %s
-				)",
+				)',
                 $this->db_table,
                 $this->db->quoteString($lid),
                 $this->db->quoteString($seeds),
@@ -232,7 +232,7 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
             );
         } else {
             $sql = sprintf(
-                "UPDATE %s SET
+                'UPDATE %s SET
 				`seeds` = %s,
 				`leeches` = %s,
 				`totalsize` = %s,
@@ -241,7 +241,7 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
 				`infoHash` = %s,
 				`announce` = %s,
 				`md5sum` = %s,
-				`added` = %s WHERE lid = %s",
+				`added` = %s WHERE lid = %s',
                 $this->db_table,
                 $this->db->quoteString($seeds),
                 $this->db->quoteString($leeches),
@@ -262,7 +262,7 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
             $result = $this->db->query($sql);
         }
         if (!$result) {
-            $torrent->setErrors("Could not store data in the database.<br>".$this->db->error().' ('.$this->db->errno().')<br>'.$sql);
+            $torrent->setErrors('Could not store data in the database.<br>' . $this->db->error() . ' (' . $this->db->errno() . ')<br>' . $sql);
             return false;
         }
         if (empty($id)) {
@@ -278,7 +278,7 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
             return false;
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql = "DELETE FROM ".$this->db_table." ".$criteria->renderWhere()."";
+            $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
         if (false != $force) {
             $result = $this->db->queryF($sql);
@@ -344,7 +344,7 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function deleteTorrentPermissions($id, $mode = "view")
+    public function deleteTorrentPermissions($id, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
@@ -359,7 +359,7 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function insertTorrentPermissions($id, $group_ids, $mode = "view")
+    public function insertTorrentPermissions($id, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $id) {
@@ -371,10 +371,10 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
             $this->perm_handler->insert($perm);
             $ii++;
         }
-        return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record ID ".$id;
+        return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $id;
     }
     
-    public function getPermittedTorrents($torrent, $mode = "view")
+    public function getPermittedTorrents($torrent, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $ret=false;
@@ -412,7 +412,7 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
         return ret;
     }
 
-    public function getSingleTorrentPermission($id, $mode = "view")
+    public function getSingleTorrentPermission($id, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;

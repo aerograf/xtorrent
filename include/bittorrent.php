@@ -1,8 +1,8 @@
 <?php
 
 error_reporting(E_ALL ^ E_NOTICE);
-require_once("secrets.php");
-require_once("cleanup.php");
+require_once('secrets.php');
+require_once('cleanup.php');
 
 
 // PHP5 with register_long_arrays off?
@@ -114,7 +114,7 @@ function local_user()
 {
     global $HTTP_SERVER_VARS;
 
-    return $HTTP_SERVER_VARS["SERVER_ADDR"] == $HTTP_SERVER_VARS["REMOTE_ADDR"];
+    return $HTTP_SERVER_VARS['SERVER_ADDR'] == $HTTP_SERVER_VARS['REMOTE_ADDR'];
 }
 
 /*dbconn();
@@ -149,11 +149,11 @@ $maxusers              = 75000;
 $announce_urls   = [];
 $announce_urls[] = str_replace('{XOOPS_URL}', XOOPS_URL, $xoopsModuleConfig['announce_url']);
 
-if ($HTTP_SERVER_VARS["HTTP_HOST"] == "") {
-    $HTTP_SERVER_VARS["HTTP_HOST"] = $HTTP_SERVER_VARS["SERVER_NAME"];
+if ($HTTP_SERVER_VARS['HTTP_HOST'] == '') {
+    $HTTP_SERVER_VARS['HTTP_HOST'] = $HTTP_SERVER_VARS['SERVER_NAME'];
 }
 
-$BASEURL     = "//" . $HTTP_SERVER_VARS["HTTP_HOST"];
+$BASEURL     = '//' . $HTTP_SERVER_VARS['HTTP_HOST'];
 
 //set this to true to make this a tracker that only registered users may use
 $MEMBERSONLY = true;
@@ -177,7 +177,7 @@ $DEFAULTBASEURL = XOOPS_URL;
 
 
 $autoclean_interval = 900;
-$pic_base_url       = "pic/";
+$pic_base_url       = 'pic/';
 
 /**** validip/getip courtesy of manolete <manolete@myway.com> ****/
 
@@ -267,22 +267,22 @@ function dbconn($autoclean = false)
 function userlogin()
 {
     global $HTTP_SERVER_VARS, $SITE_ONLINE;
-    unset($GLOBALS["CURUSER"]);
+    unset($GLOBALS['CURUSER']);
 
     $ip  = getip();
     $nip = ip2long($ip);
     $res = mysqli_query("SELECT * FROM bans WHERE $nip >= first AND $nip <= last") or sqlerr(__FILE__, __LINE__);
     if (mysqli_num_rows($res) > 0) {
-        header("HTTP/1.0 403 Forbidden");
-        print("<html><body><h1>403 Forbidden</h1>Unauthorized IP address.</body></html>");
+        header('HTTP/1.0 403 Forbidden');
+        print('<html><body><h1>403 Forbidden</h1>Unauthorized IP address.</body></html>');
         die;
     }
 
-    if (!$SITE_ONLINE || empty($_COOKIE["uid"]) || empty($_COOKIE["pass"])) {
+    if (!$SITE_ONLINE || empty($_COOKIE['uid']) || empty($_COOKIE['pass'])) {
         return;
     }
-    $id = 0 + $_COOKIE["uid"];
-    if (!$id || strlen($_COOKIE["pass"]) != 32) {
+    $id = 0 + $_COOKIE['uid'];
+    if (!$id || strlen($_COOKIE['pass']) != 32) {
         return;
     }
     $res = mysqli_query("SELECT * FROM users WHERE id = $id AND enabled='yes' AND status = 'confirmed'");// or die(mysql_error());
@@ -290,13 +290,13 @@ function userlogin()
     if (!$row) {
         return;
     }
-    $sec = hash_pad($row["secret"]);
-    if ($_COOKIE["pass"] !== $row["passhash"]) {
+    $sec = hash_pad($row['secret']);
+    if ($_COOKIE['pass'] !== $row['passhash']) {
         return;
     }
-    mysqli_query("UPDATE users SET last_access='" . get_date_time() . "', ip='$ip' WHERE id=" . $row["id"]);// or die(mysql_error());
-    $row['ip'] = $ip;
-    $GLOBALS["CURUSER"] = $row;
+    mysqli_query("UPDATE users SET last_access='" . get_date_time() . "', ip='$ip' WHERE id=" . $row['id']);// or die(mysql_error());
+    $row['ip']          = $ip;
+    $GLOBALS['CURUSER'] = $row;
 }
 
 function autoclean()
@@ -335,13 +335,13 @@ function unesc($x)
 function mksize($bytes)
 {
     if ($bytes < 1000 * 1024) {
-        return number_format($bytes / 1024, 2) . " kB";
+        return number_format($bytes / 1024, 2) . ' kB';
     } elseif ($bytes < 1000 * 1048576) {
-        return number_format($bytes / 1048576, 2) . " MB";
+        return number_format($bytes / 1048576, 2) . ' MB';
     } elseif ($bytes < 1000 * 1073741824) {
-        return number_format($bytes / 1073741824, 2) . " GB";
+        return number_format($bytes / 1073741824, 2) . ' GB';
     } else {
-        return number_format($bytes / 1099511627776, 2) . " TB";
+        return number_format($bytes / 1099511627776, 2) . ' TB';
     }
 }
 
@@ -349,15 +349,15 @@ function mksizeint($bytes)
 {
     $bytes = max(0, $bytes);
     if ($bytes < 1000) {
-        return floor($bytes) . " B";
+        return floor($bytes) . ' B';
     } elseif ($bytes < 1000 * 1024) {
-        return floor($bytes / 1024) . " kB";
+        return floor($bytes / 1024) . ' kB';
     } elseif ($bytes < 1000 * 1048576) {
-        return floor($bytes / 1048576) . " MB";
+        return floor($bytes / 1048576) . ' MB';
     } elseif ($bytes < 1000 * 1073741824) {
-        return floor($bytes / 1073741824) . " GB";
+        return floor($bytes / 1073741824) . ' GB';
     } else {
-        return floor($bytes / 1099511627776) . " TB";
+        return floor($bytes / 1099511627776) . ' TB';
     }
 }
 
@@ -373,8 +373,8 @@ function mkprettytime($s)
         $s = 0;
     }
     $t = [];
-    foreach (["60:sec", "60:min", "24:hour", "0:day"] as $x) {
-        $y = explode(":", $x);
+    foreach (['60:sec', '60:min', '24:hour', '0:day'] as $x) {
+        $y = explode(':', $x);
         if ($y[0] > 1) {
             $v = $s % $y[0];
             $s = floor($s / $y[0]);
@@ -384,21 +384,21 @@ function mkprettytime($s)
         $t[$y[1]] = $v;
     }
 
-    if ($t["day"]) {
-        return $t["day"] . "d " . sprintf("%02d:%02d:%02d", $t["hour"], $t["min"], $t["sec"]);
+    if ($t['day']) {
+        return $t['day'] . 'd ' . sprintf('%02d:%02d:%02d', $t['hour'], $t['min'], $t['sec']);
     }
-    if ($t["hour"]) {
-        return sprintf("%d:%02d:%02d", $t["hour"], $t["min"], $t["sec"]);
+    if ($t['hour']) {
+        return sprintf('%d:%02d:%02d', $t['hour'], $t['min'], $t['sec']);
     }
 //    if ($t["min"])
-    return sprintf("%d:%02d", $t["min"], $t["sec"]);
+    return sprintf('%d:%02d', $t['min'], $t['sec']);
 //    return $t["sec"] . " secs";
 }
 
 function mkglobal($vars)
 {
     if (!is_array($vars)) {
-        $vars = explode(":", $vars);
+        $vars = explode(':', $vars);
     }
     foreach ($vars as $v) {
         if (isset($_GET[$v])) {
@@ -440,7 +440,7 @@ function sqlesc($x)
 
 function sqlwildcardesc($x)
 {
-    return str_replace(["%","_"], ["\\%","\\_"], mysqli_real_escape_string($x));
+    return str_replace(['%', '_'], ["\\%", "\\_"], mysqli_real_escape_string($x));
 }
 
 function urlparse($m)
@@ -461,34 +461,34 @@ function parsedescr($d, $html)
     return $d;
 }
 
-function stdhead($title = "", $msgalert = true)
+function stdhead($title = '', $msgalert = true)
 {
     global $CURUSER, $HTTP_SERVER_VARS, $PHP_SELF, $SITE_ONLINE, $FUNDS, $SITENAME;
 
     if (!$SITE_ONLINE) {
-        die("Site is down for maintenance, please check back again later... thanks<br>");
+        die('Site is down for maintenance, please check back again later... thanks<br>');
     }
 
-    header("Content-Type: text/html; charset=iso-8859-1");
+    header('Content-Type: text/html; charset=iso-8859-1');
     //header("Pragma: No-cache");
-    if ($title == "") {
+    if ($title == '') {
         $title = $SITENAME;
     } else {
         $title = "$SITENAME :: " . htmlspecialchars($title);
     }
     if ($CURUSER) {
-        $ss_a = @mysqli_fetch_array(@mysqli_query("select uri from stylesheets where id=" . $CURUSER["stylesheet"]));
+        $ss_a = @mysqli_fetch_array(@mysqli_query('select uri from stylesheets where id=' . $CURUSER['stylesheet']));
         if ($ss_a) {
-            $ss_uri = $ss_a["uri"];
+            $ss_uri = $ss_a['uri'];
         }
     }
     if (!$ss_uri) {
-        ($r = mysqli_query("SELECT uri FROM stylesheets WHERE id=1")) or die(mysqli_error());
+        ($r = mysqli_query('SELECT uri FROM stylesheets WHERE id=1')) or die(mysqli_error());
         ($a = mysqli_fetch_array($r)) or die(mysqli_error());
-        $ss_uri = $a["uri"];
+        $ss_uri = $a['uri'];
     }
     if ($msgalert && $CURUSER) {
-        $res = mysqli_query("SELECT COUNT(*) FROM messages WHERE receiver=" . $CURUSER["id"] . " && unread='yes'") or die("OopppsY!");
+        $res = mysqli_query('SELECT COUNT(*) FROM messages WHERE receiver=' . $CURUSER['id'] . " && unread='yes'") or die('OopppsY!');
         $arr = mysqli_fetch_row($res);
         $unread = $arr[0];
     } ?>
@@ -527,13 +527,13 @@ function stdhead($title = "", $msgalert = true)
 </tr></table>
 <?php
 
-$w = "width=100%";
+$w = 'width=100%';
     //if ($HTTP_SERVER_VARS["REMOTE_ADDR"] == $HTTP_SERVER_VARS["SERVER_ADDR"]) $w = "width=984"; ?>
 <table class=mainouter <?=$w; ?> border="1" cellspacing="0" cellpadding="10">
 
 <!------------- MENU ------------------------------------------------------------------------>
 
-<?php $fn = substr($PHP_SELF, strrpos($PHP_SELF, "/") + 1); ?>
+<?php $fn = substr($PHP_SELF, strrpos($PHP_SELF, '/') + 1); ?>
 <tr><td class=outer align=center>
 <table class=main width=700 cellspacing="0" cellpadding="5" border="0">
 <tr>
@@ -570,7 +570,7 @@ $w = "width=100%";
 
 if ($unread) {
     print("<p><table border=0 cellspacing=0 cellpadding=10 bgcolor=red><tr><td style='padding: 10px; background: red'>\n");
-    print("<b><a href=$BASEURL/inbox.php><font color=white>You have $unread new message" . ($unread > 1 ? "s" : "") . "!</font></a></b>");
+    print("<b><a href=$BASEURL/inbox.php><font color=white>You have $unread new message" . ($unread > 1 ? 's' : '') . '!</font></a></b>');
     print("</td></tr></table></p>\n");
 }
 } // stdhead
@@ -587,15 +587,15 @@ function stdfoot()
 function genbark($x, $y)
 {
     stdhead($y);
-    print("<h2>" . htmlspecialchars($y) . "</h2>\n");
-    print("<p>" . htmlspecialchars($x) . "</p>\n");
+    print('<h2>' . htmlspecialchars($y) . "</h2>\n");
+    print('<p>' . htmlspecialchars($x) . "</p>\n");
     stdfoot();
     exit();
 }
 
 function mksecret($len = 20)
 {
-    $ret = "";
+    $ret = '';
     for ($i = 0; $i < $len; $i++) {
         $ret .= chr(mt_rand(0, 255));
     }
@@ -604,7 +604,7 @@ function mksecret($len = 20)
 
 function httperr($code = 404)
 {
-    header("HTTP/1.0 404 Not found");
+    header('HTTP/1.0 404 Not found');
     print("<h1>Not Found</h1>\n");
     print("<p>Sorry pal :(</p>\n");
     exit();
@@ -628,8 +628,8 @@ function logincookie($id, $password, $secret, $updatedb = 1, $expires = 0x7fffff
 
 function logincookie($id, $passhash, $updatedb = 1, $expires = 0x7fffffff)
 {
-    setcookie("uid", $id, $expires, "/");
-    setcookie("pass", $passhash, $expires, "/");
+    setcookie('uid', $id, $expires, '/');
+    setcookie('pass', $passhash, $expires, '/');
 
     if ($updatedb) {
         mysqli_query("UPDATE users SET last_login = NOW() WHERE id = $id");
@@ -639,15 +639,15 @@ function logincookie($id, $passhash, $updatedb = 1, $expires = 0x7fffffff)
 
 function logoutcookie()
 {
-    setcookie("uid", "", 0x7fffffff, "/");
-    setcookie("pass", "", 0x7fffffff, "/");
+    setcookie('uid', '', 0x7fffffff, '/');
+    setcookie('pass', '', 0x7fffffff, '/');
 }
 
 function loggedinorreturn()
 {
     global $CURUSER;
     if (!$CURUSER) {
-        header("Location: login.php?returnto=" . urlencode($_SERVER["REQUEST_URI"]));
+        header('Location: login.php?returnto=' . urlencode($_SERVER['REQUEST_URI']));
         exit();
     }
 }
@@ -656,7 +656,7 @@ function deletetorrent($id)
 {
     global $torrent_dir;
     mysqli_query("DELETE FROM torrents WHERE id = $id");
-    foreach (explode(".", "peers.files.comments.ratings") as $x) {
+    foreach (explode('.', 'peers.files.comments.ratings') as $x) {
         mysqli_query("DELETE FROM $x WHERE torrent = $id");
     }
     unlink("$torrent_dir/$id.torrent");
@@ -666,7 +666,7 @@ function pager($rpp, $count, $href, $opts = [])
 {
     $pages = ceil($count / $rpp);
 
-    if (!$opts["lastpagedefault"]) {
+    if (!$opts['lastpagedefault']) {
         $pagedefault = 0;
     } else {
         $pagedefault = floor(($count - 1) / $rpp);
@@ -675,8 +675,8 @@ function pager($rpp, $count, $href, $opts = [])
         }
     }
 
-    if (isset($_GET["page"])) {
-        $page = 0 + $_GET["page"];
+    if (isset($_GET['page'])) {
+        $page = 0 + $_GET['page'];
         if ($page < 0) {
             $page = $pagedefault;
         }
@@ -684,23 +684,23 @@ function pager($rpp, $count, $href, $opts = [])
         $page = $pagedefault;
     }
 
-    $pager = "";
+    $pager = '';
 
     $mp = $pages - 1;
-    $as = "<b>&lt;&lt;&nbsp;Prev</b>";
+    $as = '<b>&lt;&lt;&nbsp;Prev</b>';
     if ($page >= 1) {
-        $pager .= "<a href=\"{$href}page=" . ($page - 1) . "\">";
+        $pager .= "<a href=\"{$href}page=" . ($page - 1) . '">';
         $pager .= $as;
-        $pager .= "</a>";
+        $pager .= '</a>';
     } else {
         $pager .= $as;
     }
-    $pager .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-    $as = "<b>Next&nbsp;&gt;&gt;</b>";
+    $pager .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+    $as = '<b>Next&nbsp;&gt;&gt;</b>';
     if ($page < $mp && $mp >= 0) {
-        $pager .= "<a href=\"{$href}page=" . ($page + 1) . "\">";
+        $pager .= "<a href=\"{$href}page=" . ($page + 1) . '">';
         $pager .= $as;
-        $pager .= "</a>";
+        $pager .= '</a>';
     } else {
         $pager .= $as;
     }
@@ -715,7 +715,7 @@ function pager($rpp, $count, $href, $opts = [])
         for ($i = 0; $i < $pages; $i++) {
             if (($i >= $dotspace && $i <= $curdotend) || ($i >= $curdotstart && $i < $dotend)) {
                 if (!$dotted) {
-                    $pagerarr[] = "...";
+                    $pagerarr[] = '...';
                 }
                 $dotted = 1;
                 continue;
@@ -733,7 +733,7 @@ function pager($rpp, $count, $href, $opts = [])
                 $pagerarr[] = "<b>$text</b>";
             }
         }
-        $pagerstr = join(" | ", $pagerarr);
+        $pagerstr = join(' | ', $pagerarr);
         $pagertop = "<p align=\"center\">$pager<br />$pagerstr</p>\n";
         $pagerbottom = "<p align=\"center\">$pagerstr<br />$pager</p>\n";
     } else {
@@ -753,25 +753,25 @@ function downloaderdata($res)
     $peerdata = [];
     while ($row = mysqli_fetch_assoc($res)) {
         $rows[] = $row;
-        $id     = $row["id"];
+        $id     = $row['id'];
         $ids[]  = $id;
         $peerdata[$id] = [downloaders => 0, seeders => 0, comments => 0];
     }
 
     if (count($ids)) {
-        $allids = implode(",", $ids);
+        $allids = implode(',', $ids);
         $res = mysqli_query("SELECT COUNT(*) AS c, torrent, seeder FROM peers WHERE torrent IN ($allids) GROUP BY torrent, seeder");
         while ($row = mysqli_fetch_assoc($res)) {
-            if ($row["seeder"] == "yes") {
-                $key = "seeders";
+            if ($row['seeder'] == 'yes') {
+                $key = 'seeders';
             } else {
-                $key = "downloaders";
+                $key = 'downloaders';
             }
-            $peerdata[$row["torrent"]][$key] = $row["c"];
+            $peerdata[$row['torrent']][$key] = $row['c'];
         }
         $res = mysqli_query("SELECT COUNT(*) AS c, torrent FROM comments WHERE torrent IN ($allids) GROUP BY torrent");
         while ($row = mysqli_fetch_assoc($res)) {
-            $peerdata[$row["torrent"]]["comments"] = $row["c"];
+            $peerdata[$row['torrent']]['comments'] = $row['c'];
         }
     }
 
@@ -785,39 +785,37 @@ function commenttable($rows)
     begin_frame();
     $count = 0;
     foreach ($rows as $row) {
-        print("<p class=sub>#" . $row["id"] . " by ");
-        if (isset($row["username"])) {
-            $title = $row["title"];
-            if ($title == "") {
-                $title = get_user_class_name($row["class"]);
+        print('<p class=sub>#' . $row['id'] . ' by ');
+        if (isset($row['username'])) {
+            $title = $row['title'];
+            if ($title == '') {
+                $title = get_user_class_name($row['class']);
             } else {
                 $title = htmlspecialchars($title);
             }
-            print("<a name=comm". $row["id"] .
-            " href=userdetails.php?id=" . $row["user"] . "><b>" .
-            htmlspecialchars($row["username"]) . "</b></a>" . ($row["donor"] == "yes" ? "<img src=pic/star.gif alt='Donor'>" : "") . ($row["warned"] == "yes" ? "<img src=".
-                "pic/warned.gif alt=\"Warned\">" : "") . " ($title)");
+            print('<a name=comm' . $row['id'] . ' href=userdetails.php?id=' . $row['user'] . '><b>' .
+                  htmlspecialchars($row['username']) . '</b></a>' . ($row['donor'] == 'yes' ? "<img src=pic/star.gif alt='Donor'>" : '') . ($row['warned'] == 'yes' ? '<img src=' . 'pic/warned.gif alt="Warned">' : '') . " ($title)");
         } else {
-            print("<a name=\"comm" . $row["id"] . "\"><i>(orphaned)</i></a>");
+            print('<a name="comm' . $row['id'] . '"><i>(orphaned)</i></a>');
         }
 
-        print(" at " . $row["added"] . " GMT" .
-            ($row["user"] == $CURUSER["id"] || get_user_class() >= UC_MODERATOR ? "- [<a href=comment.php?action=edit&amp;cid=$row[id]>Edit</a>]" : "") .
-            (get_user_class() >= UC_MODERATOR ? "- [<a href=comment.php?action=delete&amp;cid=$row[id]>Delete</a>]" : "") .
-            ($row["editedby"] && get_user_class() >= UC_MODERATOR ? "- [<a href=comment.php?action=vieworiginal&amp;cid=$row[id]>View original</a>]" : "") . "</p>");
-        $avatar = ($CURUSER["avatars"] == "yes" ? htmlspecialchars($row["avatar"]) : "");
+        print(' at ' . $row['added'] . ' GMT' .
+              ($row['user'] == $CURUSER['id'] || get_user_class() >= UC_MODERATOR ? "- [<a href=comment.php?action=edit&amp;cid=$row[id]>Edit</a>]" : '') .
+              (get_user_class() >= UC_MODERATOR ? "- [<a href=comment.php?action=delete&amp;cid=$row[id]>Delete</a>]" : '') .
+              ($row['editedby'] && get_user_class() >= UC_MODERATOR ? "- [<a href=comment.php?action=vieworiginal&amp;cid=$row[id]>View original</a>]" : '') . '</p>');
+        $avatar = ($CURUSER['avatars'] == 'yes' ? htmlspecialchars($row['avatar']) : '');
         if (!$avatar) {
-            $avatar = "pic/default_avatar.gif";
+            $avatar = 'pic/default_avatar.gif';
         }
-        $text = format_comment($row["text"]);
-        if ($row["editedby"]) {
+        $text = format_comment($row['text']);
+        if ($row['editedby']) {
             $text .= "<p><font size=1 class=small>Last edited by <a href=userdetails.php?id=$row[editedby]><b>$row[username]</b></a> at $row[editedat] GMT</font></p>";
         }
         begin_table(true);
-        print("<tr valign=top>");
+        print('<tr valign=top>');
         print("<td align=center width=150 style='padding: 0px'><img width=150 src=$avatar></td>");
         print("<td class=text>$text</td>");
-        print("</tr>");
+        print('</tr>');
         end_table();
     }
     end_frame();
@@ -826,13 +824,13 @@ function commenttable($rows)
 
 function searchfield($s)
 {
-    return preg_replace(['/[^a-z0-9]/si', '/^\s*/s', '/\s*$/s', '/\s+/s'], [" ", "", "", " "], $s);
+    return preg_replace(['/[^a-z0-9]/si', '/^\s*/s', '/\s*$/s', '/\s+/s'], [' ', '', '', ' '], $s);
 }
 
 function genrelist()
 {
     $ret = [];
-    $res = mysqli_query("SELECT id, name FROM categories ORDER BY name");
+    $res = mysqli_query('SELECT id, name FROM categories ORDER BY name');
     while ($row = mysqli_fetch_array($res)) {
         $ret[] = $row;
     }
@@ -842,11 +840,11 @@ function genrelist()
 function linkcolor($num)
 {
     if (!$num) {
-        return "red";
+        return 'red';
     }
 //    if ($num == 1)
 //        return "yellow";
-    return "green";
+    return 'green';
 }
 
 function ratingpic($num)
@@ -859,13 +857,13 @@ function ratingpic($num)
     return "<img src=\"$pic_base_url$r.gif\" border=\"0\" alt=\"rating: $num / 5\" >";
 }
 
-function torrenttable($res, $variant = "index")
+function torrenttable($res, $variant = 'index')
 {
     global $pic_base_url, $CURUSER;
 
-    if ($CURUSER["class"] < UC_VIP) {
-        $gigs = $CURUSER["uploaded"] / (1024*1024*1024);
-        $ratio = (($CURUSER["downloaded"] > 0) ? ($CURUSER["uploaded"] / $CURUSER["downloaded"]) : 0);
+    if ($CURUSER['class'] < UC_VIP) {
+        $gigs = $CURUSER['uploaded'] / (1024 * 1024 * 1024);
+        $ratio = (($CURUSER['downloaded'] > 0) ? ($CURUSER['uploaded'] / $CURUSER['downloaded']) : 0);
         if ($ratio < 0.5 || $gigs < 5) {
             $wait = 48;
         } elseif ($ratio < 0.65 || $gigs < 6.5) {
@@ -889,7 +887,7 @@ function torrenttable($res, $variant = "index")
         print("<td class=\"colhead\" align=\"center\">Wait</td>\n");
     }
 
-    if ($variant == "mytorrents") {
+    if ($variant == 'mytorrents') {
         print("<td class=\"colhead\" align=\"center\">Edit</td>\n");
         print("<td class=\"colhead\" align=\"center\">Visible</td>\n");
     } ?>
@@ -908,48 +906,48 @@ function torrenttable($res, $variant = "index")
 <td class="colhead" align=right>Leechers</td>
 <?php
 
-    if ($variant == "index") {
-        print("<td class=\"colhead\" align=center>Upped&nbsp;by</td>");
+    if ($variant == 'index') {
+        print('<td class="colhead" align=center>Upped&nbsp;by</td>');
     }
 
-    print("</tr>");
+    print('</tr>');
 
     while ($row = mysql_fetch_assoc($res)) {
-        $id = $row["id"];
-        print("<tr>");
+        $id = $row['id'];
+        print('<tr>');
 
         print("<td align=center style='padding: 0px'>");
-        if (isset($row["cat_name"])) {
-            print("<a href=\"browse.php?cat=" . $row["category"] . "\">");
-            if (isset($row["cat_pic"]) && $row["cat_pic"] != "") {
-                print("<img border=\"0\" src=\"$pic_base_url" . $row["cat_pic"] . "\" alt=\"" . $row["cat_name"] . "\" >");
+        if (isset($row['cat_name'])) {
+            print('<a href="browse.php?cat=' . $row['category'] . '">');
+            if (isset($row['cat_pic']) && $row['cat_pic'] != '') {
+                print("<img border=\"0\" src=\"$pic_base_url" . $row['cat_pic'] . '" alt="' . $row['cat_name'] . '" >');
             } else {
-                print($row["cat_name"]);
+                print($row['cat_name']);
             }
-            print("</a>");
+            print('</a>');
         } else {
-            print("-");
+            print('-');
         }
-        print("</td>");
+        print('</td>');
 
-        $dispname = htmlspecialchars($row["name"]);
-        print("<td align=left><a href=\"details.php?");
-        if ($variant == "mytorrents") {
-            print("returnto=" . urlencode($_SERVER["REQUEST_URI"]) . "&amp;");
+        $dispname = htmlspecialchars($row['name']);
+        print('<td align=left><a href="details.php?');
+        if ($variant == 'mytorrents') {
+            print('returnto=' . urlencode($_SERVER['REQUEST_URI']) . '&amp;');
         }
         print("id=$id");
-        if ($variant == "index") {
-            print("&amp;hit=1");
+        if ($variant == 'index') {
+            print('&amp;hit=1');
         }
         print("\"><b>$dispname</b></a>");
 
         if ($wait) {
-            $elapsed = floor((gmtime() - strtotime($row["added"])) / 3600);
+            $elapsed = floor((gmtime() - strtotime($row['added'])) / 3600);
             if ($elapsed < $wait) {
                 $color = dechex(floor(127*($wait - $elapsed)/48 + 128)*65536);
-                print("<td align=center><nobr><a href=\"/faq.php#dl8\"><font color=\"$color\">" . number_format($wait - $elapsed) . " h</font></a></nobr></td>");
+                print("<td align=center><nobr><a href=\"/faq.php#dl8\"><font color=\"$color\">" . number_format($wait - $elapsed) . ' h</font></a></nobr></td>');
             } else {
-                print("<td align=center><nobr>None</nobr></td>");
+                print('<td align=center><nobr>None</nobr></td>');
             }
         }
 
@@ -959,37 +957,37 @@ function torrenttable($res, $variant = "index")
                 if ($variant == "index")
                     print("<a href=\"download.php/$id/" . rawurlencode($row["filename"]) . "\"><img src=pic/download.gif border=0 alt=Download></a>\n");
         
-                else */ if ($variant == "mytorrents") {
-            print("<td align=\"center\"><a href=\"edit.php?returnto=" . urlencode($_SERVER["REQUEST_URI"]) . "&amp;id=" . $row["id"] . "\">edit</a>");
+                else */ if ($variant == 'mytorrents') {
+            print('<td align="center"><a href="edit.php?returnto=' . urlencode($_SERVER['REQUEST_URI']) . '&amp;id=' . $row['id'] . '">edit</a>');
         }
         print("</td>\n");
-        if ($variant == "mytorrents") {
-            print("<td align=\"right\">");
-            if ($row["visible"] == "no") {
-                print("<b>no</b>");
+        if ($variant == 'mytorrents') {
+            print('<td align="right">');
+            if ($row['visible'] == 'no') {
+                print('<b>no</b>');
             } else {
-                print("yes");
+                print('yes');
             }
-            print("</td>");
+            print('</td>');
         }
 
-        if ($row["type"] == "single") {
-            print("<td align=\"right\">" . $row["numfiles"] . "</td>");
+        if ($row['type'] == 'single') {
+            print('<td align="right">' . $row['numfiles'] . '</td>');
         } else {
-            if ($variant == "index") {
-                print("<td align=\"right\"><b><a href=\"details.php?id=$id&amp;hit=1&amp;filelist=1\">" . $row["numfiles"] . "</a></b></td>");
+            if ($variant == 'index') {
+                print("<td align=\"right\"><b><a href=\"details.php?id=$id&amp;hit=1&amp;filelist=1\">" . $row['numfiles'] . '</a></b></td>');
             } else {
-                print("<td align=\"right\"><b><a href=\"details.php?id=$id&amp;filelist=1#filelist\">" . $row["numfiles"] . "</a></b></td>");
+                print("<td align=\"right\"><b><a href=\"details.php?id=$id&amp;filelist=1#filelist\">" . $row['numfiles'] . '</a></b></td>');
             }
         }
 
-        if (!$row["comments"]) {
-            print("<td align=\"right\">" . $row["comments"] . "</td>");
+        if (!$row['comments']) {
+            print('<td align="right">' . $row['comments'] . '</td>');
         } else {
-            if ($variant == "index") {
-                print("<td align=\"right\"><b><a href=\"details.php?id=$id&amp;hit=1&amp;tocomm=1\">" . $row["comments"] . "</a></b></td>");
+            if ($variant == 'index') {
+                print("<td align=\"right\"><b><a href=\"details.php?id=$id&amp;hit=1&amp;tocomm=1\">" . $row['comments'] . '</a></b></td>');
             } else {
-                print("<td align=\"right\"><b><a href=\"details.php?id=$id&amp;page=0#startcomments\">" . $row["comments"] . "</a></b></td>");
+                print("<td align=\"right\"><b><a href=\"details.php?id=$id&amp;page=0#startcomments\">" . $row['comments'] . '</a></b></td>');
             }
         }
 
@@ -1007,61 +1005,60 @@ function torrenttable($res, $variant = "index")
                 }
                 print("</td>\n");
         */
-        print("<td align=center><nobr>" . str_replace(" ", "<br />", $row["added"]) . "</nobr></td>");
-        $ttl = (28*24) - floor((gmtime() - sql_timestamp_to_unix_timestamp($row["added"])) / 3600);
+        print('<td align=center><nobr>' . str_replace(' ', '<br />', $row['added']) . '</nobr></td>');
+        $ttl = (28*24) - floor((gmtime() - sql_timestamp_to_unix_timestamp($row['added'])) / 3600);
         if ($ttl == 1) {
-            $ttl .= "<br>hour";
+            $ttl .= '<br>hour';
         } else {
-            $ttl .= "<br>hours";
+            $ttl .= '<br>hours';
         }
         print("<td align=center>$ttl</td>");
-        print("<td align=center>" . str_replace(" ", "<br>", mksize($row["size"])) . "</td>");
+        print('<td align=center>' . str_replace(' ', '<br>', mksize($row['size'])) . '</td>');
 //        print("<td align=\"right\">" . $row["views"] . "</td>\n");
 //        print("<td align=\"right\">" . $row["hits"] . "</td>\n");
-        $_s = "";
-        if ($row["times_completed"] != 1) {
-            $_s = "s";
+        $_s = '';
+        if ($row['times_completed'] != 1) {
+            $_s = 's';
         }
-        print("<td align=center>" . number_format($row["times_completed"]) . "<br>time$_s</td>");
+        print('<td align=center>' . number_format($row['times_completed']) . "<br>time$_s</td>");
 
-        if ($row["seeders"]) {
-            if ($variant == "index") {
-                if ($row["leechers"]) {
-                    $ratio = $row["seeders"] / $row["leechers"];
+        if ($row['seeders']) {
+            if ($variant == 'index') {
+                if ($row['leechers']) {
+                    $ratio = $row['seeders'] / $row['leechers'];
                 } else {
                     $ratio = 1;
                 }
                 print("<td align=right><b><a href=details.php?id=$id&amp;hit=1&amp;toseeders=1><font color=" .
-                  get_slr_color($ratio) . ">" . $row["seeders"] . "</font></a></b></td>");
+                  get_slr_color($ratio) . '>' . $row['seeders'] . '</font></a></b></td>');
             } else {
-                print("<td align=\"right\"><b><a class=\"" . linkcolor($row["seeders"]) . "\" href=\"details.php?id=$id&amp;dllist=1#seeders\">" .
-                  $row["seeders"] . "</a></b></td>");
+                print('<td align="right"><b><a class="' . linkcolor($row['seeders']) . "\" href=\"details.php?id=$id&amp;dllist=1#seeders\">" .
+                      $row['seeders'] . '</a></b></td>');
             }
         } else {
-            print("<td align=\"right\"><span class=\"" . linkcolor($row["seeders"]) . "\">" . $row["seeders"] . "</span></td>");
+            print('<td align="right"><span class="' . linkcolor($row['seeders']) . '">' . $row['seeders'] . '</span></td>');
         }
 
-        if ($row["leechers"]) {
-            if ($variant == "index") {
+        if ($row['leechers']) {
+            if ($variant == 'index') {
                 print("<td align=right><b><a href=details.php?id=$id&amp;hit=1&amp;todlers=1>" .
-                   number_format($row["leechers"]) . (isset($peerlink) ? "</a>" : "") .
-                   "</b></td>");
+                   number_format($row['leechers']) . (isset($peerlink) ? '</a>' : '') . '</b></td>');
             } else {
-                print("<td align=\"right\"><b><a class=\"" . linkcolor($row["leechers"]) . "\" href=\"details.php?id=$id&amp;dllist=1#leechers\">" .
-                  $row["leechers"] . "</a></b></td>");
+                print('<td align="right"><b><a class="' . linkcolor($row['leechers']) . "\" href=\"details.php?id=$id&amp;dllist=1#leechers\">" .
+                      $row['leechers'] . '</a></b></td>');
             }
         } else {
-            print("<td align=\"right\">0</td>");
+            print('<td align="right">0</td>');
         }
 
-        if ($variant == "index") {
-            print("<td align=center>" . (isset($row["username"]) ? ("<a href=userdetails.php?id=" . $row["owner"] . "><b>" . htmlspecialchars($row["username"]) . "</b></a>") : "<i>(unknown)</i>") . "</td>");
+        if ($variant == 'index') {
+            print('<td align=center>' . (isset($row['username']) ? ('<a href=userdetails.php?id=' . $row['owner'] . '><b>' . htmlspecialchars($row['username']) . '</b></a>') : '<i>(unknown)</i>') . '</td>');
         }
 
-        print("</tr>");
+        print('</tr>');
     }
 
-    print("</table>");
+    print('</table>');
 
     return $rows;
 }
@@ -1078,19 +1075,19 @@ function hit_count()
 {
     return;
     global $RUNTIME_CLAUSE;
-    if (preg_match(',([^/]+)$,', $_SERVER["SCRIPT_NAME"], $matches)) {
+    if (preg_match(',([^/]+)$,', $_SERVER['SCRIPT_NAME'], $matches)) {
         $path = $matches[1];
     } else {
-        $path= "(unknown)";
+        $path= '(unknown)';
     }
-    $period = date("Y-m-d H") . ":00:00";
-    $RUNTIME_CLAUSE = "page = " . sqlesc($path) . " AND period = '$period'";
+    $period = date('Y-m-d H') . ':00:00';
+    $RUNTIME_CLAUSE = 'page = ' . sqlesc($path) . " AND period = '$period'";
     $update = "UPDATE hits SET count = count + 1 WHERE $RUNTIME_CLAUSE";
     mysqli_query($update);
     if (mysql_affected_rows()) {
         return;
     }
-    $ret = mysqli_query("INSERT INTO hits (page, period, count) VALUES (" . sqlesc($path) . ", '$period', 1)");
+    $ret = mysqli_query('INSERT INTO hits (page, period, count) VALUES (' . sqlesc($path) . ", '$period', 1)");
     if (!$ret) {
         mysqli_query($update);
     }
@@ -1104,10 +1101,10 @@ function hit_end()
         return;
     }
     $now     = gettimeofday();
-    $runtime = ($now["sec"] - $RUNTIME_START["sec"]) + ($now["usec"] - $RUNTIME_START["usec"]) / 1000000;
+    $runtime = ($now['sec'] - $RUNTIME_START['sec']) + ($now['usec'] - $RUNTIME_START['usec']) / 1000000;
     $ts      = posix_times();
-    $sys     = ($ts["stime"] - $RUNTIME_TIMES["stime"]) / 100;
-    $user    = ($ts["utime"] - $RUNTIME_TIMES["utime"]) / 100;
+    $sys     = ($ts['stime'] - $RUNTIME_TIMES['stime']) / 100;
+    $user    = ($ts['utime'] - $RUNTIME_TIMES['utime']) / 100;
     mysqli_query("UPDATE hits SET runs = runs + 1, runtime = runtime + $runtime, user_cpu = user_cpu + $user, sys_cpu = sys_cpu + $sys WHERE $RUNTIME_CLAUSE");
 }
 
@@ -1118,30 +1115,30 @@ function hash_pad($hash)
 
 function hash_where($name, $hash)
 {
-    $shhash = preg_replace('/ *$/s', "", $hash);
-    return "($name = " . sqlesc($hash) . " OR $name = " . sqlesc($shhash) . ")";
+    $shhash = preg_replace('/ *$/s', '', $hash);
+    return "($name = " . sqlesc($hash) . " OR $name = " . sqlesc($shhash) . ')';
 }
 
 function get_user_icons($arr, $big = false)
 {
     if ($big) {
-        $donorpic    = "starbig.gif";
-        $warnedpic   = "warnedbig.gif";
-        $disabledpic = "disabledbig.gif";
+        $donorpic    = 'starbig.gif';
+        $warnedpic   = 'warnedbig.gif';
+        $disabledpic = 'disabledbig.gif';
         $style       = "style='margin-left: 4pt'";
     } else {
-        $donorpic    = "star.gif";
-        $warnedpic   = "warned.gif";
-        $disabledpic = "disabled.gif";
-        $style       = "style=\"margin-left: 2pt\"";
+        $donorpic    = 'star.gif';
+        $warnedpic   = 'warned.gif';
+        $disabledpic = 'disabled.gif';
+        $style       = 'style="margin-left: 2pt"';
     }
-    $pics = $arr["donor"] == "yes" ? "<img src=pic/$donorpic alt='Donor' border=0 $style>" : "";
-    if ($arr["enabled"] == "yes") {
-        $pics .= $arr["warned"] == "yes" ? "<img src=pic/$warnedpic alt=\"Warned\" border=0 $style>" : "";
+    $pics = $arr['donor'] == 'yes' ? "<img src=pic/$donorpic alt='Donor' border=0 $style>" : '';
+    if ($arr['enabled'] == 'yes') {
+        $pics .= $arr['warned'] == 'yes' ? "<img src=pic/$warnedpic alt=\"Warned\" border=0 $style>" : '';
     } else {
         $pics .= "<img src=pic/$disabledpic alt=\"Disabled\" border=0 $style>";
     }
     return $pics;
 }
 
-require "global.php";
+require 'global.php';

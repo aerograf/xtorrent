@@ -5,13 +5,13 @@ class brokenResource extends XoopsObject
     public function __construct()
     {
         $this->XoopsObject();
-        $this->initVar("reportid", XOBJ_DTYPE_INT);
-        $this->initVar("lid", XOBJ_DTYPE_INT);
-        $this->initVar("sender", XOBJ_DTYPE_INT);
-        $this->initVar("ip", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("date", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("confirm", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("acknowledged", XOBJ_DTYPE_TXTBOX);
+        $this->initVar('reportid', XOBJ_DTYPE_INT);
+        $this->initVar('lid', XOBJ_DTYPE_INT);
+        $this->initVar('sender', XOBJ_DTYPE_INT);
+        $this->initVar('ip', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('date', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('confirm', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('acknowledged', XOBJ_DTYPE_TXTBOX);
     }
 }
 
@@ -83,13 +83,13 @@ class XtorrentBrokenHandler extends XoopsObjectHandler
         }
         $myts = MyTextSanitizer::getInstance();
         if ($broken->isNew() || empty($reportid)) {
-            $reportid = $this->db->genId($this->db_table."_xt_broken_id_seq");
+            $reportid = $this->db->genId($this->db_table . '_xt_broken_id_seq');
             $sql      = sprintf(
-                "INSERT INTO %s (
+                'INSERT INTO %s (
 				`reportid`, `lid`, `sender`, `ip`, `date`, `confirmed`, `acknowledged`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s
-				)",
+				)',
                 $this->db_table,
                 $this->db->quoteString($reportid),
                 $this->db->quoteString($lid),
@@ -101,13 +101,13 @@ class XtorrentBrokenHandler extends XoopsObjectHandler
             );
         } else {
             $sql = sprintf(
-                "UPDATE %s SET
+                'UPDATE %s SET
 				`lid` = %s,
 				`sender` = %s,
 				`ip` = %s,
 				`date` = %s,
 				`confirmed` = %s,
-				`acknowledged` = %s WHERE `reportid` = %s",
+				`acknowledged` = %s WHERE `reportid` = %s',
                 $this->db_table,
                 $this->db->quoteString($lid),
                 $this->db->quoteString($sender),
@@ -125,7 +125,7 @@ class XtorrentBrokenHandler extends XoopsObjectHandler
             $result = $this->db->query($sql);
         }
         if (!$result) {
-            $broken->setErrors("Could not store data in the database.<br />" . $this->db->error() . ' (' . $this->db->errno() . ')<br />' . $sql);
+            $broken->setErrors('Could not store data in the database.<br />' . $this->db->error() . ' (' . $this->db->errno() . ')<br />' . $sql);
             return false;
         }
         if (empty($reportid)) {
@@ -141,7 +141,7 @@ class XtorrentBrokenHandler extends XoopsObjectHandler
             return false;
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql = "DELETE FROM ".$this->db_table." ".$criteria->renderWhere()."";
+            $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
         if (false != $force) {
             $result = $this->db->queryF($sql);
@@ -207,7 +207,7 @@ class XtorrentBrokenHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function deleteTorrentPermissions($reportid, $mode = "view")
+    public function deleteTorrentPermissions($reportid, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
@@ -222,7 +222,7 @@ class XtorrentBrokenHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function insertTorrentPermissions($reportid, $group_ids, $mode = "view")
+    public function insertTorrentPermissions($reportid, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $reportid) {
@@ -234,10 +234,10 @@ class XtorrentBrokenHandler extends XoopsObjectHandler
             $this->perm_handler->insert($perm);
             $ii++;
         }
-        return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record ID ".$reportid;
+        return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $reportid;
     }
     
-    public function getPermittedTorrents($broken, $mode = "view")
+    public function getPermittedTorrents($broken, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $ret=false;
@@ -275,7 +275,7 @@ class XtorrentBrokenHandler extends XoopsObjectHandler
         return ret;
     }
     
-    public function getSingleTorrentPermission($reportid, $mode = "view")
+    public function getSingleTorrentPermission($reportid, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;

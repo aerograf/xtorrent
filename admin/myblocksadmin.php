@@ -41,21 +41,21 @@ function list_blocks()
     $headingarray = [_AM_XTORRENT_BLKDESC, _AM_XTORRENT_TITLE, _AM_XTORRENT_SIDE, _AM_XTORRENT_WEIGHT, _AM_XTORRENT_VISIBLE, _AM_XTORRENT_ACTION];
     for ($i = 0; $i <= count($headingarray)-1; $i++) {
         $align = 'center';
-        echo "<th style='text-align:" . $align . ";'><b>" . $headingarray[$i] . "</th>";
+        echo "<th style='text-align:" . $align . ";'><b>" . $headingarray[$i] . '</th>';
     }
-    echo "</tr>";
+    echo '</tr>';
     // blocks displaying loop
     $class = 'even';
     foreach (array_keys($block_arr) as $i) {
-        $visible   = ($block_arr[$i]->getVar("visible") == 1) ? _YES : _NO;
-        $weight    = $block_arr[$i]->getVar("weight");
-        $side_desc = $side_descs[$block_arr[$i]->getVar("side")];
-        $title     = $block_arr[$i]->getVar("title");
+        $visible   = ($block_arr[$i]->getVar('visible') == 1) ? _YES : _NO;
+        $weight    = $block_arr[$i]->getVar('weight');
+        $side_desc = $side_descs[$block_arr[$i]->getVar('side')];
+        $title     = $block_arr[$i]->getVar('title');
         if ($title == '') {
-            $title = "&nbsp;";
+            $title = '&nbsp;';
         }
-        $name      = $block_arr[$i]->getVar("name");
-        $bid       = $block_arr[$i]->getVar("bid");
+        $name      = $block_arr[$i]->getVar('name');
+        $bid       = $block_arr[$i]->getVar('bid');
 
         echo "<tr>
               <td class='" . $class . "'>" . $name . "</td>
@@ -64,8 +64,8 @@ function list_blocks()
               <td class='" . $class . "' style='text-align:center;'>" . $weight . "</td>
               <td class='" . $class . "' style='white-space:nowrap;text-align:center;'>" . $visible . "</td>
               <td class='" . $class . "' style='text-align:center;'>
-              <a href='" . $xoops_system_url . "/admin.php?fct=blocksadmin&amp;op=edit&amp;bid=" . $bid . "' target='_blank'>" . $imagearray['editimg'] . "</a></td>
-              </tr>";
+              <a href='" . $xoops_system_url . '/admin.php?fct=blocksadmin&amp;op=edit&amp;bid=' . $bid . "' target='_blank'>" . $imagearray['editimg'] . '</a></td>
+              </tr>';
         $class = ($class == 'even') ? 'odd' : 'even';
     }
     echo "<tr><th colspan='7'></th></tr></table>";
@@ -77,7 +77,7 @@ function list_groups()
     global $xoopsModule , $block_arr , $xoops_system_url;
 
     foreach (array_keys($block_arr) as $i) {
-        $item_list[ $block_arr[$i]->getVar("bid") ] = $block_arr[$i]->getVar("title");
+        $item_list[ $block_arr[$i]->getVar('bid') ] = $block_arr[$i]->getVar('title');
     }
     $form = new MyXoopsGroupPermForm('', 1, 'block_read', _AM_SYSTEM_ADGS);
     $form->addAppendix('module_admin', $xoopsModule->mid(), $xoopsModule->name() . ' ' . _AM_XTORRENT_ACTIVERIGHTS);
@@ -89,8 +89,8 @@ function list_groups()
 }
 
   if (! empty($_POST['submit'])) {
-      include("mygroupperm.php");
-      redirect_header(XOOPS_URL . "/modules/xtorrent/admin/myblocksadmin.php", 1, _AM_SYSTEM_DBUPDATED);
+      include('mygroupperm.php');
+      redirect_header(XOOPS_URL . '/modules/xtorrent/admin/myblocksadmin.php', 1, _AM_SYSTEM_DBUPDATED);
   }
 
   xoops_cp_header();

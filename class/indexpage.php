@@ -5,20 +5,20 @@ class indexpageResource extends XoopsObject
     public function __construct()
     {
         $this->XoopsObject();
-        $this->initVar("id", XOBJ_DTYPE_INT);
-        $this->initVar("lid", XOBJ_DTYPE_INT);
-        $this->initVar("cid", XOBJ_DTYPE_INT);
-        $this->initVar("indeximage", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("indexheading", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("indexheader", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("indexfooter", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("nohtml", XOBJ_DTYPE_INT);
-        $this->initVar("nosmiley", XOBJ_DTYPE_INT);
-        $this->initVar("noxcodes", XOBJ_DTYPE_INT);
-        $this->initVar("noimages", XOBJ_DTYPE_INT);
-        $this->initVar("nobreak", XOBJ_DTYPE_INT);
-        $this->initVar("indexheaderalign", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("indexfooteralign", XOBJ_DTYPE_TXTBOX);
+        $this->initVar('id', XOBJ_DTYPE_INT);
+        $this->initVar('lid', XOBJ_DTYPE_INT);
+        $this->initVar('cid', XOBJ_DTYPE_INT);
+        $this->initVar('indeximage', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('indexheading', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('indexheader', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('indexfooter', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('nohtml', XOBJ_DTYPE_INT);
+        $this->initVar('nosmiley', XOBJ_DTYPE_INT);
+        $this->initVar('noxcodes', XOBJ_DTYPE_INT);
+        $this->initVar('noimages', XOBJ_DTYPE_INT);
+        $this->initVar('nobreak', XOBJ_DTYPE_INT);
+        $this->initVar('indexheaderalign', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('indexfooteralign', XOBJ_DTYPE_TXTBOX);
     }
 }
 
@@ -90,13 +90,13 @@ class XtorrentIndexpageHandler extends XoopsObjectHandler
         }
         $myts = MyTextSanitizer::getInstance();
         if ($indexpage->isNew() || empty($id)) {
-            $id  = $this->db->genId($this->db_table."_xt_indexpage_id_seq");
+            $id  = $this->db->genId($this->db_table . '_xt_indexpage_id_seq');
             $sql = sprintf(
-                "INSERT INTO %s (
+                'INSERT INTO %s (
 				`id`, `lid`, `cid`, `indeximage`, `indexheading`, `indexheader`, `indexfooter`, `nohtml`, `nosmiley`, `noxcodes`, `noimages`, `nobreak`, `indexheaderalign`, `indexfooteralign`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
-				)",
+				)',
                 $this->db_table,
                 $this->db->quoteString($id),
                 $this->db->quoteString($lid),
@@ -116,7 +116,7 @@ class XtorrentIndexpageHandler extends XoopsObjectHandler
             );
         } else {
             $sql = sprintf(
-                "UPDATE %s SET
+                'UPDATE %s SET
 					`lid` = %s,
 					`cid` = %s,
 					`indeximage` = %s,
@@ -129,7 +129,7 @@ class XtorrentIndexpageHandler extends XoopsObjectHandler
 					`noimages` = %s,
 					`nobreak` = %s,
 					`indexheaderalign` = %s,
-					`indexfooteralign` = %s WHERE id = %s",
+					`indexfooteralign` = %s WHERE id = %s',
                 $this->db_table,
                 $this->db->quoteString($lid),
                 $this->db->quoteString($cid),
@@ -155,7 +155,7 @@ class XtorrentIndexpageHandler extends XoopsObjectHandler
             $result = $this->db->query($sql);
         }
         if (!$result) {
-            $indexpage->setErrors("Could not store data in the database.<br>".$this->db->error().' ('.$this->db->errno().')<br>'.$sql);
+            $indexpage->setErrors('Could not store data in the database.<br>' . $this->db->error() . ' (' . $this->db->errno() . ')<br>' . $sql);
             return false;
         }
         if (empty($id)) {
@@ -171,7 +171,7 @@ class XtorrentIndexpageHandler extends XoopsObjectHandler
             return false;
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql = "DELETE FROM ".$this->db_table." ".$criteria->renderWhere()."";
+            $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
         if (false != $force) {
             $result = $this->db->queryF($sql);
@@ -237,7 +237,7 @@ class XtorrentIndexpageHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function deleteTorrentPermissions($id, $mode = "view")
+    public function deleteTorrentPermissions($id, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
@@ -252,7 +252,7 @@ class XtorrentIndexpageHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function insertTorrentPermissions($id, $group_ids, $mode = "view")
+    public function insertTorrentPermissions($id, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $id) {
@@ -264,10 +264,10 @@ class XtorrentIndexpageHandler extends XoopsObjectHandler
             $this->perm_handler->insert($perm);
             $ii++;
         }
-        return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record ID ".$id;
+        return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $id;
     }
     
-    public function getPermittedTorrents($indexpage, $mode = "view")
+    public function getPermittedTorrents($indexpage, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $ret = false;
@@ -305,7 +305,7 @@ class XtorrentIndexpageHandler extends XoopsObjectHandler
         return ret;
     }
     
-    public function getSingleTorrentPermission($id, $mode = "view")
+    public function getSingleTorrentPermission($id, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;

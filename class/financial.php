@@ -5,12 +5,12 @@ class financialResource extends XoopsObject
     public function __construct()
     {
         $this->XoopsObject();
-        $this->initVar("id", XOBJ_DTYPE_INT);
-        $this->initVar("date", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("num", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("name", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("descr", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("amount", XOBJ_DTYPE_TXTBOX);
+        $this->initVar('id', XOBJ_DTYPE_INT);
+        $this->initVar('date', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('num', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('name', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('descr', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('amount', XOBJ_DTYPE_TXTBOX);
     }
 }
 
@@ -82,13 +82,13 @@ class XtorrentFinancialHandler extends XoopsObjectHandler
         }
         $myts = MyTextSanitizer::getInstance();
         if ($financial->isNew() || empty($id)) {
-            $id  = $this->db->genId($this->db_table."_xt_financial_id_seq");
+            $id  = $this->db->genId($this->db_table . '_xt_financial_id_seq');
             $sql = sprintf(
-                "INSERT INTO %s (
+                'INSERT INTO %s (
 				`id`, `date`, `num`, `name`, `descr`, `amount`
 				) VALUES (
 				%u, %s, %s, %s, %s
-				)",
+				)',
                 $this->db_table,
                 $this->db->quoteString($id),
                 $this->db->quoteString($date),
@@ -99,12 +99,12 @@ class XtorrentFinancialHandler extends XoopsObjectHandler
             );
         } else {
             $sql = sprintf(
-                "UPDATE %s SET
+                'UPDATE %s SET
 				`date` = %s,
 				`num` = %s,
 				`name` = %s,
 				`descr` = %s,
-				`amount` = %s WHERE id = %s",
+				`amount` = %s WHERE id = %s',
                 $this->db_table,
                 $this->db->quoteString($date),
                 $this->db->quoteString($num),
@@ -121,7 +121,7 @@ class XtorrentFinancialHandler extends XoopsObjectHandler
             $result = $this->db->query($sql);
         }
         if (!$result) {
-            $financial->setErrors("Could not store data in the database.<br />".$this->db->error().' ('.$this->db->errno().')<br />'.$sql);
+            $financial->setErrors('Could not store data in the database.<br />' . $this->db->error() . ' (' . $this->db->errno() . ')<br />' . $sql);
             return false;
         }
         if (empty($id)) {
@@ -137,7 +137,7 @@ class XtorrentFinancialHandler extends XoopsObjectHandler
             return false;
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql = "DELETE FROM ".$this->db_table." ".$criteria->renderWhere()."";
+            $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
         if (false != $force) {
             $result = $this->db->queryF($sql);
@@ -203,7 +203,7 @@ class XtorrentFinancialHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function deleteTorrentPermissions($id, $mode = "view")
+    public function deleteTorrentPermissions($id, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
@@ -218,7 +218,7 @@ class XtorrentFinancialHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function insertTorrentPermissions($id, $group_ids, $mode = "view")
+    public function insertTorrentPermissions($id, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $id) {
@@ -230,10 +230,10 @@ class XtorrentFinancialHandler extends XoopsObjectHandler
             $this->perm_handler->insert($perm);
             $ii++;
         }
-        return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record ID ".$id;
+        return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $id;
     }
     
-    public function getPermittedTorrents($financial, $mode = "view")
+    public function getPermittedTorrents($financial, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $ret=false;
@@ -271,7 +271,7 @@ class XtorrentFinancialHandler extends XoopsObjectHandler
         return ret;
     }
     
-    public function getSingleTorrentPermission($id, $mode = "view")
+    public function getSingleTorrentPermission($id, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;

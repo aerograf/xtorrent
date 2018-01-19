@@ -5,9 +5,9 @@ class bencResource extends XoopsObject
     public function __construct()
     {
         $this->XoopsObject();
-        $this->initVar("benc");
-        $this->initVar("object");
-        $this->initVar("filename");
+        $this->initVar('benc');
+        $this->initVar('object');
+        $this->initVar('filename');
     }
 }
 
@@ -46,7 +46,7 @@ class XtorrentBencHandler extends XoopsObjectHandler
         $benc->setVar('filename', $file);
         $benc->setVar('object', xtorrent_bdec_file($file, $ms));
         
-        $fp = fopen($file, "rb");
+        $fp = fopen($file, 'rb');
         if (!$fp) {
             return;
         }
@@ -61,27 +61,27 @@ class XtorrentBencHandler extends XoopsObjectHandler
     {
         $obj = $benc->getVar('object');
         
-        if (!is_array($obj) || !isset($obj["type"]) || !isset($obj["value"])) {
-            trigger_error("Could not identify benc object type", E_USER_WARNING);
+        if (!is_array($obj) || !isset($obj['type']) || !isset($obj['value'])) {
+            trigger_error('Could not identify benc object type', E_USER_WARNING);
             return false;
         }
 
-        $c = $obj["value"];
-        switch ($obj["type"]) {
-            case "string":
+        $c = $obj['value'];
+        switch ($obj['type']) {
+            case 'string':
                 $benc = $this->xtorrent_benc_str($c);
                 // no break
-            case "integer":
+            case 'integer':
                 $benc = $this->xtorrent_benc_int($c);
                 // no break
-            case "list":
+            case 'list':
                 $benc = $this->xtorrent_benc_list($c);
                 // no break
-            case "dictionary":
+            case 'dictionary':
                 $benc = $this->xtorrent_benc_dict($c);
                 // no break
             default:
-                trigger_error("Could not identify benc object type set as ".$obj["type"], E_USER_WARNING);
+                trigger_error('Could not identify benc object type set as ' . $obj['type'], E_USER_WARNING);
                 return false;
         }
         
@@ -96,22 +96,22 @@ class XtorrentBencHandler extends XoopsObjectHandler
     
     private function xtorrent_benc_int($i)
     {
-        return "i" . $i . "e";
+        return 'i' . $i . 'e';
     }
     
     private function xtorrent_benc_list($a)
     {
-        $s = "l";
+        $s = 'l';
         foreach ($a as $e) {
             $s .= $this->xtorrent_benc($e);
         }
-        $s .= "e";
+        $s .= 'e';
         return $s;
     }
     
     private function xtorrent_benc_dict($d)
     {
-        $s = "d";
+        $s = 'd';
         $keys = array_keys($d);
         sort($keys);
         foreach ($keys as $k) {
@@ -119,13 +119,13 @@ class XtorrentBencHandler extends XoopsObjectHandler
             $s .= $this->xtorrent_benc_str($k);
             $s .= $this->xtorrent_benc($v);
         }
-        $s .= "e";
+        $s .= 'e';
         return $s;
     }
     
     private function xtorrent_bdec_file($f, $ms)
     {
-        $fp = fopen($f, "rb");
+        $fp = fopen($f, 'rb');
         if (!$fp) {
             return;
         }
@@ -144,26 +144,26 @@ class XtorrentBencHandler extends XoopsObjectHandler
             if (strlen($v) != $l) {
                 return;
             }
-            return ['type' => "string", 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss];
+            return ['type' => 'string', 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss];
         }
         if (preg_match('/^i(\d+)e/', $s, $m)) {
             $v  = $m[1];
-            $ss = "i" . $v . "e";
+            $ss = 'i' . $v . 'e';
     
-            if ($v === "-0") {
+            if ($v === '-0') {
                 return;
             }
     
-            if ($v[0] == "0" && strlen($v) != 1) {
+            if ($v[0] == '0' && strlen($v) != 1) {
                 return;
             }
         
-            return ['type' => "integer", 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss];
+            return ['type' => 'integer', 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss];
         }
         switch ($s[0]) {
-            case "l":
+            case 'l':
                 return $this->xtorrent_bdec_list($s);
-            case "d":
+            case 'd':
                 return $this->xtorrent_bdec_dict($s);
             default:
                 return;
@@ -172,18 +172,18 @@ class XtorrentBencHandler extends XoopsObjectHandler
     
     private function xtorrent_bdec_list($s)
     {
-        if ($s[0] != "l") {
+        if ($s[0] != 'l') {
             return;
         }
         $sl = strlen($s);
         $i  = 1;
         $v  = [];
-        $ss = "l";
+        $ss = 'l';
         for (;;) {
             if ($i >= $sl) {
                 return;
             }
-            if ($s[$i] == "e") {
+            if ($s[$i] == 'e') {
                 break;
             }
             $ret = $this->xtorrent_bdec(substr($s, $i));
@@ -191,37 +191,37 @@ class XtorrentBencHandler extends XoopsObjectHandler
                 return;
             }
             $v[] = $ret;
-            $i  += $ret["strlen"];
-            $ss .= $ret["string"];
+            $i  += $ret['strlen'];
+            $ss .= $ret['string'];
         }
-        $ss .= "e";
-        return ['type' => "list", 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss];
+        $ss .= 'e';
+        return ['type' => 'list', 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss];
     }
     //
     private function xtorrent_bdec_dict($s)
     {
-        if ($s[0] != "d") {
+        if ($s[0] != 'd') {
             return;
         }
         
         $sl = strlen($s);
         $i  = 1;
         $v  = [];
-        $ss = "d";
+        $ss = 'd';
         for (;;) {
             if ($i >= $sl) {
                 return;
             }
-            if ($s[$i] == "e") {
+            if ($s[$i] == 'e') {
                 break;
             }
             $ret = $this->xtorrent_bdec(substr($s, $i));
-            if (!isset($ret) || !is_array($ret) || $ret["type"] != "string") {
+            if (!isset($ret) || !is_array($ret) || $ret['type'] != 'string') {
                 return;
             }
-            $k   = $ret["value"];
-            $i  += $ret["strlen"];
-            $ss .= $ret["string"];
+            $k   = $ret['value'];
+            $i  += $ret['strlen'];
+            $ss .= $ret['string'];
             if ($i >= $sl) {
                 return;
             }
@@ -230,11 +230,11 @@ class XtorrentBencHandler extends XoopsObjectHandler
                 return;
             }
             $v[$k] = $ret;
-            $i    += $ret["strlen"];
-            $ss   .= $ret["string"];
+            $i    += $ret['strlen'];
+            $ss   .= $ret['string'];
         }
-        $ss .= "e";
-        return ['type' => "dictionary", 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss];
+        $ss .= 'e';
+        return ['type' => 'dictionary', 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss];
     }
     
     public function decompile($benc, $reimport = false)
@@ -248,7 +248,7 @@ class XtorrentBencHandler extends XoopsObjectHandler
                 return;
             }
             
-            $h = @fopen($filename, "rb");
+            $h = @fopen($filename, 'rb');
             if ($h === false) {
                 trigger_error("Could not create class benc for {$filename}: failed to open for reading", E_USER_WARNING);
                 return;
@@ -304,12 +304,12 @@ class XtorrentBencHandler extends XoopsObjectHandler
             }
             
             if (count($dictionary) == 0 || $this->error) {
-                trigger_error("Zero Length Dictionary", E_USER_WARNING);
+                trigger_error('Zero Length Dictionary', E_USER_WARNING);
                 return false;
             }
             
             $end = $this->memref;
-            $dictionary['hash'] = pack("H*", sha1(substr($data, $start, $end - $start)));
+            $dictionary['hash'] = pack('H*', sha1(substr($data, $start, $end - $start)));
             return $dictionary;
         } elseif ($data[$this->memref] == 'l') {
             $this->memref++;
@@ -356,7 +356,7 @@ class XtorrentBencHandler extends XoopsObjectHandler
         return new $this->obj_class();
     }
     
-    public function deleteTorrentPermissions($lid, $mode = "view")
+    public function deleteTorrentPermissions($lid, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
@@ -371,7 +371,7 @@ class XtorrentBencHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function insertTorrentPermissions($lid, $group_ids, $mode = "view")
+    public function insertTorrentPermissions($lid, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $lid) {
@@ -383,10 +383,10 @@ class XtorrentBencHandler extends XoopsObjectHandler
             $this->perm_handler->insert($perm);
             $ii++;
         }
-        return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record ID ".$lid;
+        return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $lid;
     }
     
-    public function getPermittedTorrents($benc, $mode = "view")
+    public function getPermittedTorrents($benc, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $ret=false;
@@ -424,7 +424,7 @@ class XtorrentBencHandler extends XoopsObjectHandler
         return ret;
     }
     
-    public function getSingleTorrentPermission($lid, $mode = "view")
+    public function getSingleTorrentPermission($lid, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;

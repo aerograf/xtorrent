@@ -46,43 +46,47 @@ if (!class_exists('qcp64_enumerator')) {
             foreach ($base->base as $key => $data) {
                 if (strlen((string)$data)==1) {
                     if (strlen(bindec(ord($data)))==5) {
-                        $offset = ["ice" => (int)substr(decbin(ord($data)), 5, 1),
-                                        "icd" => (int)substr(decbin(ord($data)), 4, 1),
-                                        "icc" => (int)substr(decbin(ord($data)), 3, 1),
-                                        "icb" => (int)substr(decbin(ord($data)), 2, 1),
-                                        "ica" => (int)substr(decbin(ord($data)), 1, 1)];
+                        $offset = [
+                            'ice' => (int)substr(decbin(ord($data)), 5, 1),
+                            'icd' => (int)substr(decbin(ord($data)), 4, 1),
+                            'icc' => (int)substr(decbin(ord($data)), 3, 1),
+                            'icb' => (int)substr(decbin(ord($data)), 2, 1),
+                            'ica' => (int)substr(decbin(ord($data)), 1, 1)];
                         if (substr(decbin(ord($data)), 5, 1)==1) {
                             $offset['icf'] = 0;
                         } else {
                             $offset['icf'] = 1;
                         }
                     } elseif (strlen(decbin(ord($data)))==6) {
-                        $offset = ["icf" => (int)substr(decbin(ord($data)), 6, 1),
-                                        "ice" => (int)substr(decbin(ord($data)), 5, 1),
-                                        "icd" => (int)substr(decbin(ord($data)), 4, 1),
-                                        "icc" => (int)substr(decbin(ord($data)), 3, 1),
-                                        "icb" => (int)substr(decbin(ord($data)), 2, 1),
-                                        "ica" => (int)substr(decbin(ord($data)), 1, 1)];
+                        $offset = [
+                            'icf' => (int)substr(decbin(ord($data)), 6, 1),
+                            'ice' => (int)substr(decbin(ord($data)), 5, 1),
+                            'icd' => (int)substr(decbin(ord($data)), 4, 1),
+                            'icc' => (int)substr(decbin(ord($data)), 3, 1),
+                            'icb' => (int)substr(decbin(ord($data)), 2, 1),
+                            'ica' => (int)substr(decbin(ord($data)), 1, 1)];
                     } elseif (strlen(decbin(ord($data)))==7) {
-                        $offset = ["ica" => (int)substr(decbin(ord($data)), 6, 1),
-                                        "icb" => (int)substr(decbin(ord($data)), 5, 1),
-                                        "icc" => (int)substr(decbin(ord($data)), 4, 1),
-                                        "icd" => (int)substr(decbin(ord($data)), 3, 1),
-                                        "ice" => (int)substr(decbin(ord($data)), 2, 1),
-                                        "icf" => (int)substr(decbin(ord($data)), 1, 1)];
+                        $offset = [
+                            'ica' => (int)substr(decbin(ord($data)), 6, 1),
+                            'icb' => (int)substr(decbin(ord($data)), 5, 1),
+                            'icc' => (int)substr(decbin(ord($data)), 4, 1),
+                            'icd' => (int)substr(decbin(ord($data)), 3, 1),
+                            'ice' => (int)substr(decbin(ord($data)), 2, 1),
+                            'icf' => (int)substr(decbin(ord($data)), 1, 1)];
                     }
                 } else {
-                    $offset = ["ica" => (int)substr(decbin(ord(substr($key, strlen($key)-1, 1))), 6, 1),
-                                    "icb" => (int)substr(decbin(ord(substr($key, strlen($key)-1, 1))), 5, 1),
-                                    "icc" => (int)substr(decbin(ord(substr($key, strlen($key)-1, 1))), 4, 1),
-                                    "icd" => (int)substr(decbin(ord(substr($key, strlen($key)-1, 1))), 2, 1),
-                                    "ice" => (int)substr(decbin(ord(substr($key, strlen($key)-1, 1))), 1, 1),
-                                    "icf" => (int)substr(decbin(ord(substr($key, strlen($key)-1, 1))), 0, 1)];
+                    $offset = [
+                        'ica' => (int)substr(decbin(ord(substr($key, strlen($key) - 1, 1))), 6, 1),
+                        'icb' => (int)substr(decbin(ord(substr($key, strlen($key) - 1, 1))), 5, 1),
+                        'icc' => (int)substr(decbin(ord(substr($key, strlen($key) - 1, 1))), 4, 1),
+                        'icd' => (int)substr(decbin(ord(substr($key, strlen($key) - 1, 1))), 2, 1),
+                        'ice' => (int)substr(decbin(ord(substr($key, strlen($key) - 1, 1))), 1, 1),
+                        'icf' => (int)substr(decbin(ord(substr($key, strlen($key) - 1, 1))), 0, 1)];
                 }
                 
                 if (strlen(decbin(ord($data)))==7) {
                     if (strlen($data)==1) {
-                        $cycle = ["icf", "ice", "icd", "icc", "icb", "ica"];
+                        $cycle = ['icf', 'ice', 'icd', 'icc', 'icb', 'ica'];
                         foreach ($cycle as $element) {
                             if ($done==false) {
                                 if ($offset[$element]=='0') {
@@ -99,7 +103,7 @@ if (!class_exists('qcp64_enumerator')) {
                             }
                         }
                     } else {
-                        $cycle = ["ica", "icb", "icc", "icd", "ice", "icf"];
+                        $cycle = ['ica', 'icb', 'icc', 'icd', 'ice', 'icf'];
                         foreach ($cycle as $element) {
                             if ($done==false) {
                                 if ($offset[$element]=='0') {
@@ -119,15 +123,17 @@ if (!class_exists('qcp64_enumerator')) {
                 }
                 $done=false;
                 if (strlen($data)==1) {
-                    @$this->elekey[$key] = ["key" => $data,
-                                                 "bin" => decbin(ord($data)),
-                                                 "offset" => $offset,
-                                                 "flip" => 0];
+                    @$this->elekey[$key] = [
+                        'key'    => $data,
+                        'bin'    => decbin(ord($data)),
+                        'offset' => $offset,
+                        'flip'   => 0];
                 } else {
-                    @$this->elekey[$key] = ["key" => $data,
-                                                 "bin" => decbin(ord($data)),
-                                                 "offset" => $offset,
-                                                 "flip" => 1];
+                    @$this->elekey[$key] = [
+                        'key'    => $data,
+                        'bin'    => decbin(ord($data)),
+                        'offset' => $offset,
+                        'flip'   => 1];
                 }
             }
         }
@@ -278,31 +284,34 @@ if (!class_exists('qcp64_enumerator')) {
             }
             
             if ($debug==true) {
-                $data[sizeof($data)+1] = ["pos" => $this->getBytePos($char),
-                                              "elements" => $this->elekey];
+                $data[sizeof($data)+1] = [
+                    'pos'      => $this->getBytePos($char),
+                    'elements' => $this->elekey];
                                 
-                $result = ["result" => $result,
-                         "prince" => $prince,
-                         "karma" => $karma,
-                         "motivation" => $motivation,
-                         "official" => $official,
-                         "outsidecause" => $outsidecause,
-                         "nuclear" => $nuclear,
-                         "yin" => $yin,
-                         "yang" => $yang,
-                         "nx_key" => $nx_key,
-                         "data"=> $data];
+                $result = [
+                    'result'       => $result,
+                    'prince'       => $prince,
+                    'karma'        => $karma,
+                    'motivation'   => $motivation,
+                    'official'     => $official,
+                    'outsidecause' => $outsidecause,
+                    'nuclear'      => $nuclear,
+                    'yin'          => $yin,
+                    'yang'         => $yang,
+                    'nx_key'       => $nx_key,
+                    'data'         => $data];
             } else {
-                $result = ["result" => $result,
-                         "prince" => $prince,
-                         "karma" => $karma,
-                         "motivation" => $motivation,
-                         "official" => $official,
-                         "outsidecause" => $outsidecause,
-                         "nuclear" => $nuclear,
-                         "yin" => $yin,
-                         "yang" => $yang,
-                         "nx_key" => $nx_key];
+                $result = [
+                    'result'       => $result,
+                    'prince'       => $prince,
+                    'karma'        => $karma,
+                    'motivation'   => $motivation,
+                    'official'     => $official,
+                    'outsidecause' => $outsidecause,
+                    'nuclear'      => $nuclear,
+                    'yin'          => $yin,
+                    'yang'         => $yang,
+                    'nx_key'       => $nx_key];
             }
             
             return $result;

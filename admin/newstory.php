@@ -7,15 +7,15 @@ $story = new NewsStory();
 $story -> setUid($xoopsUser -> uid());
 $story -> setPublished(time());
 $story -> setExpired(0);
-$story -> setType("admin");
-$story -> setHostname(getenv("REMOTE_ADDR"));
+$story -> setType('admin');
+$story -> setHostname(getenv('REMOTE_ADDR'));
 $story -> setApproved(1);
-$topicid = $_POST["newstopicid"];
+$topicid = $_POST['newstopicid'];
 $story -> setTopicId($topicid);
 $story -> setTitle($title);
 
 $_fileid = (isset($lid) && $lid > 0) ? $lid : $newid;
-$_link = $_POST["description"]."<br><div><a href=" . XOOPS_URL . "/modules/xtorrent/singlefile.php?cid=" . $cid . "&amp;lid=" . $_fileid . ">" . $title . "</a></div>";
+$_link = $_POST['description'] . '<br><div><a href=' . XOOPS_URL . '/modules/xtorrent/singlefile.php?cid=' . $cid . '&amp;lid=' . $_fileid . '>' . $title . '</a></div>';
 
 $description = $myts->addslashes(trim($_link));
 $story -> setHometext($description);
@@ -30,7 +30,7 @@ $tags = [];
 $tags['STORY_NAME'] = $story -> title();
 
 $modhandler = xoops_gethandler('module');
-$newsModule = $modhandler -> getByDirname("news");
+$newsModule = $modhandler -> getByDirname('news');
 
 $tags['STORY_URL'] = XOOPS_URL . '/modules/news/article.php?storyid=' . $story -> storyid();
 if (!empty($isnew)) {

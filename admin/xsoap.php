@@ -12,16 +12,16 @@ $server = isset($_REQUEST['srv'])?$_REQUEST['srv']:0;
 
 global $xoopsModule, $xoopsUser;
 error_reporting(E_ALL);
-$xoopsModule = XoopsModule::getByDirname("xsoap");
+$xoopsModule = XoopsModule::getByDirname('xsoap');
 if (!$xoopsModule->mid())
 {
-	redirect_header(XOOPS_URL . "/", 3, 'X-SOAP Not Installed');
+	redirect_header(XOOPS_URL . '/', 3, 'X-SOAP Not Installed');
 	exit();
 
 } else {
 	if (!file_exists(XOOPS_ROOT_PATH.'/class/soap/xoopssoap.php')){
 		foreach (get_loaded_extensions() as $ext){
-			if (strpos(' ' . $ext,"soap")>1){
+			if (strpos(' ' . $ext, 'soap') > 1){
 				$native=true;
 			}
 		}
@@ -39,7 +39,7 @@ if (!$xoopsModule->mid())
 
 if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 
-	redirect_header(XOOPS_URL . "/", 3, _NOPERM);
+	redirect_header(XOOPS_URL . '/', 3, _NOPERM);
 	exit();
 
 } else {
@@ -47,11 +47,11 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 	$servers = pharseSoapServer();
 	if (empty($servers))
 	{
-		redirect_header(XOOPS_URL . "/", 3, 'No SOAP Server Details Provided in Settings.');
+		redirect_header(XOOPS_URL . '/', 3, 'No SOAP Server Details Provided in Settings.');
 		exit();
 	}
 
-    $sform = new XoopsThemeForm($heading, "op", xoops_getenv('PHP_SELF')."?op=$op&srv=$server");
+    $sform = new XoopsThemeForm($heading, 'op', xoops_getenv('PHP_SELF') . "?op=$op&srv=$server");
     $sform -> setExtra('enctype="multipart/form-data"');
 
 	foreach ($servers as $key => $data)
@@ -62,8 +62,8 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 
     $indeximage_select = new XoopsFormSelect('', 'server', $server);
     $indeximage_select -> addOptionArray($svr_array);
-    $indeximage_select -> setExtra("onchange='location.href=\"".XOOPS_URL."/modules/xtorrent/admin/xsoap.php?op=".$op."&srv=\"+this.options[this.selectedIndex].value'");
-    $indeximage_tray = new XoopsFormElementTray("Server", '&nbsp;');
+    $indeximage_select -> setExtra("onchange='location.href=\"".XOOPS_URL . '/modules/xtorrent/admin/xsoap.php?op=' . $op . "&srv=\"+this.options[this.selectedIndex].value'");
+    $indeximage_tray = new XoopsFormElementTray('Server', '&nbsp;');
     $indeximage_tray -> addElement($indeximage_select);
 
 	$sform -> addElement($indeximage_tray);
@@ -74,16 +74,16 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 	$result = $client->call('xtorrent_key',
                             [
                                 'username' => $servers[$server]['username'],
-                                "password" => $servers[$server]['password'],
-                                "passhash" => sha1((time()-$rnd).$servers[$server]['username'].$servers[$server]['password']), "rand" =>$rnd,
-                                "time"     => time()
+                                'password' => $servers[$server]['password'],
+                                'passhash' => sha1((time() - $rnd) . $servers[$server]['username'] . $servers[$server]['password']), 'rand' =>$rnd,
+                                'time'     => time()
                             ]);
 
-	$srv_key = new XoopsFormLabel("Server Key", $result['RESULT']['response_key']);
+	$srv_key = new XoopsFormLabel('Server Key', $result['RESULT']['response_key']);
 	$sform -> addElement($srv_key);
-	$srv_url = new XoopsFormLabel("Server URL", $result['xoops_url']);
+	$srv_url = new XoopsFormLabel('Server URL', $result['xoops_url']);
 	$sform -> addElement($srv_url);
-  $srv_sitename = new XoopsFormLabel("Server Sitename", $result['sitename']);
+  $srv_sitename = new XoopsFormLabel('Server Sitename', $result['sitename']);
 	$sform -> addElement($srv_sitename);
 
 	$site_url   = $result['xoops_url'];
@@ -92,18 +92,19 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 
 	switch ($op)
 	{
-		case "category":
+		case 'category':
 			switch ($_REQUEST['action'])
 			{
-			case "scribe":
+			case 'scribe':
 				for ($r=1; $r<$_REQUEST['total']+1; $r++)
 				{
 					if ($_REQUEST['new'][$r]!=true)
 					{
-						$sql = "UPDATE ".$xoopsDB->prefix('xtorrent_soap_catmatch')." SET cid = '". $_REQUEST['catassign'][$r] . "', scid = '". $_REQUEST['scid'][$r] . "', auto_approval = '". $_REQUEST['auto_import'][$r]."' WHERE id = '". $_REQUEST['id'][$r]."'";
+						$sql = 'UPDATE ' . $xoopsDB->prefix('xtorrent_soap_catmatch') . " SET cid = '" . $_REQUEST['catassign'][$r] . "', scid = '" . $_REQUEST['scid'][$r] . "', auto_approval = '" . $_REQUEST['auto_import'][$r] . "' WHERE id = '" . $_REQUEST['id'][$r] . "'";
 						
 					} else {
-					  	$sql = "INSERT INTO ".$xoopsDB->prefix('xtorrent_soap_catmatch')." (cid, scid, stitle, sdescription, skey, auto_approval, server, username) VALUES ('". $_REQUEST['catassign'][$r] . "', '". $_REQUEST['scid'][$r] . "', '". $_REQUEST['title'][$r] . "', '". $_REQUEST['desc'][$r] . "', '". $server_key . "', '". $_REQUEST['auto_import'][$r]."', '".$servers[$server]['uri']."', '".$servers[$server]['username']."')";
+					  	$sql = 'INSERT INTO '
+                               . $xoopsDB->prefix('xtorrent_soap_catmatch') . " (cid, scid, stitle, sdescription, skey, auto_approval, server, username) VALUES ('" . $_REQUEST['catassign'][$r] . "', '" . $_REQUEST['scid'][$r] . "', '" . $_REQUEST['title'][$r] . "', '" . $_REQUEST['desc'][$r] . "', '" . $server_key . "', '" . $_REQUEST['auto_import'][$r] . "', '" . $servers[$server]['uri'] . "', '" . $servers[$server]['username'] . "')";
 						
 					}
 					$ret = $xoopsDB->queryF($sql);
@@ -120,14 +121,14 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
         $adminObject->displayNavigation(basename(__FILE__)); 
 
 				$result = $client->call('xtorrent_categories', 
-							['username' => $servers[$server]['username'], 
-							"password"  => $servers[$server]['password'],
-							"passhash"  => sha1((time()-$rnd) . $servers[$server]['username'] . $servers[$server]['password']),
-              "rand"      => $rnd,
-              "time"      => time()
+							['username' => $servers[$server]['username'],
+                             'password' => $servers[$server]['password'],
+                             'passhash' => sha1((time() - $rnd) . $servers[$server]['username'] . $servers[$server]['password']),
+                             'rand'     => $rnd,
+                             'time'     => time()
               ]);
 
-				$sql = "SELECT * FROM ".$xoopsDB->prefix('xtorrent_soap_catmatch')." WHERE skey = '$server_key'";
+				$sql = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_soap_catmatch') . " WHERE skey = '$server_key'";
 				$ret = $xoopsDB->queryF($sql);
 				$cordta = [];
 				while($row = $xoopsDB->fetchArray($ret))
@@ -135,7 +136,7 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 					$cordta[] = $row;
 				}
 
-				$mytreechose = new XoopsTree($xoopsDB -> prefix("xtorrent_cat"), "cid", "pid");
+				$mytreechose = new XoopsTree($xoopsDB -> prefix('xtorrent_cat'), 'cid', 'pid');
 
 				$iidx = [];
 				$dscx = [];
@@ -149,8 +150,8 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 					$iidx[$ii] = new XoopsFormElementTray($row['stitle'], '&nbsp;');
 
 					ob_start();
-					$mytreechose -> makeMySelBox("title", "title", $row['cid'] , 1, "catassign[$ii]");
-					$iidx[$ii]->addElement(new XoopsFormLabel("Cat Assignment", ob_get_contents()));
+					$mytreechose -> makeMySelBox('title', 'title', $row['cid'] , 1, "catassign[$ii]");
+					$iidx[$ii]->addElement(new XoopsFormLabel('Cat Assignment', ob_get_contents()));
 					ob_end_clean();
 					$iidx[$ii]->addElement(new XoopsFormRadioYN('Auto Import', "auto_import[$ii]", $row['auto_approval']));
 					$iidx[$ii]->addElement(new XoopsFormHidden("id[$ii]", $row['id']));
@@ -181,11 +182,11 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 						$iidx[$ii] = new XoopsFormElementTray($r['title'], '&nbsp;');
 
 						ob_start();
-						$mytreechose -> makeMySelBox("title", "title", 0 , 1, "catassign[$ii]");
-						$iidx[$ii]->addElement(new XoopsFormLabel("Cat Assignment", ob_get_contents()));
+						$mytreechose -> makeMySelBox('title', 'title', 0 , 1, "catassign[$ii]");
+						$iidx[$ii]->addElement(new XoopsFormLabel('Cat Assignment', ob_get_contents()));
 						ob_end_clean();
 						$iidx[$ii]->addElement(new XoopsFormRadioYN('Auto Import', "auto_import[$ii]", $r['auto_approval']));
-						$iidx[$ii]->addElement(new XoopsFormLabel("", "<strong>(new)</strong>"));
+						$iidx[$ii]->addElement(new XoopsFormLabel('', '<strong>(new)</strong>'));
 						$iidx[$ii]->addElement(new XoopsFormHidden("desc[$ii]", $r['description']));
 						$iidx[$ii]->addElement(new XoopsFormHidden("title[$ii]", $r['title']));						
 						$iidx[$ii]->addElement(new XoopsFormHidden("scid[$ii]", $r['cid']));				
@@ -195,17 +196,17 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 				}
 
 				$sform -> addElement(new XoopsFormButton('', 'submit', 'Save Changes', 'submit'));
-				$sform -> addElement(new XoopsFormHidden("action", "scribe"));
-				$sform -> addElement(new XoopsFormHidden("total", $ii));
+				$sform -> addElement(new XoopsFormHidden('action', 'scribe'));
+				$sform -> addElement(new XoopsFormHidden('total', $ii));
 			}			
 			break;
-		case "listing":
+		case 'listing':
 			xoops_cp_header();
       $adminObject = \Xmf\Module\Admin::getInstance();
       $adminObject->displayNavigation(basename(__FILE__));
 			switch ($_REQUEST['action'])
 			{
-			case "scribe":
+			case 'scribe':
 				$hmy = importtorrents($_REQUEST, $client, $servers, $server, $server_key, $site_name, $site_url);
 				if ($hmy>0)
 				{
@@ -215,19 +216,19 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 				}
 				exit();			
 				break;
-			case "search":
+			case 'search':
 				$toggles = xtorrent_getcookie('G', true);
     			?><script src="/modules/xtorrent/assets/js/xtorrent_toggle.js" language="javascript"></script><?php
 				if (is_array($_REQUEST['category']))
 				{
-					$request["cid"] = $_REQUEST['category'];
+                    $request['cid'] = $_REQUEST['category'];
 				}
 				if ($_REQUEST['from']!=$_REQUEST['to'])
 				{
-					$request["from"] = strtotime($_REQUEST['from']);
-					$request["to"] = strtotime($_REQUEST['to']);
-				}								 
-				$request["datefield"] = $_REQUEST['datefield'];
+                    $request['from'] = strtotime($_REQUEST['from']);
+                    $request['to']   = strtotime($_REQUEST['to']);
+				}
+                $request['datefield'] = $_REQUEST['datefield'];
 
 				$result = $client->call('xtorrent_listing', 
 								['username' => $servers[$server]['username'], 
@@ -238,7 +239,7 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
                 'request'   => $request
                 ]);
 
-				$sql = "SELECT scid, slid, scrc FROM " . $xoopsDB->prefix('xtorrent_soap_transactions') . " WHERE ssitename = " . $site_name . " AND surl = " . $site_url;
+				$sql = 'SELECT scid, slid, scrc FROM ' . $xoopsDB->prefix('xtorrent_soap_transactions') . ' WHERE ssitename = ' . $site_name . ' AND surl = ' . $site_url;
 				if (is_array($_REQUEST['category']))
 				{
 					$sql .= " AND scid in ('" . implode("','",$_REQUEST['category']) . "')";
@@ -267,75 +268,75 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
                   	<table width=\"100%\" border=\"0\">
                   	  <tr>
                   		<td width='25%'>Title:</td>
-                  		<td>" . $uu['title'] . "</td>
+                  		<td>" . $uu['title'] . '</td>
                   	  </tr>
                   	  <tr>
                   		<td>Paypal Email:</td>
-                  		<td>" . $uu['paypalemail'] . "</td>
+                  		<td>' . $uu['paypalemail'] . '</td>
                   	  </tr>
                   	  <tr>
                   		<td>File CRC:</td>
-                  		<td>" . $uu['crc'] . "</td>
+                  		<td>' . $uu['crc'] . '</td>
                   	  </tr>
                   	  <tr>
                   		<td>Features:</td>
-                  		<td> * " . implode("<br> * ",explode("|",$uu['features'])) . "</td>
+                  		<td> * ' . implode('<br> * ', explode('|', $uu['features'])) . '</td>
                   	  </tr>
                   	  <tr>
                   		<td>Requirements:</td>
-                  		<td> * " . implode("<br> * ",explode("|",$uu['requirements'])) . "</td>
+                  		<td> * ' . implode('<br> * ', explode('|', $uu['requirements'])) . '</td>
                   	  </tr>
                   	  <tr>
                   		<td>Homepage:</td>
-                  		<td><a href=\"" . $uu['homepage'] . "\">" . $uu['homepagetitle'] . "</a></td>
+                  		<td><a href="' . $uu['homepage'] . '">' . $uu['homepagetitle'] . '</a></td>
                   	  </tr>
                   	  <tr>
                   		<td>Version:</td>
-                  		<td>" . $uu['version'] . "</td>
+                  		<td>' . $uu['version'] . '</td>
                   	  </tr>
                   	  <tr>
                   		<td>Size:</td>
-                  		<td>" . $uu['size'] . "</td>
+                  		<td>' . $uu['size'] . '</td>
                   	  </tr>
                   	  <tr>
                   		<td>Platform:</td>
-                  		<td>" . $result['RESULT']['arrays']['platform'][$uu['platform']] . "</td>
+                  		<td>' . $result['RESULT']['arrays']['platform'][$uu['platform']] . '</td>
                   	  </tr>
                   	  <tr>
                   		<td>Publisher</td>
-                  		<td>" . $uu['publisher'] . "</td>
+                  		<td>' . $uu['publisher'] . '</td>
                   	  </tr>
                   	  <tr>
                   		<td>IP Address</td>
-                  		<td>" . $uu['ipaddress'] . "</td>
+                  		<td>' . $uu['ipaddress'] . '</td>
                   	  </tr>
-                  	</table></div>";
-						$iidx[$ii]->addElement(new XoopsFormLabel("", "<strong>Import: </strong><input type=\"checkbox\" id=\"import[" . $ii . "]\" name=\"import[" . $ii . "]\" value=\"1\">"));																	
-						$iidx[$ii]->addElement(new XoopsFormLabel("", "<strong>(new)</strong>"));																	
-						$iidx[$ii]->addElement(new XoopsFormLabel("", $ti));
+                  	</table></div>';
+						$iidx[$ii]->addElement(new XoopsFormLabel('', '<strong>Import: </strong><input type="checkbox" id="import[' . $ii . ']" name="import[' . $ii . ']" value="1">'));
+						$iidx[$ii]->addElement(new XoopsFormLabel('', '<strong>(new)</strong>'));
+						$iidx[$ii]->addElement(new XoopsFormLabel('', $ti));
 						$iidx[$ii]->addElement(new XoopsFormHidden("new[$ii]", true));		
 						$iidx[$ii]->addElement(new XoopsFormHidden("lid[$ii]", $uu['lid']));														
 						$sform -> addElement($iidx[$ii]);
 					
 					}
 				}
-				$sform -> addElement(new XoopsFormLabel("Notify", "<input type=\"checkbox\" id=\"notify\" name=\"notify\" value=\"1\">&nbsp;<font size=-1>Notify Users of New Torrents</font>"));
+				$sform -> addElement(new XoopsFormLabel('Notify', '<input type="checkbox" id="notify" name="notify" value="1">&nbsp;<font size=-1>Notify Users of New Torrents</font>'));
 				$sform -> addElement(new XoopsFormButton('', 'submit', 'Import Torrents', 'submit'));
-				$sform -> addElement(new XoopsFormHidden("action", "scribe"));
-				$sform -> addElement(new XoopsFormHidden("total", $ii));					
+				$sform -> addElement(new XoopsFormHidden('action', 'scribe'));
+				$sform -> addElement(new XoopsFormHidden('total', $ii));
 				
 				break;
 			default:
 				$dscx = [];
 				$iidx = [];
 				
-				$dscx[0] = new XoopsFormSelect('Categories', 'category', 0, 4, true);
-				$dscx[1] = new XoopsFormSelect('Search Field', 'datefield', 0, 1, false);
-				$cordtb["expired"] = "Expiry Date";
-				$cordtb["date"] = "Date of Ingestion";
-				$cordtb["published"] = "Publishing Date";
+				$dscx[0]             = new XoopsFormSelect('Categories', 'category', 0, 4, true);
+				$dscx[1]             = new XoopsFormSelect('Search Field', 'datefield', 0, 1, false);
+                $cordtb['expired']   = 'Expiry Date';
+                $cordtb['date']      = 'Date of Ingestion';
+                $cordtb['published'] = 'Publishing Date';
 				$dscx[1] -> addOptionArray($cordtb);
-				$sql    = "SELECT scid, stitle FROM " . $xoopsDB->prefix('xtorrent_soap_catmatch') . " WHERE skey = " . $server_key;
+				$sql    = 'SELECT scid, stitle FROM ' . $xoopsDB->prefix('xtorrent_soap_catmatch') . ' WHERE skey = ' . $server_key;
 				$ret    = $xoopsDB->queryF($sql);
 				$cordta = [];
 				//$cordta[0] = '--------------------------------';
@@ -346,14 +347,14 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 				}
 				$dscx[0] -> addOptionArray($cordta);
 				$sform -> addElement($dscx[0]);
-				$sform -> addElement(new XoopsFormDateTime("Search From","from"));
-				$sform -> addElement(new XoopsFormDateTime("Search To","to"));
+				$sform -> addElement(new XoopsFormDateTime('Search From', 'from'));
+				$sform -> addElement(new XoopsFormDateTime('Search To', 'to'));
 				$sform -> addElement($dscx[1]);
 				$sform -> addElement(new XoopsFormButton('', 'submit', 'Search Listings', 'submit'));
-				$sform -> addElement(new XoopsFormHidden("action", "search"));
+				$sform -> addElement(new XoopsFormHidden('action', 'search'));
 			}	
 			break;	
-		case "retrieve":
+		case 'retrieve':
 		default:
 			xoops_cp_header();		
       $adminObject = \Xmf\Module\Admin::getInstance();
@@ -369,12 +370,12 @@ function pharseSoapServer()
 {
 	global $xoopsModuleConfig;
 	$svrinfo = [];
-	$xms     = explode("|", $xoopsModuleConfig['xsoap_servers']);
+	$xms     = explode('|', $xoopsModuleConfig['xsoap_servers']);
 	foreach ($xms as $key => $data)
 	{
-		$sep                       = explode("@", $data);
+		$sep                       = explode('@', $data);
 		$svrinfo[$key]['uri']      = $sep[1];
-		$sepb                      = explode(":", $sep[0]);
+		$sepb                      = explode(':', $sep[0]);
 		$svrinfo[$key]['username'] = $sepb[0];
 		$svrinfo[$key]['password'] = $sepb[1];
 	}
@@ -386,7 +387,7 @@ function decodespecialchars($rec)
 	$res = [];
 	foreach ($rec as $k => $l)
 	{
-		if ($k!="crc")
+		if ($k != 'crc')
 		{
 			$res[$k] = convert_uudecode($l);
 		} else {
@@ -406,80 +407,80 @@ function importtorrents($req, $client, $servers, $server, $server_key, $site_nam
 		{
 			$request['lid'] = [$req['lid'][$k]];
 			$result = $client->call('xtorrent_send', 
-							['username' => $servers[$server]['username'], 
-							"password"  => $servers[$server]['password'],
-							"passhash"  => sha1((time()-$rnd) . $servers[$server]['username'] . $servers[$server]['password']),
-              "rand"      => $rnd,
-              "time"      => time(),
-              "request"   => $request
+							['username' => $servers[$server]['username'],
+                             'password' => $servers[$server]['password'],
+                             'passhash' => sha1((time() - $rnd) . $servers[$server]['username'] . $servers[$server]['password']),
+                             'rand'     => $rnd,
+                             'time'     => time(),
+                             'request'  => $request
               ]);			
 		  //print_r($result);
 			$myts   = MyTextSanitizer::getInstance();
 			$notify = $req['notify']!=0 ? 1 : 0;
 			$slid   = (!empty($result['RESULT']['data'][0]['content']['lid'])) ? intval($result['RESULT']['data'][0]['content']['lid']) : 0 ;
 			$scid   = (!empty($result['RESULT']['data'][0]['content']['cid'])) ? intval($result['RESULT']['data'][0]['content']['cid']) : 0 ;
-			$sql    = "SELECT cid, auto_approval FROM " . $xoopsDB->prefix('xtorrent_soap_catmatch') . " WHERE scid = " . $scid . " and skey = ". $server_key;
+			$sql    = 'SELECT cid, auto_approval FROM ' . $xoopsDB->prefix('xtorrent_soap_catmatch') . ' WHERE scid = ' . $scid . ' and skey = ' . $server_key;
 
 			list($cid, $x_autoapprove) = $xoopsDB->fetchRow($xoopsDB->queryF($sql));
 
 			if ($cid>0)
 			{
 				$hmy++;
-				$down = xtorrent_writefile(convert_uudecode($result['RESULT']['data'][0]['benc']), $xoopsModuleConfig['uploaddir'], XOOPS_URL, $result['RESULT']['data'][0]['content']['title'].".torrent");
+				$down = xtorrent_writefile(convert_uudecode($result['RESULT']['data'][0]['benc']), $xoopsModuleConfig['uploaddir'], XOOPS_URL, $result['RESULT']['data'][0]['content']['title'] . '.torrent');
 
 				$url   = $down['url'];
 				$size  = $down['size'];
-				$title = $myts->addslashes(trim($result['RESULT']['data'][0]['content']["title"]));
+				$title = $myts->addslashes(trim($result['RESULT']['data'][0]['content']['title']));
 
 				$homepage      = '';
 				$homepagetitle = '';
-				if (!empty($result['RESULT']['data'][0]['content']["homepage"]) || $result['RESULT']['data'][0]['content']["homepage"] != "http://")
+				if (!empty($result['RESULT']['data'][0]['content']['homepage']) || $result['RESULT']['data'][0]['content']['homepage'] != 'http://')
 				{
-					$homepage = $myts->addslashes(formatURL(trim($result['RESULT']['data'][0]['content']["homepage"])));
-					$homepagetitle = $myts->addslashes(trim($result['RESULT']['data'][0]['content']["homepagetitle"]));
+					$homepage = $myts->addslashes(formatURL(trim($result['RESULT']['data'][0]['content']['homepage'])));
+					$homepagetitle = $myts->addslashes(trim($result['RESULT']['data'][0]['content']['homepagetitle']));
 				} 
-				$version = $myts->addslashes($result['RESULT']['data'][0]['content']["version"]);
+				$version = $myts->addslashes($result['RESULT']['data'][0]['content']['version']);
 
 				foreach($xoopsModuleConfig['platform'] as $ky => $tp)
 				{
-					if (strpos($result['RESULT']['arrays']['platform'][$result['RESULT']['data'][0]['content']["platform"]], substr($tp,1,strlen($tp)-2))!=false) {
+					if (strpos($result['RESULT']['arrays']['platform'][$result['RESULT']['data'][0]['content']['platform']], substr($tp, 1, strlen($tp) - 2)) != false) {
 						$platform = $ky;
 					}
 				}
 
 				foreach($xoopsModuleConfig['license'] as $ky => $tp)
 				{
-					if (strpos($result['RESULT']['arrays']['license'][$result['RESULT']['data'][0]['content']["license"]], substr($tp,3,strlen($tp)-6))!=false) {
+					if (strpos($result['RESULT']['arrays']['license'][$result['RESULT']['data'][0]['content']['license']], substr($tp, 3, strlen($tp) - 6)) != false) {
 						$license = $ky;
 					}
 				}
 
 				foreach($xoopsModuleConfig['currencies'] as $ky => $tp)
 				{
-					if (strpos($result['RESULT']['arrays']['currency'][$result['RESULT']['data'][0]['content']["currency"]], $tp)!=false) {
+					if (strpos($result['RESULT']['arrays']['currency'][$result['RESULT']['data'][0]['content']['currency']], $tp) != false) {
 						$currency = $ky;
 					}
 				}
 				global $xoopsUser;
 
-				$description  = $myts->addslashes($result['RESULT']['data'][0]['content']["description"]);
+				$description  = $myts->addslashes($result['RESULT']['data'][0]['content']['description']);
 				$submitter    = $myts->addslashes($xoopsUser->getVar('uid'));
-				$publisher    = $myts->addslashes(trim($result['RESULT']['data'][0]['content']["publisher"]));
-				$price        = $myts->addslashes(trim($result['RESULT']['data'][0]['content']["price"]));
-				$mirror       = $myts->addslashes(formatURL(trim($result['RESULT']['data'][0]['content']["mirror"])));
-				$paypalemail  = $myts->addslashes(trim($result['RESULT']['data'][0]['content']["paypalemail"]));
+				$publisher    = $myts->addslashes(trim($result['RESULT']['data'][0]['content']['publisher']));
+				$price        = $myts->addslashes(trim($result['RESULT']['data'][0]['content']['price']));
+				$mirror       = $myts->addslashes(formatURL(trim($result['RESULT']['data'][0]['content']['mirror'])));
+				$paypalemail  = $myts->addslashes(trim($result['RESULT']['data'][0]['content']['paypalemail']));
 				//$currency     = $myts->addslashes(trim($result['RESULT']['data'][0]['content']["currency"]));
-				$features     = $myts->addslashes(trim($result['RESULT']['data'][0]['content']["features"]));
-				$requirements = $myts->addslashes(trim($result['RESULT']['data'][0]['content']["requirements"]));
-				$limitations  = (isset($result['RESULT']['data'][0]['content']["limitations"])) ? $myts->addslashes($result['RESULT']['data'][0]['content']["limitations"]) : '';
-				$dhistory     = (isset($result['RESULT']['data'][0]['content']["dhistory"])) ? $myts->addslashes($result['RESULT']['data'][0]['content']["dhistory"]) : '';
+				$features     = $myts->addslashes(trim($result['RESULT']['data'][0]['content']['features']));
+				$requirements = $myts->addslashes(trim($result['RESULT']['data'][0]['content']['requirements']));
+				$limitations  = (isset($result['RESULT']['data'][0]['content']['limitations'])) ? $myts->addslashes($result['RESULT']['data'][0]['content']['limitations']) : '';
+				$dhistory     = (isset($result['RESULT']['data'][0]['content']['dhistory'])) ? $myts->addslashes($result['RESULT']['data'][0]['content']['dhistory']) : '';
 				$offline      = (isset($result['RESULT']['data'][0]['content']['offline']) && $result['RESULT']['data'][0]['content']['offline'] == 1) ? 1 : 0;
-				$date         = (isset($result['RESULT']['data'][0]['content']["date"])) ? $myts->addslashes($result['RESULT']['data'][0]['content']["date"]) : '';
-				$publishdate  = (isset($result['RESULT']['data'][0]['content']["publishdate"])) ? $myts->addslashes($result['RESULT']['data'][0]['content']["publishdate"]) : '';
+				$date         = (isset($result['RESULT']['data'][0]['content']['date'])) ? $myts->addslashes($result['RESULT']['data'][0]['content']['date']) : '';
+				$publishdate  = (isset($result['RESULT']['data'][0]['content']['publishdate'])) ? $myts->addslashes($result['RESULT']['data'][0]['content']['publishdate']) : '';
 				$notifypub    = (isset($result['RESULT']['data'][0]['content']['notifypub']) && $result['RESULT']['data'][0]['content']['notifypub'] == 1) ? 1 : 0;
 				$scrc         = isset($result['RESULT']['data'][0]['content']['crc']) ? $result['RESULT']['data'][0]['content']['crc'] : '';
-				$screenshot   = (isset($result['RESULT']['data'][0]['content']["screenshot"])) ? $myts->addslashes($result['RESULT']['data'][0]['content']["screenshot"]) : '';
-				$ipaddress    = (isset($result['RESULT']['data'][0]['content']["ipaddress"])) ? $myts->addslashes($result['RESULT']['data'][0]['content']["ipaddress"]) : '';	
+				$screenshot   = (isset($result['RESULT']['data'][0]['content']['screenshot'])) ? $myts->addslashes($result['RESULT']['data'][0]['content']['screenshot']) : '';
+				$ipaddress    = (isset($result['RESULT']['data'][0]['content']['ipaddress'])) ? $myts->addslashes($result['RESULT']['data'][0]['content']['ipaddress']) : '';
 
 				if ($lid == 0)
 				{
@@ -489,8 +490,8 @@ function importtorrents($req, $client, $servers, $server, $server_key, $site_nam
 						$status = 1;
 					} 
 					$status = ($x_autoapprove == 1) ? 1 : 0 ;
-					$query  = "INSERT INTO " . $xoopsDB->prefix("xtorrent_downloads") . " 
-						(lid, cid, title, url, homepage, version, size, platform, screenshot, submitter, publisher, status, date, hits, rating, votes, comments, price, mirror, license, paypalemail, features, requirements, homepagetitle, forumid, limitations, dhistory, published, expired,offline, description, ipaddress, notifypub, currency)";
+					$query  = 'INSERT INTO ' . $xoopsDB->prefix('xtorrent_downloads') . ' 
+						(lid, cid, title, url, homepage, version, size, platform, screenshot, submitter, publisher, status, date, hits, rating, votes, comments, price, mirror, license, paypalemail, features, requirements, homepagetitle, forumid, limitations, dhistory, published, expired,offline, description, ipaddress, notifypub, currency)';
 					$query .= " VALUES 	('', $cid, '$title', '$url', '$homepage', '$version', '$size', '$platform', '$screenshot', '$submitter', '$publisher','$status', '$date', 0, 0, 0, 0, '$price', '$mirror', '$license', '$paypalemail', '$features', '$requirements', '$homepagetitle', '$forumid', '$limitations', '$dhistory', '$publishdate', 0, '$offline', '$description', '$ipaddress', '$notifypub', '$currency')";
 					$result = $xoopsDB->queryF($query);
 					$newid  = $xoopsDB->getInsertId();
@@ -499,7 +500,7 @@ function importtorrents($req, $client, $servers, $server, $server_key, $site_nam
 						$groups = [1, 2];
 						xtorrent_save_Permissions($groups, $newid, 'xtorrentownFilePerm');
 
-						$sql    = "INSERT INTO " . $xoopsDB->prefix("xtorrent_soap_transactions") . " (lid, cid, slid, scid, scrc, retrieved, ssitename, surl) VALUES ('$newid','$cid', '$slid', '$scid', '$scrc', '".time()."', '$site_name', '$site_url')";
+						$sql    = 'INSERT INTO ' . $xoopsDB->prefix('xtorrent_soap_transactions') . " (lid, cid, slid, scid, scrc, retrieved, ssitename, surl) VALUES ('$newid','$cid', '$slid', '$scid', '$scrc', '" . time() . "', '$site_name', '$site_url')";
 						$result = $xoopsDB->queryF($sql);
 
 						/*
@@ -509,7 +510,7 @@ function importtorrents($req, $client, $servers, $server, $server_key, $site_nam
 						$tags                  = [];
 						$tags['FILE_NAME']     = $title;
 						$tags['FILE_URL']      = XOOPS_URL . '/modules/xtorrent/singlefile.php?cid=' . $cid . '&amp;lid=' . $newid;
-						$sql                   = "SELECT title FROM " . $xoopsDB->prefix('xtorrent_cat') . " WHERE cid=" . $cid;
+						$sql                   = 'SELECT title FROM ' . $xoopsDB->prefix('xtorrent_cat') . ' WHERE cid=' . $cid;
 						$result                = $xoopsDB->query($sql);
 						$row                   = $xoopsDB->fetchArray($result);
 						$tags['CATEGORY_NAME'] = $row['title'];

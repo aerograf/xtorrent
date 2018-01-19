@@ -5,42 +5,42 @@ class paymentsResource extends XoopsObject
     public function __construct()
     {
         $this->XoopsObject();
-        $this->initVar("id", XOBJ_DTYPE_INT);
-        $this->initVar("torrent", XOBJ_DTYPE_INT);
-        $this->initVar("passkey", XOBJ_DTYPE_INT);
-        $this->initVar("userid", XOBJ_DTYPE_INT);
-        $this->initVar("payment", XOBJ_DTYPE_INT);
-        $this->initVar("business", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("txn_id", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("item_name", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("item_number", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("quantity", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("invoice", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("custom", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("tax", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("option_name1", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("option_selection1", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("option_name2", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("option_selection2", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("memo", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("payment_status", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("payment_date", XOBJ_DTYPE_INT);
-        $this->initVar("txn_type", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("mc_gross", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("mc_fee", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("mc_currency", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("settle_amount", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("exchange_rate", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("first_name", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("last_name", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("address_street", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("address_city", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("address_state", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("address_zip", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("address_country", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("address_status", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("payer_email", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("payer_status", XOBJ_DTYPE_TXTBOX);
+        $this->initVar('id', XOBJ_DTYPE_INT);
+        $this->initVar('torrent', XOBJ_DTYPE_INT);
+        $this->initVar('passkey', XOBJ_DTYPE_INT);
+        $this->initVar('userid', XOBJ_DTYPE_INT);
+        $this->initVar('payment', XOBJ_DTYPE_INT);
+        $this->initVar('business', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('txn_id', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('item_name', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('item_number', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('quantity', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('invoice', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('custom', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('tax', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('option_name1', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('option_selection1', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('option_name2', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('option_selection2', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('memo', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('payment_status', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('payment_date', XOBJ_DTYPE_INT);
+        $this->initVar('txn_type', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('mc_gross', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('mc_fee', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('mc_currency', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('settle_amount', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('exchange_rate', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('first_name', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('last_name', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('address_street', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('address_city', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('address_state', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('address_zip', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('address_country', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('address_status', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('payer_email', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('payer_status', XOBJ_DTYPE_TXTBOX);
     }
 }
 
@@ -112,14 +112,14 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
         }
         $myts = MyTextSanitizer::getInstance();
         if ($payments->isNew() || empty($id)) {
-            $id  = $this->db->genId($this->db_table."_xt_payments_id_seq");
+            $id  = $this->db->genId($this->db_table . '_xt_payments_id_seq');
             $sql = sprintf(
-                "INSERT INTO %s (
+                'INSERT INTO %s (
 				`id`, `torrent`, `passkey`, `userid`, `payment`, `business`, `txn_id`, `item_name`, `item_number`, `quantity`, `invoice`, `custom`, `tax`, `option_name1`, `option_selection1`, `option_name2`, `option_selection2`, `memo`, `payment_status`, `payment_date`, 	`txn_type`, `mc_gross`, `mc_fee`, `mc_currency`, `settle_amount`, `exchange_rate`, `first_name`, `last_name`, `address_street`, `address_city`, `address_state`, `address_zip`, `address_country`, `address_status`, `payer_email`, `payer_status`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
 				%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
-				)",
+				)',
                 $this->db_table,
                 $this->db->quoteString($id),
                 $this->db->quoteString($torrent),
@@ -160,7 +160,7 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
             );
         } else {
             $sql = sprintf(
-                "UPDATE %s SET
+                'UPDATE %s SET
 				`torrent` = %s,
 				`passkey` = %s,
 				`userid` = %s,
@@ -195,7 +195,7 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
 				`address_country` = %s,
 				`address_status` = %s,
 				`payer_email` = %s,
-				`payer_status` = %s WHERE id = %s",
+				`payer_status` = %s WHERE id = %s',
                 $this->db_table,
                 $this->db->quoteString($torrent),
                 $this->db->quoteString($passkey),
@@ -242,7 +242,7 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
             $result = $this->db->query($sql);
         }
         if (!$result) {
-            $payments->setErrors("Could not store data in the database.<br>".$this->db->error().' ('.$this->db->errno().')<br>'.$sql);
+            $payments->setErrors('Could not store data in the database.<br>' . $this->db->error() . ' (' . $this->db->errno() . ')<br>' . $sql);
             return false;
         }
         if (empty($id)) {
@@ -258,7 +258,7 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
             return false;
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql = "DELETE FROM ".$this->db_table." ".$criteria->renderWhere()."";
+            $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
         if (false != $force) {
             $result = $this->db->queryF($sql);
@@ -324,7 +324,7 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function deleteTorrentPermissions($id, $mode = "view")
+    public function deleteTorrentPermissions($id, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
@@ -339,7 +339,7 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function insertTorrentPermissions($id, $group_ids, $mode = "view")
+    public function insertTorrentPermissions($id, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $id) {
@@ -351,10 +351,10 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
             $this->perm_handler->insert($perm);
             $ii++;
         }
-        return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record ID ".$id;
+        return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $id;
     }
     
-    public function getPermittedTorrents($payments, $mode = "view")
+    public function getPermittedTorrents($payments, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $ret = false;
@@ -392,7 +392,7 @@ class XtorrentPaymentsHandler extends XoopsObjectHandler
         return ret;
     }
     
-    public function getSingleTorrentPermission($id, $mode = "view")
+    public function getSingleTorrentPermission($id, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;

@@ -1,6 +1,6 @@
 <?php
 
-require_once("bittorrent.php");
+require_once('bittorrent.php');
 
 function docleanup()
 {
@@ -10,7 +10,7 @@ function docleanup()
     ignore_user_abort(1);
 
     do {
-        $res = mysqli_query("SELECT id FROM torrents");
+        $res = mysqli_query('SELECT id FROM torrents');
         $ar  = [];
         while ($row = mysqli_fetch_array($res)) {
             $id = $row[0];
@@ -54,10 +54,10 @@ function docleanup()
             unset($ar[$k]);
         }
         if (count($delids)) {
-            mysqli_query("DELETE FROM torrents WHERE id IN (" . join(",", $delids) . ")");
+            mysqli_query('DELETE FROM torrents WHERE id IN (' . join(',', $delids) . ')');
         }
 
-        $res    = mysqli_query("SELECT torrent FROM peers GROUP BY torrent");
+        $res    = mysqli_query('SELECT torrent FROM peers GROUP BY torrent');
         $delids = [];
         while ($row = mysqli_fetch_array($res)) {
             $id = $row[0];
@@ -67,10 +67,10 @@ function docleanup()
             $delids[] = $id;
         }
         if (count($delids)) {
-            mysqli_query("DELETE FROM peers WHERE torrent IN (" . join(",", $delids) . ")");
+            mysqli_query('DELETE FROM peers WHERE torrent IN (' . join(',', $delids) . ')');
         }
 
-        $res    = mysqli_query("SELECT torrent FROM files GROUP BY torrent");
+        $res    = mysqli_query('SELECT torrent FROM files GROUP BY torrent');
         $delids = [];
         while ($row = mysqli_fetch_array($res)) {
             $id = $row[0];
@@ -80,7 +80,7 @@ function docleanup()
             $delids[] = $id;
         }
         if (count($delids)) {
-            mysqli_query("DELETE FROM files WHERE torrent IN (" . join(",", $delids) . ")");
+            mysqli_query('DELETE FROM files WHERE torrent IN (' . join(',', $delids) . ')');
         }
     } while (0);
 
@@ -94,25 +94,25 @@ function docleanup()
     mysqli_query("DELETE FROM users WHERE status = 'pending' AND added < FROM_UNIXTIME($deadtime) AND last_login < FROM_UNIXTIME($deadtime) AND last_access < FROM_UNIXTIME($deadtime)");
 
     $torrents = [];
-    $res      = mysqli_query("SELECT torrent, seeder, COUNT(*) AS c FROM peers GROUP BY torrent, seeder");
+    $res      = mysqli_query('SELECT torrent, seeder, COUNT(*) AS c FROM peers GROUP BY torrent, seeder');
     while ($row = mysqli_fetch_assoc($res)) {
-        if ($row["seeder"] == "yes") {
-            $key = "seeders";
+        if ($row['seeder'] == 'yes') {
+            $key = 'seeders';
         } else {
-            $key = "leechers";
+            $key = 'leechers';
         }
-        $torrents[$row["torrent"]][$key] = $row["c"];
+        $torrents[$row['torrent']][$key] = $row['c'];
     }
 
-    $res = mysqli_query("SELECT torrent, COUNT(*) AS c FROM comments GROUP BY torrent");
+    $res = mysqli_query('SELECT torrent, COUNT(*) AS c FROM comments GROUP BY torrent');
     while ($row = mysqli_fetch_assoc($res)) {
-        $torrents[$row["torrent"]]["comments"] = $row["c"];
+        $torrents[$row['torrent']]['comments'] = $row['c'];
     }
 
-    $fields = explode(":", "comments:leechers:seeders");
-    $res    = mysqli_query("SELECT id, seeders, leechers, comments FROM torrents");
+    $fields = explode(':', 'comments:leechers:seeders');
+    $res    = mysqli_query('SELECT id, seeders, leechers, comments FROM torrents');
     while ($row = mysqli_fetch_assoc($res)) {
-        $id   = $row["id"];
+        $id   = $row['id'];
         $torr = $torrents[$id];
         foreach ($fields as $field) {
             if (!isset($torr[$field])) {
@@ -126,7 +126,7 @@ function docleanup()
             }
         }
         if (count($update)) {
-            mysqli_query("UPDATE torrents SET " . implode(",", $update) . " WHERE id = $id");
+            mysqli_query('UPDATE torrents SET ' . implode(',', $update) . " WHERE id = $id");
         }
     }
 
@@ -181,13 +181,13 @@ function docleanup()
     }
 
     // Update stats
-    $seeders  = get_row_count("peers", "WHERE seeder='yes'");
-    $leechers = get_row_count("peers", "WHERE seeder='no'");
+    $seeders  = get_row_count('peers', "WHERE seeder='yes'");
+    $leechers = get_row_count('peers', "WHERE seeder='no'");
     mysqli_query("UPDATE avps SET value_u=$seeders WHERE arg='seeders'") or sqlerr(__FILE__, __LINE__);
     mysqli_query("UPDATE avps SET value_u=$leechers WHERE arg='leechers'") or sqlerr(__FILE__, __LINE__);
 
     // update forum post/topic count
-    $forums = mysqli_query("select id from forums");
+    $forums = mysqli_query('select id from forums');
     while ($forum = mysqli_fetch_assoc($forums)) {
         $postcount  = 0;
         $topiccount = 0;

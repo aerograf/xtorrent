@@ -5,21 +5,21 @@ class catResource extends XoopsObject
     public function __construct()
     {
         $this->XoopsObject();
-        $this->initVar("cid", XOBJ_DTYPE_INT);
-        $this->initVar("pid", XOBJ_DTYPE_INT);
-        $this->initVar("title", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("imgurl", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("description", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("total", XOBJ_DTYPE_INT);
-        $this->initVar("summary", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("spotlighttop", XOBJ_DTYPE_INT);
-        $this->initVar("spotlighthis", XOBJ_DTYPE_INT);
-        $this->initVar("nohtml", XOBJ_DTYPE_INT);
-        $this->initVar("nosmiley", XOBJ_DTYPE_INT);
-        $this->initVar("noxcodes", XOBJ_DTYPE_INT);
-        $this->initVar("noimages", XOBJ_DTYPE_INT);
-        $this->initVar("nobreak", XOBJ_DTYPE_INT);
-        $this->initVar("weight", XOBJ_DTYPE_INT);
+        $this->initVar('cid', XOBJ_DTYPE_INT);
+        $this->initVar('pid', XOBJ_DTYPE_INT);
+        $this->initVar('title', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('imgurl', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('description', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('total', XOBJ_DTYPE_INT);
+        $this->initVar('summary', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('spotlighttop', XOBJ_DTYPE_INT);
+        $this->initVar('spotlighthis', XOBJ_DTYPE_INT);
+        $this->initVar('nohtml', XOBJ_DTYPE_INT);
+        $this->initVar('nosmiley', XOBJ_DTYPE_INT);
+        $this->initVar('noxcodes', XOBJ_DTYPE_INT);
+        $this->initVar('noimages', XOBJ_DTYPE_INT);
+        $this->initVar('nobreak', XOBJ_DTYPE_INT);
+        $this->initVar('weight', XOBJ_DTYPE_INT);
     }
 }
 
@@ -91,13 +91,13 @@ class XtorrentCatHandler extends XoopsObjectHandler
         }
         $myts = MyTextSanitizer::getInstance();
         if ($cat->isNew() || empty($cid)) {
-            $cid = $this->db->genId($this->db_table."_xt_cat_id_seq");
+            $cid = $this->db->genId($this->db_table . '_xt_cat_id_seq');
             $sql = sprintf(
-                "INSERT INTO %s (
+                'INSERT INTO %s (
 				`cid`, `pid`, `title`, `imgurl`, `description`, `total`, `summary`, `spotlighttop`, `spotlighthis`, `nohtml`, `nosmiley`, `noxcodes`, `noimages`, `nobreak`, `weight`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
-				)",
+				)',
                 $this->db_table,
                 $this->db->quoteString($cid),
                 $this->db->quoteString($pid),
@@ -117,7 +117,7 @@ class XtorrentCatHandler extends XoopsObjectHandler
             );
         } else {
             $sql = sprintf(
-                "UPDATE %s SET
+                'UPDATE %s SET
  				 `weight` = %s,
 				 `pid` = %s,
 				 `title` = %s,
@@ -132,7 +132,7 @@ class XtorrentCatHandler extends XoopsObjectHandler
 				 `noxcodes` = %s,
 				 `noimages` = %s,
 				 `nobreak` = %s,
-				  WHERE `cid` = %s",
+				  WHERE `cid` = %s',
                 $this->db_table,
                 $this->db->quoteString($weight),
                 $this->db->quoteString($pid),
@@ -158,7 +158,7 @@ class XtorrentCatHandler extends XoopsObjectHandler
             $result = $this->db->query($sql);
         }
         if (!$result) {
-            $cat->setErrors("Could not store data in the database.<br />".$this->db->error().' ('.$this->db->errno().')<br />'.$sql);
+            $cat->setErrors('Could not store data in the database.<br />' . $this->db->error() . ' (' . $this->db->errno() . ')<br />' . $sql);
             return false;
         }
         if (empty($cid)) {
@@ -174,7 +174,7 @@ class XtorrentCatHandler extends XoopsObjectHandler
             return false;
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql = "DELETE FROM ".$this->db_table." ".$criteria->renderWhere()."";
+            $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
         if (false != $force) {
             $result = $this->db->queryF($sql);
@@ -240,7 +240,7 @@ class XtorrentCatHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function deleteTorrentPermissions($cid, $mode = "view")
+    public function deleteTorrentPermissions($cid, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
@@ -255,7 +255,7 @@ class XtorrentCatHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function insertTorrentPermissions($cid, $group_ids, $mode = "view")
+    public function insertTorrentPermissions($cid, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $cid) {
@@ -267,10 +267,10 @@ class XtorrentCatHandler extends XoopsObjectHandler
             $this->perm_handler->insert($perm);
             $ii++;
         }
-        return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record ID ".$cid;
+        return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $cid;
     }
     
-    public function getPermittedTorrents($cat, $mode = "view")
+    public function getPermittedTorrents($cat, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $ret=false;
@@ -308,7 +308,7 @@ class XtorrentCatHandler extends XoopsObjectHandler
         return ret;
     }
     
-    public function getSingleTorrentPermission($cid, $mode = "view")
+    public function getSingleTorrentPermission($cid, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;

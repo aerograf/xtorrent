@@ -5,18 +5,18 @@ class usersResource extends XoopsObject
     public function __construct()
     {
         $this->XoopsObject();
-        $this->initVar("id", XOBJ_DTYPE_INT);
-        $this->initVar("uid", XOBJ_DTYPE_INT);
-        $this->initVar("lid", XOBJ_DTYPE_INT);
-        $this->initVar("username", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("old_password", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("passhash", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("secret", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("uploaded", XOBJ_DTYPE_INT);
-        $this->initVar("downloaded", XOBJ_DTYPE_INT);
-        $this->initVar("enabled", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("last_access", XOBJ_DTYPE_INT);
-        $this->initVar("passkey", XOBJ_DTYPE_TXTBOX);
+        $this->initVar('id', XOBJ_DTYPE_INT);
+        $this->initVar('uid', XOBJ_DTYPE_INT);
+        $this->initVar('lid', XOBJ_DTYPE_INT);
+        $this->initVar('username', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('old_password', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('passhash', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('secret', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('uploaded', XOBJ_DTYPE_INT);
+        $this->initVar('downloaded', XOBJ_DTYPE_INT);
+        $this->initVar('enabled', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('last_access', XOBJ_DTYPE_INT);
+        $this->initVar('passkey', XOBJ_DTYPE_TXTBOX);
     }
 }
 
@@ -88,13 +88,13 @@ class XtorrentUsersHandler extends XoopsObjectHandler
         }
         $myts = MyTextSanitizer::getInstance();
         if ($users->isNew() || empty($id)) {
-            $id = $this->db->genId($this->db_table."_xt_users_id_seq");
+            $id = $this->db->genId($this->db_table . '_xt_users_id_seq');
             $sql = sprintf(
-                "INSERT INTO %s (
+                'INSERT INTO %s (
 				`id`, `uid`, `lid`, `username`, `old_password`, `passhash`, `secret`, `uploaded`, `downloaded`, `enabled`, `last_access`, `passkey`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-				)",
+				)',
                 $this->db_table,
                 $this->db->quoteString($id),
                 $this->db->quoteString($uid),
@@ -110,7 +110,7 @@ class XtorrentUsersHandler extends XoopsObjectHandler
             );
         } else {
             $sql = sprintf(
-                "UPDATE %s SET
+                'UPDATE %s SET
 				`uid` = %s,
 				`lid` = %s,
 				`username` = %s,
@@ -122,7 +122,7 @@ class XtorrentUsersHandler extends XoopsObjectHandler
 				`enabled` = %s,
 				`last_access` = %s,
 				`passhash` = %s,
-				WHERE id = %s",
+				WHERE id = %s',
                 $this->db_table,
                 $this->db->quoteString($uid),
                 $this->db->quoteString($lid),
@@ -144,7 +144,7 @@ class XtorrentUsersHandler extends XoopsObjectHandler
             $result = $this->db->query($sql);
         }
         if (!$result) {
-            $users->setErrors("Could not store data in the database.<br />".$this->db->error().' ('.$this->db->errno().')<br />'.$sql);
+            $users->setErrors('Could not store data in the database.<br />' . $this->db->error() . ' (' . $this->db->errno() . ')<br />' . $sql);
             return false;
         }
         if (empty($id)) {
@@ -160,7 +160,7 @@ class XtorrentUsersHandler extends XoopsObjectHandler
             return false;
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql = "DELETE FROM ".$this->db_table." ".$criteria->renderWhere()."";
+            $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
         if (false != $force) {
             $result = $this->db->queryF($sql);
@@ -226,7 +226,7 @@ class XtorrentUsersHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function deleteTorrentPermissions($id, $mode = "view")
+    public function deleteTorrentPermissions($id, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
@@ -241,7 +241,7 @@ class XtorrentUsersHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function insertTorrentPermissions($id, $group_ids, $mode = "view")
+    public function insertTorrentPermissions($id, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $id) {
@@ -253,10 +253,10 @@ class XtorrentUsersHandler extends XoopsObjectHandler
             $this->perm_handler->insert($perm);
             $ii++;
         }
-        return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record ID ".$id;
+        return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $id;
     }
     
-    public function getPermittedTorrents($users, $mode = "view")
+    public function getPermittedTorrents($users, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $ret=false;
@@ -294,7 +294,7 @@ class XtorrentUsersHandler extends XoopsObjectHandler
         return ret;
     }
     
-    public function getSingleTorrentPermission($id, $mode = "view")
+    public function getSingleTorrentPermission($id, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;

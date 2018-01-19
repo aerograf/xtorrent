@@ -105,18 +105,18 @@ convenience function.
 
 function benc($obj)
 {
-    if (!is_array($obj) || !isset($obj["type"]) || !isset($obj["value"])) {
+    if (!is_array($obj) || !isset($obj['type']) || !isset($obj['value'])) {
         return;
     }
-    $c = $obj["value"];
-    switch ($obj["type"]) {
-case "string":
+    $c = $obj['value'];
+    switch ($obj['type']) {
+case 'string':
 return benc_str($c);
-case "integer":
+case 'integer':
 return benc_int($c);
-case "list":
+case 'list':
 return benc_list($c);
-case "dictionary":
+case 'dictionary':
 return benc_dict($c);
 default:
 return;
@@ -130,22 +130,22 @@ function benc_str($s)
 
 function benc_int($i)
 {
-    return "i" . $i . "e";
+    return 'i' . $i . 'e';
 }
 
 function benc_list($a)
 {
-    $s = "l";
+    $s = 'l';
     foreach ($a as $e) {
         $s .= benc($e);
     }
-    $s .= "e";
+    $s .= 'e';
     return $s;
 }
 
 function benc_dict($d)
 {
-    $s = "d";
+    $s = 'd';
     $keys = array_keys($d);
     sort($keys);
     foreach ($keys as $k) {
@@ -153,13 +153,13 @@ function benc_dict($d)
         $s .= benc_str($k);
         $s .= benc($v);
     }
-    $s .= "e";
+    $s .= 'e';
     return $s;
 }
 
 function bdec_file($f, $ms)
 {
-    $fp = fopen($f, "rb");
+    $fp = fopen($f, 'rb');
     if (!$fp) {
         return;
     }
@@ -178,23 +178,23 @@ function bdec($s)
         if (strlen($v) != $l) {
             return;
         }
-        return ['type' => "string", 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss];
+        return ['type' => 'string', 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss];
     }
     if (preg_match('/^i(\d+)e/', $s, $m)) {
         $v = $m[1];
-        $ss = "i" . $v . "e";
-        if ($v === "-0") {
+        $ss = 'i' . $v . 'e';
+        if ($v === '-0') {
             return;
         }
-        if ($v[0] == "0" && strlen($v) != 1) {
+        if ($v[0] == '0' && strlen($v) != 1) {
             return;
         }
-        return ['type' => "integer", 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss];
+        return ['type' => 'integer', 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss];
     }
     switch ($s[0]) {
-case "l":
+case 'l':
 return bdec_list($s);
-case "d":
+case 'd':
 return bdec_dict($s);
 default:
 return;
@@ -203,18 +203,18 @@ return;
 
 function bdec_list($s)
 {
-    if ($s[0] != "l") {
+    if ($s[0] != 'l') {
         return;
     }
     $sl = strlen($s);
     $i = 1;
     $v = [];
-    $ss = "l";
+    $ss = 'l';
     for (;;) {
         if ($i >= $sl) {
             return;
         }
-        if ($s[$i] == "e") {
+        if ($s[$i] == 'e') {
             break;
         }
         $ret = bdec(substr($s, $i));
@@ -222,36 +222,36 @@ function bdec_list($s)
             return;
         }
         $v[] = $ret;
-        $i += $ret["strlen"];
-        $ss .= $ret["string"];
+        $i += $ret['strlen'];
+        $ss .= $ret['string'];
     }
-    $ss .= "e";
-    return ['type' => "list", 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss];
+    $ss .= 'e';
+    return ['type' => 'list', 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss];
 }
 //
 function bdec_dict($s)
 {
-    if ($s[0] != "d") {
+    if ($s[0] != 'd') {
         return;
     }
     $sl = strlen($s);
     $i = 1;
     $v = [];
-    $ss = "d";
+    $ss = 'd';
     for (;;) {
         if ($i >= $sl) {
             return;
         }
-        if ($s[$i] == "e") {
+        if ($s[$i] == 'e') {
             break;
         }
         $ret = bdec(substr($s, $i));
-        if (!isset($ret) || !is_array($ret) || $ret["type"] != "string") {
+        if (!isset($ret) || !is_array($ret) || $ret['type'] != 'string') {
             return;
         }
-        $k = $ret["value"];
-        $i += $ret["strlen"];
-        $ss .= $ret["string"];
+        $k = $ret['value'];
+        $i += $ret['strlen'];
+        $ss .= $ret['string'];
         if ($i >= $sl) {
             return;
         }
@@ -260,9 +260,9 @@ function bdec_dict($s)
             return;
         }
         $v[$k] = $ret;
-        $i += $ret["strlen"];
-        $ss .= $ret["string"];
+        $i += $ret['strlen'];
+        $ss .= $ret['string'];
     }
-    $ss .= "e";
-    return ['type' => "dictionary", 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss];
+    $ss .= 'e';
+    return ['type' => 'dictionary', 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss];
 }

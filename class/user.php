@@ -44,7 +44,7 @@ class Xtorrent_XoopsUser extends XoopsUser
         $this->initVar('passcrc', XOBJ_DTYPE_INT);
         $this->initVar('uname', XOBJ_DTYPE_TXTBOX, null, true, 25);
         
-        $id = $this->getVar("id");
+        $id = $this->getVar('id');
         
         // for backward compatibility
         if (isset($id)) {
@@ -70,11 +70,11 @@ class Xtorrent_XoopsUser extends XoopsUser
     public function getuname_fromhash($user_hashinfo)
     {
         global $xoopsDB;
-        $sql     = "SELECT (1, uname) FROM ".$xoopsDB->prefix('users')." WHERE sha1(concat('uname','id')) = "."'$user_hashinfo'";
+        $sql     = 'SELECT (1, uname) FROM ' . $xoopsDB->prefix('users') . " WHERE sha1(concat('uname','id')) = " . "'$user_hashinfo'";
         $request = $xoopsDB->prefix($sql);
         if (!empty($request)) {
             list($passcrc, $uname)   = $xoopsDB->fetchRow($request);
-            $this->setVar("passcrc") = $passcrc;
+            $this->setVar('passcrc') = $passcrc;
             return $uname;
         }
         return false;

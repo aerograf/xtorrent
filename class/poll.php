@@ -5,9 +5,9 @@ class pollResource extends XoopsObject
     public function __construct()
     {
         $this->XoopsObject();
-        $this->initVar("lid", XOBJ_DTYPE_INT);
-        $this->initVar("torrent", XOBJ_DTYPE_INT);
-        $this->initVar("tracker", XOBJ_DTYPE_INT);
+        $this->initVar('lid', XOBJ_DTYPE_INT);
+        $this->initVar('torrent', XOBJ_DTYPE_INT);
+        $this->initVar('tracker', XOBJ_DTYPE_INT);
     }
 }
 
@@ -79,13 +79,13 @@ class XtorrentPollHandler extends XoopsObjectHandler
         }
         $myts = MyTextSanitizer::getInstance();
         if ($poll->isNew() || empty($id)) {
-            $id  = $this->db->genId($this->db_table."_xt_poll_id_seq");
+            $id  = $this->db->genId($this->db_table . '_xt_poll_id_seq');
             $sql = sprintf(
-                "INSERT INTO %s (
+                'INSERT INTO %s (
 				`lid`, `torrent`, `tracker`
 				) VALUES (
 				%u, %s, %s
-				)",
+				)',
                 $this->db_table,
                 $this->db->quoteString($lid),
                 $this->db->quoteString($torrent),
@@ -93,10 +93,10 @@ class XtorrentPollHandler extends XoopsObjectHandler
             );
         } else {
             $sql = sprintf(
-                "UPDATE %s SET
+                'UPDATE %s SET
 				`torrent` = %s,
 				`tracker` = %s,
-				 WHERE lid = %s",
+				 WHERE lid = %s',
                 $this->db_table,
                 $this->db->quoteString($torrent),
                 $this->db->quoteString($tracker),
@@ -110,7 +110,7 @@ class XtorrentPollHandler extends XoopsObjectHandler
             $result = $this->db->query($sql);
         }
         if (!$result) {
-            $poll->setErrors("Could not store data in the database.<br>".$this->db->error().' ('.$this->db->errno().')<br>'.$sql);
+            $poll->setErrors('Could not store data in the database.<br>' . $this->db->error() . ' (' . $this->db->errno() . ')<br>' . $sql);
             return false;
         }
         if (empty($id)) {
@@ -126,7 +126,7 @@ class XtorrentPollHandler extends XoopsObjectHandler
             return false;
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql = "DELETE FROM ".$this->db_table." ".$criteria->renderWhere()."";
+            $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
         if (false != $force) {
             $result = $this->db->queryF($sql);
@@ -192,7 +192,7 @@ class XtorrentPollHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function deleteTorrentPermissions($id, $mode = "view")
+    public function deleteTorrentPermissions($id, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
@@ -207,7 +207,7 @@ class XtorrentPollHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function insertTorrentPermissions($id, $group_ids, $mode = "view")
+    public function insertTorrentPermissions($id, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $id) {
@@ -219,10 +219,10 @@ class XtorrentPollHandler extends XoopsObjectHandler
             $this->perm_handler->insert($perm);
             $ii++;
         }
-        return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record ID ".$id;
+        return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $id;
     }
     
-    public function getPermittedTorrents($poll, $mode = "view")
+    public function getPermittedTorrents($poll, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $ret=false;
@@ -260,7 +260,7 @@ class XtorrentPollHandler extends XoopsObjectHandler
         return ret;
     }
     
-    public function getSingleTorrentPermission($id, $mode = "view")
+    public function getSingleTorrentPermission($id, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;

@@ -5,12 +5,12 @@ class mimetypesResource extends XoopsObject
     public function __construct()
     {
         $this->XoopsObject();
-        $this->initVar("mime_id", XOBJ_DTYPE_INT);
-        $this->initVar("mime_ext", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("mime_types", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("mime_name", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("mime_admin", XOBJ_DTYPE_INT);
-        $this->initVar("mime_user", XOBJ_DTYPE_INT);
+        $this->initVar('mime_id', XOBJ_DTYPE_INT);
+        $this->initVar('mime_ext', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('mime_types', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('mime_name', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('mime_admin', XOBJ_DTYPE_INT);
+        $this->initVar('mime_user', XOBJ_DTYPE_INT);
     }
 }
 
@@ -82,13 +82,13 @@ class XtorrentMimetypesHandler extends XoopsObjectHandler
         }
         $myts = MyTextSanitizer::getInstance();
         if ($mimetypes->isNew() || empty($mime_id)) {
-            $mime_id = $this->db->genId($this->db_table."_xt_mimetypes_id_seq");
+            $mime_id = $this->db->genId($this->db_table . '_xt_mimetypes_id_seq');
             $sql     = sprintf(
-                "INSERT INTO %s (
+                'INSERT INTO %s (
 				`mime_id`, `mime_ext`, `mime_types`, `mime_name`, `mime_admin`, `mime_user`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s
-				)",
+				)',
                 $this->db_table,
                 $this->db->quoteString($mime_id),
                 $this->db->quoteString($mime_ext),
@@ -99,12 +99,12 @@ class XtorrentMimetypesHandler extends XoopsObjectHandler
             );
         } else {
             $sql = sprintf(
-                "UPDATE %s SET
+                'UPDATE %s SET
 				`mime_ext` = %s,
 				`mime_types` = %s,
 				`mime_name` = %s,
 				`mime_admin` = %s,
-				`mime_user` = %s WHERE mime_id = %s",
+				`mime_user` = %s WHERE mime_id = %s',
                 $this->db_table,
                 $this->db->quoteString($mime_ext),
                 $this->db->quoteString($mime_types),
@@ -121,7 +121,7 @@ class XtorrentMimetypesHandler extends XoopsObjectHandler
             $result = $this->db->query($sql);
         }
         if (!$result) {
-            $mimetypes->setErrors("Could not store data in the database.<br />".$this->db->error().' ('.$this->db->errno().')<br />'.$sql);
+            $mimetypes->setErrors('Could not store data in the database.<br />' . $this->db->error() . ' (' . $this->db->errno() . ')<br />' . $sql);
             return false;
         }
         if (empty($mime_id)) {
@@ -137,7 +137,7 @@ class XtorrentMimetypesHandler extends XoopsObjectHandler
             return false;
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql = "DELETE FROM ".$this->db_table." ".$criteria->renderWhere()."";
+            $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
         if (false != $force) {
             $result = $this->db->queryF($sql);
@@ -203,7 +203,7 @@ class XtorrentMimetypesHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function deleteTorrentPermissions($mime_id, $mode = "view")
+    public function deleteTorrentPermissions($mime_id, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
@@ -218,7 +218,7 @@ class XtorrentMimetypesHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function insertTorrentPermissions($mime_id, $group_ids, $mode = "view")
+    public function insertTorrentPermissions($mime_id, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $mime_id) {
@@ -230,10 +230,10 @@ class XtorrentMimetypesHandler extends XoopsObjectHandler
             $this->perm_handler->insert($perm);
             $ii++;
         }
-        return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record ID ".$mime_id;
+        return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $mime_id;
     }
     
-    public function &getPermittedTorrents($mimetypes, $mode = "view")
+    public function &getPermittedTorrents($mimetypes, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $ret=false;
@@ -271,7 +271,7 @@ class XtorrentMimetypesHandler extends XoopsObjectHandler
         return ret;
     }
     
-    public function getSingleTorrentPermission($mime_id, $mode = "view")
+    public function getSingleTorrentPermission($mime_id, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;

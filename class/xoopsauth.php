@@ -23,7 +23,7 @@ class Xtorrent_XoopsAuth extends XoopsAuth
     public function uid_from_userkey($user_userkey, $passkey, $return = '')
     {
         global $xoopsDB;
-        $sql     = "SELECT (1, uname, uid) FROM ".$xoopsDB->prefix('users')." WHERE sha1(concat('uname','uid','$passkey')) = '$user_userkey'";
+        $sql     = 'SELECT (1, uname, uid) FROM ' . $xoopsDB->prefix('users') . " WHERE sha1(concat('uname','uid','$passkey')) = '$user_userkey'";
         $request = $xoopsDB->prefix($sql);
         if (!empty($request)) {
             list($passcrc, $uname, $uid) = $xoopsDB->fetchRow($request);

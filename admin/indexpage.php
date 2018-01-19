@@ -8,13 +8,13 @@ if (isset($_POST)) {
     }
 }
 
-$op = "";
+$op = '';
 if (isset($_POST['op'])) {
     $op = $_POST['op'];
 }
 
 switch ($op) {
-    case "save":
+    case 'save':
 
         global $xoopsDB;
 
@@ -30,8 +30,9 @@ switch ($op) {
         $indexheaderalign = $_POST['indexheaderalign'];
         $indexfooteralign = $_POST['indexfooteralign'];
 
-        $xoopsDB->query("update " . $xoopsDB->prefix("xtorrent_indexpage") . " set indexheading='$indexheading', indexheader='$indexheader', indexfooter='$indexfooter', indeximage='$indeximage', indexheaderalign='$indexheaderalign ', indexfooteralign='$indexfooteralign', nohtml='$nohtml', nosmiley='$nosmiley', noxcodes='$noxcodes', noimages='$noimages', nobreak='$nobreak' ");
-        redirect_header("indexpage.php", 1, _AM_XTORRENT_IPAGE_UPDATED);
+        $xoopsDB->query('update '
+                        . $xoopsDB->prefix('xtorrent_indexpage') . " set indexheading='$indexheading', indexheader='$indexheader', indexfooter='$indexfooter', indeximage='$indeximage', indexheaderalign='$indexheaderalign ', indexfooteralign='$indexfooteralign', nohtml='$nohtml', nosmiley='$nosmiley', noxcodes='$noxcodes', noimages='$noimages', nobreak='$nobreak' ");
+        redirect_header('indexpage.php', 1, _AM_XTORRENT_IPAGE_UPDATED);
         exit();
 
         break;
@@ -43,7 +44,7 @@ switch ($op) {
 
         global $xoopsModuleConfig, $xoopsDB;
 
-        $result = $xoopsDB->query("SELECT indeximage, indexheading, indexheader, indexfooter, nohtml, nosmiley, noxcodes, noimages, nobreak, indexheaderalign, indexfooteralign FROM " . $xoopsDB->prefix('xtorrent_indexpage') . " ");
+        $result = $xoopsDB->query('SELECT indeximage, indexheading, indexheader, indexfooter, nohtml, nosmiley, noxcodes, noimages, nobreak, indexheaderalign, indexfooteralign FROM ' . $xoopsDB->prefix('xtorrent_indexpage') . ' ');
         list($indeximage, $indexheading, $indexheader, $indexfooter, $nohtml, $nosmiley, $noxcodes, $noimages, $nobreak, $indexheaderalign, $indexfooteralign) = $xoopsDB->fetchrow($result);
 
         xoops_cp_header();
@@ -55,32 +56,32 @@ switch ($op) {
     echo "
     		<fieldset>
         <legend style='font-weight:bold; color:#900;'>" . _AM_XTORRENT_IPAGE_INFORMATION . "</legend>
-    		<div style='padding:8px;'>" . _AM_XTORRENT_MINDEX_PAGEINFOTXT . "</div>
+    		<div style='padding:8px;'>" . _AM_XTORRENT_MINDEX_PAGEINFOTXT . '</div>
     		</fieldset>
-    		";
+    		';
 
-        $sform = new XoopsThemeForm(_AM_XTORRENT_IPAGE_MODIFY, "op", xoops_getenv('PHP_SELF'));
+        $sform = new XoopsThemeForm(_AM_XTORRENT_IPAGE_MODIFY, 'op', xoops_getenv('PHP_SELF'));
         $sform->addElement(new XoopsFormText(_AM_XTORRENT_IPAGE_CTITLE, 'indexheading', 60, 60, $indexheading), false);
-        $graph_array = XtsLists::getListTypeAsArray(XOOPS_ROOT_PATH . "/" . $xoopsModuleConfig['mainimagedir'], $type = "images");
+        $graph_array = XtsLists::getListTypeAsArray(XOOPS_ROOT_PATH . '/' . $xoopsModuleConfig['mainimagedir'], $type = 'images');
         $indeximage_select = new XoopsFormSelect('', 'indeximage', $indeximage);
         $indeximage_select->addOptionArray($graph_array);
-        $indeximage_select->setExtra("onchange='showImgSelected(\"image\", \"indeximage\", \"" . $xoopsModuleConfig['mainimagedir'] . "\", \"\", \"" . XOOPS_URL . "\")'");
+        $indeximage_select->setExtra("onchange='showImgSelected(\"image\", \"indeximage\", \"" . $xoopsModuleConfig['mainimagedir'] . '", "", "' . XOOPS_URL . "\")'");
         $indeximage_tray = new XoopsFormElementTray(_AM_XTORRENT_IPAGE_CIMAGE, '&nbsp;');
         $indeximage_tray->addElement($indeximage_select);
         if (!empty($indeximage)) {
-            $indeximage_tray->addElement(new XoopsFormLabel('', "<br><br><img src='" . XOOPS_URL . "/" . $xoopsModuleConfig['mainimagedir'] . "/" . $indeximage . "' name='image' id='image' alt='' >"));
+            $indeximage_tray->addElement(new XoopsFormLabel('', "<br><br><img src='" . XOOPS_URL . '/' . $xoopsModuleConfig['mainimagedir'] . '/' . $indeximage . "' name='image' id='image' alt='' >"));
         } else {
             $indeximage_tray->addElement(new XoopsFormLabel('', "<br><br><img src='" . XOOPS_URL . "/uploads/blank.gif' name='image' id='image' alt='' >"));
         }
         $sform->addElement($indeximage_tray);
 
         $sform->addElement(new XoopsFormDhtmlTextArea(_AM_XTORRENT_IPAGE_CHEADING, 'indexheader', $indexheader, 15, 60));
-        $headeralign_select = new XoopsFormSelect(_AM_XTORRENT_IPAGE_CHEADINGA, "indexheaderalign", $indexheaderalign);
-        $headeralign_select->addOptionArray(["left" => _AM_XTORRENT_IPAGE_CLEFT, "right" => _AM_XTORRENT_IPAGE_CRIGHT, "center" => _AM_XTORRENT_IPAGE_CCENTER]);
+        $headeralign_select = new XoopsFormSelect(_AM_XTORRENT_IPAGE_CHEADINGA, 'indexheaderalign', $indexheaderalign);
+        $headeralign_select->addOptionArray(['left' => _AM_XTORRENT_IPAGE_CLEFT, 'right' => _AM_XTORRENT_IPAGE_CRIGHT, 'center' => _AM_XTORRENT_IPAGE_CCENTER]);
         $sform->addElement($headeralign_select);
         $sform->addElement(new XoopsFormTextArea(_AM_XTORRENT_IPAGE_CFOOTER, 'indexfooter', $indexfooter, 10, 60));
-        $footeralign_select = new XoopsFormSelect(_AM_XTORRENT_IPAGE_CFOOTERA, "indexfooteralign", $indexfooteralign);
-        $footeralign_select->addOptionArray(["left" => _AM_XTORRENT_IPAGE_CLEFT, "right" => _AM_XTORRENT_IPAGE_CRIGHT, "center" => _AM_XTORRENT_IPAGE_CCENTER]);
+        $footeralign_select = new XoopsFormSelect(_AM_XTORRENT_IPAGE_CFOOTERA, 'indexfooteralign', $indexfooteralign);
+        $footeralign_select->addOptionArray(['left' => _AM_XTORRENT_IPAGE_CLEFT, 'right' => _AM_XTORRENT_IPAGE_CRIGHT, 'center' => _AM_XTORRENT_IPAGE_CCENTER]);
         $sform->addElement($footeralign_select);
 
         $options_tray = new XoopsFormElementTray(_AM_XTORRENT_TEXTOPTIONS, '<br>');

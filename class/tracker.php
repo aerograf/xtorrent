@@ -5,10 +5,10 @@ class trackerResource extends XoopsObject
     public function __construct()
     {
         $this->XoopsObject();
-        $this->initVar("lid", XOBJ_DTYPE_INT);
-        $this->initVar("seeds", XOBJ_DTYPE_INT);
-        $this->initVar("leechers", XOBJ_DTYPE_INT);
-        $this->initVar("tracker", XOBJ_DTYPE_INT);
+        $this->initVar('lid', XOBJ_DTYPE_INT);
+        $this->initVar('seeds', XOBJ_DTYPE_INT);
+        $this->initVar('leechers', XOBJ_DTYPE_INT);
+        $this->initVar('tracker', XOBJ_DTYPE_INT);
     }
 }
 
@@ -90,7 +90,7 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
     private function xtorrent_scrape_summarise($scrape_results)
     {
         if (!is_array($scrape_results)) {
-            trigger_error("Scrape Summarise error: Expected array as first parameter.");
+            trigger_error('Scrape Summarise error: Expected array as first parameter.');
             return false;
         }
 
@@ -136,10 +136,10 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
             return false;
         }
 
-        if (strpos($scrape_address, "?") !== false) {
-            $scrape_address .= "&info_hash=" . urlencode($torrent->infoHash);
+        if (strpos($scrape_address, '?') !== false) {
+            $scrape_address .= '&info_hash=' . urlencode($torrent->infoHash);
         } else {
-            $scrape_address .= "?info_hash=" . urlencode($torrent->infoHash);
+            $scrape_address .= '?info_hash=' . urlencode($torrent->infoHash);
         }
 
         // Set the timeout before proceeding and reset it when done
@@ -150,7 +150,7 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
         ini_set('default_socket_timeout', $old_timeout);
 
         if ($data === false) {
-            trigger_error("Scrape error: Failed to scrape torrent details from the tracker", E_USER_WARNING);
+            trigger_error('Scrape error: Failed to scrape torrent details from the tracker', E_USER_WARNING);
             return false;
         }
 
@@ -161,12 +161,12 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
         $trackerInfo  = $benc_tracker->getVar('object');
 
         if ($trackerInfo === false) {
-            trigger_error("Scrape error: Tracker returned invalid response to scrape request", E_USER_WARNING);
+            trigger_error('Scrape error: Tracker returned invalid response to scrape request', E_USER_WARNING);
             return false;
         }
 
         if (isset($trackerInfo['failure reason'])) {
-            trigger_error("Scrape error: Scrape failed. Tracker gave the following reason: ".ucfirst($trackerInfo['failure reason']), E_USER_WARNING);
+            trigger_error('Scrape error: Scrape failed. Tracker gave the following reason: ' . ucfirst($trackerInfo['failure reason']), E_USER_WARNING);
             return false;
         }
 
@@ -181,7 +181,7 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
 
     private function xtorrent_get_scrape_address($announce)
     {
-        $last_slash = strrpos($announce, "/");
+        $last_slash = strrpos($announce, '/');
 
         if ($last_slash === false) {
             trigger_error("Tracker address ({$announce}) is invalid", E_USER_WARNING);
@@ -189,12 +189,12 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
         }
 
         $last_part = substr($announce, $last_slash);
-        if (strpos($last_part, "announce") === false) {
+        if (strpos($last_part, 'announce') === false) {
             trigger_error("Tracker ({$announce}) does not appear to support scrape", E_USER_WARNING);
             return false;
         }
 
-        return substr($announce, 0, $last_slash) . "/" . str_replace($last_part, "announce", "scrape");
+        return substr($announce, 0, $last_slash) . '/' . str_replace($last_part, 'announce', 'scrape');
     }
 
     public function create()
@@ -238,13 +238,13 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
         }
         $myts = MyTextSanitizer::getInstance();
         if ($tracker->isNew() || empty($id)) {
-            $id = $this->db->genId($this->db_table."_xt_xtorrent_id_seq");
+            $id = $this->db->genId($this->db_table . '_xt_xtorrent_id_seq');
             $sql = sprintf(
-                "INSERT INTO %s (
+                'INSERT INTO %s (
 				`lid`, `seeds`, `leechers`, `tracker`
 				) VALUES (
 				%u, %s, %s, %s,
-				)",
+				)',
                 $this->db_table,
                 $this->db->quoteString($lid),
                 $this->db->quoteString($seeds),
@@ -253,10 +253,10 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
             );
         } else {
             $sql = sprintf(
-                "UPDATE %s SET
+                'UPDATE %s SET
 				`seeds` = %s,
 				`leechers` = %s,
-				`tracker` = %s WHERE lid = %s",
+				`tracker` = %s WHERE lid = %s',
                 $this->db_table,
                 $this->db->quoteString($seeds),
                 $this->db->quoteString($leechers),
@@ -271,7 +271,7 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
             $result = $this->db->query($sql);
         }
         if (!$result) {
-            $tracker->setErrors("Could not store data in the database.<br>".$this->db->error().' ('.$this->db->errno().')<br>'.$sql);
+            $tracker->setErrors('Could not store data in the database.<br>' . $this->db->error() . ' (' . $this->db->errno() . ')<br>' . $sql);
             return false;
         }
         if (empty($id)) {
@@ -287,7 +287,7 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
             return false;
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql = "DELETE FROM ".$this->db_table." ".$criteria->renderWhere()."";
+            $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
         if (false != $force) {
             $result = $this->db->queryF($sql);
@@ -353,7 +353,7 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
         return true;
     }
 
-    public function deleteTorrentPermissions($id, $mode = "view")
+    public function deleteTorrentPermissions($id, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
@@ -368,7 +368,7 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
         return true;
     }
 
-    public function insertTorrentPermissions($id, $group_ids, $mode = "view")
+    public function insertTorrentPermissions($id, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $id) {
@@ -380,10 +380,10 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
             $this->perm_handler->insert($perm);
             $ii++;
         }
-        return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record ID ".$id;
+        return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $id;
     }
 
-    public function getPermittedTorrents($tracker, $mode = "view")
+    public function getPermittedTorrents($tracker, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $ret=false;
@@ -421,7 +421,7 @@ class XtorrentTrackerHandler extends XoopsObjectHandler
         return ret;
     }
 
-    public function getSingleTorrentPermission($id, $mode = "view")
+    public function getSingleTorrentPermission($id, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;

@@ -5,15 +5,15 @@ global $xoopsModuleConfig, $xoopsModule, $xoopsUser;
 
 if ($xoopsModuleConfig['htaccess']!=0) {
     if (strpos($_SERVER['REQUEST_URI'], 'odules/')>0||strpos($_SERVER['REQUEST_URI'], 'ndex.php')>0) {
-        header("HTTP/1.1 301 Moved Permanently");
-        header("Location: ".XOOPS_URL."/torrents/");
+        header('HTTP/1.1 301 Moved Permanently');
+        header('Location: ' . XOOPS_URL . '/torrents/');
         exit;
     }
 }
 
 include_once XOOPS_ROOT_PATH . '/class/xoopstree.php';
 error_reporting(E_ALL);
-$mytree = new XoopsTree($xoopsDB->prefix('xtorrent_cat'), "cid", "pid");
+$mytree = new XoopsTree($xoopsDB->prefix('xtorrent_cat'), 'cid', 'pid');
 
 $xoopsOption['template_main'] = 'xtorrent_index.tpl';
 include XOOPS_ROOT_PATH . '/header.php';
@@ -22,7 +22,7 @@ error_reporting(E_ALL);
 /**
  * Begin Main page Heading etc
  */
-$sql                          = "SELECT * FROM " . $xoopsDB->prefix('xtorrent_indexpage') . " ";
+$sql                          = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_indexpage') . ' ';
 $head_arr                     = $xoopsDB->fetchArray($xoopsDB->query($sql));
 $catarray['imageheader']      = xtorrent_imageheader();
 $catarray['indexheading']     = $myts->displayTarea($head_arr['indexheading']);
@@ -61,7 +61,7 @@ $listings = xtorrent_getTotalItems();
 */
 $total_cat = xtorrent_totalcategory();
 
-$result = $xoopsDB->query("SELECT * FROM " . $xoopsDB->prefix('xtorrent_cat') . " WHERE pid = 0 ORDER BY weight");
+$result = $xoopsDB->query('SELECT * FROM ' . $xoopsDB->prefix('xtorrent_cat') . ' WHERE pid = 0 ORDER BY weight');
 while ($myrow = $xoopsDB->fetchArray($result)) {
     $countin++;
     $subtotaldownload = 0;
@@ -76,36 +76,35 @@ while ($myrow = $xoopsDB->fetchArray($result)) {
          * get child category objects
          */
         $arr           = [];
-        $mytree        = new XoopsTree($xoopsDB->prefix('xtorrent_cat'), "cid", "pid");
-        $arr           = $mytree->getFirstChild($myrow['cid'], "title");
+        $mytree        = new XoopsTree($xoopsDB->prefix('xtorrent_cat'), 'cid', 'pid');
+        $arr           = $mytree->getFirstChild($myrow['cid'], 'title');
         $space         = 0;
         $chcount       = 0;
-        $subcategories = "";
+        $subcategories = '';
 
         foreach ($arr as $ele) {
             if ($gperm_handler->checkRight('xtorrentownCatPerm', $ele['cid'], $groups, $xoopsModule->getVar('mid'))) {
                 if ($xoopsModuleConfig['subcats'] == 1) {
                     $chtitle = $myts->htmlSpecialChars($ele['title']);
                     if ($chcount > 5) {
-                        $subcategories .= "...";
+                        $subcategories .= '...';
                         break;
                     }
                     if ($space > 0) {
-                        $subcategories .= "<br>";
+                        $subcategories .= '<br>';
                     }
-                    $subcategories .= "<a href='" . XOOPS_URL . "/modules/xtorrent/viewcat.php?cid=" . $ele['cid'] . "'>" . $chtitle . "</a>";
+                    $subcategories .= "<a href='" . XOOPS_URL . '/modules/xtorrent/viewcat.php?cid=' . $ele['cid'] . "'>" . $chtitle . '</a>';
                     $space++;
                     $chcount++;
                 }
             }
         }
 
-        if (is_file(XOOPS_ROOT_PATH . "/" . $xoopsModuleConfig['catimage'] . "/" . $myts->htmlSpecialChars($myrow['imgurl'])) && !empty($myrow['imgurl'])) {
+        if (is_file(XOOPS_ROOT_PATH . '/' . $xoopsModuleConfig['catimage'] . '/' . $myts->htmlSpecialChars($myrow['imgurl'])) && !empty($myrow['imgurl'])) {
             if ($xoopsModuleConfig['usethumbs'] && function_exists('gd_info')) {
                 $imgurl = down_createthumb(
                     $myts->htmlSpecialChars($myrow['imgurl']),
-                    $xoopsModuleConfig['catimage'],
-                                    "thumbs",
+                    $xoopsModuleConfig['catimage'], 'thumbs',
                     $xoopsModuleConfig['shotwidth'],
                     $xoopsModuleConfig['shotheight'],
                                     $xoopsModuleConfig['imagequality'],
@@ -113,7 +112,7 @@ while ($myrow = $xoopsDB->fetchArray($result)) {
                     $xoopsModuleConfig['keepaspect']
                 );
             } else {
-                $imgurl = XOOPS_URL . "/" . $xoopsModuleConfig['catimage'] . "/" . $myts->htmlSpecialChars($myrow['imgurl']);
+                $imgurl = XOOPS_URL . '/' . $xoopsModuleConfig['catimage'] . '/' . $myts->htmlSpecialChars($myrow['imgurl']);
             }
         } else {
             $imgurl = $indicator['image'];
@@ -125,7 +124,7 @@ while ($myrow = $xoopsDB->fetchArray($result)) {
     }
 }
 switch ($total_cat) {
-    case "1":
+    case '1':
         $lang_ThereAre = _MD_XTORRENT_THEREIS;
         break;
     default:

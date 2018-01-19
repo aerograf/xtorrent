@@ -3,15 +3,15 @@
 class transactionsResource extends XoopsObject {
 	public function __construct(){
 		$this->XoopsObject();
-		$this->initVar("xtid", XOBJ_DTYPE_INT);
-		$this->initVar("lid", XOBJ_DTYPE_INT);
-		$this->initVar("uid", XOBJ_DTYPE_INT);
-		$this->initVar("key", XOBJ_DTYPE_TXTBOX);
-		$this->initVar("hist_xml", XOBJ_DTYPE_TXTBOX);
-		$this->initVar("time", XOBJ_DTYPE_INT);	
-		$this->initVar("microtime", XOBJ_DTYPE_INT);	
-		$this->initVar("ip", XOBJ_DTYPE_TXTBOX);	
-		$this->initVar("hostname", XOBJ_DTYPE_TXTBOX);							
+		$this->initVar('xtid', XOBJ_DTYPE_INT);
+		$this->initVar('lid', XOBJ_DTYPE_INT);
+		$this->initVar('uid', XOBJ_DTYPE_INT);
+		$this->initVar('key', XOBJ_DTYPE_TXTBOX);
+		$this->initVar('hist_xml', XOBJ_DTYPE_TXTBOX);
+		$this->initVar('time', XOBJ_DTYPE_INT);
+		$this->initVar('microtime', XOBJ_DTYPE_INT);
+		$this->initVar('ip', XOBJ_DTYPE_TXTBOX);
+		$this->initVar('hostname', XOBJ_DTYPE_TXTBOX);
 	}
 }
 
@@ -46,7 +46,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		return $this->array2xml($array);
 	}
 
-	private function array2xml($buffer, $doctype = "tracker_history") 
+	private function array2xml($buffer, $doctype = 'tracker_history')
 	{ 
 		$xml  = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"; 
 		$xml .= "<$doctype version=\"1.0\">\n"; 
@@ -128,26 +128,26 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		}
 		$myts = MyTextSanitizer::getInstance();
 		if( $transactions->isNew() || empty($xtid) ){
-			$xtid = $this->db->genId($this->db_table."_xt_transactions_id_seq");
-			$sql  = sprintf("INSERT INTO %s (
+			$xtid = $this->db->genId($this->db_table . '_xt_transactions_id_seq');
+			$sql  = sprintf('INSERT INTO %s (
 				`xtid`, `lid`, `uid`, `key`, `hist_xml`, `time`, `microtime`, `ip`, `hostname`
 				) VALUES (
 				%u, %s, %s, %s, AES_CRYPT(COMPRESS(%s),%s), %s, %s, %s, %s
-				)",
-				$this->db_table,
-				$this->db->quoteString($xtid),
-				$this->db->quoteString($lid),
-				$this->db->quoteString($uid),
-				$this->db->quoteString($key),
-				$this->db->quoteString($myts->addslashes($hist_xml)),
-				$this->db->quoteString($key),
-				$this->db->quoteString($time),
-				$this->db->quoteString($microtime),
-				$this->db->quoteString($ip),
-				$this->db->quoteString($hostname)
+				)',
+                            $this->db_table,
+                            $this->db->quoteString($xtid),
+                            $this->db->quoteString($lid),
+                            $this->db->quoteString($uid),
+                            $this->db->quoteString($key),
+                            $this->db->quoteString($myts->addslashes($hist_xml)),
+                            $this->db->quoteString($key),
+                            $this->db->quoteString($time),
+                            $this->db->quoteString($microtime),
+                            $this->db->quoteString($ip),
+                            $this->db->quoteString($hostname)
 			);
 		}else{
-			$sql = sprintf("UPDATE %s SET
+			$sql = sprintf('UPDATE %s SET
 				`lid` = %s,
 				`uid` = %s,
 				`key` = %s,
@@ -155,18 +155,18 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 				`time` = %s,
 				`microtime` = %s,
 				`ip` = %s,
-				`hostname` = %s WHERE `xtid` = %s",
-				$this->db_table,
-				$this->db->quoteString($lid),
-				$this->db->quoteString($uid),
-				$this->db->quoteString($key),
-				$this->db->quoteString($myts->addslashes($hist_xml)),
-				$this->db->quoteString($key),
-				$this->db->quoteString($time),
-				$this->db->quoteString($microtime),
-				$this->db->quoteString($ip),
-				$this->db->quoteString($hostname),
-				$this->db->quoteString($xtid)
+				`hostname` = %s WHERE `xtid` = %s',
+                           $this->db_table,
+                           $this->db->quoteString($lid),
+                           $this->db->quoteString($uid),
+                           $this->db->quoteString($key),
+                           $this->db->quoteString($myts->addslashes($hist_xml)),
+                           $this->db->quoteString($key),
+                           $this->db->quoteString($time),
+                           $this->db->quoteString($microtime),
+                           $this->db->quoteString($ip),
+                           $this->db->quoteString($hostname),
+                           $this->db->quoteString($xtid)
 			);
 		}
 		
@@ -176,7 +176,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
             $result = $this->db->query($sql);
         }
 		if( !$result ){
-			$transactions->setErrors("Could not store data in the database.<br>".$this->db->error().' ('.$this->db->errno().')<br>'.$sql);
+			$transactions->setErrors('Could not store data in the database.<br>' . $this->db->error() . ' (' . $this->db->errno() . ')<br>' . $sql);
 			return false;
 		}
 		if( empty($xtid) ){
@@ -191,7 +191,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 			return false;
 		}
 		if( isset($criteria) && is_subclass_of($criteria, 'criteriaelement') ){
-			$sql = "DELETE FROM ".$this->db_table." ".$criteria->renderWhere()."";
+			$sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
 		}
         if( false != $force ){
             $result = $this->db->queryF($sql);
@@ -201,15 +201,15 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		return true;
 	}
 
-	public function delete_scalar($limit = 20, $sort = "id DESC")
+	public function delete_scalar($limit = 20, $sort = 'id DESC')
 	{
 		if ($this->getCount>$limit)
 		{
-			$sql = "SELECT xtid as lowid FROM ".$this->db->prefix("xtorrent_transactions")." ORDER BY $sort LIMIT $limit";
+			$sql = 'SELECT xtid as lowid FROM ' . $this->db->prefix('xtorrent_transactions') . " ORDER BY $sort LIMIT $limit";
 			$result = $this->db->queryF($sql);
 			while(list($lowid) = $this->db->fetchRow($result))
 			{
-					$sql =  "DELETE FROM ".$this->db->prefix("xtorrent_transactions")." WHERE xtid < '" . $lowid . "'";
+					$sql = 'DELETE FROM ' . $this->db->prefix('xtorrent_transactions') . " WHERE xtid < '" . $lowid . "'";
 					$result = $this->db->queryF($sql);
 			}
 		}
@@ -266,7 +266,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		return true;
 	}
 
-	public function deleteTorrentPermissions($xtid, $mode = "view"){
+	public function deleteTorrentPermissions($xtid, $mode = 'view'){
 		global $xoopsModule;
 		$criteria = new CriteriaCompo();
 		$criteria->add(new Criteria('gperm_itemid', $xtid)); 
@@ -280,7 +280,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		return true;
 	}
 	
-	public function insertTorrentPermissions($xtid, $group_ids, $mode = "view"){
+	public function insertTorrentPermissions($xtid, $group_ids, $mode = 'view'){
 		global $xoopsModule;
 		foreach( $group_ids as $xtid ){
 			$perm = $this->perm_handler->create();
@@ -291,10 +291,10 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 			$this->perm_handler->insert($perm);
 			$ii++;
 		}
-		return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record xtid ".$xtid;
+		return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record xtid ' . $xtid;
 	}
 
-	public function getPermittedTorrents($transactions, $mode = "view"){
+	public function getPermittedTorrents($transactions, $mode = 'view'){
 		global $xoopsUser, $xoopsModule;
 		$ret=false;
 		if (isset($transactions))
@@ -334,7 +334,7 @@ class XtorrentTransactionsHandler extends XoopsObjectHandler {
 		return ret;
 	}
 
-	public function getSingleTorrentPermission($xtid, $mode = "view"){
+	public function getSingleTorrentPermission($xtid, $mode = 'view'){
 		global $xoopsUser, $xoopsModule;
 		$groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;
 		if( false != $this->perm_handler->checkRight($this->perm_name.$mode, $xtid, $groups, $xoopsModule->getVar('mid')) ){

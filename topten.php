@@ -5,7 +5,7 @@ include_once XOOPS_ROOT_PATH . '/class/xoopstree.php';
 
 global $xoopsDB, $xoopsUser;
 
-$mytree = new XoopsTree($xoopsDB -> prefix('xtorrent_cat'), "cid", "pid");
+$mytree = new XoopsTree($xoopsDB -> prefix('xtorrent_cat'), 'cid', 'pid');
 $xoopsOption['template_main'] = 'xtorrent_topten.tpl';
 
 $groups        = (is_object($xoopsUser)) ? $xoopsUser -> getGroups() : XOOPS_GROUP_ANONYMOUS;
@@ -28,18 +28,18 @@ $catarray['toolbar']     = xtorrent_toolbar();
 $xoopsTpl -> assign('catarray', $catarray);
 $xoopsTpl->assign('navitem', 1);
 $arr    = [];
-$result = $xoopsDB -> query("SELECT cid, title FROM " . $xoopsDB -> prefix('xtorrent_cat') . " WHERE pid=0");
+$result = $xoopsDB -> query('SELECT cid, title FROM ' . $xoopsDB-> prefix('xtorrent_cat') . ' WHERE pid=0');
 
 $e        = 0;
 $rankings = [];
 while (list($cid, $ctitle) = $xoopsDB -> fetchRow($result)) {
     if ($gperm_handler -> checkRight('xtorrentownCatPerm', $cid, $groups, $module_id)) {
-        $query = "SELECT lid, cid, title, hits, rating, votes, platform FROM " . $xoopsDB -> prefix('xtorrent_downloads') . " WHERE published > 0 AND published <= " . time() . " AND (expired = 0 OR expired > " . time() . ") AND offline = 0 AND (cid=$cid";
+        $query = 'SELECT lid, cid, title, hits, rating, votes, platform FROM ' . $xoopsDB-> prefix('xtorrent_downloads') . ' WHERE published > 0 AND published <= ' . time() . ' AND (expired = 0 OR expired > ' . time() . ") AND offline = 0 AND (cid=$cid";
         $arr   = $mytree -> getAllChildId($cid);
         for ($i = 0;$i < count($arr);$i++) {
-            $query .= " or cid=" . $arr[$i] . "";
+            $query .= ' or cid=' . $arr[$i] . '';
         }
-        $query     .= ") order by " . $sortDB . " DESC";
+        $query     .= ') order by ' . $sortDB . ' DESC';
         $result2   = $xoopsDB -> query($query, 10, 0);
         $filecount = $xoopsDB -> getRowsNum($result2);
 
@@ -49,7 +49,7 @@ while (list($cid, $ctitle) = $xoopsDB -> fetchRow($result)) {
 
             while (list($did, $dcid, $dtitle, $hits, $rating, $votes) = $xoopsDB -> fetchRow($result2)) {
                 if ($gperm_handler -> checkRight('xtorrentownFilePerm', $did, $groups, $xoopsModule -> getVar('mid'))) {
-                    $catpath = $mytree -> getPathFromId($dcid, "title");
+                    $catpath = $mytree -> getPathFromId($dcid, 'title');
                     $catpath = basename($catpath);
 
                     $dtitle = $myts -> htmlSpecialChars($dtitle);

@@ -5,26 +5,26 @@ class peersResource extends XoopsObject
     public function __construct()
     {
         $this->XoopsObject();
-        $this->initVar("id", XOBJ_DTYPE_INT);
-        $this->initVar("torrent", XOBJ_DTYPE_INT);
-        $this->initVar("peer_id", XOBJ_DTYPE_INT);
-        $this->initVar("basename_net", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("xml", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("port", XOBJ_DTYPE_INT);
-        $this->initVar("uploaded", XOBJ_DTYPE_INT);
-        $this->initVar("downloaded", XOBJ_DTYPE_INT);
-        $this->initVar("to_go", XOBJ_DTYPE_INT);
-        $this->initVar("seeder", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("started", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("datetime", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("last_action", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("connectable", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("userid", XOBJ_DTYPE_INT);
-        $this->initVar("agent", XOBJ_DTYPE_TXTBOX);
-        $this->initVar("finishedat", XOBJ_DTYPE_INT);
-        $this->initVar("downloadoffset", XOBJ_DTYPE_INT);
-        $this->initVar("uploadoffset", XOBJ_DTYPE_INT);
-        $this->initVar("passkey", XOBJ_DTYPE_TXTBOX);
+        $this->initVar('id', XOBJ_DTYPE_INT);
+        $this->initVar('torrent', XOBJ_DTYPE_INT);
+        $this->initVar('peer_id', XOBJ_DTYPE_INT);
+        $this->initVar('basename_net', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('xml', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('port', XOBJ_DTYPE_INT);
+        $this->initVar('uploaded', XOBJ_DTYPE_INT);
+        $this->initVar('downloaded', XOBJ_DTYPE_INT);
+        $this->initVar('to_go', XOBJ_DTYPE_INT);
+        $this->initVar('seeder', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('started', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('datetime', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('last_action', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('connectable', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('userid', XOBJ_DTYPE_INT);
+        $this->initVar('agent', XOBJ_DTYPE_TXTBOX);
+        $this->initVar('finishedat', XOBJ_DTYPE_INT);
+        $this->initVar('downloadoffset', XOBJ_DTYPE_INT);
+        $this->initVar('uploadoffset', XOBJ_DTYPE_INT);
+        $this->initVar('passkey', XOBJ_DTYPE_TXTBOX);
     }
 }
 
@@ -96,13 +96,13 @@ class XtorrentPeersHandler extends XoopsObjectHandler
         }
         $myts = MyTextSanitizer::getInstance();
         if ($peers->isNew() || empty($id)) {
-            $id  = $this->db->genId($this->db_table."_xt_peers_id_seq");
+            $id  = $this->db->genId($this->db_table . '_xt_peers_id_seq');
             $sql = sprintf(
-                "INSERT INTO %s (
+                'INSERT INTO %s (
 				`id`, `torrent`, `peer_id`, `ip`, `basename_net`, `port`, `uploaded`, `downloaded`, `to_go`, `seeder`, `started`, `last_action`, `connectable`, `userid`, `agent`, `finishedat`, `downloadoffset`, `uploadoffset`, `passkey`
 				) VALUES (
 				%u, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
-				)",
+				)',
                 $this->db_table,
                 $this->db->quoteString($id),
                 $this->db->quoteString($torrent),
@@ -126,7 +126,7 @@ class XtorrentPeersHandler extends XoopsObjectHandler
             );
         } else {
             $sql = sprintf(
-                "UPDATE %s SET
+                'UPDATE %s SET
 				`torrent` = %s,
 				`peer_id` = %s,
 				`ip` = %s,
@@ -144,7 +144,7 @@ class XtorrentPeersHandler extends XoopsObjectHandler
 				`finishedat` = %s,
 				`downloadoffset` = %s,
 				`uploadoffset` = %s,
-				`passkey` = %s WHERE id = %s",
+				`passkey` = %s WHERE id = %s',
                 $this->db_table,
                 $this->db->quoteString($torrent),
                 $this->db->quoteString($peer_id),
@@ -174,7 +174,7 @@ class XtorrentPeersHandler extends XoopsObjectHandler
             $result = $this->db->query($sql);
         }
         if (!$result) {
-            $peers->setErrors("Could not store data in the database.<br />".$this->db->error().' ('.$this->db->errno().')<br />'.$sql);
+            $peers->setErrors('Could not store data in the database.<br />' . $this->db->error() . ' (' . $this->db->errno() . ')<br />' . $sql);
             return false;
         }
         if (empty($id)) {
@@ -190,7 +190,7 @@ class XtorrentPeersHandler extends XoopsObjectHandler
             return false;
         }
         if (isset($criteria) && is_subclass_of($criteria, 'criteriaelement')) {
-            $sql = "DELETE FROM ".$this->db_table." ".$criteria->renderWhere()."";
+            $sql = 'DELETE FROM ' . $this->db_table . ' ' . $criteria->renderWhere() . '';
         }
         if (false != $force) {
             $result = $this->db->queryF($sql);
@@ -256,7 +256,7 @@ class XtorrentPeersHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function deleteTorrentPermissions($id, $mode = "view")
+    public function deleteTorrentPermissions($id, $mode = 'view')
     {
         global $xoopsModule;
         $criteria = new CriteriaCompo();
@@ -271,7 +271,7 @@ class XtorrentPeersHandler extends XoopsObjectHandler
         return true;
     }
     
-    public function insertTorrentPermissions($id, $group_ids, $mode = "view")
+    public function insertTorrentPermissions($id, $group_ids, $mode = 'view')
     {
         global $xoopsModule;
         foreach ($group_ids as $id) {
@@ -283,10 +283,10 @@ class XtorrentPeersHandler extends XoopsObjectHandler
             $this->perm_handler->insert($perm);
             $ii++;
         }
-        return "Permission ".$this->perm_name.$mode." set $ii times for "._C_ADMINTITLE." Record ID ".$id;
+        return 'Permission ' . $this->perm_name . $mode . " set $ii times for " . _C_ADMINTITLE . ' Record ID ' . $id;
     }
     
-    public function getPermittedTorrents($peers, $mode = "view")
+    public function getPermittedTorrents($peers, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $ret=false;
@@ -324,7 +324,7 @@ class XtorrentPeersHandler extends XoopsObjectHandler
         return ret;
     }
     
-    public function getSingleTorrentPermission($id, $mode = "view")
+    public function getSingleTorrentPermission($id, $mode = 'view')
     {
         global $xoopsUser, $xoopsModule;
         $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : 3;

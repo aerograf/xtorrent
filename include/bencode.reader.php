@@ -29,7 +29,7 @@ class BEncodeReader
             return;
         }
 
-        $h = @fopen($filename, "rb");
+        $h = @fopen($filename, 'rb');
         if ($h === false) {
             trigger_error("Could not create BEncodeReader for {$filename}: failed to open for reading", E_USER_WARNING);
             return;
@@ -84,7 +84,7 @@ class BEncodeReader
             }
 
             $end = $this->pointer;
-            $dictionary['hash'] = pack("H*", sha1(substr($this->data, $start, $end - $start)));
+            $dictionary['hash'] = pack('H*', sha1(substr($this->data, $start, $end - $start)));
             return $dictionary;
         } elseif ($this->data[$this->pointer] == 'l') {
             // An l indicates the start of a list, which is essentially an array, so we will read it as such

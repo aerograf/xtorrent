@@ -19,17 +19,17 @@ if (isset($_GET)) {
 $rootpath = (isset($_GET['rootpath'])) ? intval($_GET['rootpath']) : 0;
 
 switch ($op) {
-    case "upload":
+    case 'upload':
 
         global $_POST;
 
-        if ($_FILES['uploadfile']['name'] != "") {
-            if (file_exists(XOOPS_ROOT_PATH . "/" . $_POST['uploadpath'] . "/" . $_FILES['uploadfile']['name'])) {
+        if ($_FILES['uploadfile']['name'] != '') {
+            if (file_exists(XOOPS_ROOT_PATH . '/' . $_POST['uploadpath'] . '/' . $_FILES['uploadfile']['name'])) {
                 redirect_header('upload.php', 2, _AM_XTORRENT_DOWN_IMAGEEXIST);
             }
             $allowed_mimetypes = ['image/gif', 'image/jpeg', 'image/pjpeg', 'image/x-png'];
-            uploading($_FILES['uploadfile']['name'], $_POST['uploadpath'], $allowed_mimetypes, "upload.php", 1, 0);
-            redirect_header("upload.php", 2, _AM_XTORRENT_DOWN_IMAGEUPLOAD);
+            uploading($_FILES['uploadfile']['name'], $_POST['uploadpath'], $allowed_mimetypes, 'upload.php', 1, 0);
+            redirect_header('upload.php', 2, _AM_XTORRENT_DOWN_IMAGEUPLOAD);
             exit();
         } else {
             redirect_header('upload.php', 2, _AM_XTORRENT_DOWN_NOIMAGEEXIST);
@@ -37,10 +37,10 @@ switch ($op) {
         }
         break;
 
-    case "delfile":
+    case 'delfile':
 
         if (isset($confirm) && $confirm == 1) {
-            $filetodelete = XOOPS_ROOT_PATH . "/" . $_POST['uploadpath'] . "/" . $_POST['downfile'];
+            $filetodelete = XOOPS_ROOT_PATH . '/' . $_POST['uploadpath'] . '/' . $_POST['downfile'];
             if (file_exists($filetodelete)) {
                 chmod($filetodelete, 0666);
                 if (@unlink($filetodelete)) {
@@ -61,13 +61,13 @@ switch ($op) {
             xoops_confirm(
                 ['op' => 'delfile', 'uploadpath' => $_POST['uploadpath'], 'downfile' => $_POST['downfile'], 'confirm' => 1],
                            'upload.php',
-                _AM_XTORRENT_DOWN_DELETEFILE . "<br><br>" . $_POST['downfile'],
+                _AM_XTORRENT_DOWN_DELETEFILE . '<br><br>' . $_POST['downfile'],
                 _AM_XTORRENT_BDELETE
             );
         }
         break;
 
-    case "default":
+    case 'default':
     default:
         include_once '../class/xtorrent_lists.php';
 
@@ -83,14 +83,14 @@ switch ($op) {
         $listarray = [1 => _AM_XTORRENT_DOWN_FCATIMAGE , 2 => _AM_XTORRENT_DOWN_FSCREENSHOTS, 3 => _AM_XTORRENT_DOWN_FMAINIMAGEDIR];
 
         if ($rootpath > 0) {
-            echo "
-      		<div><b>" . _AM_XTORRENT_DOWN_FUPLOADPATH . "</b> " . XOOPS_ROOT_PATH . "/" . $dirarray[$rootpath] . "</div>
-      		<div><b>" . _AM_XTORRENT_DOWN_FUPLOADURL . "</b> " . XOOPS_URL . "/" . $dirarray[$rootpath] . "</div><br>";
+            echo '
+      		<div><b>' . _AM_XTORRENT_DOWN_FUPLOADPATH . '</b> ' . XOOPS_ROOT_PATH . '/' . $dirarray[$rootpath] . '</div>
+      		<div><b>' . _AM_XTORRENT_DOWN_FUPLOADURL . '</b> ' . XOOPS_URL . '/' . $dirarray[$rootpath] . '</div><br>';
         }
         $pathlist = (isset($listarray[$rootpath])) ? $namearray[$rootpath] : '';
         $namelist = (isset($listarray[$rootpath])) ? $namearray[$rootpath] : '';
 
-        $iform = new XoopsThemeForm(_AM_XTORRENT_DOWN_FUPLOADIMAGETO . $pathlist, "op", xoops_getenv('PHP_SELF'));
+        $iform = new XoopsThemeForm(_AM_XTORRENT_DOWN_FUPLOADIMAGETO . $pathlist, 'op', xoops_getenv('PHP_SELF'));
         $iform->setExtra('enctype="multipart/form-data"');
 
         ob_start();
@@ -100,14 +100,14 @@ switch ($op) {
         ob_end_clean();
 
         if ($rootpath > 0) {
-            $graph_array = XtsLists::getListTypeAsArray(XOOPS_ROOT_PATH . "/" . $dirarray[$rootpath], $type = "images");
+            $graph_array = XtsLists::getListTypeAsArray(XOOPS_ROOT_PATH . '/' . $dirarray[$rootpath], $type = 'images');
             $indeximage_select = new XoopsFormSelect('', 'downfile', '');
             $indeximage_select->addOptionArray($graph_array);
-            $indeximage_select->setExtra("onchange='showImgSelected(\"image\", \"downfile\", \"" . $dirarray[$rootpath] . "\", \"\", \"" . XOOPS_URL . "\")'");
+            $indeximage_select->setExtra("onchange='showImgSelected(\"image\", \"downfile\", \"" . $dirarray[$rootpath] . '", "", "' . XOOPS_URL . "\")'");
             $indeximage_tray = new XoopsFormElementTray(_AM_XTORRENT_DOWN_FSHOWSELECTEDIMAGE, '&nbsp;');
             $indeximage_tray->addElement($indeximage_select);
             if (!empty($imgurl)) {
-                $indeximage_tray->addElement(new XoopsFormLabel('', "<br><br><img src='" . XOOPS_URL . "/" . $dirarray[$rootpath] . "/" . $downfile . "' name='image' id='image' alt='' >"));
+                $indeximage_tray->addElement(new XoopsFormLabel('', "<br><br><img src='" . XOOPS_URL . '/' . $dirarray[$rootpath] . '/' . $downfile . "' name='image' id='image' alt='' >"));
             } else {
                 $indeximage_tray->addElement(new XoopsFormLabel('', "<br><br><img src='" . XOOPS_URL . "/uploads/blank.gif' name='image' id='image' alt='' >"));
             }

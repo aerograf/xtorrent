@@ -15,7 +15,7 @@ function passkey_paypal($lid, $made)
 
 	global $xoopsUser, $xoopsDB, $xoopsModuleConfig, $myts;
 	
-	$sql    = "SELECT cid, price, paypalemail, currency, title, description, ipaddress FROM ".$xoopsDB->prefix("xtorrent_downloads")." where lid = $lid";
+	$sql    = 'SELECT cid, price, paypalemail, currency, title, description, ipaddress FROM ' . $xoopsDB->prefix('xtorrent_downloads') . " where lid = $lid";
 	$result = $xoopsDB->queryF($sql);
 	list($cid, $price, $paypalemail, $currency, $title, $description, $ipaddress) = $xoopsDB->fetchRow($result);
 	
@@ -31,26 +31,26 @@ function passkey_paypal($lid, $made)
 	
 	if (!empty($price)&&(float)$price>0&&!empty($paypalemail)&&$ipaddress!=$_SERVER['REMOTE_ADDR'])
 	{
-		$sql = "select id, passkey from ".$xoopsDB->prefix('xtorrent_users'). " where username='".$uname."' and uid='".$uid."' and lid = $lid and secret = sha1('".xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR']))."') and enabled = 'yes' order by last_access, id";
+		$sql = 'select id, passkey from ' . $xoopsDB->prefix('xtorrent_users') . " where username='" . $uname . "' and uid='" . $uid . "' and lid = $lid and secret = sha1('" . xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR'])) . "') and enabled = 'yes' order by last_access, id";
 		$rt  = $xoopsDB->queryF($sql);				
 		if ($xoopsDB->getRowsNum($rt)){			
-			$sql = "select id, passkey from ".$xoopsDB->prefix('xtorrent_users'). " where lid = $lid and secret = sha1('".xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR']))."') and enabled = 'yes' order by last_access, id";
+			$sql = 'select id, passkey from ' . $xoopsDB->prefix('xtorrent_users') . " where lid = $lid and secret = sha1('" . xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR'])) . "') and enabled = 'yes' order by last_access, id";
 			$rt  = $xoopsDB->queryF($sql);				
 		}
 		$rt = $xoopsDB->queryF($sql);				
 		if ($xoopsDB->getRowsNum($rt)){
-			if ($made=="yes")
+			if ($made == 'yes')
 			{
 				list($id, $passkey) = $xoopsDB->fetchRow($rt);
-				$sql = "UDPATE ".$xoopsDB->prefix('xtorrent_users'). " SET enabled = 'yes', last_access = '".date("Y-m-d H:i:s")."' WHERE id = '".$id."'";
+				$sql = 'UDPATE ' . $xoopsDB->prefix('xtorrent_users') . " SET enabled = 'yes', last_access = '" . date('Y-m-d H:i:s') . "' WHERE id = '" . $id . "'";
 				$rt  = $xoopsDB->queryF($sql);				
 				$payment_made = true;
 			} else {
 				list($id, $passkey) = $xoopsDB->fetchRow($rt);
-				$sql = "SELECT id FROM ".$xoopsDB->prefix('xtorrent_payments'). " WHERE custom = '".$passkey."'";
+				$sql = 'SELECT id FROM ' . $xoopsDB->prefix('xtorrent_payments') . " WHERE custom = '" . $passkey . "'";
 				$rt  = $xoopsDB->queryF($sql);				
 				if ($xoopsDB->getRowsNum($rt)){
-					$sql = "UDPATE ".$xoopsDB->prefix('xtorrent_users'). " SET enabled = 'yes', last_access = '".date("Y-m-d H:i:s")."' WHERE id = '".$id."'";
+					$sql = 'UDPATE ' . $xoopsDB->prefix('xtorrent_users') . " SET enabled = 'yes', last_access = '" . date('Y-m-d H:i:s') . "' WHERE id = '" . $id . "'";
 					$rt  = $xoopsDB->queryF($sql);
 					$payment_made = true;
 				}				
@@ -63,26 +63,26 @@ function passkey_paypal($lid, $made)
 				$rt  = $xoopsDB->queryF($sql);				
 			}
 			if (!$xoopsDB->getRowsNum($rt)){
-				$sql = "delete from ".$xoopsDB->prefix('xtorrent_users'). " where uid=".$uid." and username=".$uname." and lid = $lid and secret = sha1('".xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR']))."') and enabled = 'no'";
+				$sql = 'delete from ' . $xoopsDB->prefix('xtorrent_users') . ' where uid=' . $uid . ' and username=' . $uname . " and lid = $lid and secret = sha1('" . xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR'])) . "') and enabled = 'no'";
 				$rt  = $xoopsDB->queryF($sql);
-				$sql = "insert into ".$xoopsDB->prefix('xtorrent_users'). " (username, uid, old_password, secret, lid, enabled) VALUES ('".$uname."', ".$uid.", '".$pass."', sha1('".xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR']))."'),'$lid', 'no')";
+				$sql = 'insert into ' . $xoopsDB->prefix('xtorrent_users') . " (username, uid, old_password, secret, lid, enabled) VALUES ('" . $uname . "', " . $uid . ", '" . $pass . "', sha1('" . xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR'])) . "'),'$lid', 'no')";
 				$rt  = $xoopsDB->queryF($sql);
 			} else {
-				$sql = "delete from ".$xoopsDB->prefix('xtorrent_users'). " where uid=".$uid." and username=".$uname." and lid = $lid and secret = sha1('".xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR']))."') and enabled = 'no'";
+				$sql = 'delete from ' . $xoopsDB->prefix('xtorrent_users') . ' where uid=' . $uid . ' and username=' . $uname . " and lid = $lid and secret = sha1('" . xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR'])) . "') and enabled = 'no'";
 				$rt  = $xoopsDB->queryF($sql);
-				$sql = "insert into ".$xoopsDB->prefix('xtorrent_users'). " (username, uid, old_password, secret, lid, enabled) VALUES ('".$uname."', ".$uid.", '".$pass."', sha1('".xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR']))."'),'$lid', 'no')";
+				$sql = 'insert into ' . $xoopsDB->prefix('xtorrent_users') . " (username, uid, old_password, secret, lid, enabled) VALUES ('" . $uname . "', " . $uid . ", '" . $pass . "', sha1('" . xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR'])) . "'),'$lid', 'no')";
 				$rt  = $xoopsDB->queryF($sql);
 			}
 			if($rt){
 				$kid = $xoopsDB->getInsertId();
-				$sql = "update ".$xoopsDB->prefix('xtorrent_users'). " set passhash = md5(concat(secret, old_password, secret, '".gethostbyaddr($_SERVER['REMOTE_ADDR'])."')), last_access = '".date("Y-m-d H:i:s")."' where id = ".$kid ;
+				$sql = 'update ' . $xoopsDB->prefix('xtorrent_users') . " set passhash = md5(concat(secret, old_password, secret, '" . gethostbyaddr($_SERVER['REMOTE_ADDR']) . "')), last_access = '" . date('Y-m-d H:i:s') . "' where id = " . $kid ;
 				$rt  = $xoopsDB->queryF($sql);
-				$sql = "select * from ".$xoopsDB->prefix('xtorrent_users'). " where id = ".$kid ;
+				$sql = 'select * from ' . $xoopsDB->prefix('xtorrent_users') . ' where id = ' . $kid ;
 				$rt  = $xoopsDB->queryF($sql);
 				$row = $xoopsDB->fetchArray($rt); 
 				$crc = new qcp71($lid.$kid.$row['username'].get_date_time().$row['passhash'], mt_rand(17,245), mt_rand(31,121));
 				$passkey = $crc->crc;
-				$sql = "update ".$xoopsDB->prefix('xtorrent_users'). " set passkey = '".$passkey ."', last_access = '".date("Y-m-d H:i:s")."' where id = ".$kid ;
+				$sql = 'update ' . $xoopsDB->prefix('xtorrent_users') . " set passkey = '" . $passkey . "', last_access = '" . date('Y-m-d H:i:s') . "' where id = " . $kid ;
 				$rt  = $xoopsDB->queryF($sql);
 			}
 
@@ -90,22 +90,22 @@ function passkey_paypal($lid, $made)
 		}
 
 	} else {	
-		$sql = "select id, passkey from ".$xoopsDB->prefix('xtorrent_users'). " where username='".$uname."' and uid='".$uid."' and lid = $lid and secret = sha1('".xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR']))."') and enabled = 'yes'";
+		$sql = 'select id, passkey from ' . $xoopsDB->prefix('xtorrent_users') . " where username='" . $uname . "' and uid='" . $uid . "' and lid = $lid and secret = sha1('" . xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR'])) . "') and enabled = 'yes'";
 		$rt  = $xoopsDB->queryF($sql);				
 		if (!$xoopsDB->getRowsNum($rt)){
-			$sql = "insert into ".$xoopsDB->prefix('xtorrent_users'). " (username, uid, old_password, secret, lid, enabled) VALUES ('".$uname."', ".$uid.", '".$pass."', sha1('".xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR']))."'),'$lid', 'yes')";
+			$sql = 'insert into ' . $xoopsDB->prefix('xtorrent_users') . " (username, uid, old_password, secret, lid, enabled) VALUES ('" . $uname . "', " . $uid . ", '" . $pass . "', sha1('" . xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR'])) . "'),'$lid', 'yes')";
 			$rt  = $xoopsDB->queryF($sql);
 
 			if($rt){
 				$kid = $xoopsDB->getInsertId();
-				$sql = "update ".$xoopsDB->prefix('xtorrent_users'). " set passhash = md5(concat(secret, old_password, secret, '".gethostbyaddr($_SERVER['REMOTE_ADDR'])."')), last_access = '".date("Y-m-d H:i:s")."' where id = ".$kid ;
+				$sql = 'update ' . $xoopsDB->prefix('xtorrent_users') . " set passhash = md5(concat(secret, old_password, secret, '" . gethostbyaddr($_SERVER['REMOTE_ADDR']) . "')), last_access = '" . date('Y-m-d H:i:s') . "' where id = " . $kid ;
 				$rt  = $xoopsDB->queryF($sql);
-				$sql = "select * from ".$xoopsDB->prefix('xtorrent_users'). " where id = ".$kid ;
+				$sql = 'select * from ' . $xoopsDB->prefix('xtorrent_users') . ' where id = ' . $kid ;
 				$rt  = $xoopsDB->queryF($sql);
 				$row = $xoopsDB->fetchArray($rt); 
 				$crc = new qcp71($lid.$kid.$row['username'].get_date_time().$row['passhash'], mt_rand(17,245), mt_rand(31,121));
 				$passkey = $crc->crc;
-				$sql = "update ".$xoopsDB->prefix('xtorrent_users'). " set passkey = '".$passkey ."', last_access = '".date("Y-m-d H:i:s")."' where id = ".$kid ;
+				$sql = 'update ' . $xoopsDB->prefix('xtorrent_users') . " set passkey = '" . $passkey . "', last_access = '" . date('Y-m-d H:i:s') . "' where id = " . $kid ;
 				$rt  = $xoopsDB->queryF($sql);
 			}
 			
@@ -133,7 +133,7 @@ function passkey_paypal($lid, $made)
                 <input type="hidden" name="amount" id="paypal" value="<?php echo $price;?>">
                 <input type="hidden" name="cmd" value="_xclick">
                 <input type="hidden" name="business" value="<?php echo $paypalemail;?>">
-                <input type="hidden" name="item_name" value="<?php echo $uid . " : " . $title;?>">
+                <input type="hidden" name="item_name" value="<?php echo $uid . ' : ' . $title;?>">
                 <input type="hidden" name="item_number" value="<?php echo $lid;?>">
                 <input type="hidden" name="notify_url" value="<?php echo XOOPS_URL;?>/modules/xtorrent/ipnppd.php">
                 <input type="hidden" name="currency_code" value="<?php echo $xoopsModuleConfig['currencies'][$currency]; ?>">
@@ -159,11 +159,11 @@ function passkey_paypal($lid, $made)
 function reportBroken($lid)
 {
     global $xoopsModule;
-    echo "
-		<h4>" . _MD_XTORRENT_BROKENFILE . "</h4>
-		<div>" . _MD_XTORRENT_PLEASEREPORT . "
-		<a href='" . XOOPS_URL . "/modules/xtorrent/brokenfile.php?lid=$lid'>" . _MD_XTORRENT_CLICKHERE . "</a>
-		</div>";
+    echo '
+		<h4>' . _MD_XTORRENT_BROKENFILE . '</h4>
+		<div>' . _MD_XTORRENT_PLEASEREPORT . "
+		<a href='" . XOOPS_URL . "/modules/xtorrent/brokenfile.php?lid=$lid'>" . _MD_XTORRENT_CLICKHERE . '</a>
+		</div>';
 } 
 
 if ($agreed == 0)
@@ -175,9 +175,9 @@ if ($agreed == 0)
         $referer_host = $referer['host'];
         foreach ($xoopsModuleConfig['referers'] as $ref)
         {
-            if (!empty($ref) && preg_match("/" . $ref . "/i", $referer_host))
+            if (!empty($ref) && preg_match('/' . $ref . '/i', $referer_host))
             {
-                $goodhost = "1";
+                $goodhost = '1';
                 break;
             } 
         } 
@@ -192,9 +192,9 @@ if ($agreed == 0)
 if ($xoopsModuleConfig['showDowndisclaimer'] && $agreed == 0)
 {
     include XOOPS_ROOT_PATH . '/header.php';
-    echo "<div align='center'>" . xtorrent_imageheader() . "</div>
-      		<h4>" . _MD_XTORRENT_DISCLAIMERAGREEMENT . "</h4>
-      		<div>" . $myts -> displayTarea($xoopsModuleConfig['downdisclaimer'], 0, 1, 1, 1, 1) . "</div><br>
+    echo "<div align='center'>" . xtorrent_imageheader() . '</div>
+      		<h4>' . _MD_XTORRENT_DISCLAIMERAGREEMENT . '</h4>
+      		<div>' . $myts -> displayTarea($xoopsModuleConfig['downdisclaimer'], 0, 1, 1, 1, 1) . "</div><br>
       		<form action='visit.php' method='post'>
       		<div align='center'><b>" . _MD_XTORRENT_DOYOUAGREE . "</b><br><br>
       		<input type='button' onclick='location=\"visit.php?agree=1&amp;lid=$lid&amp;cid=$cid\"' class='formButton' value='" . _MD_XTORRENT_AGREE . "' alt='" . _MD_XTORRENT_AGREE . "' />
@@ -211,10 +211,10 @@ else
     $isadmin = (!empty($xoopsUser) && $xoopsUser -> isAdmin($xoopsModule -> mid())) ? true : false;
     if ($isadmin == false)
     {
-        $sql = sprintf("UPDATE " . $xoopsDB -> prefix('xtorrent_downloads') . " SET hits = hits+1 WHERE lid =$lid");
+        $sql = sprintf('UPDATE ' . $xoopsDB-> prefix('xtorrent_downloads') . " SET hits = hits+1 WHERE lid =$lid");
         $xoopsDB -> queryF($sql);
     } 
-    $result = $xoopsDB -> query("SELECT url FROM " . $xoopsDB -> prefix('xtorrent_downloads') . " WHERE lid=$lid");
+    $result = $xoopsDB -> query('SELECT url FROM ' . $xoopsDB-> prefix('xtorrent_downloads') . " WHERE lid=$lid");
     list($url) = $xoopsDB -> fetchRow($result);
 
    // include XOOPS_ROOT_PATH . '/header.php';
@@ -231,7 +231,7 @@ else
 				ini_set('allow_url_fopen',true);
 				global $xoopsUser, $xoopsDB;
 					
-				require_once("include/bittorrent.php");
+				require_once('include/bittorrent.php');
 				
 				$passkey = passkey_paypal($lid, $_REQUEST['made']);
 
@@ -247,55 +247,55 @@ else
 
 					$fn = str_replace($url_array, XOOPS_ROOT_PATH, $url);
 				
-					require_once "include/benc.php";
+					require_once 'include/benc.php';
 					$dict = bdec_file($fn, (1024*1024));
 	
 					if (empty($dict['value']['announce'])){
-						$dict['value']['announce']['type'] = "string";
+						$dict['value']['announce']['type'] = 'string';
 						$dict['value']['announce']['value'] = str_replace('{XOOPS_URL}', XOOPS_URL, $xoopsModuleConfig['announce_url'])."?passkey=$passkey";
-						$dict['value']['announce']['string'] = strlen($dict['value']['announce']['value']).":".$dict['value']['announce']['value'];
+						$dict['value']['announce']['string'] = strlen($dict['value']['announce']['value']) . ':' . $dict['value']['announce']['value'];
 						$dict['value']['announce']['strlen'] = strlen($dict['value']['announce']['string']);
 					} else {
 						$tracker = [];
 						$buffer  = [];					
-						$tracker['type'] = "list";
-						$buffer['type'] = "string";
+						$tracker['type'] = 'list';
+						$buffer['type'] = 'string';
 						$buffer['value'] = str_replace('{XOOPS_URL}', XOOPS_URL, $xoopsModuleConfig['announce_url'])."?passkey=$passkey";
 						if (!empty($dict['value']['announce-list'])){
 							
-							$buffer['string'] = strlen($buffer['value']).":".$buffer['value'];
+							$buffer['string'] = strlen($buffer['value']) . ':' . $buffer['value'];
 							$buffer['strlen'] = strlen($buffer['string']);
 							$tracker['value'] = [$buffer];
-							$tracker['string'] = "l".$buffer['string']."e";
+							$tracker['string'] = 'l' . $buffer['string'] . 'e';
 							$tracker['strlen'] = strlen($tracker['string']);
 							$dict['value']['announce-list']['value'][count($dict['value']['announce-list']['value'])] = $tracker;
-							$dict['value']['announce-list']['string'] = substr($dict['value']['announce-list']['string'],0,strlen($dict['value']['announce-list']['string'])-2)."l".$buffer['string']."ee";
+							$dict['value']['announce-list']['string'] = substr($dict['value']['announce-list']['string'],0,strlen($dict['value']['announce-list']['string'])-2) . 'l' . $buffer['string'] . 'ee';
 							$dict['value']['announce-list']['strlen'] = strlen($dict['value']['announce-list']['string']);
 						} else {
-							$dict['value']['announce-list']['type'] = "list";
+							$dict['value']['announce-list']['type'] = 'list';
 							$buffer2 = [];
 							
-							$buffer2['type'] = "string";
-							$buffer2['string'] = strlen($dict['value']['announce']['value']).":".$dict['value']['announce']['value'];
+							$buffer2['type'] = 'string';
+							$buffer2['string'] = strlen($dict['value']['announce']['value']) . ':' . $dict['value']['announce']['value'];
 							$buffer2['value'] = $dict['value']['announce']['value'];
 							$buffer2['strlen'] = strlen($buffer2['string']);
 							$tracker['value'] = [$buffer2];
-							$tracker['string'] = "l".$buffer2['string']."e";
+							$tracker['string'] = 'l' . $buffer2['string'] . 'e';
 							$tracker['strlen'] = strlen($tracker['string']);
 							$dict['value']['announce-list']['value'][count($dict['value']['announce-list']['value'])] = $tracker;
 							
-							$buffer['string'] = strlen($buffer['value']).":".$buffer['value'];
+							$buffer['string'] = strlen($buffer['value']) . ':' . $buffer['value'];
 							$buffer['strlen'] = strlen($buffer['string']);
 							$tracker['value'] = [$buffer];
-							$tracker['string'] = "l".$buffer['string']."e";
+							$tracker['string'] = 'l' . $buffer['string'] . 'e';
 							$tracker['strlen'] = strlen($tracker['string']);
 							
 							$dict['value']['announce-list']['value'][count($dict['value']['announce-list']['value'])] = $tracker;
-							$dict['value']['announce-list']['string'] = "ll".$buffer2['string']."".$buffer['string']."ee";
+							$dict['value']['announce-list']['string'] = 'll' . $buffer2['string'] . '' . $buffer['string'] . 'ee';
 							$dict['value']['announce-list']['strlen'] = strlen($dict['value']['announce-list']['string']);
 						}									
 						header('Content-Disposition: attachment; filename="'.basename($url).'"');
-						header("Content-Type: application/x-bittorrent");
+						header('Content-Type: application/x-bittorrent');
 						//print_r($dict);
 						print(benc($dict));
 						exit();
@@ -307,13 +307,13 @@ else
 			else
 			{
 				include XOOPS_ROOT_PATH . '/header.php';
-				echo "<br><div align='center'>" . xtorrent_imageheader() . "</div>";
+				echo "<br><div align='center'>" . xtorrent_imageheader() . '</div>';
 				reportBroken($lid);
 			
 			} 
 		
         } else {
-			die("Headers already sent"); 
+			die('Headers already sent'); 
 		}
 	} else {
 		reportBroken($lid);

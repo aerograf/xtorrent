@@ -6,19 +6,19 @@ if (!empty($_POST['submit'])) {
     global $xoopsModule, $xoopsModuleConfig, $xoopsUser;
 
     $sender = (is_object($xoopsUser)) ? $xoopsUser->getVar('uid') : 0;
-    $ip = getenv("REMOTE_ADDR");
+    $ip = getenv('REMOTE_ADDR');
     $lid = intval($_POST['lid']);
     $time = time();
     /*
     *  Check if REG user is trying to report twice.
     */
-    $result = $xoopsDB->query("SELECT COUNT(*) FROM " . $xoopsDB->prefix('xtorrent_broken') . " WHERE lid=$lid");
+    $result = $xoopsDB->query('SELECT COUNT(*) FROM ' . $xoopsDB->prefix('xtorrent_broken') . " WHERE lid=$lid");
     list($count) = $xoopsDB->fetchRow($result);
     if ($count > 0) {
         redirect_header('index.php', 2, _MD_XTORRENT_ALREADYREPORTED);
         exit();
     } else {
-        $sql = sprintf("INSERT INTO ".$xoopsDB->prefix('xtorrent_broken')." (reportid, lid, sender, ip, date, confirmed, acknowledged ) VALUES ( '', '$lid', '$sender', '$ip', '$time', '0', '0')");
+        $sql = sprintf('INSERT INTO ' . $xoopsDB->prefix('xtorrent_broken') . " (reportid, lid, sender, ip, date, confirmed, acknowledged ) VALUES ( '', '$lid', '$sender', '$ip', '$time', '0', '0')");
         $result = $xoopsDB->query($sql);
 
         $newid = $xoopsDB->getInsertId();
@@ -30,7 +30,7 @@ if (!empty($_POST['submit'])) {
         /**
          * Send email to the owner of the download stating that it is broken
          */
-        $sql = "SELECT * FROM " . $xoopsDB->prefix('xtorrent_downloads') . " WHERE lid = $lid AND published > 0 AND published <= " . time() . " AND (expired = 0 OR expired > " . time() . ")";
+        $sql = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_downloads') . " WHERE lid = $lid AND published > 0 AND published <= " . time() . ' AND (expired = 0 OR expired > ' . time() . ')';
         $down_arr = $xoopsDB->fetchArray($xoopsDB->query($sql));
         unset($sql);
 
@@ -42,19 +42,19 @@ if (!empty($_POST['submit'])) {
 
         $xoopsMailer = &getMailer();
         $xoopsMailer->useMail();
-        $template_dir = XOOPS_ROOT_PATH . "/modules/xtorrent/language/" . $xoopsConfig['language'] . "/mail_template";
+        $template_dir = XOOPS_ROOT_PATH . '/modules/xtorrent/language/' . $xoopsConfig['language'] . '/mail_template';
 
         $xoopsMailer->setTemplateDir($template_dir);
         $xoopsMailer->setTemplate('filebroken_notify.tpl');
         $xoopsMailer->setToEmails($user->email());
         $xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
         $xoopsMailer->setFromName($xoopsConfig['sitename']);
-        $xoopsMailer->assign("X_UNAME", $user->uname());
-        $xoopsMailer->assign("SITENAME", $xoopsConfig['sitename']);
-        $xoopsMailer->assign("X_ADMINMAIL", $xoopsConfig['adminmail']);
+        $xoopsMailer->assign('X_UNAME', $user->uname());
+        $xoopsMailer->assign('SITENAME', $xoopsConfig['sitename']);
+        $xoopsMailer->assign('X_ADMINMAIL', $xoopsConfig['adminmail']);
         $xoopsMailer->assign('X_SITEURL', XOOPS_URL . '/');
-        $xoopsMailer->assign("X_TITLE", $title);
-        $xoopsMailer->assign("X_SUB_DATE", $subdate);
+        $xoopsMailer->assign('X_TITLE', $title);
+        $xoopsMailer->assign('X_SUB_DATE', $subdate);
         $xoopsMailer->assign('X_DOWNLOAD', XOOPS_URL . '/modules/xtorrent/singlefile.php?cid=' . $cid . '&amp;lid=' . $lid);
         $xoopsMailer->setSubject($subject);
         $xoopsMailer->send();
@@ -71,11 +71,11 @@ if (!empty($_POST['submit'])) {
     $xoopsTpl->assign('catarray', $catarray);
 
     $lid = (isset($_GET['lid']) && $_GET['lid'] > 0) ? intval($_GET['lid']) : 0;
-    $sql = "SELECT * FROM " . $xoopsDB->prefix('xtorrent_downloads') . " WHERE lid = $lid AND published > 0 AND published <= " . time() . " AND (expired = 0 OR expired > " . time() . ")";
+    $sql = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_downloads') . " WHERE lid = $lid AND published > 0 AND published <= " . time() . ' AND (expired = 0 OR expired > ' . time() . ')';
     $down_arr = $xoopsDB->fetchArray($xoopsDB->query($sql));
     unset($sql);
 
-    $sql = "SELECT * FROM " . $xoopsDB->prefix('xtorrent_broken') . " WHERE lid = $lid";
+    $sql = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_broken') . " WHERE lid = $lid";
     $broke_arr = $xoopsDB->fetchArray($xoopsDB->query($sql));
     ;
 

@@ -42,7 +42,7 @@ if (false != $xt_user) {
     if (!$member_handler->insertUser($xt_user)) {
     }
     // Regenrate a new session id and destroy old session
-    $GLOBALS["sess_handler"]->regenerate_id(true);
+    $GLOBALS['sess_handler']->regenerate_id(true);
     $_SESSION = [];
     $_SESSION['xoopsUserId'] = $xt_user->getVar('uid');
     $_SESSION['xoopsUserGroups'] = $xt_user->getGroups();
@@ -53,7 +53,7 @@ if (false != $xt_user) {
     
     // Set cookie for rememberme
     if (!empty($xoopsConfig['usercookie'])) {
-        if (!empty($_POST["rememberme"])) {
+        if (!empty($_POST['rememberme'])) {
             setcookie($xoopsConfig['usercookie'], $_SESSION['xoopsUserId'], time() + 31536000, '/', '', 0);
         } else {
             setcookie($xoopsConfig['usercookie'], 0, -1, '/', '', 0);

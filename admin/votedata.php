@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/admin_header.php';
 
-$op = "";
+$op = '';
 if (isset($_POST)) {
     foreach ($_POST as $k => $v) {
         ${$k} = $v;
@@ -23,14 +23,14 @@ if (isset($_POST['op'])) {
 }
 
 switch ($op) {
-    case "delVote":
+    case 'delVote':
         global $xoopsDB, $_GET;
         $rid = intval($_GET['rid']);
         $lid = intval($_GET['lid']);
-        $sql = $xoopsDB->queryF("DELETE FROM " . $xoopsDB->prefix('xtorrent_votedata') . " WHERE ratingid = $rid");
+        $sql = $xoopsDB->queryF('DELETE FROM ' . $xoopsDB->prefix('xtorrent_votedata') . " WHERE ratingid = $rid");
         $xoopsDB->query($sql);
         xtorrent_updaterating($lid);
-        redirect_header("votedata.php", 1, _AM_XTORRENT_VOTEDELETED);
+        redirect_header('votedata.php', 1, _AM_XTORRENT_VOTEDELETED);
         break;
 
     case 'main':
@@ -42,11 +42,11 @@ switch ($op) {
         $useravgrating = '0';
         $uservotes     = '0';
 
-            $sql           = "SELECT * FROM " . $xoopsDB->prefix('xtorrent_votedata') . " ORDER BY ratingtimestamp DESC";
+            $sql           = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_votedata') . ' ORDER BY ratingtimestamp DESC';
         $results       = $xoopsDB->query($sql, 20, $start);
             $votes         = $xoopsDB->getRowsNum($results);
         
-        $sql           = "SELECT rating FROM " . $xoopsDB->prefix('xtorrent_votedata') . "";
+        $sql           = 'SELECT rating FROM ' . $xoopsDB->prefix('xtorrent_votedata') . '';
         $result2       = $xoopsDB->query($sql, 20, $start);
             $uservotes     = $xoopsDB->getRowsNum($result2);
         $useravgrating = 0;
@@ -64,22 +64,22 @@ switch ($op) {
         $adminObject->displayNavigation(basename(__FILE__));
 
           echo "<fieldset><legend style='font-weight:bold;color:#900;'>" . _AM_XTORRENT_VOTE_DISPLAYVOTES . "</legend>
-          		<div style='padding:4px;'><b>" . _AM_XTORRENT_VOTE_USERAVG . ":</b> " . $useravgrating . "</div>
-          		<div style='padding:4px;'><b>" . _AM_XTORRENT_VOTE_TOTALRATE . ":</b> " . $uservotes . "</div>
-          		<div style='padding: 4px;'><li>" . $imagearray['deleteimg'] . " " . _AM_XTORRENT_VOTE_DELETEDSC . "</li></div><br>
+          		<div style='padding:4px;'><b>" . _AM_XTORRENT_VOTE_USERAVG . ':</b> ' . $useravgrating . "</div>
+          		<div style='padding:4px;'><b>" . _AM_XTORRENT_VOTE_TOTALRATE . ':</b> ' . $uservotes . "</div>
+          		<div style='padding: 4px;'><li>" . $imagearray['deleteimg'] . ' ' . _AM_XTORRENT_VOTE_DELETEDSC . "</li></div><br>
           		<table class='outer' style='width:100%;'><tr>";
 
         $headingarray = [_AM_XTORRENT_VOTE_ID, _AM_XTORRENT_VOTE_USER, _AM_XTORRENT_VOTE_IP, _AM_XTORRENT_VOTE_FILETITLE, _AM_XTORRENT_VOTE_RATING, _AM_XTORRENT_VOTE_DATE, _AM_XTORRENT_MINDEX_ACTION];
         for ($i = 0; $i <= count($headingarray)-1; $i++) {
             $align = 'center';
-            echo "<th style='text-align:" . $align . ";'><b>" . $headingarray[$i] . "</th>";
+            echo "<th style='text-align:" . $align . ";'><b>" . $headingarray[$i] . '</th>';
         }
-        echo "</tr>";
+        echo '</tr>';
         if ($votes == 0) {
-            echo "<tr><td colspan='7' class='head' style='text-align:center;'>" . _AM_XTORRENT_VOTE_NOVOTES . "</td></tr>";
+            echo "<tr><td colspan='7' class='head' style='text-align:center;'>" . _AM_XTORRENT_VOTE_NOVOTES . '</td></tr>';
         }
         while (list($ratingid, $lid, $ratinguser, $rating, $ratinghostname, $ratingtimestamp) = $xoopsDB->fetchRow($results)) {
-            $sql = "SELECT title FROM " . $xoopsDB->prefix('xtorrent_downloads') . " WHERE lid=" . $lid . "";
+            $sql = 'SELECT title FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE lid=' . $lid . '';
             $down_array = $xoopsDB->fetchArray($xoopsDB->query($sql));
             
             $formatted_date = formatTimestamp($ratingtimestamp, $xoopsModuleConfig['dateformat']);
@@ -92,10 +92,10 @@ switch ($op) {
           		<td class='even' style='text-align:center;'>" . $rating . "</td>
           		<td class='even' style='text-align:center;'>" . $formatted_date . "</td>
           		<td class='even' style='text-align:center;'>
-              <b><a href='votedata.php?op=delVote&amp;lid=" . $lid . "&amp;rid=" . $ratingid . "'>" . $imagearray['deleteimg'] . "</a></b></td>
-          		</tr>";
+              <b><a href='votedata.php?op=delVote&amp;lid=" . $lid . '&amp;rid=' . $ratingid . "'>" . $imagearray['deleteimg'] . '</a></b></td>
+          		</tr>';
         }
-        echo "</table></fieldset>";
+        echo '</table></fieldset>';
         
             //Include page navigation
             include_once XOOPS_ROOT_PATH . '/class/pagenav.php';

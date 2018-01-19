@@ -26,7 +26,7 @@ $cid = intval($cid);
 $lid = intval($lid);
 
 switch (isset($op) && !empty($op)) {
-    case "list":
+    case 'list':
 
         global $xoopsDB, $xoopsModuleConfig, $myts;
         $start = isset($_GET['start']) ? intval($_GET['start']) : 0;
@@ -34,19 +34,19 @@ switch (isset($op) && !empty($op)) {
         $xoopsOption['template_main'] = 'xtorrent_reviews.tpl';
         include XOOPS_ROOT_PATH . '/header.php';
         
-        $sql                     = "SELECT * FROM " . $xoopsDB->prefix('xtorrent_indexpage') . " ";
+        $sql                     = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_indexpage') . ' ';
         $head_arr                = $xoopsDB->fetchArray($xoopsDB->query($sql));
         $catarray['imageheader'] = xtorrent_imageheader();
         $catarray['letters']     = xtorrent_letters();
         $catarray['toolbar']     = xtorrent_toolbar();
         $xoopsTpl->assign('catarray', $catarray);
 
-        $sql_review    = "SELECT * FROM " . $xoopsDB->prefix('xtorrent_reviews') . " WHERE lid = " . intval($lid) . " AND submit = 1 ORDER by date";
+        $sql_review    = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_reviews') . ' WHERE lid = ' . intval($lid) . ' AND submit = 1 ORDER by date';
         $result_review = $xoopsDB->query($sql_review, 5, $start);
         $result_count  = $xoopsDB->query($sql_review);
         $review_amount = $xoopsDB->getRowsNum($result_count);
 
-        $sql                     = "SELECT title, lid, cid FROM " . $xoopsDB->prefix('xtorrent_downloads') . " WHERE lid = " . $lid . "";
+        $sql                     = 'SELECT title, lid, cid FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE lid = ' . $lid . '';
         $down_arr_text           = $xoopsDB->fetcharray($xoopsDB->query($sql));
         $down_arr['title']       = $myts->htmlSpecialChars($myts->stripSlashesGPC($down_arr_text['title']));
         $down_arr['cid']         = intval($down_arr_text['cid']);
@@ -78,17 +78,17 @@ switch (isset($op) && !empty($op)) {
         include XOOPS_ROOT_PATH . '/footer.php';
         break;
 
-    case "default":
+    case 'default':
     default:
         if (!empty($_POST['submit'])) {
             $uid    = !empty($xoopsUser) ? $xoopsUser->getVar('uid') : 0;
-            $title  = $myts->addslashes(trim($_POST["title"]));
-            $review = $myts->addslashes(trim($_POST["review"]));
-            $lid    = intval(trim($_POST["lid"]));
-            $rated  = intval(trim($_POST["rated"]));
+            $title  = $myts->addslashes(trim($_POST['title']));
+            $review = $myts->addslashes(trim($_POST['review']));
+            $lid    = intval(trim($_POST['lid']));
+            $rated  = intval(trim($_POST['rated']));
             $date   = time();
             $submit = ($xoopsModuleConfig['autoapprove']) ? 1 : 0 ;
-            $sql    = "INSERT INTO " . $xoopsDB->prefix('xtorrent_reviews') . " (review_id, lid, title, review, submit, date, uid, rated) VALUES ('', $lid, '$title', '$review', '$submit', $date, $uid, $rated)";
+            $sql    = 'INSERT INTO ' . $xoopsDB->prefix('xtorrent_reviews') . " (review_id, lid, title, review, submit, date, uid, rated) VALUES ('', $lid, '$title', '$review', '$submit', $date, $uid, $rated)";
             $result = $xoopsDB->query($sql);
             if (!$result) {
                 $error = _MD_XTORRENT_ERROR_CREATCHANNEL . $sql;
@@ -101,16 +101,16 @@ switch (isset($op) && !empty($op)) {
             include XOOPS_ROOT_PATH . '/header.php';
             include XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
 
-            echo "<div align='center'>" . xtorrent_imageheader() . "</div><br>
-				    <div>" . _MD_XTORRENT_REV_SNEWMNAMEDESC . "</div>";
+            echo "<div align='center'>" . xtorrent_imageheader() . '</div><br>
+				    <div>' . _MD_XTORRENT_REV_SNEWMNAMEDESC . '</div>';
             
-            $sform = new XoopsThemeForm(_MD_XTORRENT_REV_SUBMITREV, "reviewform", xoops_getenv('PHP_SELF'));
+            $sform = new XoopsThemeForm(_MD_XTORRENT_REV_SUBMITREV, 'reviewform', xoops_getenv('PHP_SELF'));
             $sform->addElement(new XoopsFormText(_MD_XTORRENT_REV_TITLE, 'title', 50, 255), true);
-            $rating_select = new XoopsFormSelect(_MD_XTORRENT_REV_RATING, "rated", '10');
+            $rating_select = new XoopsFormSelect(_MD_XTORRENT_REV_RATING, 'rated', '10');
             $rating_select->addOptionArray(['1' => 1, '2' => 2, '3' => 3, '4' => 4, '5' => 5, '6' => 6, '7' => 7, '8' => 8, '9' => 9, '10' => 10]);
             $sform->addElement($rating_select);
             $sform->addElement(new XoopsFormDhtmlTextArea(_MD_XTORRENT_REV_DESCRIPTION, 'review', '', 15, 60), true);
-            $sform->addElement(new XoopsFormHidden("lid", $_GET['lid']));
+            $sform->addElement(new XoopsFormHidden('lid', $_GET['lid']));
             $button_tray = new XoopsFormElementTray('', '');
             $button_tray->addElement(new XoopsFormButton('', 'submit', _SUBMIT, 'submit'));
             $sform->addElement($button_tray);
