@@ -5,7 +5,7 @@ use XoopsModules\Xtorrent;
 include __DIR__ . '/../preloads/autoloader.php';
 
 require_once __DIR__ . '/../../../include/cp_header.php';
-require_once __DIR__ . '../include/functions.php';
+require_once __DIR__ . '/../include/functions.php';
 
 include_once XOOPS_ROOT_PATH . '/class/xoopstree.php';
 include_once XOOPS_ROOT_PATH . '/class/xoopslists.php';
