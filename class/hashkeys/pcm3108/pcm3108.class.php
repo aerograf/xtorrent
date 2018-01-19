@@ -68,6 +68,6 @@ if (!class_exists('pcm3108')) {
     }
 }
 
-require('pcm3108.base.php');
-require('pcm3108.enumerator.php');
-require('pcm3108.leaver.php');
+require 'pcm3108.base.php';
+require 'pcm3108.enumerator.php';
+require 'pcm3108.leaver.php';

@@ -12,7 +12,7 @@ function b_XTORRENT_top_show($options)
     $xoopsModule       = $modhandler->getByDirname('xtorrent');
     $config_handler    = xoops_gethandler('config');
     $xoopsModuleConfig = $config_handler->getConfigsByCat(0, $xoopsModule->getVar('mid'));
-    $groups            = (is_object($xoopsUser)) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
+    $groups            = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
     $gperm_handler     = xoops_gethandler('groupperm');
     $result            = $xoopsDB->query('SELECT lid, cid, title, date, hits FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE status > 0 AND offline = 0 ORDER BY ' . $options[0] . ' DESC', $options[1], 0);
     while ($myrow = $xoopsDB->fetchArray($result)) {
@@ -21,7 +21,7 @@ function b_XTORRENT_top_show($options)
             $title    = $myts->htmlSpecialChars($myrow['title']);
             if (!XOOPS_USE_MULTIBYTES) {
                 if (strlen($myrow['title']) >= $options[2]) {
-                    $title = $myts->htmlSpecialChars(substr($myrow['title'], 0, ($options[2] -1))) . '...';
+                    $title = $myts->htmlSpecialChars(substr($myrow['title'], 0, $options[2] - 1)) . '...';
                 }
             }
             $download['id']    = $myrow['lid'];

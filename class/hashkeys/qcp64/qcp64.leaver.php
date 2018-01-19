@@ -112,7 +112,7 @@ if (!class_exists('qcp64_leaver')) {
 
             $char = decbin($result.$prince.$karma.$motivation.$official.$outsidecause);
             
-            return (ord($char));
+            return ord($char);
         }
         
         private function nuc_step($nuclear, $var, $cycle)

@@ -98,7 +98,7 @@ switch ($op) {
                 $logourl   = $myts->htmlSpecialChars($new['screenshot']);
                 $submitter = xoops_getLinkedUnameFromId($new['submitter']);
                 $datetime  = formatTimestamp($new['date'], $xoopsModuleConfig['dateformat']);
-                $status    = ($new['published']) ? $approved : "<a href='newdownloads.php?op=approve&amp;lid=" . $new['lid'] . "'>" . $imagearray['approve'] . '</a>';
+                $status    = $new['published'] ? $approved : "<a href='newdownloads.php?op=approve&amp;lid=" . $new['lid'] . "'>" . $imagearray['approve'] . '</a>';
                 $modify    = "<a href='index.php?op=Download&amp;lid=" . $new['lid'] . "'>" . $imagearray['editimg'] . '</a>';
                 $delete    = "<a href='index.php?op=delDownload&amp;lid=" . $new['lid'] . "'>" . $imagearray['deleteimg'] . '</a>';
 

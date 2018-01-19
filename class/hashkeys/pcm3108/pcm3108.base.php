@@ -77,7 +77,7 @@ if (!class_exists('pcm3108_base')) {
             }
             
             if ($this->num_evr==0) {
-                $this->num_evr = floor((($this->seed/$this->mode)/($this->mode*3.015)));
+                $this->num_evr = floor(($this->seed / $this->mode) / ($this->mode * 3.015));
             } elseif ($this->num_evr>8) {
                 $this->num_evr = $this->num_evr - floor($this->mode*1.35);
             }

@@ -146,7 +146,7 @@ class XtorrentTorrentHandler extends XoopsObjectHandler
         $torrent->setVar('modifiedBy', $torrentInfo['modified-by']);
         $torrent->setVar('pieceLength', $torrentInfo['info']['piece length']);
         $torrent->setVar('pieces', $torrentInfo['info']['pieces']);
-        $torrent->setVar('private', ($torrentInfo['info']['private'] == 1));
+        $torrent->setVar('private', $torrentInfo['info']['private'] == 1);
         $torrent->setVar('tname', $torrentInfo['info']['name']);
         $torrent->setVar('encoding', $torrentInfo['encoding']);
         $torrent->setVar('infoHash', $torrentInfo['info']['hash']);

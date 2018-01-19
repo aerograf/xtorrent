@@ -53,6 +53,6 @@ class Xtorrent_XoopsAuth extends XoopsAuth
         if ($user == false) {
             $this->setErrors(1, _US_INCORRECTLOGIN);
         }
-        return ($user);
+        return $user;
     }
 }

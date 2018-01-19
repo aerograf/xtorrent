@@ -8,7 +8,7 @@ include XOOPS_ROOT_PATH . '/header.php';
 
 global $xoopsDB, $xoopsModule, $xoopsUser, $xoopsModuleConfig;
 
-$groups        = (is_object($xoopsUser)) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
+$groups        = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
 $module_id     = $xoopsModule->getVar('mid');
 $gperm_handler = xoops_gethandler('groupperm');
 
@@ -67,7 +67,7 @@ $xoopsTpl->assign('navitem', 1);
 /**
  * List Last VARIABLE Days of Downloads
  */
-$newdownloadshowdays = (!isset($_GET['newdownloadshowdays'])) ? 7 : $_GET['newdownloadshowdays'];
+$newdownloadshowdays = !isset($_GET['newdownloadshowdays']) ? 7 : $_GET['newdownloadshowdays'];
 $xoopsTpl->assign('newdownloadshowdays', $newdownloadshowdays);
 
 $counter = 0;

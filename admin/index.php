@@ -124,7 +124,7 @@ function Download()
         $gperm_handler = xoops_gethandler('groupperm');
         $groups = $gperm_handler -> getGroupIds('xtorrentownFilePerm', $lid, $xoopsModule -> getVar('mid'));
 
-        $groups = ($groups) ? $groups : true;
+        $groups = $groups ? $groups : true;
         $sform -> addElement(new XoopsFormSelectGroup(_AM_XTORRENT_FCATEGORY_GROUPPROMPT, 'groups', true, $groups, 5, true));
 
         $titles_tray = new XoopsFormElementTray(_AM_XTORRENT_FILE_TITLE, '<br />');
@@ -426,15 +426,15 @@ function addDownload()
     global $xoopsDB, $xoopsUser, $xoopsModule, $myts, $_FILES, $xoopsModuleConfig;
 
     $groups = isset($_POST['groups']) ? $_POST['groups'] : [];
-    $lid    = (!empty($_POST['lid'])) ? $_POST['lid'] : 0;
-    $cid    = (!empty($_POST['cid'])) ? $_POST['cid'] : 0;
-    $status = (!empty($_POST['status'])) ? $_POST['status'] : 2;
+    $lid    = !empty($_POST['lid']) ? $_POST['lid'] : 0;
+    $cid    = !empty($_POST['cid']) ? $_POST['cid'] : 0;
+    $status = !empty($_POST['status']) ? $_POST['status'] : 2;
     /**
      * Define URL
      */
     if (empty($_FILES['userfile']['name']) && $_POST['url'] && $_POST['url'] != '' && $_POST['url'] != 'http://') {
         $url   = ($_POST['url'] != 'http://') ? $myts-> addslashes($_POST['url']) : '';
-        $size  = ((empty($size) || !is_numeric($size))) ? $myts -> addslashes($_POST['size']) : 0;
+        $size  = empty($size) || !is_numeric($size) ? $myts-> addslashes($_POST['size']) : 0;
         $title = $myts -> addslashes(trim($_POST['title']));
     } else {
         global $_FILES;
@@ -459,7 +459,7 @@ function addDownload()
     }
 
     $topic_tags      = $myts -> addslashes(trim($_POST['topic_tags']));
-    $version         = (!empty($_POST['version'])) ? $myts-> addslashes(trim($_POST['version'])) : 0;
+    $version         = !empty($_POST['version']) ? $myts-> addslashes(trim($_POST['version'])) : 0;
     $platform        = $myts -> addslashes(trim($_POST['platform']));
     $description     = $myts -> addslashes(trim($_POST['description']));
     $submitter       = $xoopsUser -> uid();
@@ -473,9 +473,9 @@ function addDownload()
     $features        = $myts -> addslashes(trim($_POST['features']));
     $requirements    = $myts -> addslashes(trim($_POST['requirements']));
     $forumid         = (isset($_POST['forumid']) && $_POST['forumid'] > 0) ? intval($_POST['forumid']) : 0;
-    $limitations     = (isset($_POST['limitations'])) ? $myts-> addslashes($_POST['limitations']) : '';
-    $dhistory        = (isset($_POST['dhistory'])) ? $myts-> addslashes($_POST['dhistory']) : '';
-    $dhistoryhistory = (isset($_POST['dhistoryaddedd'])) ? $myts-> addslashes($_POST['dhistoryaddedd']) : '';
+    $limitations     = isset($_POST['limitations']) ? $myts-> addslashes($_POST['limitations']) : '';
+    $dhistory        = isset($_POST['dhistory']) ? $myts-> addslashes($_POST['dhistory']) : '';
+    $dhistoryhistory = isset($_POST['dhistoryaddedd']) ? $myts-> addslashes($_POST['dhistoryaddedd']) : '';
     if ($lid > 0 && !empty($dhistoryhistory)) {
         $dhistory  = $dhistory . "\n\n";
         $time      = time();
@@ -602,7 +602,7 @@ function addDownload()
     $message = (!$lid) ? _AM_XTORRENT_FILE_NEXTILEUPLOAD : _AM_XTORRENT_FILE_FILEMODIFIEDUPDATE ;
     $message = ($lid && !$_POST['was_published'] && $approved) ? _AM_XTORRENT_FILE_FILEAPPROVED : $message;
     if ($_POST['submitNews'] == 1) {
-        $title = (!empty($_POST['newsTitle'])) ? $_POST['newsTitle'] : $title;
+        $title = !empty($_POST['newsTitle']) ? $_POST['newsTitle'] : $title;
         include_once 'newstory.php';
     }
     redirect_header('index.php', 1, $message);
@@ -638,7 +638,7 @@ switch ($op) {
     case 'delDownload':
 
         global $xoopsDB, $_POST, $xoopsModule, $xoopsModuleConfig;
-        $confirm = (isset($confirm)) ? 1 : 0;
+        $confirm = isset($confirm) ? 1 : 0;
         if ($confirm) {
             $file = XOOPS_ROOT_PATH . '/' . $xoopsModuleConfig['uploaddir'] . '/' . basename($_POST['url']);
             if (is_file($file)) {
@@ -655,7 +655,7 @@ switch ($op) {
             redirect_header('index.php', 1, sprintf(_AM_XTORRENT_FILE_FILEWASDELETED, $title));
             exit();
         } else {
-            $lid    = (isset($_POST['lid'])) ? $_POST['lid'] : $lid;
+            $lid    = isset($_POST['lid']) ? $_POST['lid'] : $lid;
             $result = $xoopsDB -> query('SELECT lid, title, url FROM ' . $xoopsDB-> prefix('xtorrent_downloads') . " WHERE lid = $lid");
             list($lid, $title, $url) = $xoopsDB -> fetchrow($result);
             xoops_cp_header();
@@ -672,13 +672,13 @@ switch ($op) {
     case 'del_review':
 
         global $xoopsDB, $_POST, $xoopsModule;
-        $confirm = (isset($confirm)) ? 1 : 0;
+        $confirm = isset($confirm) ? 1 : 0;
         if ($confirm) {
             $xoopsDB -> query('DELETE FROM ' . $xoopsDB-> prefix('xtorrent_reviews') . ' WHERE review_id = ' . $_POST['review_id'] . '');
             redirect_header('index.php', 1, sprintf(_AM_XTORRENT_FILE_FILEWASDELETED, $title));
             exit();
         } else {
-            $review_id = (isset($_POST['review_id'])) ? $_POST['review_id'] : $review_id;
+            $review_id = isset($_POST['review_id']) ? $_POST['review_id'] : $review_id;
             $sql       = 'SELECT review_id, title FROM ' . $xoopsDB-> prefix('xtorrent_reviews') . " WHERE review_id = $review_id";
             $result    = $xoopsDB -> query($sql);
             list($review_id, $title) = $xoopsDB -> fetchrow($result);
@@ -707,7 +707,7 @@ switch ($op) {
 
     case 'edit_review':
 
-        $confirm = (isset($confirm)) ? 1 : 0;
+        $confirm = isset($confirm) ? 1 : 0;
         if ($confirm) {
             $review_id = intval($_POST['review_id']);
             $title     = $myts -> addSlashes(trim($_POST['title']));
@@ -838,7 +838,7 @@ switch ($op) {
                 $lid         = intval($review_array['lid']);
                 $submitter   = xoops_getLinkedUnameFromId($review_array['uid']);
                 $datetime    = formatTimestamp($review_array['date'], $xoopsModuleConfig['dateformat']);
-                $status      = (intval($review_array['submit'])) ? $approved : "<a href='index.php?op=approve_review&review_id=" . $review_id . "'>" . $imagearray['approve'] . '</a>';
+                $status      = intval($review_array['submit']) ? $approved : "<a href='index.php?op=approve_review&review_id=" . $review_id . "'>" . $imagearray['approve'] . '</a>';
                 $modify      = "<a href='index.php?op=edit_review&review_id=" . $review_id . "'>" . $imagearray['editimg'] . '</a>';
                 $delete      = "<a href='index.php?op=del_review&review_id=" . $review_id . "'>" . $imagearray['deleteimg'] . '</a>';
                 echo "

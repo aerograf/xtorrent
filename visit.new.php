@@ -1,11 +1,11 @@
 <?php
 
 include 'header.php';
-require (XOOPS_ROOT_PATH.'/modules/xtorrent/class/qcp71.class.php');
+require XOOPS_ROOT_PATH . '/modules/xtorrent/class/qcp71.class.php';
 
 global $xoopsUser, $xoopsModuleConfig, $myts;
 
-$agreed = (isset($_GET['agree'])) ? $_GET['agree'] : 0;
+$agreed = isset($_GET['agree']) ? $_GET['agree'] : 0;
 
 $lid = intval($_GET['lid']);
 $cid = intval($_GET['cid']);
@@ -231,7 +231,7 @@ else
 				ini_set('allow_url_fopen',true);
 				global $xoopsUser, $xoopsDB;
 					
-				require_once('include/bittorrent.php');
+				require_once 'include/bittorrent.php';
 				
 				$passkey = passkey_paypal($lid, $_REQUEST['made']);
 
@@ -248,7 +248,7 @@ else
 					$fn = str_replace($url_array, XOOPS_ROOT_PATH, $url);
 				
 					require_once 'include/benc.php';
-					$dict = bdec_file($fn, (1024*1024));
+					$dict = bdec_file($fn, 1024 * 1024);
 	
 					if (empty($dict['value']['announce'])){
 						$dict['value']['announce']['type'] = 'string';

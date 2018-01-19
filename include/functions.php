@@ -63,9 +63,9 @@ function xtorrent_save_Permissions($groups, $id, $perm_name)
 function xtorrent_toolbar()
 {
     global $xoopsModuleConfig, $xoopsUser;
-    $submissions = ($xoopsModuleConfig['submissions']) ? 1 : 0;
+    $submissions = $xoopsModuleConfig['submissions'] ? 1 : 0;
     if (!is_object($xoopsUser)) {
-        $submissions = ($xoopsModuleConfig['anonpost']) ? 1 : 0;
+        $submissions = $xoopsModuleConfig['anonpost'] ? 1 : 0;
     }
     $toolbar = '[ ';
     if ($submissions == 1) {
@@ -315,7 +315,7 @@ function xtorrent_totalcategory($pid = 0)
 {
     global $xoopsDB, $xoopsModule, $xoopsUser;
 
-    $groups        = (is_object($xoopsUser)) ? $xoopsUser -> getGroups() : XOOPS_GROUP_ANONYMOUS;
+    $groups        = is_object($xoopsUser) ? $xoopsUser-> getGroups() : XOOPS_GROUP_ANONYMOUS;
     $gperm_handler = xoops_gethandler('groupperm');
 
     $sql = 'SELECT cid FROM ' . $xoopsDB-> prefix('xtorrent_cat') . ' ';
@@ -343,7 +343,7 @@ function xtorrent_getTotalItems($sel_id = 0, $get_child = 0)
 {
     global $xoopsDB, $mytree, $xoopsModule, $xoopsUser;
 
-    $groups         = (is_object($xoopsUser)) ? $xoopsUser -> getGroups() : XOOPS_GROUP_ANONYMOUS;
+    $groups         = is_object($xoopsUser) ? $xoopsUser-> getGroups() : XOOPS_GROUP_ANONYMOUS;
     $gperm_handler  = xoops_gethandler('groupperm');
 
     $count          = 0;
@@ -668,7 +668,7 @@ function xtorrent_adminmenu($header = '', $menu = '', $extra = '', $scount = 4)
     if (isset($_SERVER['PHP_SELF'])) {
         $thispage = basename($_SERVER['PHP_SELF']);
     }
-    $op = (isset($_GET['op'])) ? $op = '?op=' . $_GET['op'] : '';
+    $op = isset($_GET['op']) ? $op = '?op=' . $_GET['op'] : '';
 
     echo "
 		<table class='outer' style='width:100%;'>
@@ -953,7 +953,7 @@ function xtorrent_getcookie($name, $isArray = false)
     global $xtorrentCookie;
     $value = !empty($_COOKIE[$xtorrentCookie['prefix'].$name]) ? $_COOKIE[$xtorrentCookie['prefix'].$name] : null;
     if ($isArray) {
-        $_value = ($value)?explode(',', $value):[];
+        $_value = $value ?explode(',', $value):[];
         $value = [];
         if (count($_value)>0) {
             foreach ($_value as $string) {
@@ -962,7 +962,7 @@ function xtorrent_getcookie($name, $isArray = false)
                     $value[]=$string;
                 } else {
                     $key = substr($string, 0, $sep);
-                    $val = substr($string, ($sep+1));
+                    $val = substr($string, $sep + 1);
                     $value[$key] = $val;
                 }
             }

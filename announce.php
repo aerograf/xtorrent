@@ -1,10 +1,10 @@
 <?php 
 
 ob_start('ob_gzhandler');
-require_once('../../mainfile.php');
-require_once('include/functions.php');
-require_once('include/bittorrent.php');
-require_once('include/benc.php');
+require_once '../../mainfile.php';
+require_once 'include/functions.php';
+require_once 'include/bittorrent.php';
+require_once 'include/benc.php';
 
 global $xoopsDB, $xoopsConfig, $xoopsModuleConfig;
 $filename = XOOPS_ROOT_PATH.'/uploads/test.txt';
@@ -259,7 +259,7 @@ unset($self);
                 continue;
             }
             
-            $ips = ($row['ip']);
+            $ips = $row['ip'];
             
             if ($row['seeder']='yes') {
                 $seeds .= 'd2:ip' . strlen($ips) . ':' . $ips;
@@ -315,7 +315,7 @@ if (!isset($self)) {
                            . sqlesc($passkey) . " AND enabled = 'yes' and secret = " . sqlesc(sha1(xtorrent_get_base_domain(gethostbyaddr($_SERVER['REMOTE_ADDR'])))) . ' ORDER BY last_access DESC LIMIT 1') or err('Tracker error 2');
 
     $az = $xoopsDB->fetchArray($rz);
-    $userid = ($az['id']);
+    $userid = $az['id'];
 
     if ($xoopsDB->getRowsNum($rz) == 0) {
         err('Unknown passkey or secret. Please redownload the torrent from ' . XOOPS_URL);
@@ -324,7 +324,7 @@ if (!isset($self)) {
     $rz = $xoopsDB->queryF('SELECT id, uploaded, downloaded FROM ' . $xoopsDB->prefix('xtorrent_users') . ' WHERE passkey=' . sqlesc($passkey) . " AND enabled = 'yes' ORDER BY last_access DESC LIMIT 1") or err('Tracker error 2');
 
     $az = $xoopsDB->fetchArray($rz);
-    $userid = ($az['id']);
+    $userid = $az['id'];
 
     $upthis   = max(0, $uploaded - $self['uploaded']);
     $downthis = max(0, $downloaded - $self['downloaded']);

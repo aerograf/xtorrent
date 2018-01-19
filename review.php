@@ -87,14 +87,14 @@ switch (isset($op) && !empty($op)) {
             $lid    = intval(trim($_POST['lid']));
             $rated  = intval(trim($_POST['rated']));
             $date   = time();
-            $submit = ($xoopsModuleConfig['autoapprove']) ? 1 : 0 ;
+            $submit = $xoopsModuleConfig['autoapprove'] ? 1 : 0 ;
             $sql    = 'INSERT INTO ' . $xoopsDB->prefix('xtorrent_reviews') . " (review_id, lid, title, review, submit, date, uid, rated) VALUES ('', $lid, '$title', '$review', '$submit', $date, $uid, $rated)";
             $result = $xoopsDB->query($sql);
             if (!$result) {
                 $error = _MD_XTORRENT_ERROR_CREATCHANNEL . $sql;
                 trigger_error($error, E_USER_ERROR);
             } else {
-                $database_mess = ($xoopsModuleConfig['autoapprove']) ? _MD_XTORRENT_ISAPPROVED : _MD_XTORRENT_ISNOTAPPROVED;
+                $database_mess = $xoopsModuleConfig['autoapprove'] ? _MD_XTORRENT_ISAPPROVED : _MD_XTORRENT_ISNOTAPPROVED;
                 redirect_header('index.php', 2, $database_mess);
             }
         } else {

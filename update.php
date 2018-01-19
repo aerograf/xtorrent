@@ -1,6 +1,6 @@
 <?php
 
-include('header.php');
+include 'header.php';
 
 define('IS_UPDATE_FILE', true);
 
@@ -118,7 +118,7 @@ if ($action == 'message') {
     }
 
     install_footer();
-    include_once(XOOPS_ROOT_PATH . '/footer.php');
+    include_once XOOPS_ROOT_PATH . '/footer.php';
     exit();
 }
 // THIS IS THE UPDATE DATABASE FROM HERE!!!!!!!!! DO NOT TOUCH THIS!!!!!!!!

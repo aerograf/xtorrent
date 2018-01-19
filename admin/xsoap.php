@@ -28,12 +28,12 @@ if (!$xoopsModule->mid())
 		
 		if ($native!=true) {
 			define('XOOPS_SOAP_LIB', 'NUSOAP');
-			require_once(XOOPS_ROOT_PATH.'/modules/xsoap/include/nusoap/nusoap.php');
+			require_once XOOPS_ROOT_PATH . '/modules/xsoap/include/nusoap/nusoap.php';
 		} else {
 			define('XOOPS_SOAP_LIB', 'INHERIT');
 		}
 	} else {
-		require_once (XOOPS_ROOT_PATH . '/class/soap/xoopssoap.php');
+		require_once XOOPS_ROOT_PATH . '/class/soap/xoopssoap.php';
 	}
 }
 
@@ -257,11 +257,11 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
 					{
 						$iidx[$ii] = new XoopsFormElementTray($uu['title'], '&nbsp;');
 						$objid='toz_' . $uu['lid'] . $uu['cid'];
-						$objshow = (count($toggles)>0)?((in_array($objid, $toggles)) ? false : true):true;
+						$objshow = (count($toggles)>0)?(in_array($objid, $toggles) ? false : true):true;
 					
-						$display = ($objshow) ? 'none;'  :  'block;';
-						$display_text = ($objshow) ? 'Open'  :  'Close';
-						$display_icon  = ($objshow) ? XOOPS_URL.'/modules/xtorrent/images/down.gif' : XOOPS_URL.'/modules/xtorrent/images/up.gif' ;
+						$display = $objshow ? 'none;'  :  'block;';
+						$display_text = $objshow ? 'Open'  :  'Close';
+						$display_icon  = $objshow ? XOOPS_URL . '/modules/xtorrent/images/down.gif' : XOOPS_URL . '/modules/xtorrent/images/up.gif' ;
 										
 						$ti = '<img align="right" onclick="ToggleBlock2(\''.'toz_' . $uu['lid'] . $uu['cid'] . '\', this)" src="' . $display_icon . '" alt="' . $display_text . '" />';
 						$ti .= "<div id='toz_" . $uu['lid'] . $uu['cid']."' style=\"display: $display\">
@@ -417,8 +417,8 @@ function importtorrents($req, $client, $servers, $server, $server_key, $site_nam
 		  //print_r($result);
 			$myts   = MyTextSanitizer::getInstance();
 			$notify = $req['notify']!=0 ? 1 : 0;
-			$slid   = (!empty($result['RESULT']['data'][0]['content']['lid'])) ? intval($result['RESULT']['data'][0]['content']['lid']) : 0 ;
-			$scid   = (!empty($result['RESULT']['data'][0]['content']['cid'])) ? intval($result['RESULT']['data'][0]['content']['cid']) : 0 ;
+			$slid   = !empty($result['RESULT']['data'][0]['content']['lid']) ? intval($result['RESULT']['data'][0]['content']['lid']) : 0 ;
+			$scid   = !empty($result['RESULT']['data'][0]['content']['cid']) ? intval($result['RESULT']['data'][0]['content']['cid']) : 0 ;
 			$sql    = 'SELECT cid, auto_approval FROM ' . $xoopsDB->prefix('xtorrent_soap_catmatch') . ' WHERE scid = ' . $scid . ' and skey = ' . $server_key;
 
 			list($cid, $x_autoapprove) = $xoopsDB->fetchRow($xoopsDB->queryF($sql));
@@ -472,15 +472,15 @@ function importtorrents($req, $client, $servers, $server, $server_key, $site_nam
 				//$currency     = $myts->addslashes(trim($result['RESULT']['data'][0]['content']["currency"]));
 				$features     = $myts->addslashes(trim($result['RESULT']['data'][0]['content']['features']));
 				$requirements = $myts->addslashes(trim($result['RESULT']['data'][0]['content']['requirements']));
-				$limitations  = (isset($result['RESULT']['data'][0]['content']['limitations'])) ? $myts->addslashes($result['RESULT']['data'][0]['content']['limitations']) : '';
-				$dhistory     = (isset($result['RESULT']['data'][0]['content']['dhistory'])) ? $myts->addslashes($result['RESULT']['data'][0]['content']['dhistory']) : '';
+				$limitations  = isset($result['RESULT']['data'][0]['content']['limitations']) ? $myts->addslashes($result['RESULT']['data'][0]['content']['limitations']) : '';
+				$dhistory     = isset($result['RESULT']['data'][0]['content']['dhistory']) ? $myts->addslashes($result['RESULT']['data'][0]['content']['dhistory']) : '';
 				$offline      = (isset($result['RESULT']['data'][0]['content']['offline']) && $result['RESULT']['data'][0]['content']['offline'] == 1) ? 1 : 0;
-				$date         = (isset($result['RESULT']['data'][0]['content']['date'])) ? $myts->addslashes($result['RESULT']['data'][0]['content']['date']) : '';
-				$publishdate  = (isset($result['RESULT']['data'][0]['content']['publishdate'])) ? $myts->addslashes($result['RESULT']['data'][0]['content']['publishdate']) : '';
+				$date         = isset($result['RESULT']['data'][0]['content']['date']) ? $myts->addslashes($result['RESULT']['data'][0]['content']['date']) : '';
+				$publishdate  = isset($result['RESULT']['data'][0]['content']['publishdate']) ? $myts->addslashes($result['RESULT']['data'][0]['content']['publishdate']) : '';
 				$notifypub    = (isset($result['RESULT']['data'][0]['content']['notifypub']) && $result['RESULT']['data'][0]['content']['notifypub'] == 1) ? 1 : 0;
 				$scrc         = isset($result['RESULT']['data'][0]['content']['crc']) ? $result['RESULT']['data'][0]['content']['crc'] : '';
-				$screenshot   = (isset($result['RESULT']['data'][0]['content']['screenshot'])) ? $myts->addslashes($result['RESULT']['data'][0]['content']['screenshot']) : '';
-				$ipaddress    = (isset($result['RESULT']['data'][0]['content']['ipaddress'])) ? $myts->addslashes($result['RESULT']['data'][0]['content']['ipaddress']) : '';
+				$screenshot   = isset($result['RESULT']['data'][0]['content']['screenshot']) ? $myts->addslashes($result['RESULT']['data'][0]['content']['screenshot']) : '';
+				$ipaddress    = isset($result['RESULT']['data'][0]['content']['ipaddress']) ? $myts->addslashes($result['RESULT']['data'][0]['content']['ipaddress']) : '';
 
 				if ($lid == 0)
 				{

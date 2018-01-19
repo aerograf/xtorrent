@@ -22,12 +22,12 @@ if (!$xoopsModuleConfig['submissions']) {
 if (isset($_POST['submit']) && !empty($_POST['submit'])) {
     $notify = !empty($_POST['notify']) ? 1 : 0;
 
-    $lid = (!empty($_POST['lid'])) ? intval($_POST['lid']) : 0 ;
-    $cid = (!empty($_POST['cid'])) ? intval($_POST['cid']) : 0 ;
+    $lid = !empty($_POST['lid']) ? intval($_POST['lid']) : 0 ;
+    $cid = !empty($_POST['cid']) ? intval($_POST['cid']) : 0 ;
 
     if (empty($_FILES['userfile']['name']) && $_POST['url'] && $_POST['url'] != '' && $_POST['url'] != 'https://') {
         $url   = ($_POST['url'] != 'https://') ? $myts->addslashes($_POST['url']) : '';
-        $size  = ((empty($size) || !is_numeric($size))) ? $myts->addslashes($_POST['size']) : 0;
+        $size  = empty($size) || !is_numeric($size) ? $myts->addslashes($_POST['size']) : 0;
         $title = $myts->addslashes(trim($_POST['title']));
     } else {
         global $_FILES;
@@ -59,9 +59,9 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
     $features        = $myts->addslashes(trim($_POST['features']));
     $requirements    = $myts->addslashes(trim($_POST['requirements']));
     $forumid         = (isset($_POST['forumid']) && $_POST['forumid'] > 0) ? intval($_POST['forumid']) : 0;
-    $limitations     = (isset($_POST['limitations'])) ? $myts->addslashes($_POST['limitations']) : '';
-    $dhistory        = (isset($_POST['dhistory'])) ? $myts->addslashes($_POST['dhistory']) : '';
-    $dhistoryhistory = (isset($_POST['dhistoryaddedd'])) ? $myts->addslashes($_POST['dhistoryaddedd']) : '';
+    $limitations     = isset($_POST['limitations']) ? $myts->addslashes($_POST['limitations']) : '';
+    $dhistory        = isset($_POST['dhistory']) ? $myts->addslashes($_POST['dhistory']) : '';
+    $dhistoryhistory = isset($_POST['dhistoryaddedd']) ? $myts->addslashes($_POST['dhistoryaddedd']) : '';
     if ($lid > 0 && !empty($dhistoryhistory)) {
         $dhistory = $dhistory . "\n\n";
         $time     = time();
@@ -74,7 +74,7 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
     $notifypub = (isset($_POST['notifypub']) && $_POST['notifypub'] == 1) ? 1 : 0;
     
     $screenshot = '';
-    if ((isset($_FILES['screenshot']['name']) && !empty($_FILES['screenshot']['name']))) {
+    if (isset($_FILES['screenshot']['name']) && !empty($_FILES['screenshot']['name'])) {
         $allowed_mimetypes = $allowed_mimetypes = ['image/gif', 'image/jpeg', 'image/pjpeg', 'image/x-png'];
         $maxfilesize       = $xoopsModuleConfig['maxfilesize'];
         $maxfilewidth      = $xoopsModuleConfig['maximgwidth'];

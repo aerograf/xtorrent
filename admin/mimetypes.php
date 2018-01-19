@@ -107,7 +107,7 @@ switch ($op) {
         break;
 
     case 'update':
-        $mime_id  = (isset($_GET['mime_id'])) ? $_GET['mime_id'] : $mime_id;
+        $mime_id  = isset($_GET['mime_id']) ? $_GET['mime_id'] : $mime_id;
         $query    = 'select * from ' . $xoopsDB-> prefix('xtorrent_mimetypes') . " WHERE mime_id = $mime_id";
         $mime_arr = $xoopsDB -> fetchArray($xoopsDB -> query($query));
 
@@ -181,7 +181,7 @@ switch ($op) {
 
         global $xoopsDB;
 
-        $confirm = (isset($_POST['confirm'])) ? 1 : 0;
+        $confirm = isset($_POST['confirm']) ? 1 : 0;
 
         if ($confirm) {
             $sql    = 'DELETE FROM ' . $xoopsDB-> prefix('xtorrent_mimetypes') . ' WHERE mime_id = ' . $_POST['mime_id'] . '';
@@ -195,7 +195,7 @@ switch ($op) {
             }
             exit();
         } else {
-            $mime_id = (isset($_POST['mime_id'])) ? $_POST['mime_id'] : $mime_id;
+            $mime_id = isset($_POST['mime_id']) ? $_POST['mime_id'] : $mime_id;
             $result  = $xoopsDB -> query('SELECT mime_id, mime_name FROM ' . $xoopsDB-> prefix('xtorrent_mimetypes') . " WHERE mime_id = '$mime_id'");
             list($mime_id, $mime_name) = $xoopsDB -> fetchrow($result);
             xoops_cp_header();
@@ -280,11 +280,11 @@ switch ($op) {
             echo "<td class='even'>" . $mimetypes['mime_name'] . '</td>';
             echo "<td class='even' style='text-align:center;'>." . $mimetypes['mime_ext'] . '</td>';
 
-            $yes_admin_image = ($mimetypes['mime_admin']) ? $imagearray['online'] : $imagearray['offline'];
+            $yes_admin_image = $mimetypes['mime_admin'] ? $imagearray['online'] : $imagearray['offline'];
             $image_admin     = "<a href='mimetypes.php?op=update&amp;admin=1&amp;mime_id=" . $mimetypes['mime_id'] . '&amp;start=' . $start . "'>" . $yes_admin_image . '</a>';
             echo "<td class='even' style='text-align:center;width:10%;'>" . $image_admin . '</td>';
 
-            $yes_user_image = ($mimetypes['mime_user']) ? $imagearray['online'] : $imagearray['offline'];
+            $yes_user_image = $mimetypes['mime_user'] ? $imagearray['online'] : $imagearray['offline'];
             $image_user     = "<a href='mimetypes.php?op=update&amp;user=1&amp;mime_id=" . $mimetypes['mime_id'] . '&amp;start=' . $start . "'>" . $yes_user_image . '</a>';
             echo "<td class='even' style='text-align:center;width:10%;'>" . $image_user . '</td>';
             echo "<td class='even' style='text-align:center;'>";

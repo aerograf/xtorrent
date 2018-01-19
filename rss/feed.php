@@ -1,6 +1,6 @@
 <?php
 
-include('../../../mainfile.php');
+include '../../../mainfile.php';
 
 $source   = $_GET['source'];
 $numitems = isset($_GET['numitems'])?$_GET['numitems']:15;
@@ -20,7 +20,7 @@ function rss_data($cid, $numitems)
     $config_handler    = xoops_gethandler('config');
     $xoopsModuleConfig = $config_handler->getConfigsByCat(0, $xoopsModule->getVar('mid'));
 
-    $groups        = (is_object($xoopsUser)) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
+    $groups        = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
     $gperm_handler = xoops_gethandler('groupperm');
 
     if (!empty($cid)||$cid>0) {
@@ -96,9 +96,9 @@ if (!function_exists('xoops_sef')) {
                 $replacement_chars[] = chr($i);
             }
         }
-        $return_data = (str_replace($replacement_chars, $char, $datab));
+        $return_data = str_replace($replacement_chars, $char, $datab);
         #print $return_data . "<BR><BR>";
-        return($return_data);
+        return $return_data;
     }
 }
 
@@ -127,7 +127,7 @@ header('Content-type: text/xml; charset=UTF-8');
 
 <?php if (!isset($_REQUEST['ms'])) {
     ?> 
- <description><?php echo(htmlspecialchars($xoopsConfig['slogan'])).' '.htmlspecialchars(implode(', ', $rssfeed_data['category'])); ?></description>
+ <description><?php echo htmlspecialchars($xoopsConfig['slogan']) . ' ' . htmlspecialchars(implode(', ', $rssfeed_data['category'])); ?></description>
  <lastBuildDate><?php echo date('D, d-m-y H:i:s e', time()); ?></lastBuildDate>
  <docs>http://backend.userland.com/rss/</docs>
  <generator><?php echo(htmlspecialchars($xoopsConfig['sitename'])); ?></generator>
@@ -154,7 +154,7 @@ header('Content-type: text/xml; charset=UTF-8');
 foreach ($rssfeed_data as $item) {
         ?>
  <item>
- <title><?php echo htmlspecialchars(($item['title'])); ?></title> 
+ <title><?php echo htmlspecialchars($item['title']); ?></title>
  <link><?php echo htmlspecialchars($item['url']); ?></link>
  <description><?php echo $item['description']; ?></description> 
 <?php if (!isset($_REQUEST['ms'])) {

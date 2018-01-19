@@ -16,7 +16,7 @@ if (isset($_GET)) {
     }
 }
 
-$rootpath = (isset($_GET['rootpath'])) ? intval($_GET['rootpath']) : 0;
+$rootpath = isset($_GET['rootpath']) ? intval($_GET['rootpath']) : 0;
 
 switch ($op) {
     case 'upload':
@@ -87,8 +87,8 @@ switch ($op) {
       		<div><b>' . _AM_XTORRENT_DOWN_FUPLOADPATH . '</b> ' . XOOPS_ROOT_PATH . '/' . $dirarray[$rootpath] . '</div>
       		<div><b>' . _AM_XTORRENT_DOWN_FUPLOADURL . '</b> ' . XOOPS_URL . '/' . $dirarray[$rootpath] . '</div><br>';
         }
-        $pathlist = (isset($listarray[$rootpath])) ? $namearray[$rootpath] : '';
-        $namelist = (isset($listarray[$rootpath])) ? $namearray[$rootpath] : '';
+        $pathlist = isset($listarray[$rootpath]) ? $namearray[$rootpath] : '';
+        $namelist = isset($listarray[$rootpath]) ? $namearray[$rootpath] : '';
 
         $iform = new XoopsThemeForm(_AM_XTORRENT_DOWN_FUPLOADIMAGETO . $pathlist, 'op', xoops_getenv('PHP_SELF'));
         $iform->setExtra('enctype="multipart/form-data"');

@@ -65,7 +65,7 @@ $xoopsTpl->assign('navitem', 1);
 /**
  * Show other author downloads
  */
-$groups        = (is_object($xoopsUser)) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
+$groups        = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
 $gperm_handler = xoops_gethandler('groupperm');
 
 $sql = 'SELECT lid, cid, title, published FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' 

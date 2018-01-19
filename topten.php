@@ -8,7 +8,7 @@ global $xoopsDB, $xoopsUser;
 $mytree = new XoopsTree($xoopsDB -> prefix('xtorrent_cat'), 'cid', 'pid');
 $xoopsOption['template_main'] = 'xtorrent_topten.tpl';
 
-$groups        = (is_object($xoopsUser)) ? $xoopsUser -> getGroups() : XOOPS_GROUP_ANONYMOUS;
+$groups        = is_object($xoopsUser) ? $xoopsUser-> getGroups() : XOOPS_GROUP_ANONYMOUS;
 $module_id     = $xoopsModule -> getVar('mid');
 $gperm_handler = xoops_gethandler('groupperm');
 

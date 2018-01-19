@@ -168,7 +168,7 @@ if (!isset($_POST['op'])) {
 switch ($op) {
     case 'move':
         if (!isset($_POST['ok'])) {
-            $cid = (isset($_POST['cid'])) ? intval($_POST['cid']) : intval($_GET['cid']);
+            $cid = isset($_POST['cid']) ? intval($_POST['cid']) : intval($_GET['cid']);
 
             xoops_cp_header();
             $adminObject = \Xmf\Module\Admin::getInstance();
@@ -223,10 +223,10 @@ switch ($op) {
         global $xoopsDB, $myts, $_FILES, $xoopsModuleConfig;
 
         $groups       = isset($_POST['groups']) ? $_POST['groups'] : [];
-        $cid          = (isset($_POST['cid'])) ? $_POST['cid'] : 0;
-        $pid          = (isset($_POST['pid'])) ? $_POST['pid'] : 0;
+        $cid          = isset($_POST['cid']) ? $_POST['cid'] : 0;
+        $pid          = isset($_POST['pid']) ? $_POST['pid'] : 0;
         $weight       = (isset($_POST['weight']) && $_POST['weight'] > 0) ? $_POST['weight'] : 0;
-        $spotlighthis = (isset($_POST['lid'])) ? $_POST['lid'] : 0;
+        $spotlighthis = isset($_POST['lid']) ? $_POST['lid'] : 0;
         $spotlighttop = ($_POST['spotlighttop'] == 1) ? 1 : 0;
         $title        = $myts -> addslashes($_POST['title']);
         $description  = $myts -> addslashes($_POST['description']);
@@ -335,7 +335,7 @@ switch ($op) {
         break;
 
     case 'modCat':
-        $cid = (isset($_POST['cid'])) ? $_POST['cid'] : 0;
+        $cid = isset($_POST['cid']) ? $_POST['cid'] : 0;
         xoops_cp_header();
         $adminObject = \Xmf\Module\Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));

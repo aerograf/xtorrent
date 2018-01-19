@@ -29,11 +29,11 @@ $catarray['indexheading']     = $myts->displayTarea($head_arr['indexheading']);
 $catarray['indexheaderalign'] = $head_arr['indexheaderalign'];
 $catarray['indexfooteralign'] = $head_arr['indexfooteralign'];
 
-$html   = ($head_arr['nohtml']) ? 0 : 1;
-$smiley = ($head_arr['nosmiley']) ? 0 : 1;
-$xcodes = ($head_arr['noxcodes']) ? 0 : 1;
-$images = ($head_arr['noimages']) ? 0 : 1;
-$breaks = ($head_arr['nobreak']) ? 1 : 0;
+$html   = $head_arr['nohtml'] ? 0 : 1;
+$smiley = $head_arr['nosmiley'] ? 0 : 1;
+$xcodes = $head_arr['noxcodes'] ? 0 : 1;
+$images = $head_arr['noimages'] ? 0 : 1;
+$breaks = $head_arr['nobreak'] ? 1 : 0;
 
 $catarray['indexheader'] = $myts->displayTarea($head_arr['indexheader'], $html, $smiley, $xcodes, $images, $breaks);
 $catarray['indexfooter'] = $myts->displayTarea($head_arr['indexfooter'], $html, $smiley, $xcodes, $images, $breaks);
@@ -48,7 +48,7 @@ $count   = 1;
 $chcount = 0;
 $countin = 0;
 
-$groups        = (is_object($xoopsUser)) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
+$groups        = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
 $module_id     = $xoopsModule->getVar('mid');
 $gperm_handler = xoops_gethandler('groupperm');
 

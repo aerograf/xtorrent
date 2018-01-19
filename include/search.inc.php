@@ -23,7 +23,7 @@ function xtorrent_search($queryarray, $andor, $limit, $offset, $userid)
     $ret    = [];
     $i      = 0;
 
-    $groups              = (is_object($xoopsUser)) ? $xoopsUser -> getGroups() : XOOPS_GROUP_ANONYMOUS;
+    $groups              = is_object($xoopsUser) ? $xoopsUser-> getGroups() : XOOPS_GROUP_ANONYMOUS;
     $modhandler          = xoops_gethandler('module');
     $xoopsxtorrentModule = $modhandler -> getByDirname('xtorrent');
     $gperm_handler       = xoops_gethandler('groupperm');

@@ -20,8 +20,8 @@ $_link = $_POST['description'] . '<br><div><a href=' . XOOPS_URL . '/modules/xto
 $description = $myts->addslashes(trim($_link));
 $story -> setHometext($description);
 $story -> setBodytext('');
-$nohtml = (empty($nohtml)) ? 0 : 1;
-$nosmiley = (empty($nosmiley)) ? 0 : 1;
+$nohtml = empty($nohtml) ? 0 : 1;
+$nosmiley = empty($nosmiley) ? 0 : 1;
 $story -> setNohtml($nohtml);
 $story -> setNosmiley($nosmiley);
 $story -> store();

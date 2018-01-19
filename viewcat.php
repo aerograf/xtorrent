@@ -10,7 +10,7 @@ $orderby    = isset($_REQUEST['orderby']) ? $_REQUEST['orderby'] : 'dateD';
 $cid        = isset($_REQUEST['cid']) && $_REQUEST['cid'] > 0 ? intval($_REQUEST['cid']) : 0;
 $selectdate = isset($_REQUEST['selectdate'])?$_REQUEST['selectdate']: 0 ;
 $list       = isset($_REQUEST['list'])?$_REQUEST['list']: 0 ;
-$cat        = empty($_REQUEST['cat']) ? '' : (xoops_sef($_REQUEST['cat'], '_')) ;
+$cat        = empty($_REQUEST['cat']) ? '' : xoops_sef($_REQUEST['cat'], '_');
 
 if ($xoopsModuleConfig['htaccess']!=0) {
     if ($cid!=0) {
@@ -44,7 +44,7 @@ if ($xoopsModuleConfig['htaccess']!=0) {
 $orderby = isset($_REQUEST['orderby']) ? convertorderbyin($_REQUEST['orderby']) : 'date DESC';
     
 $xoopsOption['template_main'] = 'xtorrent_viewcat.tpl';
-$groups        = (is_object($xoopsUser)) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
+$groups        = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
 $gperm_handler = xoops_gethandler('groupperm');
 
 /**
@@ -125,11 +125,11 @@ if (is_array($arr) > 0 && !empty($list) && !empty($selectdate)) {
      */
     $sql         = 'SELECT description, nohtml, nosmiley, noxcodes, noimages, nobreak FROM ' . $xoopsDB->prefix('xtorrent_cat') . " WHERE cid = $cid";
     $head_arr    = $xoopsDB->fetchArray($xoopsDB->query($sql));
-    $html        = ($head_arr['nohtml']) ? 0 : 1;
-    $smiley      = ($head_arr['nosmiley']) ? 0 : 1;
-    $xcodes      = ($head_arr['noxcodes']) ? 0 : 1;
-    $images      = ($head_arr['noimages']) ? 0 : 1;
-    $breaks      = ($head_arr['nobreak']) ? 1 : 0;
+    $html        = $head_arr['nohtml'] ? 0 : 1;
+    $smiley      = $head_arr['nosmiley'] ? 0 : 1;
+    $xcodes      = $head_arr['noxcodes'] ? 0 : 1;
+    $images      = $head_arr['noimages'] ? 0 : 1;
+    $breaks      = $head_arr['nobreak'] ? 1 : 0;
     $description = $myts->displayTarea($head_arr['description'], $html, $smiley, $xcodes, $images, $breaks);
     $xoopsTpl->assign('description', $description);
 

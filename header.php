@@ -56,9 +56,9 @@ if (!function_exists('xoops_sef')) {
                 $replacement_chars[] = chr($i);
             }
         }
-        $return_data = (str_replace($replacement_chars, $char, $datab));
+        $return_data = str_replace($replacement_chars, $char, $datab);
         #print $return_data . "<BR><BR>";
-        return($return_data);
+        return $return_data;
     }
 }
 

@@ -10,7 +10,7 @@ if (!isset($_POST['op'])) {
     $op = $_POST['op'];
 }
 
-$lid = (isset($_GET['lid'])) ? intval($_GET['lid']) : 0;
+$lid = isset($_GET['lid']) ? intval($_GET['lid']) : 0;
 
 switch ($op) {
     case 'updateNotice':
@@ -108,9 +108,9 @@ switch ($op) {
                   		<a href='brokendown.php?op=ignoreBrokenDownloads&amp;lid=" . $lid . "'>" . $imagearray['ignore'] . "</a>
                   		<a href='index.php?op=Download&amp;lid=" . $lid . "'> " . $imagearray['editimg'] . " </a>
                   		<a href='brokendown.php?op=delBrokenDownloads&amp;lid=" . $lid . "'>" . $imagearray['deleteimg'] . '</a>';
-                $ack_image = ($acknowledged) ? $imagearray['ack_yes'] : $imagearray['ack_no'];
+                $ack_image = $acknowledged ? $imagearray['ack_yes'] : $imagearray['ack_no'];
                 echo "<a href='brokendown.php?op=updateNotice&amp;lid=$lid&ack=$acknowledged'>" . $ack_image . ' </a>';
-                $con_image = ($confirmed) ? $imagearray['con_yes'] : $imagearray['con_no'];
+                $con_image = $confirmed ? $imagearray['con_yes'] : $imagearray['con_no'];
                 echo "<a href='brokendown.php?op=updateNotice&amp;lid=$lid&amp;con=$confirmed'>" . $con_image . ' </a></td></tr>';
             }
         }

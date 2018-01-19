@@ -1,6 +1,6 @@
 <?php
 
-include('../../mainfile.php');
+include '../../mainfile.php';
 
 global $xoopsModuleConfig, $xoopsDB;
 

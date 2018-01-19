@@ -1,8 +1,8 @@
 <?php
 
 error_reporting(E_ALL ^ E_NOTICE);
-require_once('secrets.php');
-require_once('cleanup.php');
+require_once 'secrets.php';
+require_once 'cleanup.php';
 
 
 // PHP5 with register_long_arrays off?

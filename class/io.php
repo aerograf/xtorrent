@@ -243,61 +243,61 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 	public function agents_disallowed()
 	{
 		global $xoopsModuleConfig;
-		return (!isset($xoopsModuleConfig['agents_disallowed']))?'':(string)$xoopsModuleConfig['agents_disallowed'];
+		return !isset($xoopsModuleConfig['agents_disallowed']) ?'':(string)$xoopsModuleConfig['agents_disallowed'];
 	}
 
 	public function numleechers()
 	{
 		global $xoopsModuleConfig;
-		return (!isset($xoopsModuleConfig['numleechers']))?300:(int)$xoopsModuleConfig['numleechers'];
+		return !isset($xoopsModuleConfig['numleechers']) ?300:(int)$xoopsModuleConfig['numleechers'];
 	}
 
 	public function numseeds()
 	{
 		global $xoopsModuleConfig;
-		return (!isset($xoopsModuleConfig['numseeds']))?1000:(int)$xoopsModuleConfig['numseeds'];
+		return !isset($xoopsModuleConfig['numseeds']) ?1000:(int)$xoopsModuleConfig['numseeds'];
 	}
 
 	public function max_torrent_size()
 	{
 		global $xoopsModuleConfig;
-		return (!isset($xoopsModuleConfig['max_torrent_size']))?1000000:(int)$xoopsModuleConfig['max_torrent_size'];
+		return !isset($xoopsModuleConfig['max_torrent_size']) ?1000000:(int)$xoopsModuleConfig['max_torrent_size'];
 	}
 
 	public function max_torrent_size()
 	{
 		global $xoopsModuleConfig;
-		return (!isset($xoopsModuleConfig['max_torrent_size']))?1000000:(int)$xoopsModuleConfig['max_torrent_size'];
+		return !isset($xoopsModuleConfig['max_torrent_size']) ?1000000:(int)$xoopsModuleConfig['max_torrent_size'];
 	}
 
 	public function completed_notice()
 	{
 		global $xoopsConfig;
-		return (!isset($xoopsConfig['completed_notice']))?TRUE:(int)$xoopsConfig['completed_notice'];
+		return !isset($xoopsConfig['completed_notice']) ?TRUE:(int)$xoopsConfig['completed_notice'];
 	}
 
 	public function stopped_notice()
 	{
 		global $xoopsConfig;
-		return (!isset($xoopsConfig['stopped_notice']))?FALSE:(int)$xoopsConfig['stopped_notice'];
+		return !isset($xoopsConfig['stopped_notice']) ?FALSE:(int)$xoopsConfig['stopped_notice'];
 	}
 
 	public function sitename()
 	{
 		global $xoopsConfig;
-		return (!isset($xoopsConfig['sitename']))?'X-Torrent Module Site':(string)$xoopsConfig['sitename'];
+		return !isset($xoopsConfig['sitename']) ?'X-Torrent Module Site':(string)$xoopsConfig['sitename'];
 	}
 
 	public function siteemail()
 	{
 		global $xoopsConfig;
-		return (!isset($xoopsConfig['adminemail']))?'example555@hotmail.com':(string)$xoopsConfig['adminemail'];
+		return !isset($xoopsConfig['adminemail']) ?'example555@hotmail.com':(string)$xoopsConfig['adminemail'];
 	}
 
 	public function peerlimit()
 	{
 		global $xoopsModuleConfig;
-		return (!isset($xoopsModuleConfig['peerlimit']))?1:(int)$xoopsModuleConfig['peerlimit'];
+		return !isset($xoopsModuleConfig['peerlimit']) ?1:(int)$xoopsModuleConfig['peerlimit'];
 	}
 	
 	public function baseurl()
@@ -308,49 +308,49 @@ class XtorrentIoHandler extends XoopsObjectHandler {
 	public function autoclean_interval()
 	{
 		global $xoopsModuleConfig;
-		return (!isset($xoopsModuleConfig['autoclean_interval']))?(900):(int)$xoopsModuleConfig['autoclean_interval'];
+		return !isset($xoopsModuleConfig['autoclean_interval']) ? 900 :(int)$xoopsModuleConfig['autoclean_interval'];
 	}
 
 	public function max_torrent_size()
 	{
 		global $xoopsModuleConfig;
-		return (!isset($xoopsModuleConfig['max_torrent_size']))?1000000:(int)$xoopsModuleConfig['max_torrent_size'];
+		return !isset($xoopsModuleConfig['max_torrent_size']) ?1000000:(int)$xoopsModuleConfig['max_torrent_size'];
 	}
 
 	public function tracker_wait()
 	{
 		global $xoopsModuleConfig;
-		return (!isset($xoopsModuleConfig['tracker_wait']))?(60 * 30):(int)$xoopsModuleConfig['tracker_wait'];
+		return !isset($xoopsModuleConfig['tracker_wait']) ?(60 * 30):(int)$xoopsModuleConfig['tracker_wait'];
 	}
 	
 	public function mit_timeout()
 	{
 		global $xoopsModuleConfig;
-		return (!isset($xoopsModuleConfig['mit_timeout']))?(86400 * 3):(int)$xoopsModuleConfig['mit_timeout'];
+		return !isset($xoopsModuleConfig['mit_timeout']) ?(86400 * 3):(int)$xoopsModuleConfig['mit_timeout'];
 	}	
 
 	public function minvotes()
 	{
 		global $xoopsModuleConfig;
-		return (!isset($xoopsModuleConfig['minvotes']))?(1):(int)$xoopsModuleConfig['minvotes'];
+		return !isset($xoopsModuleConfig['minvotes']) ? 1 :(int)$xoopsModuleConfig['minvotes'];
 	}	
 	
 	public function dead_torrent_time()
 	{
 		global $xoopsModuleConfig;
-		return (!isset($xoopsModuleConfig['dead_torrent_time']))?(6 * 3600):(int)$xoopsModuleConfig['dead_torrent_time'];
+		return !isset($xoopsModuleConfig['dead_torrent_time']) ?(6 * 3600):(int)$xoopsModuleConfig['dead_torrent_time'];
 	}	
 
 	public function online()
 	{
 		global $xoopsModuleConfig;
-		return (!isset($xoopsModuleConfig['online']))?(TRUE):(int)$xoopsModuleConfig['online'];
+		return !isset($xoopsModuleConfig['online']) ? TRUE :(int)$xoopsModuleConfig['online'];
 	}	
 	
 	public function maxusers()
 	{
 		global $xoopsModuleConfig;
-		return (!isset($xoopsModuleConfig['maxusers']))?(450009):(int)$xoopsModuleConfig['maxusers'];
+		return !isset($xoopsModuleConfig['maxusers']) ? 450009 :(int)$xoopsModuleConfig['maxusers'];
 	}	
 	
 	public function announce_urls()

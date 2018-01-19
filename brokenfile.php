@@ -5,7 +5,7 @@ include 'header.php';
 if (!empty($_POST['submit'])) {
     global $xoopsModule, $xoopsModuleConfig, $xoopsUser;
 
-    $sender = (is_object($xoopsUser)) ? $xoopsUser->getVar('uid') : 0;
+    $sender = is_object($xoopsUser) ? $xoopsUser->getVar('uid') : 0;
     $ip = getenv('REMOTE_ADDR');
     $lid = intval($_POST['lid']);
     $time = time();
