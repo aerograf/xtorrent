@@ -1,7 +1,5 @@
 <?php
 
-use XoopsModules\Xtorrent;
-
 $moduleDirName = basename(dirname(__DIR__));
 
 $helper = \XoopsModules\Xtorrent\Helper::getInstance();

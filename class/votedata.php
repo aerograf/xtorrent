@@ -220,6 +220,7 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
     {
         global $xoopsUser, $xoopsModule;
         $ret = false;
+        $groups    = [];
         if (isset($votedata)) {
             $ret      = [];
             $criteria = new CriteriaCompo();
@@ -228,7 +229,6 @@ class XtorrentVotedataHandler extends XoopsObjectHandler
             $criteria->add(new Criteria('gperm_name', $this->perm_name . $mode, '='), 'AND');
 
             $gtObjperm = $this->permHandler->getObjects($criteria);
-            $groups    = [];
 
             foreach ($gtObjperm as $v) {
                 $ret[] = $v->getVar('gperm_groupid');
