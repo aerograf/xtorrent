@@ -33,7 +33,7 @@
         <div><b><{$lang_subdate}>:</b> <{$down.updated}></div>
         <form action="brokenfile.php" method="POST">
             <input type="hidden" name="lid" value="<{$file_id}>"/><input type="submit" name="submit" value="<{$smarty.const._MD_XTORRENT_SUBMITBROKEN}>" alt="<{$smarty.const._MD_XTORRENT_SUBMITBROKEN}>"/>
-            &nbsp;<input type="button" value="<{$smarty.const._MD_XTORRENT_CANCEL}>" alt="<{$smarty.const._MD_XTORRENT_CANCEL}>" onclick="javascript:history.go(-2)"/>
+            &nbsp;<input type="button" value="<{$smarty.const._MD_XTORRENT_CANCEL}>" alt="<{$smarty.const._MD_XTORRENT_CANCEL}>" onclick="history.go(-2)"/>
         </form>
     </div>
 <{/if}>
