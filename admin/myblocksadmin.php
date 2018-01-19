@@ -17,7 +17,7 @@ include_once "$xoops_system_path/language/$language/admin.php";
 include_once "$xoops_system_path/language/$language/admin/blocksadmin.php";
 $group_defs = file("$xoops_system_path/language/$language/admin/groups.php");
 foreach ($group_defs as $def) {
-    if (strstr($def, '_AM_XTORRENT_ACCESSRIGHTS') || strstr($def, '_AM_XTORRENT_ACTIVERIGHTS')) {
+    if (false !== strpos($def, '_AM_XTORRENT_ACCESSRIGHTS') || false !== strpos($def, '_AM_XTORRENT_ACTIVERIGHTS')) {
         eval($def);
     }
 }
