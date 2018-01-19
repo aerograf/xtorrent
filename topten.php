@@ -36,7 +36,7 @@ while (list($cid, $ctitle) = $xoopsDB -> fetchRow($result)) {
     if ($gperm_handler -> checkRight('xtorrentownCatPerm', $cid, $groups, $module_id)) {
         $query = 'SELECT lid, cid, title, hits, rating, votes, platform FROM ' . $xoopsDB-> prefix('xtorrent_downloads') . ' WHERE published > 0 AND published <= ' . time() . ' AND (expired = 0 OR expired > ' . time() . ") AND offline = 0 AND (cid=$cid";
         $arr   = $mytree -> getAllChildId($cid);
-        for ($i = 0;$i < count($arr);$i++) {
+        for ($i = 0, $iMax = count($arr); $i < $iMax; $i++) {
             $query .= ' or cid=' . $arr[$i] . '';
         }
         $query     .= ') order by ' . $sortDB . ' DESC';

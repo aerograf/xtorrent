@@ -366,7 +366,7 @@ function xtorrent_getTotalItems($sel_id = 0, $get_child = 0)
     if (1 == $get_child) {
         $arr  = $mytree -> getAllChildId($sel_id);
         $size = count($arr);
-        for ($i = 0;$i < count($arr);$i++) {
+        for ($i = 0, $iMax = count($arr); $i < $iMax; $i++) {
             $query2  = 'select lid, published from ' . $xoopsDB-> prefix('xtorrent_downloads') . ' WHERE status > 0 AND offline = 0 AND published > 0 AND published <= ' . time() . ' AND (expired = 0 OR expired > ' . time() . ') AND cid=' . $arr[$i] . '';
             $result2 = $xoopsDB -> query($query2);
             while (list($lid, $published) = $xoopsDB -> fetchRow($result2)) {

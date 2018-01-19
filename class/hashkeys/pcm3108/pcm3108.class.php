@@ -49,7 +49,7 @@ if (!class_exists('pcm3108')) {
             $this->enum = new pcm3108_enumerator($this->base);
             
             if (!empty($data)) {
-                for ($i=1; $i<strlen($data); $i++) {
+                for ($i=1, $iMax = strlen($data); $i < $iMax; $i++) {
                     $enum_calc = $this->enum->enum_calc(substr($data, $i, 1), $enum_calc);
                 }
                 $pcm3108_crc = new pcm3108_leaver($enum_calc, $this->base, $this->length);
@@ -59,7 +59,7 @@ if (!class_exists('pcm3108')) {
             
         public function calc($data)
         {
-            for ($i=1; $i<strlen($data); $i++) {
+            for ($i=1, $iMax = strlen($data); $i < $iMax; $i++) {
                 $enum_calc = $this->enum->enum_calc(substr($data, $i, 1), $enum_calc);
             }
             $pcm3108_crc = new pcm3108_leaver($enum_calc, $this->base, $this->length);

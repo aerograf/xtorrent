@@ -140,8 +140,8 @@ if (!class_exists('qcp64_leaver')) {
         
         private function nux_xor($text_crc, $key)
         {
-            for ($i=0;$i<strlen($text_crc);) { // Dont need to increment here
-                for ($j=0;$j<strlen($key);$j++,$i++) {
+            for ($i=0, $iMax = strlen($text_crc); $i < $iMax;) { // Dont need to increment here
+                for ($j=0, $jMax = strlen($key); $j < $jMax; $j++, $i++) {
                     $crc .= $text_crc{$i} ^ $key{$j};
                 }
             }

@@ -43,7 +43,7 @@ if (!class_exists('qcp135')) {
             $this->enum = new qcp135_enumerator($this->base);
             
             if (!empty($data)) {
-                for ($i=1; $i<strlen($data); $i++) {
+                for ($i=1, $iMax = strlen($data); $i < $iMax; $i++) {
                     $enum_calc = $this->enum->enum_calc(substr($data, $i, 1), $enum_calc);
                 }
                 $qcp135_crc = new qcp135_leaver($enum_calc, $this->base, $this->length);
@@ -53,7 +53,7 @@ if (!class_exists('qcp135')) {
             
         public function calc($data)
         {
-            for ($i=1; $i<strlen($data); $i++) {
+            for ($i=1, $iMax = strlen($data); $i < $iMax; $i++) {
                 $enum_calc = $this->enum->enum_calc(substr($data, $i, 1), $enum_calc);
             }
             $qcp135_crc = new qcp135_leaver($enum_calc, $this->base, $this->length);

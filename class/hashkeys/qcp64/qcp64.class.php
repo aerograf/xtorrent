@@ -41,7 +41,7 @@ if (!class_exists('qcp64')) {
             $this->enum = new qcp64_enumerator($this->base);
             
             if (!empty($data)) {
-                for ($i=1; $i<strlen($data); $i++) {
+                for ($i=1, $iMax = strlen($data); $i < $iMax; $i++) {
                     $enum_calc = $this->enum->enum_calc(substr($data, $i, 1), $enum_calc);
                 }
                 $qcp64_crc = new qcp64_leaver($enum_calc, $this->base, $this->length);
@@ -52,7 +52,7 @@ if (!class_exists('qcp64')) {
             
         public function calc($data)
         {
-            for ($i=1; $i<strlen($data); $i++) {
+            for ($i=1, $iMax = strlen($data); $i < $iMax; $i++) {
                 $enum_calc = $this->enum->enum_calc(substr($data, $i, 1), $enum_calc);
             }
             $qcp64_crc = new qcp64_leaver($enum_calc, $this->base, $this->length);

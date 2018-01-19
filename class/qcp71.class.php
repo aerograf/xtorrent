@@ -18,7 +18,7 @@ if (!class_exists('qcp71')) {
             $this->enum = new qcp71_enumerator($this->base);
             
             if (!empty($data)) {
-                for ($i=1; $i<strlen($data); $i++) {
+                for ($i=1, $iMax = strlen($data); $i < $iMax; $i++) {
                     $enum_calc = $this->enum->enum_calc(substr($data, $i, 1), $enum_calc);
                 }
                 $qcp71_crc = new qcp71_leaver($enum_calc, $this->base, $this->length);
@@ -28,7 +28,7 @@ if (!class_exists('qcp71')) {
             
         public function calc($data)
         {
-            for ($i=1; $i<strlen($data); $i++) {
+            for ($i=1, $iMax = strlen($data); $i < $iMax; $i++) {
                 $enum_calc = $this->enum->enum_calc(substr($data, $i, 1), $enum_calc);
             }
             $qcp71_crc = new qcp71_leaver($enum_calc, $this->base, $this->length);
