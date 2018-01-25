@@ -1,15 +1,15 @@
 <?php
  
-class WfsLists
+class XtsLists
 {
-    var $value;
-    var $selected;
-    var $path = 'uploads';
-    var $size;
-    var $emptyselect;
-    var $type;
-    var $prefix;
-    var $suffix;
+    public $value;
+    public $selected;
+    public $path = 'uploads';
+    public $size;
+    public $emptyselect;
+    public $type;
+    public $prefix;
+    public $suffix;
 
     /**
      * $value: 
@@ -24,26 +24,26 @@ class WfsLists
      * 		dir
      */
 
-    function __construct($path = "uploads", $value = null, $selected = '', $size = 1, $emptyselect = 0, $type = 0, $prefix = '', $suffix = '')
+    public function __construct($path = 'uploads', $value = null, $selected = '', $size = 1, $emptyselect = 0, $type = 0, $prefix = '', $suffix = '')
     {
-        $this -> value = $value;
-        $this -> selection = $selected;
-        $this -> path = $path;
-        $this -> size = intval($size);
+        $this -> value       = $value;
+        $this -> selection   = $selected;
+        $this -> path        = $path;
+        $this -> size        = (int)$size;
         $this -> emptyselect = ($emptyselect) ? 0 : 1;
-        $this -> type = $type;
+        $this -> type        = $type;
     }
 
-    public static function &getarray($this_array)
+    public static function getarray($this_array)
     {
-        $ret = "<select size='" . $this->size() . "' name='" . $this->value() . "'>";
+        $ret = "<select size='" . static::size() . "' name='" . $this->value() . "'>";
         if ($this->emptyselect)
         {
-            $ret .= "<option value='" . $this->value() . "'>----------------------</option>";
+            $ret .= "<option value='" . static::size() . "'>----------------------</option>";
         }
         foreach($this_array as $content)
         {
-            $opt_selected = "";
+            $opt_selected = '';
 
             if ($content[0] == $this->selected())
             {
@@ -51,14 +51,14 @@ class WfsLists
             }
             $ret .= "<option value='" . $content . "' $opt_selected>" . $content . "</option>";
         }
-        $ret .= "</select>";
+        $ret .= '</select>';
         return $ret;
     }
 
     /**
      * Private to be called by other parts of the class
      */
-    public static function &getDirListAsArray($dirname)
+    public static function getDirListAsArray($dirname)
     {
         $dirlist = [];
         if (is_dir($dirname) && $handle = opendir($dirname))
@@ -67,7 +67,7 @@ class WfsLists
             {
                 if (!preg_match("/^[.]{1,2}$/", $file))
                 {
-                    if (strtolower($file) != 'cvs' && is_dir($dirname . $file))
+                    if ('cvs' != strtolower($file) && is_dir($dirname . $file))
                     {
                         $dirlist[$file] = $file;
                     }
@@ -80,29 +80,29 @@ class WfsLists
         return $dirlist;
     }
 
-    public static function &getListTypeAsArray($dirname, $type = '', $prefix = "", $noselection = 1)
+    public static function getListTypeAsArray($dirname, $type = '', $prefix = '', $noselection = 1)
     {
         $filelist = [];
         switch (trim($type))
         {
-            case "images":
-                $types = "[.gif|.jpg|.png]";
+            case 'images':
+                $types = '[.gif|.jpg|.png]';
                 if ($noselection)
-                    $filelist[""] = "Show No Image";
+                    $filelist[""] = 'Show No Image';
                 break;
-            case "html":
-                $types = "[.htm|.html|.xhtml|.php|.php3|.phtml|.txt]";
+            case 'html':
+                $types = '[.htm|.html|.xhtml|.php|.php3|.phtml|.txt]';
                 if ($noselection)
-                    $filelist[""] = "No Selection";
+                    $filelist[""] = 'No Selection';
                 break;
             default:
-                $types = "";
+                $types = '';
                 if ($noselection)
-                    $filelist[""] = "No Selected File";
+                    $filelist[""] = 'No Selected File';
                 break;
         }
 
-        if (substr($dirname, -1) == '/')
+        if ('/' == substr($dirname, -1))
         {
             $dirname = substr($dirname, 0, -1);
         }
@@ -111,11 +111,13 @@ class WfsLists
         {
             while (false !== ($file = readdir($handle)))
             {
-                if (!preg_match("/^[.]{1,2}$/", $file) && preg_match("/$types$/i", $file) && is_file($dirname . '/' . $file))
+                if (!preg_match('/^[.]{1,2}$/', $file) && preg_match("/$types$/i", $file) && is_file($dirname . '/' . $file))
                 {
-                    if (strtolower($file) == "blank.png")
-                        Continue;
-                    $file = $prefix . $file;
+                    if ('blank.png' == strtolower($file))
+                    {
+                        continue;
+                    }
+                    $file            = $prefix . $file;
                     $filelist[$file] = $file;
                 }
             }

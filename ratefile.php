@@ -1,6 +1,6 @@
 <?php 
 
-include 'header.php';
+include __DIR__ . '/header.php';
 
 global $myts;
 
@@ -16,30 +16,30 @@ if (!empty($_POST['submit']))
     } 
     // Make sure only 1 anonymous from an IP in a single day.
     $anonwaitdays = 1;
-    $ip           = getenv("REMOTE_ADDR");
-    $lid          = intval($_POST['lid']);
-    $cid          = intval($_POST['cid']);
-    $rating       = intval($_POST['rating']); 
+    $ip           = getenv('REMOTE_ADDR');
+    $lid          = (int)$_POST['lid'];
+    $cid          = (int)$_POST['cid'];
+    $rating       = (int)$_POST['rating']; 
     // Check if Rating is Null
-    if ($rating == "--")
+    if ('--' == $rating)
     {
-        redirect_header("ratefile.php?cid=" . $cid . "&amp;lid=" . $lid . "", 4, _MD_XTORRENT_NORATING);
+        redirect_header('ratefile.php?cid=' . $cid . '&amp;lid=' . $lid . '', 4, _MD_XTORRENT_NORATING);
         exit();
     } 
     // Check if Download POSTER is voting (UNLESS Anonymous users allowed to post)
-    if ($ratinguser != 0)
+    if (0 != $ratinguser)
     {
-        $result = $xoopsDB -> query("SELECT submitter FROM " . $xoopsDB -> prefix('xtorrent_downloads') . " WHERE lid=" . $lid);
+        $result = $xoopsDB -> query('SELECT submitter FROM ' . $xoopsDB -> prefix('xtorrent_downloads') . ' WHERE lid=' . $lid);
         while (list($ratinguserDB) = $xoopsDB -> fetchRow($result))
         {
             if ($ratinguserDB == $ratinguser)
             {
-                redirect_header("index.php", 4, _MD_XTORRENT_CANTVOTEOWN);
+                redirect_header('index.php', 4, _MD_XTORRENT_CANTVOTEOWN);
                 exit();
             } 
         } 
         // Check if REG user is trying to vote twice.
-        $result = $xoopsDB -> query("SELECT ratinguser FROM " . $xoopsDB -> prefix('xtorrent_votedata') . " WHERE lid=" . $lid);
+        $result = $xoopsDB -> query('SELECT ratinguser FROM ' . $xoopsDB -> prefix('xtorrent_votedata') . ' WHERE lid=' . $lid);
         while (list($ratinguserDB) = $xoopsDB -> fetchRow($result))
         {
             if ($ratinguserDB == $ratinguser)
@@ -53,9 +53,9 @@ if (!empty($_POST['submit']))
     { 
         // Check if ANONYMOUS user is trying to vote more than once per day.
         $yesterday = (time() - (86400 * $anonwaitdays));
-        $result    = $xoopsDB -> query("SELECT COUNT(*) FROM "
+        $result    = $xoopsDB -> query('SELECT COUNT(*) FROM '
                                         . $xoopsDB -> prefix('xtorrent_votedata')
-                                        . " WHERE lid="
+                                        . ' WHERE lid='
                                         . $lid
                                         . " AND ratinguser=0 AND ratinghostname = '"
                                         . $ip
@@ -64,32 +64,39 @@ if (!empty($_POST['submit']))
         list($anonvotecount) = $xoopsDB -> fetchRow($result);
         if ($anonvotecount >= 1)
         {
-            redirect_header("index.php", 4, _MD_XTORRENT_VOTEONCE);
+            redirect_header('index.php', 4, _MD_XTORRENT_VOTEONCE);
             exit();
         } 
     } 
     // All is well.  Add to Line Item Rate to DB.
-    $newid    = $xoopsDB -> genId($xoopsDB -> prefix('xtorrent_votedata') . "_ratingid_seq");
+    $newid    = $xoopsDB -> genId($xoopsDB -> prefix('xtorrent_votedata') . '_ratingid_seq');
     $datetime = time();
     $sql      = sprintf("INSERT INTO %s (ratingid, lid, ratinguser, rating, ratinghostname, ratingtimestamp) VALUES (%u, %u, %u, %u, '%s', %u)", $xoopsDB -> prefix('xtorrent_votedata'), $newid, $lid, $ratinguser, $rating, $ip, $datetime);
-    $xoopsDB -> query($sql); 
+    $xoopsDB  -> query($sql); 
     // All is well.  Calculate Score & Add to Summary (for quick retrieval & sorting) to DB.
     xtorrent_updaterating($lid);
-    $ratemessage = _MD_XTORRENT_VOTEAPPRE . "<br>" . sprintf(_MD_XTORRENT_THANKYOU, $xoopsConfig['sitename']);
+    $ratemessage = _MD_XTORRENT_VOTEAPPRE . '<br>' . sprintf(_MD_XTORRENT_THANKYOU, $xoopsConfig['sitename']);
     redirect_header('index.php', 4, $ratemessage);
     exit();
 } 
 else
 {
-    $xoopsOption['template_main'] = 'xtorrent_ratefile.tpl';
+    $GLOBALS['xoopsOption']['template_main'] = 'xtorrent_ratefile.tpl';
     include XOOPS_ROOT_PATH . '/header.php';
-    $lid         = intval($_GET['lid']);
-    $cid         = intval($_GET['cid']);
+    $lid         = (int)$_GET['lid'];
+    $cid         = (int)$_GET['cid'];
     $imageheader = xtorrent_imageheader();
 
-    $result      = $xoopsDB -> query("SELECT title FROM " . $xoopsDB -> prefix('xtorrent_downloads') . " WHERE lid=" . $lid);
+    $result      = $xoopsDB -> query('SELECT title FROM ' . $xoopsDB -> prefix('xtorrent_downloads') . ' WHERE lid=' . $lid);
     list($title) = $xoopsDB -> fetchRow($result);
-    $xoopsTpl -> assign('file', ['id' => $lid, 'cid' => $cid, 'title' => $myts -> htmlSpecialChars($title), 'imageheader' => $imageheader]);
+    $xoopsTpl -> assign('file', [
+                                 'id'          => $lid,
+                                 'cid'         => $cid,
+                                 'title'       => $myts -> htmlSpecialChars($title),
+                                 'imageheader' => $imageheader
+                                 ]);
+    $xoopsTpl -> assign('navitem', 1);
     include XOOPS_ROOT_PATH . '/footer.php';
-} 
-include 'footer.php';
+}
+ 
+include __DIR__ . '/footer.php';

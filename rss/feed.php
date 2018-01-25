@@ -1,6 +1,6 @@
 <?
 
-include("../../../mainfile.php");
+include __DIR__ . '/../../../mainfile.php';
 
 $source   = $_GET['source'];
 $numitems = isset($_GET['numitems']) ? $_GET['numitems'] : 15;
@@ -12,88 +12,100 @@ function rss_data($cid, $numitems)
 {
     global $xoopsDB, $xoopsModule, $xoopsUser;
 
-    $block = [];
-    $myts  = MyTextSanitizer::getInstance();
+    $block             = [];
+    $myts              = MyTextSanitizer::getInstance();
 
-    $modhandler        = xoops_gethandler('module');
-    $xoopsModule       = $modhandler->getByDirname("xtorrent");
-    $config_handler    = xoops_gethandler('config');
-    $xoopsModuleConfig = $config_handler->getConfigsByCat(0, $xoopsModule->getVar('mid'));
+    $moduleHandler     = xoops_getHandler('module');
+    $xoopsModule       = $moduleHandler->getByDirname("xtorrent");
+    $configHandler     = xoops_getHandler('config');
+    $xoopsModuleConfig = $configHandler->getConfigsByCat(0, $xoopsModule->getVar('mid'));
 
-    $groups        = (is_object($xoopsUser)) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
-    $gperm_handler = xoops_gethandler('groupperm'); 
+    $groups            = is_object($xoopsUser) ? $xoopsUser->getGroups() : XOOPS_GROUP_ANONYMOUS;
+    $gpermHandler      = xoops_getHandler('groupperm'); 
 
-	if (!empty($cid)||$cid>0){
-		$pif = " WHERE cid = $cid";
+	if (!empty($cid) || $cid > 0)
+  {
+		$pif = ' WHERE cid = ' . $cid;
 	}
 	$rss    = [];
-  $result = $xoopsDB->query("SELECT lid, cid, title, date, description, hits FROM " . $xoopsDB->prefix('xtorrent_downloads') . " $pif ORDER BY published DESC ", $numitems, 0);
-	$rep    = ["<br>","<br/>","<br />"];
+  $result = $xoopsDB->query('SELECT lid, cid, title, date, description, hits FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ''  . $pif .' ORDER BY published DESC ', $numitems, 0);
+	$rep    = [
+             '<br>',
+             '<br/>',
+             '<br />'
+            ];
     while($myrow = $xoopsDB->fetchArray($result))
     {
        
             $download                = [];
             $download['title']       = strip_tags($myts->displayTarea($myrow["title"], 0, 0, 1));
-            $download['description'] = strip_tags($myts->displayTarea($myrow["description"], 0, 0, 1));			
+            $download['description'] = htmlspecialchars(htmlspecialchars_decode($myts->displayTarea($myrow['description'], 1, 1, 1)));			
             $download['url']         = XOOPS_URL . '/modules/' . $xoopsModule->dirname() . '/visit.php?lid=' . $myrow['lid'];
 			      $download['dossier_url'] = XOOPS_URL . '/modules/' . $xoopsModule->dirname() . '/singlefile.php?lid=' . $myrow['lid'];
             $download['date']        = formatTimestamp($myrow['date'], 'D, d-m-y H:i:s e');
             $download['hits']        = $myrow['hits'];
+            $download['category']    = $myrow['category'];
+            $category[]              = ucfirst($myrow['category']);
 			      $rss[$j++]               = $download;
     }
+    $rss['category'] = array_unique($category);
     return $rss;
 }
 
 $myts = MyTextSanitizer::getInstance();
 	
-if (!function_exists('xoops_sef')){
+if (!function_exists('xoops_sef'))
+{
 	function xoops_sef($datab, $char ='-')
 	{
 		$replacement_chars = [];
 		$accepted          = [
-                          "a",
-                          "b",
-                          "c",
-                          "d",
-                          "e",
-                          "f",
-                          "g",
-                          "h",
-                          "i",
-                          "j",
-                          "k",
-                          "l",
-                          "m",
-                          "n",
-                          "m",
-                          "o",
-                          "p",
-                          "q",
-                          "r",
-                          "s",
-                          "t",
-                          "u",
-                          "v",
-                          "w",
-                          "x",
-                          "y",
-                          "z",
-                          "0",
-                          "9",
-                          "8",
-                          "7",
-                          "6",
-                          "5",
-                          "4",
-                          "3",
-                          "2",
-                          "1"
+                          'a',
+                          'b',
+                          'c',
+                          'd',
+                          'e',
+                          'f',
+                          'g',
+                          'h',
+                          'i',
+                          'j',
+                          'k',
+                          'l',
+                          'm',
+                          'n',
+                          'm',
+                          'o',
+                          'p',
+                          'q',
+                          'r',
+                          's',
+                          't',
+                          'u',
+                          'v',
+                          'w',
+                          'x',
+                          'y',
+                          'z',
+                          '0',
+                          '9',
+                          '8',
+                          '7',
+                          '6',
+                          '5',
+                          '4',
+                          '3',
+                          '2',
+                          '1'
                           ];
-		for($i=0; $i<256; $i++){
+		for($i=0; $i < 256; $i++)
+    {
 			if (!in_array(strtolower(chr($i)), $accepted))
+      {
 				$replacement_chars[] = chr($i);
+      }
 		}
-		$return_data = (str_replace($replacement_chars, $char,$datab));
+		$return_data = str_replace($replacement_chars, $char,$datab);
 		#print $return_data . "<br><br>";
 		return($return_data);
 	
@@ -102,24 +114,26 @@ if (!function_exists('xoops_sef')){
 
 global $xoopsDB;
 
-if (!empty($source)){
-	$sql             = "SELECT cid, title FROM " . $xoopsDB->prefix('xtorrent_cat') . " FROM title LIKE '" . xoops_sef($source,"_") . "'";
+if (!empty($source))
+{
+	$sql             = 'SELECT cid, title FROM ' . $xoopsDB->prefix('xtorrent_cat') . " FROM title LIKE '" . xoops_sef($source,"_") . "'";
 	list($cid, $cat) = $xoopsDB->fetchRow($xoopsDB->query($sql));
 	
-	if (is_numeric($source)){
-
-		$sql             = "SELECT cid, title FROM " . $xoopsDB->prefix('xtorrent_cat') . " FROM cid = '" . xoops_sef($source,"_") . "'";
+	if (is_numeric($source))
+  {
+		$sql             = 'SELECT cid, title FROM ' . $xoopsDB->prefix('xtorrent_cat') . " FROM cid = '" . xoops_sef($source,"_") . "'";
 		list($cid, $cat) = $xoopsDB->fetchRow($xoopsDB->query($sql));
-
 	}
 }	
 
-if ($cat=="")
-	$cat = "Latest Torrents";
+if ('' == $cat)
+{
+	$cat = 'Latest Torrents';
+}
 
 $rssfeed_data = rss_data($cid, $numitems);
 
-header("Content-type: text/xml; charset=UTF-8");  
+header('Content-type: text/xml; charset=UTF-8');  
 ?><?php echo '<?xml version="1.0" encoding="iso-8859-1"?>'.chr(10).chr(13); ?>
 <rss version="2.0"> 
 

@@ -1,15 +1,13 @@
 <?php
 
-if (!isset($moduleDirName)) {
-    $moduleDirName = basename(dirname(__DIR__));
-}
-if (false !== ($moduleHelper = Xmf\Module\Helper::getHelper($moduleDirName))) {
-} else {
-    $moduleHelper = Xmf\Module\Helper::getHelper('system');
-}
-$adminObject   = \Xmf\Module\Admin::getInstance();
+$moduleDirName = basename(dirname(__DIR__));
+
+$helper = \XoopsModules\Xtorrent\Helper::getInstance();
 $pathIcon32    = \Xmf\Module\Admin::menuIconPath('');
-$pathModIcon32 = $moduleHelper->getModule()->getInfo('modicons32');
+$pathModIcon32 = $helper->getModule()->getInfo('modicons32');
+
+$helper->loadLanguage('admin');
+$helper->loadLanguage('modinfo');
 
 $adminmenu = [
     [
@@ -60,12 +58,12 @@ $adminmenu = [
      'desc'    =>  '',
      'icon'    =>  $pathIcon32 . '/permissions.png'
     ],
-    [
+/*    [
      'title'   =>  _MI_TORRENT_BLOCKADMIN,
      'link'    =>  'admin/myblocksadmin.php',
      'desc'    =>  '',
      'icon'    =>  $pathIcon32 . '/block.png'
-    ],
+    ],*/
     [
      'title'   =>  _MI_TORRENT_ADMENU3,
      'link'    =>  'admin/about.php',

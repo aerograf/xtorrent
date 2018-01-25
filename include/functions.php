@@ -34,16 +34,16 @@ function urlExists($url)
 function xtorrent_save_Permissions($groups, $id, $perm_name)
 {
     $result         = true;
-    $hModule        = xoops_gethandler('module');
+    $hModule        = xoops_getHandler('module');
     $xtorrentModule = $hModule -> getByDirname('xtorrent');
 
     $module_id     = $xtorrentModule -> getVar('mid');
-    $gperm_handler = xoops_gethandler('groupperm'); 
+    $gpermHandler  = xoops_getHandler('groupperm'); 
 
     /* 
 	* First, if the permissions are already there, delete them
 	*/ 
-    $gperm_handler -> deleteByModule($module_id, $perm_name, $id); 
+    $gpermHandler -> deleteByModule($module_id, $perm_name, $id); 
     /*
 	*  Save the new permissions
 	*/ 
@@ -51,7 +51,7 @@ function xtorrent_save_Permissions($groups, $id, $perm_name)
     {
         foreach ($groups as $group_id)
         {
-            $gperm_handler -> addRight($perm_name, $id, $group_id, $module_id);
+            $gpermHandler -> addRight($perm_name, $id, $group_id, $module_id);
         } 
     } 
     return $result;
@@ -65,17 +65,17 @@ function xtorrent_save_Permissions($groups, $id, $perm_name)
 function xtorrent_toolbar()
 {
     global $xoopsModuleConfig, $xoopsUser;
-    $submissions = ($xoopsModuleConfig['submissions']) ? 1 : 0;
+    $submissions = $xoopsModuleConfig['submissions'] ? 1 : 0;
     if (!is_object($xoopsUser))
     {
-        $submissions = ($xoopsModuleConfig['anonpost']) ? 1 : 0;
+        $submissions = $xoopsModuleConfig['anonpost'] ? 1 : 0;
     } 
     $toolbar = "[ ";
-    if ($submissions == 1)
+    if (1 == $submissions)
     {
-        $toolbar .= "<a href='submit.php'>" . _MD_XTORRENT_SUBMITDOWNLOAD . "</a> | ";
+        $toolbar .= "<a href='submit.php'>" . _MD_XTORRENT_SUBMITDOWNLOAD . '</a> | ';
     } 
-    $toolbar .= "<a href='newlist.php'>" . _MD_XTORRENT_LATESTLIST . "</a> | <a href='topten.php?list=hit'>" . _MD_XTORRENT_POPULARITY . "</a> | <a href='topten.php?list=rate'>" . _MD_XTORRENT_TOPRATED . "</a> ]";
+    $toolbar .= "<a href='newlist.php'>" . _MD_XTORRENT_LATESTLIST . "</a> | <a href='topten.php?list=hit'>" . _MD_XTORRENT_POPULARITY . "</a> | <a href='topten.php?list=rate'>" . _MD_XTORRENT_TOPRATED . '</a> ]';
     return $toolbar;
 } 
 
@@ -87,7 +87,7 @@ function xtorrent_toolbar()
 function xtorrent_serverstats()
 {
 	  echo "<fieldset><legend style='font-weight:bold;color:#900;'>" . _AM_XTORRENT_DOWN_IMAGEINFO . "</legend>
-      		<div><div style='padding:2px;'>" . _AM_XTORRENT_DOWN_SPHPINI . "</div>";
+      		<div><div style='padding:2px;'>" . _AM_XTORRENT_DOWN_SPHPINI . '</div>';
 
     $safemode        = (ini_get('safe_mode')) ? _AM_XTORRENT_DOWN_ON . _AM_XTORRENT_DOWN_SAFEMODEPROBLEMS : _AM_XTORRENT_DOWN_OFF;
     $registerglobals = (ini_get('register_globals') == '') ? _AM_XTORRENT_DOWN_OFF : _AM_XTORRENT_DOWN_ON;
@@ -100,16 +100,16 @@ function xtorrent_serverstats()
     {
         if (true == $gdlib = gd_info())
         {
-            echo "<li style='padding:2px;'>" . _AM_XTORRENT_DOWN_GDLIBVERSION . "<b>" . $gdlib['GD Version'] . "</b></li>";
+            echo "<li style='padding:2px;'>" . _AM_XTORRENT_DOWN_GDLIBVERSION . '<b>' . $gdlib['GD Version'] . '</b></li>';
         } 
     } 
   	echo "<br>
   	      <li style='padding:2px;'>" . _AM_XTORRENT_DOWN_SAFEMODESTATUS . $safemode . "</li>
           <li style='padding:2px;'>" . _AM_XTORRENT_DOWN_REGISTERGLOBALS . $registerglobals . "</li>
           <li style='padding:2px;'>" . _AM_XTORRENT_DOWN_SERVERUPLOADSTATUS . $downloads . "</li>
-          <li style='padding:2px;'>" . _AM_XTORRENT_DOWN_MAXUPLOADSIZE . " <b>" . ini_get('upload_max_filesize') . "</b></li>
-          <li style='padding:2px;'>" . _AM_XTORRENT_DOWN_MAXPOSTSIZE . " <b>" . ini_get('post_max_size') . "</b></li>
-          </ul></div></fieldset>";
+          <li style='padding:2px;'>" . _AM_XTORRENT_DOWN_MAXUPLOADSIZE . ' <b>' . ini_get('upload_max_filesize') . "</b></li>
+          <li style='padding:2px;'>" . _AM_XTORRENT_DOWN_MAXPOSTSIZE . ' <b>' . ini_get('post_max_size') . '</b></li>
+          </ul></div></fieldset>';
 }
 
 /**
@@ -130,37 +130,49 @@ function xtorrent_displayicons($time, $status = 0, $counter = 0)
     $newdate = (time() - (86400 * intval($xoopsModuleConfig['daysnew'])));
     $popdate = (time() - (86400 * intval($xoopsModuleConfig['daysupdated']))) ;
 
-    if ($xoopsModuleConfig['displayicons'] != 3)
+    if (3 != $xoopsModuleConfig['displayicons'])
     {
         if ($newdate < $time)
         {
-            if (intval($status) > 1)
+            if ((int)$status > 1)
             {
-                if ($xoopsModuleConfig['displayicons'] == 1)
-                    $new = "&nbsp;<img src=" . XOOPS_URL . "/modules/xtorrent/assets/images/icons/32/update.gif alt='' align ='absmiddle'>";
-                if ($xoopsModuleConfig['displayicons'] == 2)
-                    $new = "<i>Updated!</i>";
+                if (1 == $xoopsModuleConfig['displayicons'])
+                {
+                    $new = '&nbsp;<img src=' . XOOPS_URL . "/modules/xtorrent/assets/images/icons/32/update.gif alt='' align ='absmiddle'>";
+                }
+                if (2 == $xoopsModuleConfig['displayicons'])
+                {
+                    $new = '<i>Updated!</i>';
+                }
             }
             else
             {
-                if ($xoopsModuleConfig['displayicons'] == 1)
-                    $new = "&nbsp;<img src=" . XOOPS_URL . "/modules/xtorrent/assets/images/icons/32/newred.gif alt='' align ='absmiddle'>";
-                if ($xoopsModuleConfig['displayicons'] == 2)
-                    $new = "<i>New!</i>";
+                if (1 == $xoopsModuleConfig['displayicons'])
+                {
+                    $new = '&nbsp;<img src=' . XOOPS_URL . "/modules/xtorrent/assets/images/icons/32/newred.gif alt='' align ='absmiddle'>";
+                }
+                if (2 == $xoopsModuleConfig['displayicons'])
+                {
+                    $new = '<i>New!</i>';
+                }
             }
         }
         if ($popdate < $time)
         {
             if ($counter >= $xoopsModuleConfig['popular'])
             {
-                if ($xoopsModuleConfig['displayicons'] == 1)
-                    $pop = "&nbsp;<img src =" . XOOPS_URL . "/modules/xtorrent/assets/images/icons/32/pop.gif alt='' align ='absmiddle'>";
-                if ($xoopsModuleConfig['displayicons'] == 2)
-                    $pop = "<i>Popular</i>";
+                if (1 == $xoopsModuleConfig['displayicons'])
+                {
+                    $pop = '&nbsp;<img src =' . XOOPS_URL . "/modules/xtorrent/assets/images/icons/32/pop.gif alt='' align ='absmiddle'>";
+                }
+                if (2 == $xoopsModuleConfig['displayicons'])
+                {
+                    $pop = '<i>Popular</i>';
+                }
             }
         }
     }
-    $icons = $new . " " . $pop;
+    $icons = $new . ' ' . $pop;
     return $icons;
 }
 
@@ -177,30 +189,30 @@ if (!function_exists('convertorderbyin'))
     {
         switch (trim($orderby))
         {
-            case "titleA":
-                $orderby = "title ASC";
+            case 'titleA':
+                $orderby = 'title ASC';
                 break;
-            case "dateA":
-                $orderby = "published ASC";
+            case 'dateA':
+                $orderby = 'published ASC';
                 break;
-            case "hitsA":
-                $orderby = "hits ASC";
+            case 'hitsA':
+                $orderby = 'hits ASC';
                 break;
-            case "ratingA":
-                $orderby = "rating ASC";
+            case 'ratingA':
+                $orderby = 'rating ASC';
                 break;
-            case "titleD":
-                $orderby = "title DESC";
+            case 'titleD':
+                $orderby = 'title DESC';
                 break;
-            case "hitsD":
-                $orderby = "hits DESC";
+            case 'hitsD':
+                $orderby = 'hits DESC';
                 break;
-            case "ratingD":
-                $orderby = "rating DESC";
+            case 'ratingD':
+                $orderby = 'rating DESC';
                 break;
-            case"dateD":
+            case 'dateD':
             default:
-                $orderby = "published DESC";
+                $orderby = 'published DESC';
                 break;
         } 
         return $orderby;
@@ -210,14 +222,38 @@ if (!function_exists('convertorderbytrans'))
 {
     function convertorderbytrans($orderby)
     {
-        if ($orderby == "hits ASC") $orderbyTrans = _MD_XTORRENT_POPULARITYLTOM;
-        if ($orderby == "hits DESC") $orderbyTrans = _MD_XTORRENT_POPULARITYMTOL;
-        if ($orderby == "title ASC") $orderbyTrans = _MD_XTORRENT_TITLEATOZ;
-        if ($orderby == "title DESC") $orderbyTrans = _MD_XTORRENT_TITLEZTOA;
-        if ($orderby == "published ASC") $orderbyTrans = _MD_XTORRENT_DATEOLD;
-        if ($orderby == "published DESC") $orderbyTrans = _MD_XTORRENT_DATENEW;
-        if ($orderby == "rating ASC") $orderbyTrans = _MD_XTORRENT_RATINGLTOH;
-        if ($orderby == "rating DESC") $orderbyTrans = _MD_XTORRENT_RATINGHTOL;
+        if ($orderby == 'hits ASC')
+        {
+          $orderbyTrans = _MD_XTORRENT_POPULARITYLTOM;
+        }
+        if ($orderby == 'hits DESC')
+        {
+          $orderbyTrans = _MD_XTORRENT_POPULARITYMTOL;
+        }
+        if ($orderby == 'title ASC')
+        {
+          $orderbyTrans = _MD_XTORRENT_TITLEATOZ;
+        }
+        if ($orderby == 'title DESC')
+        {
+          $orderbyTrans = _MD_XTORRENT_TITLEZTOA;
+        }
+        if ($orderby == 'published ASC')
+        {
+          $orderbyTrans = _MD_XTORRENT_DATEOLD;
+        }
+        if ($orderby == 'published DESC')
+        {
+          $orderbyTrans = _MD_XTORRENT_DATENEW;
+        }
+        if ($orderby == 'rating ASC')
+        {
+          $orderbyTrans = _MD_XTORRENT_RATINGLTOH;
+        }
+        if ($orderby == 'rating DESC')
+        {
+          $orderbyTrans = _MD_XTORRENT_RATINGHTOL;
+        }
         return $orderbyTrans;
     } 
 } 
@@ -225,14 +261,38 @@ if (!function_exists('convertorderbyout'))
 {
     function convertorderbyout($orderby)
     {
-        if ($orderby == "title ASC") $orderby = "titleA";
-        if ($orderby == "published ASC") $orderby = "dateA";
-        if ($orderby == "hits ASC") $orderby = "hitsA";
-        if ($orderby == "rating ASC") $orderby = "ratingA";
-        if ($orderby == "title DESC") $orderby = "titleD";
-        if ($orderby == "published DESC") $orderby = "dateD";
-        if ($orderby == "hits DESC") $orderby = "hitsD";
-        if ($orderby == "rating DESC") $orderby = "ratingD";
+        if ($orderby == 'title ASC')
+        {
+          $orderby = 'titleA';
+        }
+        if ($orderby == 'published ASC')
+        {
+          $orderby = 'dateA';
+        }
+        if ($orderby == 'hits ASC')
+        {
+          $orderby = 'hitsA';
+        }
+        if ($orderby == 'rating ASC')
+        {
+          $orderby = 'ratingA';
+        }
+        if ($orderby == 'title DESC')
+        {
+          $orderby = 'titleD';
+        }
+        if ($orderby == 'published DESC')
+        {
+          $orderby = 'dateD';
+        }
+        if ($orderby == 'hits DESC')
+        {
+          $orderby = 'hitsD';
+        }
+        if ($orderby == 'rating DESC')
+        {
+          $orderby = 'ratingD';
+        }
         return $orderby;
     } 
 } 
@@ -248,10 +308,11 @@ function xtorrent_PrettySize($size)
     $mb = 1024 * 1024;
     if ($size > $mb)
     {
-        $mysize = sprintf ("%01.2f", $size / $mb) . " MB";
-    } elseif ($size >= 1024)
+        $mysize = sprintf ('%01.2f', $size / $mb) . ' MB';
+    }
+    elseif ($size >= 1024)
     {
-        $mysize = sprintf ("%01.2f", $size / 1024) . " KB";
+        $mysize = sprintf ('%01.2f', $size / 1024) . ' KB';
     } 
     else
     {
@@ -269,7 +330,7 @@ function xtorrent_PrettySize($size)
 function xtorrent_updaterating($sel_id)
 {
     global $xoopsDB;
-    $query       = "SELECT rating FROM " . $xoopsDB -> prefix('xtorrent_votedata') . " WHERE lid = " . $sel_id . "";
+    $query       = 'SELECT rating FROM ' . $xoopsDB -> prefix('xtorrent_votedata') . ' WHERE lid = ' . $sel_id . '';
     $voteresult  = $xoopsDB -> query($query);
     $votesDB     = $xoopsDB -> getRowsNum($voteresult);
     $totalrating = 0;
@@ -277,10 +338,10 @@ function xtorrent_updaterating($sel_id)
     {
         $totalrating += $rating;
     } 
-    $finalrating = $totalrating / $votesDB;
-    $finalrating = number_format($finalrating, 4);
-    $sql         = sprintf("UPDATE %s SET rating = %u, votes = %u WHERE lid = %u", $xoopsDB -> prefix('xtorrent_downloads'), $finalrating, $votesDB, $sel_id);
-    $xoopsDB     -> query($sql);
+    $finalrating /= $votesDB;
+    $finalrating  = number_format($finalrating, 4);
+    $sql          = sprintf('UPDATE %s SET rating = %u, votes = %u WHERE lid = %u', $xoopsDB -> prefix('xtorrent_downloads'), $finalrating, $votesDB, $sel_id);
+    $xoopsDB      -> query($sql);
 } 
 
 
@@ -297,10 +358,10 @@ function xtorrent_totalcategory($pid = 0)
     $groups        = (is_object($xoopsUser)) ? $xoopsUser -> getGroups() : XOOPS_GROUP_ANONYMOUS;
     $gperm_handler = xoops_gethandler('groupperm');
 
-    $sql      = "SELECT cid FROM " . $xoopsDB -> prefix('xtorrent_cat') . " ";
+    $sql      = 'SELECT cid FROM ' . $xoopsDB -> prefix('xtorrent_cat') . ' ';
     if ($pid > 0)
     {
-        $sql .= "WHERE pid = 0";
+        $sql .= 'WHERE pid = 0';
     } 
     $result           = $xoopsDB -> query($sql);
     $catlisting       = 0;
@@ -332,16 +393,16 @@ function xtorrent_getTotalItems($sel_id = 0, $get_child = 0)
     $published_date = 0;
 
     $arr   = [];
-    $query = "SELECT lid, published FROM "
+    $query = 'SELECT lid, published FROM '
               . $xoopsDB -> prefix('xtorrent_downloads')
-              . " WHERE offline = 0 AND published > 0 AND published <= "
+              . ' WHERE offline = 0 AND published > 0 AND published <= '
               . time()
-              . " AND (expired = 0 OR expired > "
+              . ' AND (expired = 0 OR expired > '
               . time()
-              . ")";
+              . ')';
     if ($sel_id)
     {
-        $query .= " AND cid=" . $sel_id . "";
+        $query .= ' AND cid=' . $sel_id . '';
     } 
     $result = $xoopsDB -> query($query);
     while (list($lid, $published) = $xoopsDB -> fetchRow($result))
@@ -353,21 +414,21 @@ function xtorrent_getTotalItems($sel_id = 0, $get_child = 0)
         } 
     } 
     $thing = 0;
-    if ($get_child == 1)
+    if (1 == $get_child)
     {
         $arr  = $mytree -> getAllChildId($sel_id);
         $size = count($arr);
         for($i = 0;$i < count($arr);$i++)
         {
-            $query2  = "SELECT lid, published FROM "
+            $query2  = 'SELECT lid, published FROM '
                         . $xoopsDB -> prefix('xtorrent_downloads')
-                        . " WHERE status > 0 AND offline = 0 AND published > 0 AND published <= "
+                        . ' WHERE status > 0 AND offline = 0 AND published > 0 AND published <= '
                         . time()
-                        . " AND (expired = 0 OR expired > "
+                        . ' AND (expired = 0 OR expired > '
                         . time()
-                        . ") AND cid="
+                        . ') AND cid='
                         . $arr[$i]
-                        . "";
+                        . '';
             $result2 = $xoopsDB -> query($query2);
             while (list($lid, $published) = $xoopsDB -> fetchRow($result2))
             {
@@ -389,7 +450,7 @@ function xtorrent_imageheader()
     global $xoopsDB, $xoopsModule, $xoopsModuleConfig;
 
     $image  = '';
-    $result = $xoopsDB -> query("SELECT indeximage, indexheading FROM " . $xoopsDB -> prefix("xtorrent_indexpage ") . " ");
+    $result = $xoopsDB -> query('SELECT indeximage, indexheading FROM ' . $xoopsDB -> prefix('xtorrent_indexpage') . ' ');
     list($indeximage, $indexheading) = $xoopsDB -> fetchrow($result);
     if (!empty($indeximage))
     {
@@ -409,16 +470,16 @@ function xtorrent_displayimage($image = '', $path = '', $imgsource = '', $alttex
      */
     if ($path)
     {
-        $showimage = "<a href=" . $path . ">";
+        $showimage = '<a href=' . $path . '>';
     } 
 
     /**
      * checks to see if the file is valid else displays default blank image
      */
 
-    if (!is_dir(XOOPS_ROOT_PATH . "/" . $imgsource . "/" . $image) && file_exists(XOOPS_ROOT_PATH . "/" . $imgsource . "/" . $image))
+    if (!is_dir(XOOPS_ROOT_PATH . '/' . $imgsource . '/' . $image) && file_exists(XOOPS_ROOT_PATH . '/' . $imgsource . '/' . $image))
     {
-        $showimage .= "<img src='" . XOOPS_URL . "/" . $imgsource . "/" . $image . "' border='0' alt='" . $alttext . "'></a>";
+        $showimage .= "<img src='" . XOOPS_URL . '/' . $imgsource . '/' . $image . "' border='0' alt='" . $alttext . "'></a>";
     } 
     else
     {
@@ -452,19 +513,19 @@ function down_createthumb($img_name, $img_path, $img_savepath, $img_w = 100, $im
 {
     global $xoopsModuleConfig, $xoopsConfig; 
     // paths
-    if ($xoopsModuleConfig['usethumbs'] == 0)
+    if (0 == $xoopsModuleConfig['usethumbs'])
     {
         $image_path = XOOPS_URL . "/{$img_path}/{$img_name}";
         return $image_path;
     } 
     $image_path = XOOPS_ROOT_PATH . "/{$img_path}/{$img_name}";
 
-    $savefile   = $img_path . "/" . $img_savepath . "/" . $img_w . "x" . $img_h . "_" . $img_name;
-    $savepath   = XOOPS_ROOT_PATH . "/" . $savefile; 
+    $savefile   = $img_path . '/' . $img_savepath . '/' . $img_w . 'x' . $img_h . '_' . $img_name;
+    $savepath   = XOOPS_ROOT_PATH . '/' . $savefile; 
     // Return the image if no update and image exists
     if ($update == 0 && file_exists($savepath))
     {
-        return XOOPS_URL . "/" . $savefile;
+        return XOOPS_URL . '/' . $savefile;
     } 
 
     list($width, $height, $type, $attr) = getimagesize($image_path, $info);
@@ -554,65 +615,65 @@ function down_createthumb($img_name, $img_path, $img_savepath, $img_w = 100, $im
     } 
     imagedestroy($img);
     flush();
-    return XOOPS_URL . "/" . $savefile;
+    return XOOPS_URL . '/' . $savefile;
 } 
 
 function xtorrent_letters()
 {
     global $xoopsModule;
 
-    $letterchoice  = "<div>" . _MD_XTORRENT_BROWSETOTOPIC . "</div>";
-    $letterchoice .= "[  ";
+    $letterchoice  = '<div>' . _MD_XTORRENT_BROWSETOTOPIC . '</div>';
+    $letterchoice .= '[  ';
     $alphabet      = [
-                      "0",
-                      "1",
-                      "2",
-                      "3",
-                      "4",
-                      "5",
-                      "6",
-                      "7",
-                      "8",
-                      "9",
-                      "A",
-                      "B",
-                      "C",
-                      "D",
-                      "E",
-                      "F",
-                      "G",
-                      "H",
-                      "I",
-                      "J",
-                      "K",
-                      "L",
-                      "M",
-                      "N",
-                      "O",
-                      "P",
-                      "Q",
-                      "R",
-                      "S",
-                      "T",
-                      "U",
-                      "V",
-                      "W",
-                      "X",
-                      "Y",
-                      "Z"
+                      '0',
+                      '1',
+                      '2',
+                      '3',
+                      '4',
+                      '5',
+                      '6',
+                      '7',
+                      '8',
+                      '9',
+                      'A',
+                      'B',
+                      'C',
+                      'D',
+                      'E',
+                      'F',
+                      'G',
+                      'H',
+                      'I',
+                      'J',
+                      'K',
+                      'L',
+                      'M',
+                      'N',
+                      'O',
+                      'P',
+                      'Q',
+                      'R',
+                      'S',
+                      'T',
+                      'U',
+                      'V',
+                      'W',
+                      'X',
+                      'Y',
+                      'Z'
                       ];
     $num           = count($alphabet) - 1;
     $counter       = 0;
     while (list(, $ltr) = each($alphabet))
     {
-        $letterchoice .= "<a href='" . XOOPS_URL . "/modules/xtorrent/viewcat.php?list=" . $ltr . "'>" . $ltr . "</a>";
+        $letterchoice .= "<a href='" . XOOPS_URL . "/modules/xtorrent/viewcat.php?list=" . $ltr . "'>" . $ltr . '</a>';
         if ($counter == round($num / 2))
-            $letterchoice .= " ]<br>[ ";
+            $letterchoice .= ' ]<br>[ ';
         elseif ($counter != $num)
-            $letterchoice .= "&nbsp;|&nbsp;";
+            $letterchoice .= '&nbsp;|&nbsp;';
         $counter++;
     } 
-    $letterchoice .= " ]";
+    $letterchoice .= ' ]';
     return $letterchoice;
 } 
 
@@ -626,24 +687,27 @@ function xtorrent_isnewimage($published)
 
     if ($published > 0 && $published < $week)
     {
-        $indicator['image']   = "assets/images/icons/32/download4.gif";
+        $indicator['image']   = 'assets/images/icons/32/download4.gif';
         $indicator['alttext'] = _MD_XTORRENT_NEWLAST;
-    } elseif ($published >= $week && $published < $threedays)
+    }
+    elseif ($published >= $week && $published < $threedays)
     {
-        $indicator['image'] = "assets/images/icons/32/download3.gif";
+        $indicator['image']   = 'assets/images/icons/32/download3.gif';
         $indicator['alttext'] = _MD_XTORRENT_NEWTHIS;
-    } elseif ($published >= $threedays && $published < $oneday)
+    }
+    elseif ($published >= $threedays && $published < $oneday)
     {
-        $indicator['image'] = "assets/images/icons/32/download2.gif";
+        $indicator['image']   = 'assets/images/icons/32/download2.gif';
         $indicator['alttext'] = _MD_XTORRENT_THREE;
-    } elseif ($published >= $oneday)
+    }
+    elseif ($published >= $oneday)
     {
-        $indicator['image'] = "assets/images/icons/32/download1.gif";
+        $indicator['image']   = 'assets/images/icons/32/download1.gif';
         $indicator['alttext'] = _MD_XTORRENT_TODAY;
     } 
     else
     {
-        $indicator['image'] = "assets/images/icons/32/download.gif";
+        $indicator['image']   = 'assets/images/icons/32/download.gif';
         $indicator['alttext'] = _MD_XTORRENT_NO_FILES;
     } 
     return $indicator;
@@ -688,30 +752,48 @@ function xtorrent_GetDownloadTime($size = 0, $gmodem = 1, $gisdn = 1, $gdsl = 1,
     {
         $ahtime[$i] = sprintf(' %2.0f', $amtime[$i] / 60);
     } 
-    if ($size <= 0) $dltime = 'N/A';
+    if ($size <= 0)
+    {
+        $dltime = 'N/A';
+    }
     else
     {
-        for($i = 0;$i < 5;$i++)
+        for($i = 0; $i < 5; $i++)
         {
             if (!$aflag[$i]) $asout[$i] = '';
             else
             {
-                if (($amtime[$i] * 60) < 1) $asout[$i] = sprintf(' : %4.2fs', $amtime[$i] * 60);
+                if (($amtime[$i] * 60) < 1)
+                {
+                  $asout[$i] = sprintf(' : %4.2fs', $amtime[$i] * 60);
+                }
                 else
                 {
-                    if ($amtime[$i] < 1) $asout[$i] = sprintf(' : %2.0fs', round($amtime[$i] * 60));
+                    if ($amtime[$i] < 1)
+                    {
+                      $asout[$i] = sprintf(' : %2.0fs', round($amtime[$i] * 60));
+                    }
                     else
                     {
-                        if ($ahtime[$i] == 0) $asout[$i] = sprintf(' : %5.1fmin', $amtime[$i]);
-                        else $asout[$i] = sprintf(' : %2.0fh%2.0fmin', $ahtime[$i], $artime[$i]);
+                        if (0 == $ahtime[$i])
+                        {
+                          $asout[$i] = sprintf(' : %5.1fmin', $amtime[$i]);
+                        }
+                        else
+                        {
+                          $asout[$i] = sprintf(' : %2.0fh%2.0fmin', $ahtime[$i], $artime[$i]);
+                        }
                     } 
                 } 
-                $asout[$i] = "<b>" . $amname[$i] . "</b>" . $asout[$i];
-                if ($i < 4) $asout[$i] = $asout[$i] . ' | ';
+                $asout[$i] = '<b>' . $amname[$i] . '</b>' . $asout[$i];
+                if ($i < 4)
+                {
+                  $asout[$i] = $asout[$i] . ' | ';
+                }
             } 
         } 
         $dltime = '';
-        for($i = 0;$i < 5;$i++)
+        for($i = 0; $i < 5; $i++)
         {
             $dltime = $dltime . $asout[$i];
         } 
@@ -729,14 +811,14 @@ function xtorrent_retmime($filename, $usertype = 1)
     global $xoopsDB;
 
     $ext = ltrim(strrchr($filename, '.'), '.');
-    $sql = "SELECT mime_types, mime_ext FROM " . $xoopsDB -> prefix('xtorrent_mimetypes') . " WHERE mime_ext = '" . strtolower($ext) . "'";
-    if ($usertype == 1)
+    $sql = 'SELECT mime_types, mime_ext FROM ' . $xoopsDB -> prefix('xtorrent_mimetypes') . " WHERE mime_ext = '" . strtolower($ext) . "'";
+    if (1 == $usertype)
     {
-        $sql .= " AND mime_admin = 1";
+        $sql .= ' AND mime_admin = 1';
     } 
     else
     {
-        $sql .= " AND mime_user = 1";
+        $sql .= ' AND mime_user = 1';
     } 
     $result                       = $xoopsDB -> query($sql);
     list($mime_types , $mime_ext) = $xoopsDB -> fetchrow($result);
@@ -749,62 +831,77 @@ function xtorrent_adminmenu($header = '', $menu = '', $extra = '', $scount = 4)
 {
     global $xoopsConfig, $xoopsModule;
 
-    if (isset($_SERVER['PHP_SELF'])) $thispage = basename($_SERVER['PHP_SELF']);
-    $op = (isset($_GET['op'])) ? $op = "?op=" . $_GET['op'] : '';
+    if (!is_object($xoopsModule))
+    {
+        $moduleHandler = xoops_getHandler('module');
+        $xoopsModule   = $moduleHandler->getByDirname('xtorrent');
+    }
 
-	echo "
-		<table width='100%' cellspacing='0' cellpadding='0' border='0' class='outer'>\n
-		<tr>\n
-		<td style='font-size: 10px; text-align: left; color: #2F5376; padding: 2px 6px; line-height: 18px;'>\n
-		<a href='../../system/admin.php?fct=preferences&amp;op=showmod&amp;mod=" . $xoopsModule -> getVar('mid') . "'>" . _AM_XTORRENT_PREFS . "</a> | \n
-		<a href='../admin/index.php'>" . _AM_XTORRENT_BINDEX . "</a> | \n
-		<a href='../admin/permissions.php'>" . _AM_XTORRENT_PERMISSIONS . "</a> | \n
-		<a href='../admin/myblocksadmin.php'>" . _AM_XTORRENT_BLOCKADMIN . "</a> | \n
-		<a href='../index.php'>" . _AM_XTORRENT_GOMODULE . "</a> | \n
-		<a href='http://wfsections.xoops2.com/uploads/readme/xtorrent/readme.html' target='_blank'>" . _AM_XTORRENT_BHELP . "</a> | \n
-		<a href='about.php'>" . _AM_XTORRENT_ABOUT . "</a>\n
-		</td>\n
-		</tr>\n
-		</table><br />\n
-		";
+    if (isset($_SERVER['PHP_SELF']))
+    {
+      $thispage = basename($_SERVER['PHP_SELF']);
+    }
+    $op = isset($_GET['op']) ? $op = '?op=' . $_GET['op'] : '';
+
+  	echo "<table width='100%' cellspacing='0' cellpadding='0' border='0' class='outer'>
+      		<tr>
+      		<td style='font-size: 10px; text-align: left; color: #2F5376; padding: 2px 6px; line-height: 18px;'>
+      		<a href='../../system/admin.php?fct=preferences&amp;op=showmod&amp;mod=" . $xoopsModule -> getVar('mid') . "'>" . _AM_XTORRENT_PREFS . "</a> |
+      		<a href='../admin/index.php'>" . _AM_XTORRENT_BINDEX . "</a> |
+      		<a href='../admin/permissions.php'>" . _AM_XTORRENT_PERMISSIONS . "</a> |
+      		<a href='../admin/myblocksadmin.php'>" . _AM_XTORRENT_BLOCKADMIN . "</a> |
+      		<a href='../index.php'>" . _AM_XTORRENT_GOMODULE . "</a> |
+      		<a href='http://wfsections.xoops2.com/uploads/readme/xtorrent/readme.html' target='_blank'>" . _AM_XTORRENT_BHELP . "</a> |
+      		<a href='about.php'>" . _AM_XTORRENT_ABOUT . "</a>
+          </td>
+          </tr>
+          </table><br>";
 
     if (empty($menu))
     {
         /**
          * You can change this part to suit your own module. Defining this here will save you form having to do this each time.
          */
-        $menu = array(
+        $menu = [
             // _AM_GENERALSET => "" . XOOPS_URL . "/modules/system/admin.php?fct=preferences&amp;op=showmod&amp;mod=" . $xoopsModule->getVar('mid') . "",
-            _AM_XTORRENT_INDEXPAGE => "indexpage.php",
-            _AM_XTORRENT_MCATEGORY => "category.php",
-            _AM_XTORRENT_MDOWNLOADS => "index.php?op=Download",
-            _AM_XTORRENT_MUPLOADS => "upload.php",
-            _AM_XTORRENT_MMIMETYPES => "mimetypes.php",
-            _AM_WFS_MVOTEDATA => "votedata.php",
-            _AM_XTORRENT_MCOMMENTS => "../../system/admin.php?module=" . $xoopsModule -> mid() . "&amp;status=0&amp;limit=100&amp;fct=comments&amp;selsubmit=Go",
-            );
+            _AM_XTORRENT_INDEXPAGE  => 'indexpage.php',
+            _AM_XTORRENT_MCATEGORY  => 'category.php',
+            _AM_XTORRENT_MDOWNLOADS => 'index.php?op=Download',
+            _AM_XTORRENT_MUPLOADS   => 'upload.php',
+            _AM_XTORRENT_MMIMETYPES => 'mimetypes.php',
+            _AM_WFS_MVOTEDATA       => 'votedata.php',
+            _AM_XTORRENT_MCOMMENTS  => '../../system/admin.php?module=' . $xoopsModule -> mid() . '&amp;status=0&amp;limit=100&amp;fct=comments&amp;selsubmit=Go',
+            ];
     } 
 
     if (!is_array($menu))
     {
-	echo "
-		<table width = '100%' cellpadding= '2' cellspacing= '1' class='outer'>\n
-		<tr><td class ='even' align ='center'><b>" . _AM_XTORRENT_NOMENUITEMS . "</b></td></tr></table><br />\n
-		";
-        return false;
+    	echo "<table width = '100%' cellpadding= '2' cellspacing= '1' class='outer'>
+        		<tr><td class ='even' align ='center'><b>" . _AM_XTORRENT_NOMENUITEMS . '</b></td></tr></table><br>';
+            return false;
     } 
 
-    $oddnum = [1 => "1", 3 => "3", 5 => "5", 7 => "7", 9 => "9", 11 => "11", 13 => "13"]; 
+    $oddnum   = [
+                 1  => '1',
+                 3  => '3',
+                 5  => '5',
+                 7  => '7',
+                 9  => '9',
+                 11 => '11',
+                 13 => '13'
+                 ]; 
     // number of rows per menu
     $menurows = count($menu) / $scount; 
     // total amount of rows to complete menu
-    $menurow = ceil($menurows) * $scount; 
+    $menurow  = ceil($menurows) * $scount; 
     // actual number of menuitems per row
     $rowcount = $menurow / ceil($menurows);
-    $count = 0;
+    $count    = 0;
     for ($i = count($menu); $i < $menurow; $i++)
     {
-        $tempArray = array(1 => null);
+        $tempArray = [
+                      1 => null
+                      ];
         $menu = array_merge($menu, $tempArray);
         $count++;
     } 
@@ -816,7 +913,7 @@ function xtorrent_adminmenu($header = '', $menu = '', $extra = '', $scount = 4)
     $width = ceil($width);
 
     $menucount = 0;
-    $count = 0;
+    $count     = 0;
     /**
      * Menu table output
      */
@@ -827,7 +924,7 @@ function xtorrent_adminmenu($header = '', $menu = '', $extra = '', $scount = 4)
     if (is_array($menu))
     {
         $classcounts = 0;
-        $classcol[0] = "even";
+        $classcol[0] = 'even';
 
         for ($i = 1; $i < $menurow; $i++)
         {
@@ -836,17 +933,17 @@ function xtorrent_adminmenu($header = '', $menu = '', $extra = '', $scount = 4)
             {
                 if ($classcol[$i-1] == 'odd')
                 {
-                    $classcol[$i] = ($classcol[$i-1] == 'odd' && in_array($classcounts, $oddnum)) ? "even" : "odd";
+                    $classcol[$i] = ($classcol[$i-1] == 'odd' && in_array($classcounts, $oddnum)) ? 'even' : 'odd';
                 } 
                 else
                 {
-                    $classcol[$i] = ($classcol[$i-1] == 'even' && in_array($classcounts, $oddnum)) ? "odd" : "even";
+                    $classcol[$i] = ($classcol[$i-1] == 'even' && in_array($classcounts, $oddnum)) ? 'odd' : 'even';
                 } 
                 $classcounts = 0;
             } 
             else
             {
-                $classcol[$i] = ($classcol[$i-1] == 'even') ? "odd" : "even";
+                $classcol[$i] = ($classcol[$i-1] == 'even') ? 'odd' : 'even';
             } 
         } 
         unset($classcounts);
@@ -855,16 +952,16 @@ function xtorrent_adminmenu($header = '', $menu = '', $extra = '', $scount = 4)
         {
             if ($thispage . $op == $menulink)
             {
-                $classcol[$count] = "outer";
+                $classcol[$count] = 'outer';
             } 
-            echo "<td class='" . $classcol[$count] . "' align='center' valign='middle' width='$width%'>";
+            echo "<td class='" . $classcol[$count] . "' align='center' valign='middle' width='" . $width . "%'>";
             if (is_string($menulink))
             {
-                echo "<a href='" . $menulink . "'><small>" . $menutitle . "</small></a></td>";
+                echo "<a href='" . $menulink . "'><small>" . $menutitle . '</small></a></td>';
             } 
             else
             {
-                echo "&nbsp;</td>";
+                echo '&nbsp;</td>';
             } 
             $menucount++;
             $count++;
@@ -873,18 +970,18 @@ function xtorrent_adminmenu($header = '', $menu = '', $extra = '', $scount = 4)
              */
             if ($menucount >= $scount)
             {
-                echo "</tr>";
+                echo '</tr>';
                 $menucount = 0;
             } 
         } 
-        echo "</table><br />";
+        echo '</table><br>';
         unset($count);
         unset($menucount);
     } 
-    echo "<h3 style='color: #2F5376;'>" . $header . "</h3>";
+    echo "<h3 style='color: #2F5376;'>" . $header . '</h3>';
     if ($extra)
     {
-        echo "<div>$extra</div>";
+        echo '<div>' . $extra . '</div>';
     } 
 } 
 
@@ -896,15 +993,15 @@ function xtorrent_getDirSelectOption($selected, $dirarray, $namearray)
     {
         if ($workd === $selected)
         {
-            $opt_selected = "selected";
+            $opt_selected = 'selected';
         } 
         else
         {
-            $opt_selected = "";
+            $opt_selected = '';
         } 
-        echo "<option value='" . htmlspecialchars($namearray, ENT_QUOTES) . "' $opt_selected>" . $workd . "</option>";
+        echo "<option value='" . htmlspecialchars($namearray, ENT_QUOTES) . "' $opt_selected>" . $workd . '</option>';
     } 
-    echo "</select>";
+    echo '</select>';
 } 
 /*
 function filesarray($filearray)
@@ -928,19 +1025,19 @@ function filesarray($filearray)
     return $files;
 } 
 */
-function xtorrent_uploading($_GLOBALS, $uploaddir = "uploads", $allowed_mimetypes = '', $redirecturl = "index.php", $num = 0, $redirect = 0, $usertype = 1)
+function xtorrent_uploading($_GLOBALS, $uploaddir = 'uploads', $allowed_mimetypes = '', $redirecturl = 'index.php', $num = 0, $redirect = 0, $usertype = 1)
 {
     global $_GLOBALS, $xoopsConfig, $xoopsModuleConfig, $_POST, $xoopsModule;
 
     $down = [];
 	
-	include_once XOOPS_ROOT_PATH . "/modules/xtorrent/class/uploader.php";
+	include_once XOOPS_ROOT_PATH . '/modules/xtorrent/class/uploader.php';
 
     if (empty($allowed_mimetypes))
     {
         $allowed_mimetypes = xtorrent_retmime($_FILES['userfile']['name'], $usertype);
     } 
-    $upload_dir = XOOPS_ROOT_PATH . "/" . $uploaddir . "/";
+    $upload_dir = XOOPS_ROOT_PATH . '/' . $uploaddir . '/';
 
     $maxfilesize   = $xoopsModuleConfig['maxfilesize'];
     $maxfilewidth  = $xoopsModuleConfig['maximgwidth'];
@@ -964,10 +1061,10 @@ function xtorrent_uploading($_GLOBALS, $uploaddir = "uploads", $allowed_mimetype
             } 
             else
             {
-				if (is_file($uploader->savedDestination))
+				        if (is_file($uploader->savedDestination))
                 {
-	                $down['url']  = XOOPS_URL . "/" . $uploaddir . "/" . strtolower($uploader->savedFileName);
-					        $down['size'] = filesize(XOOPS_ROOT_PATH . "/" . $uploaddir . "/" . strtolower($uploader->savedFileName));
+	                $down['url']  = XOOPS_URL . '/' . $uploaddir . '/' . strtolower($uploader->savedFileName);
+					        $down['size'] = filesize(XOOPS_ROOT_PATH . '/' . $uploaddir . '/' . strtolower($uploader->savedFileName));
                 } 
                 return $down;
             } 
@@ -986,7 +1083,7 @@ function xtorrent_getforum($forumid)
 
     echo "<select name='forumid'>";
     echo "<option value='0'>----------------------</option>";
-    $result = $xoopsDB -> query("SELECT forum_name, forum_id FROM " . $xoopsDB -> prefix("newbb_forums") . " ORDER BY forum_id");
+    $result = $xoopsDB -> query('SELECT forum_name, forum_id FROM ' . $xoopsDB -> prefix('newbb_forums') . ' ORDER BY forum_id');
     while (list($forum_name, $forum_id) = $xoopsDB -> fetchRow($result))
     {
         if ($forum_id == $forumid)
@@ -995,11 +1092,11 @@ function xtorrent_getforum($forumid)
         } 
         else
         {
-            $opt_selected = "";
+            $opt_selected = '';
         } 
-        echo "<option value='" . $forum_id . "' $opt_selected>" . $forum_name . "</option>";
+        echo "<option value='" . $forum_id . "' $opt_selected>" . $forum_name . '</option>';
     } 
-    echo "</select></div>";
+    echo '</select></div>';
     return $forumid;
 } 
 
@@ -1014,8 +1111,8 @@ function xtorrent_downlistheader($heading)
     		<th style='text-align:center;'>" . _AM_XTORRENT_MINDEX_SUBMITTED . "</th>
     		<th style='text-align:center;'>" . _AM_XTORRENT_MINDEX_ONLINESTATUS . "</th>
     		<th style='text-align:center;'>" . _AM_XTORRENT_MINDEX_PUBLISHED . "</th>
-    		<th style='text-align:center;'>" . _AM_XTORRENT_MINDEX_ACTION . "</th>
-    		</tr>";
+    		<th style='text-align:center;'>" . _AM_XTORRENT_MINDEX_ACTION . '</th>
+    		</tr>';
 } 
 
 function xtorrent_downlistbody($published)
@@ -1024,13 +1121,13 @@ function xtorrent_downlistbody($published)
 
     $lid       = $published['lid'];
     $cid       = $published['cid'];
-    $title     = "<a href='../singlefile.php?cid=" . $published['cid'] . "&amp;lid=" . $published['lid'] . "'>" . $myts -> htmlSpecialChars(trim($published['title'])) . "</a>";;
-    $submitter = xoops_getLinkedUnameFromId(intval($published['submitter']));
+    $title     = "<a href='../singlefile.php?cid=" . $published['cid'] . '&amp;lid=' . $published['lid'] . "'>" . $myts -> htmlSpecialChars(trim($published['title'])) . '</a>';//;
+    $submitter = xoops_getLinkedUnameFromId((int)$published['submitter']);
     $publish   = formatTimestamp($published['published'], 's');
-    $status    = ($published['published'] > 0) ? $imagearray['online'] : "<a href='newdownloads.php'>" . $imagearray['offline'] . "</a>";
+    $status    = ($published['published'] > 0) ? $imagearray['online'] : "<a href='newdownloads.php'>" . $imagearray['offline'] . '</a>';
     $offline   = ($published['offline'] == 0) ? $imagearray['online'] : $imagearray['offline'];
-    $modify    = "<a href='index.php?op=Download&amp;lid=" . $lid . "'>" . $imagearray['editimg'] . "</a>";
-    $delete    = "<a href='index.php?op=delDownload&amp;lid=" . $lid . "'>" . $imagearray['deleteimg'] . "</a>";
+    $modify    = "<a href='index.php?op=Download&amp;lid=" . $lid . "'>" . $imagearray['editimg'] . '</a>';
+    $delete    = "<a href='index.php?op=delDownload&amp;lid=" . $lid . "'>" . $imagearray['deleteimg'] . '</a>';
 
 	  echo "<tr>
       		<td class='head' style='text-align:center;'>" . $lid . "</td>
@@ -1039,28 +1136,26 @@ function xtorrent_downlistbody($published)
       		<td class='even' style='text-align:center;'>" . $publish . "</td>
       		<td class='even' style='text-align:center;'>" . $offline . "</td>
       		<td class='even' style='text-align:center;'>" . $status . "</td>
-      		<td class='even' style='text-align:center;white-space:nowrap;width:10%;'>" . $modify . " " . $delete . "</td>
-      		</tr>";
+      		<td class='even' style='text-align:center;white-space:nowrap;width:10%;'>" . $modify . ' ' . $delete . '</td>
+      		</tr>';
     unset($published);
 } 
 
 function xtorrent_downlistfooter()
 {
-	echo "
-		<tr>
-		<td class='head' colspan= '7' style='text-align:center;'>" . _AM_XTORRENT_MINDEX_NODOWNLOADSFOUND . "</td>
-		</tr>
-		";
+	echo "<tr>
+    		<td class='head' colspan= '7' style='text-align:center;'>" . _AM_XTORRENT_MINDEX_NODOWNLOADSFOUND . '</td>
+    		</tr>';
 } 
 
-function xtorrent_downlistpagenav($pubrowamount, $start, $art = "art")
+function xtorrent_downlistpagenav($pubrowamount, $start, $art = 'art')
 {
     global $xoopsModuleConfig;
 
-    echo "</table>"; 
+    echo '</table>'; 
     // Display Page Nav if published is > total display pages amount.
     $page    = ($pubrowamount > $xoopsModuleConfig['admin_perpage']) ? _AM_XTORRENT_MINDEX_PAGE : '';
     $pagenav = new XoopsPageNav($pubrowamount, $xoopsModuleConfig['admin_perpage'], $start, 'st' . $art);
     echo "<div style='padding:8px;float:right;'>" . $page . '' . $pagenav -> renderNav() . '</div>';
-    echo "</fieldset><br>";
+    echo '</fieldset><br>';
 } 

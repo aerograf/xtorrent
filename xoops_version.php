@@ -9,12 +9,13 @@ $modversion     = [
     'name'                => _MI_TORRENT_NAME,
     'description'         => _MI_TORRENT_DESC,
     'dirname'             => $moduleDirName,
-    'help'                => 'xtorrent.tpl',
+    'help'                => 'page=help',
     'author'              => 'Wishcraft, LordPeter, Eparcyl, Aerograf',
     'credits'             => 'X-Torrent extrapolated from WF-Downloads',
     'license'             => 'GNU GPL 2.0',
     'license_url'         => 'www.gnu.org/licenses/gpl-2.0.html/',
     'image'               => 'assets/images/logoModule_b.png',
+    //'image'               => 'assets/images/logoModule.png',
     'module_website_url'  => 'www.xoops.org/',
     'module_website_name' => 'XOOPS',
     'demo_site_url'       => 'https://xoops.org/newbb/',
@@ -54,7 +55,14 @@ $modversion     = [
         'file' => 'include/search.inc.php',
         'func' => 'xtorrent_search',
     ],
-    'use_smarty'          => 1
+    //'use_smarty'          => 1
+];
+// ------------------- Help files ------------------- //
+$modversion['helpsection'] = [
+    ['name' => _MI_XTORRENT_OVERVIEW, 'link'        => 'page=help'],
+    ['name' => _MI_XTORRENT_HELP_DISCLAIMER, 'link' => 'page=disclaimer'],
+    ['name' => _MI_XTORRENT_HELP_LICENSE, 'link'    => 'page=license'],
+    ['name' => _MI_XTORRENT_HELP_SUPPORT, 'link'    => 'page=support'],
 ];
 
 // Blocks
@@ -80,29 +88,23 @@ $modversion['blocks'][] = [
 
 global $xoopsModuleConfig, $xoopsUser, $xoopsDLModule;
 
-$submissions   = 0;
-$modhandler    = xoops_gethandler('module');
-$xoopsDLModule = $modhandler->getByDirname("xtorrent");
+$submissions = 0;
 
-if (is_object($xoopsDLModule) && $xoopsDLModule->getVar('isactive'))
+if (is_object($xoopsUser) && isset($xoopsModuleConfig['submissions']))
 {
-    if (is_object($xoopsUser) && isset($xoopsModuleConfig['submissions']))
+    $groups = $xoopsUser->getGroups();
+    if (array_intersect($xoopsModuleConfig['submitarts'], $groups))
     {
-        $groups = $xoopsUser->getGroups();
-        if (array_intersect($xoopsModuleConfig['submitarts'], $groups))
-        {
-            $submissions = 1;
-        }
-    }
-    else
-    {
-        if (isset($xoopsModuleConfig['anonpost']) && $xoopsModuleConfig['anonpost'] == 1)
-        {
-            $submissions = 1;
-        }
+        $submissions = 1;
     }
 }
-
+else
+{
+    if (isset($xoopsModuleConfig['anonpost']) && 1 == $xoopsModuleConfig['anonpost'])
+    {
+        $submissions = 1;
+    }
+}
 $i = 0;
 if ($submissions)
 {

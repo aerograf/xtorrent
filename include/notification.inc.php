@@ -4,24 +4,28 @@ function xtorrent_notify_iteminfo($category, $item_id)
 {
 	global $xoopsModule, $xoopsModuleConfig, $xoopsConfig;
 
-	if (empty($xoopsModule) || $xoopsModule->getVar('dirname') != 'xtorrent') {	
-		$module_handler = xoops_gethandler('module');
-		$module         = $module_handler->getByDirname('xtorrent');
-		$config_handler = xoops_gethandler('config');
-		$config         = $config_handler->getConfigsByCat(0,$module->getVar('mid'));
-	} else {
+	if (empty($xoopsModule) || 'xtorrent' != $xoopsModule->getVar('dirname'))
+  {	
+		$moduleHandler  = xoops_getHandler('module');
+		$module         = $moduleHandler->getByDirname('xtorrent');
+		$configHandler  = xoops_getHandler('config');
+		$config         = $configHandler->getConfigsByCat(0,$module->getVar('mid'));
+	}
+  else
+  {
 		$module = $xoopsModule;
 		$config = $xoopsModuleConfig;
 	}
 
-	if ($category=='global') {
+	if ('global' == $category)
+  {
 		$item['name'] = '';
 		$item['url']  = '';
 		return $item;
 	}
 
 	global $xoopsDB;
-	if ($category=='category') {
+	if ('category' == $category) {
 		// Assume we have a valid category id
 		$sql          = 'SELECT title FROM ' . $xoopsDB->prefix('xtorrent_cat') . ' WHERE cid = ' . $item_id;
 		$result       = $xoopsDB->query($sql); // TODO: error check
@@ -31,7 +35,7 @@ function xtorrent_notify_iteminfo($category, $item_id)
 		return $item;
 	}
 
-	if ($category=='file') {
+	if ('file' == $category) {
 		// Assume we have a valid file id
 		$sql          = 'SELECT cid,title FROM ' . $xoopsDB->prefix('xtorrent_downloads') . ' WHERE lid = ' . $item_id;
 		$result       = $xoopsDB->query($sql); // TODO: error check

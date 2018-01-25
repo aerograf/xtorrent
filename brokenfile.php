@@ -1,26 +1,28 @@
 <?php 
 
-include 'header.php';
+include __DIR__ . '/header.php';
 
-if (!empty($_POST['submit'])) {
-    
+if (!empty($_POST['submit']))
+{
 	global $xoopsModule, $xoopsModuleConfig, $xoopsUser;
 
-    $sender = (is_object($xoopsUser)) ? $xoopsUser->getVar('uid') : 0;
+    $sender = is_object($xoopsUser) ? $xoopsUser->getVar('uid') : 0;
     $ip     = getenv("REMOTE_ADDR");
-    $lid    = intval($_POST['lid']); 
+    $lid    = (int)$_POST['lid']; 
 	  $time   = time();
     /*
 	*  Check if REG user is trying to report twice.
 	*/ 
-    $result       = $xoopsDB->query("SELECT COUNT(*) FROM " . $xoopsDB->prefix('xtorrent_broken') . " WHERE lid=" . $lid);
+    $result       = $xoopsDB->query('SELECT COUNT(*) FROM ' . $xoopsDB->prefix('xtorrent_broken') . ' WHERE lid=' . $lid);
     list ($count) = $xoopsDB->fetchRow($result);
-    if ($count > 0) {
+    if ($count > 0)
+    {
         redirect_header('index.php', 2, _MD_XTORRENT_ALREADYREPORTED);
         exit();
-    } else {
-
-		$sql    = sprintf("INSERT INTO "
+    }
+    else
+    {
+		$sql    = sprintf('INSERT INTO '
                       . $xoopsDB->prefix('xtorrent_broken')
                       . " (reportid, lid, sender, ip, date, confirmed, acknowledged ) VALUES ( '', '"
                       . $lid
@@ -42,15 +44,15 @@ if (!empty($_POST['submit'])) {
         /**
          * Send email to the owner of the download stating that it is broken
          */
-    $sql      = "SELECT * FROM "
+    $sql      = 'SELECT * FROM '
                 . $xoopsDB->prefix('xtorrent_downloads')
-                . " WHERE lid = "
+                . ' WHERE lid = '
                 . $lid
-                . " AND published > 0 AND published <= "
+                . ' AND published > 0 AND published <= '
                 . time()
-                . " AND (expired = 0 OR expired > "
+                . ' AND (expired = 0 OR expired > '
                 . time()
-                . ")";
+                . ')';
     $down_arr = $xoopsDB->fetchArray($xoopsDB->query($sql));
     unset($sql);
 
@@ -60,9 +62,9 @@ if (!empty($_POST['submit'])) {
     $title   = $down_arr['title'];
     $subject = _MD_XTORRENT_BROKENREPORTED;
 
-    $xoopsMailer  = getMailer();
+    $xoopsMailer  = &getMailer();
     $xoopsMailer  -> useMail();
-    $template_dir = XOOPS_ROOT_PATH . "/modules/xtorrent/language/" . $xoopsConfig['language'] . "/mail_template";
+    $template_dir = XOOPS_ROOT_PATH . '/modules/xtorrent/language/' . $xoopsConfig['language'] . '/mail_template';
 
     $xoopsMailer -> setTemplateDir($template_dir);
     $xoopsMailer -> setTemplate('filebroken_notify.tpl');
@@ -81,8 +83,10 @@ if (!empty($_POST['submit'])) {
     redirect_header('index.php', 2, _MD_XTORRENT_BROKENREPORTED);
     exit();
     } 
-    } else {
-    $xoopsOption['template_main'] = 'xtorrent_brokenfile.tpl';
+}
+else
+{
+    $GLOBALS['xoopsOption']['template_main'] = 'xtorrent_brokenfile.tpl';
     include XOOPS_ROOT_PATH . '/header.php';
     /**
      * Begin Main page Heading etc
@@ -91,29 +95,41 @@ if (!empty($_POST['submit'])) {
     $xoopsTpl->assign('catarray', $catarray);
 
     $lid      = (isset($_GET['lid']) && $_GET['lid'] > 0) ? intval($_GET['lid']) : 0;
-    $sql      = "SELECT * FROM " . $xoopsDB->prefix('xtorrent_downloads') . " WHERE lid = $lid AND published > 0 AND published <= " . time() . " AND (expired = 0 OR expired > " . time() . ")";
+    $sql      = 'SELECT * FROM '
+                . $xoopsDB->prefix('xtorrent_downloads')
+                . ' WHERE lid = '
+                . $lid
+                . ' AND published > 0 AND published <= '
+                . time()
+                . ' AND (expired = 0 OR expired > '
+                . time()
+                . ')';
     $down_arr = $xoopsDB->fetchArray($xoopsDB->query($sql));
     unset($sql);
 
-    $sql       = "SELECT * FROM " . $xoopsDB->prefix('xtorrent_broken') . " WHERE lid = $lid";
+    $sql       = 'SELECT * FROM ' . $xoopsDB->prefix('xtorrent_broken') . ' WHERE lid = ' . $lid;
     $broke_arr = $xoopsDB->fetchArray($xoopsDB->query($sql));;
 
-    if (is_array($broke_arr)) {
+    if (is_array($broke_arr))
+    {
         global $xoopsModuleConfig;
 
         $broken['title']        = trim($down_arr['title']);
         $broken['id']           = $broke_arr['reportid'];
-        $broken['reporter']     = xoops_getLinkedUnameFromId(intval($broke_arr['sender']));
+        $broken['reporter']     = xoops_getLinkedUnameFromId((int)$broke_arr['sender']);
         $broken['date']         = formatTimestamp($broke_arr['date'], $xoopsModuleConfig['dateformat']);
-        $broken['acknowledged'] = ($broke_arr['acknowledged'] == 1) ? _YES : _NO ;
-        $broken['confirmed']    = ($broke_arr['confirmed'] == 1) ? _YES : _NO ;
+        $broken['acknowledged'] = (1 == $broke_arr['acknowledged']) ? _YES : _NO;
+        $broken['confirmed']    = (1 == $broke_arr['confirmed']) ? _YES : _NO;
 
         $xoopsTpl -> assign('broken', $broken);
         $xoopsTpl -> assign('brokenreport', true);
-    } else {
+    }
+    else
+    {
         $amount = $xoopsDB -> getRowsNum($sql);
 
-        if (!is_array($down_arr)) {
+        if (!is_array($down_arr))
+        {
             redirect_header('index.php', 0 , _MD_XTORRENT_THISFILEDOESNOTEXIST);
             exit();
         } 
@@ -122,10 +138,10 @@ if (!empty($_POST['submit'])) {
          */
         $down['title']     = trim($down_arr['title']);
         $down['homepage']  = $myts->makeClickable(formatURL(trim($down_arr['homepage'])));
-        $time              = ($down_arr['updated'] != 0) ? $down_arr['updated'] : $down_arr['published'];
+        $time              = (0 != $down_arr['updated']) ? $down_arr['updated'] : $down_arr['published'];
         $down['updated']   = formatTimestamp($time, $xoopsModuleConfig['dateformat']);
-        $is_updated        = ($down_arr['updated'] != 0) ? _MD_XTORRENT_UPDATEDON : _MD_XTORRENT_SUBMITDATE;
-        $down['publisher'] = xoops_getLinkedUnameFromId(intval($down_arr['submitter']));
+        $is_updated        = (0 != $down_arr['updated']) ? _MD_XTORRENT_UPDATEDON : _MD_XTORRENT_SUBMITDATE;
+        $down['publisher'] = xoops_getLinkedUnameFromId((int)$down_arr['submitter']);
 
         $xoopsTpl -> assign('file_id', $lid);
         $xoopsTpl -> assign('lang_subdate' , $is_updated);

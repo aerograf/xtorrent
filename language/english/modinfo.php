@@ -242,3 +242,11 @@ define('_MI_TORRENT_AUTHOR_BUGFIXES', "Bug Fix History");
 define('_MI_TORRENT_COPYRIGHTIMAGE', "Images copyright WF-Project and may only be used with permission");
 
 define('_MI_TORRENT_ADMENU3', 'About');
+//help multi-page
+define('_MI_XTORRENT_DIRNAME', basename(dirname(dirname(__DIR__))));
+define('_MI_XTORRENT_HELP_HEADER', __DIR__ . '/help/helpheader.tpl');
+define('_MI_XTORRENT_BACK_2_ADMIN', 'Back to Administration of ');
+define('_MI_XTORRENT_OVERVIEW', 'Overview');
+define('_MI_XTORRENT_HELP_DISCLAIMER', 'Disclaimer');
+define('_MI_XTORRENT_HELP_LICENSE', 'License');
+define('_MI_XTORRENT_HELP_SUPPORT', 'Support');
